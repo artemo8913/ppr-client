@@ -1,0 +1,60 @@
+export interface IRowData {
+    id: string,
+    type: string,
+    section: string,
+    subsection: string,
+    location: string,
+    lineClass: string,
+    meter: string,
+    totalCount: number,
+    yearOfLaunch: number,
+    periodicityNormal: string,
+    periodicityFact: string,
+    periodicityLast: string,
+    normOfTime: number,
+    normOfTimeDocumentSource: string,
+    unity: string,
+    yearPlanWork: number,
+    yearPlanTime: number,
+    yearFactWork: number,
+    yearFactNormTime: number,
+    yearFactTime: number,
+    planWork: IMounthData,
+    planTime: IMounthData,
+    factWork: IMounthData,
+    factNormTime: IMounthData,
+    factTime: IMounthData,
+};
+
+export interface IRow extends IRowData{
+    sectionIsShow?: boolean,
+    subsectionIsShow?: boolean,
+    sectionSpan?: number,
+    subsectionSpan?: number,
+};
+
+export interface IMounthData{
+    jan: number,
+    feb: number,
+    mar: number,
+    apr: number,
+    may: number,
+    june: number,
+    july: number,
+    aug: number,
+    sept: number,
+    oct: number,
+    nov: number,
+    dec: number,
+};
+
+export interface ICell{
+    id?: string,
+    type?: string,
+    children: string | number | undefined,
+    verticalText?: boolean,
+    editable?: boolean,
+    dropdown?: boolean,
+    colSpan?: number,
+    rowSpan?: number,
+};

@@ -1,58 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import Title from "./Components/Title";
+import Row from "./Components/Row";
+import styled from "styled-components";
+import { RootState } from "./Redux/store";
+import { useSelector } from "react-redux";
+import { IRow, IRowData } from "./Interface";
 
-function App() {
+const TableStyled = styled.table`
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 10px;
+`;
+
+export default function App() {
+  const data = useSelector((state: RootState) => state.ppr.value);
+  const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
+    let sectionSpan = 1;
+    let subsectionSpan = 1;
+    let sectionIsShow = true;
+    let subsectionIsShow = true;
+    if (index != data.length - 1) {
+      for (let j = index + 1; j < data.length && rowData.section === data[j].section; j++) sectionSpan++;
+      for (let j = index + 1; j < data.length && rowData.subsection === data[j].subsection && rowData.section === data[j].section; j++) subsectionSpan++;
+    }
+    if (index != 0) {
+      const prevSection = data[index - 1].section;
+      const prevSubsection = data[index - 1].subsection;
+      if (rowData.section === prevSection) sectionIsShow = false;
+      if (rowData.subsection === prevSubsection && rowData.section === prevSection) subsectionIsShow = false;
+    }
+    return <Row
+      {...rowData}
+      sectionIsShow={sectionIsShow}
+      subsectionIsShow={subsectionIsShow}
+      sectionSpan={sectionSpan}
+      subsectionSpan={subsectionSpan}
+    />
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div className='app'>
+      <h1>Hello World!</h1>
+      <TableStyled>
+        <Title />
+        <tbody>
+          {rows}
+        </tbody>
+      </TableStyled>
     </div>
   );
 }
-
-export default App;
