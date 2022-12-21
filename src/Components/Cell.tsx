@@ -1,4 +1,3 @@
-import React, { ReactElement, RefObject } from "react";
 import styled from "styled-components";
 import { ICell } from "../Interface";
 import { useDispatch } from "react-redux";
