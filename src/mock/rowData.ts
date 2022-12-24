@@ -2,6 +2,7 @@ import { IRowData } from '../Interface';
 const data: Array<IRowData> = [
     {
         id: '1',
+        index_number:1,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сети',
         subsection: 'на главных путях',
@@ -94,6 +95,7 @@ const data: Array<IRowData> = [
     },
     {
         id: '2',
+        index_number:2,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сети',
         subsection: 'на главных путях',
@@ -186,6 +188,7 @@ const data: Array<IRowData> = [
     },
     {
         id: '3',
+        index_number:3,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сети',
         subsection: 'на боковых путях',
@@ -278,6 +281,7 @@ const data: Array<IRowData> = [
     },
     {
         id: '4',
+        index_number:4,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd',
         subsection: 'на главных путях',

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IRow } from "../Interface";
+import { IRow } from "../../Interface";
 import Cell from "./Cell";
 
 const StyledRow = styled.tr`
@@ -11,6 +11,7 @@ const StyledRow = styled.tr`
 export default function Row(props: IRow) {
     const {
         id,
+        index_number,
         type,
         section,
         subsection,

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { ICell } from "../Interface";
+import { ICell } from "../../Interface";
 import { useDispatch } from "react-redux";
-import { change } from "../Redux/slice/pprSlice";
-import theme from "../theme";
+import { change } from "../../Redux/slice/pprSlice";
+import theme from "../../theme";
 
 const CellStyled = styled.td<{ bgType: string, verticalText: boolean }>`
     text-align: center;
