@@ -3,7 +3,7 @@ import Title from "./Title";
 import Row from "./Row";
 import { RootState } from "../../Redux/store";
 import { useSelector } from "react-redux";
-import { IRow, IRowData } from "../../Interface";
+import { IRowData } from "../../Interface";
 
 const TableStyled = styled.table`
   border-collapse: collapse;
