@@ -1,4 +1,4 @@
-import apiFetch from "../healper/ApiFetch";
+import apiFetch from "../../healper/ApiFetch";
 
 export default function ButtonForApiTest(props: {
   url: string;

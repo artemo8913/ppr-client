@@ -1,10 +1,11 @@
 import ReacCellOM from "react-dom/client";
 import App from "./App";
-import DeveloperPage from "./Components/DeveloperPage";
+import DeveloperPage from "./Components/DeveloperPage/DeveloperPage";
 import "./style.css";
 import { Provider } from "react-redux";
 import store from "./Redux/store";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginPage from './Components/LoginPage/LoginPage';
 
 //@ts-ignore
 const root = ReacCellOM.createRoot(document.getElementById("root"));
@@ -13,6 +14,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/developer" element={<DeveloperPage />} />
         <Route path="/*" element={<div>Ууппс, нет странички</div>} />
       </Routes>

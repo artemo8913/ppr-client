@@ -7,7 +7,10 @@ class ApiFetch {
   ) {
     await fetch(url, { body: JSON.stringify(data), method })
       .then((data) => data.json())
-      .then((json) => callback(JSON.stringify(json)))
+      .then((json) => {
+        callback(JSON.stringify(json,null," "));
+        console.log(JSON.stringify(json,null," "));
+      })
       .catch((error) => console.log(error));
   }
 }
