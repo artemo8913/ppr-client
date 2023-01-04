@@ -3,17 +3,17 @@ export default function Title() {
     return (
         <thead>
             <tr>
-                <Cell verticalText rowSpan={4} colSpan={2}>Наименования и условия выполнения технологических операций, испытаний и измерений</Cell>
-                <Cell verticalText rowSpan={4}>Наименование места проведения работ / тип оборудования</Cell>
-                <Cell verticalText rowSpan={4}>Класс участка / вид технического обслуживания и ремонта</Cell>
-                <Cell verticalText rowSpan={4}>Измеритель</Cell>
-                <Cell verticalText rowSpan={4}>Количество измерителей (всего)</Cell>
-                <Cell verticalText rowSpan={4}>Год ввода в эксплуатацию</Cell>
-                <Cell rowSpan={3} colSpan={3}>Периодичность выполнения работ</Cell>
-                <Cell verticalText rowSpan={4}>Норма времени на измеритель, чел.-ч</Cell>
-                <Cell verticalText rowSpan={4}>Обоснование нормы времени</Cell>
-                <Cell verticalText rowSpan={4}>Подразделение / исполнитель</Cell>
-                <Cell colSpan={65}>Планируемое и фактическое выполнение работ за год и по месяцам:</Cell>
+                <Cell widthPercent={10} verticalText rowSpan={4} colSpan={2}>Наименования и условия выполнения технологических операций, испытаний и измерений</Cell>
+                <Cell widthPercent={4} verticalText rowSpan={4}>Наименование места проведения работ / тип оборудования</Cell>
+                <Cell widthPercent={1} verticalText rowSpan={4}>Класс участка / вид технического обслуживания и ремонта</Cell>
+                <Cell widthPercent={1} verticalText rowSpan={4}>Измеритель</Cell>
+                <Cell widthPercent={1} verticalText rowSpan={4}>Количество измерителей (всего)</Cell>
+                <Cell widthPercent={1} verticalText rowSpan={4}>Год ввода в эксплуатацию</Cell>
+                <Cell widthPercent={4} rowSpan={3} colSpan={3}>Периодичность выполнения работ</Cell>
+                <Cell widthPercent={1} verticalText rowSpan={4}>Норма времени на измеритель, чел.-ч</Cell>
+                <Cell widthPercent={4} verticalText rowSpan={4}>Обоснование нормы времени</Cell>
+                <Cell widthPercent={1} verticalText rowSpan={4}>Подразделение / исполнитель</Cell>
+                <Cell widthPercent={72} colSpan={65}>Планируемое и фактическое выполнение работ за год и по месяцам:</Cell>
             </tr>
             <tr>
                 <Cell colSpan={5}>Всего за год</Cell>
@@ -62,7 +62,7 @@ export default function Title() {
             <tr>
                 <Cell verticalText >в соответствии с действующими правилами</Cell>
                 <Cell verticalText >факт</Cell>
-                <Cell verticalText >Дата последнего выполнения (для работ с периодичностью более 1 года) и объем выполнения',</Cell>
+                <Cell verticalText >Дата последнего выполнения (для работ с периодичностью более 1 года)</Cell>
                 <Cell verticalText >кол-во</Cell>
                 <Cell verticalText >норм. время на плановый объем, чел.-ч</Cell>
                 <Cell verticalText >кол-во</Cell>

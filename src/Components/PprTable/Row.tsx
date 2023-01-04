@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import styled from "styled-components";
 import { IRow } from "../../Interface";
 import Cell from "./Cell";
@@ -42,34 +43,34 @@ export default function Row(props: IRow) {
         subsectionSpan,
     } = props;
     const mounthsName = ["jan", "feb", "mar", "apr", "may", "june", "july", "aug", "sept", "oct", "nov", "dec"] as const;
-    const mounthsData = mounthsName.map(mounth => <>
-        <Cell editable verticalText id={id} type={`planWork ${mounth}`}>{planWork[mounth]}</Cell>
-        <Cell editable verticalText id={id} type={`planTime ${mounth}`}>{planTime[mounth]}</Cell>
-        <Cell editable verticalText id={id} type={`factWork ${mounth}`}>{factWork[mounth]}</Cell>
-        <Cell editable verticalText id={id} type={`factNormTime ${mounth}`}>{factNormTime[mounth]}</Cell>
-        <Cell editable verticalText id={id} type={`factTime ${mounth}`}>{factTime[mounth]}</Cell>
-    </>);
+    const mounthsData = mounthsName.map(mounth => <Fragment key={mounth}>
+        <Cell editable verticalText rowId={id} textareaCols={10} type={`planWork ${mounth}`}>{planWork[mounth]}</Cell>
+        <Cell editable verticalText rowId={id} textareaCols={10} type={`planTime ${mounth}`}>{planTime[mounth]}</Cell>
+        <Cell editable verticalText rowId={id} textareaCols={10} type={`factWork ${mounth}`}>{factWork[mounth]}</Cell>
+        <Cell editable verticalText rowId={id} textareaCols={10} type={`factNormTime ${mounth}`}>{factNormTime[mounth]}</Cell>
+        <Cell editable verticalText rowId={id} textareaCols={10} type={`factTime ${mounth}`}>{factTime[mounth]}</Cell>
+    </Fragment>);
 
     return (
         <StyledRow>
-            {sectionIsShow && <Cell id={id} type="section" rowSpan={sectionSpan} editable>{section}</Cell>}
-            {subsectionIsShow && <Cell id={id} type="subsection" rowSpan={subsectionSpan} editable>{subsection}</Cell>}
-            <Cell id={id} type="location">{location}</Cell>
-            <Cell id={id} type="lineClass">{lineClass}</Cell>
-            <Cell id={id} type="meter">{meter}</Cell>
-            <Cell id={id} type="totalCount">{totalCount}</Cell>
-            <Cell id={id} type="yearOfLaunch">{yearOfLaunch}</Cell>
-            <Cell id={id} type="periodicityNormal">{periodicityNormal}</Cell>
-            <Cell id={id} type="periodicityFact">{periodicityFact}</Cell>
-            <Cell id={id} type="periodicityLast">{periodicityLast}</Cell>
-            <Cell id={id} type="normOfTime">{normOfTime}</Cell>
-            <Cell id={id} type="normOfTimeDocumentSource">{normOfTimeDocumentSource}</Cell>
-            <Cell id={id} type="unity">{unity}</Cell>
-            <Cell id={id} type="yearPlanWork">{yearPlanWork}</Cell>
-            <Cell id={id} type="yearPlanTime">{yearPlanTime}</Cell>
-            <Cell id={id} type="yearFactWork">{yearFactWork}</Cell>
-            <Cell id={id} type="yearFactNormTime">{yearFactNormTime}</Cell>
-            <Cell id={id} type="yearFactTime">{yearFactTime}</Cell>
+            {sectionIsShow && <Cell rowId={id} textareaRows={4} type="section" rowSpan={sectionSpan} editable>{section}</Cell>}
+            {subsectionIsShow && <Cell rowId={id} textareaRows={4} type="subsection" rowSpan={subsectionSpan} editable>{subsection}</Cell>}
+            <Cell rowId={id} type="location">{location}</Cell>
+            <Cell rowId={id} type="lineClass" verticalText>{lineClass}</Cell>
+            <Cell rowId={id} type="meter" verticalText>{meter}</Cell>
+            <Cell rowId={id} type="totalCount" verticalText>{totalCount}</Cell>
+            <Cell rowId={id} type="yearOfLaunch" verticalText>{yearOfLaunch}</Cell>
+            <Cell rowId={id} type="periodicityNormal" verticalText>{periodicityNormal}</Cell>
+            <Cell rowId={id} type="periodicityFact" verticalText>{periodicityFact}</Cell>
+            <Cell rowId={id} type="periodicityLast" verticalText>{periodicityLast}</Cell>
+            <Cell rowId={id} type="normOfTime" verticalText>{normOfTime}</Cell>
+            <Cell rowId={id} type="normOfTimeDocumentSource">{normOfTimeDocumentSource}</Cell>
+            <Cell rowId={id} type="unity" verticalText>{unity}</Cell>
+            <Cell rowId={id} type="yearPlanWork" verticalText>{yearPlanWork}</Cell>
+            <Cell rowId={id} type="yearPlanTime" verticalText>{yearPlanTime}</Cell>
+            <Cell rowId={id} type="yearFactWork" verticalText>{yearFactWork}</Cell>
+            <Cell rowId={id} type="yearFactNormTime" verticalText>{yearFactNormTime}</Cell>
+            <Cell rowId={id} type="yearFactTime" verticalText>{yearFactTime}</Cell>
             {mounthsData}
         </StyledRow>
     )

@@ -4,35 +4,47 @@ import { useDispatch } from "react-redux";
 import { change } from "../../Redux/slice/pprSlice";
 import theme from "../../theme";
 
-const CellStyled = styled.td<{ bgType: string; verticalText: boolean }>`
+const CellStyled = styled.td<{ bgType: string; verticalText: boolean; editable: boolean; widthPercent?: number }>`
+  background-color: ${(props) => (props.bgType ? theme.colors[props.bgType] : "")};
   ${(props) =>
-    props.verticalText
+    props.verticalText && !props.editable
       ? `
-        vertical-align: middle;
         writing-mode: vertical-rl;
+        transform: rotate(180deg);
         `
-      : ``};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 10px;
-  height: 10px;
+      : ``}
+  width: ${(props) => (props.widthPercent ? `${props.widthPercent}%` : "unset")};
+  max-height: 500px;
+  min-height: 100px;
+  /* font-size: 12px; */
+  word-break: normal;
   text-align: center;
   border: 1px solid black;
-  background-color: ${(props) => (props.bgType ? theme.colors[props.bgType] : "")};
   cursor: default;
   &:hover {
     box-shadow: inset 0px 0px 10px #ff00dd;
   }
 `;
-
-const TextAreaStyled = styled.textarea<{ verticalText: boolean }>`
-  width: 10px;
+const ConteinerStyled = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  min-height: 100px;
+  & *{
+    flex: 1 0 auto;
+  }
+`;
+const TextAreaStyled = styled.textarea<{ verticalText: boolean; cols: number | undefined }>`
+  width: ${(props) => (props.cols ? "unset" : "100%")};
+  text-align: center;
   resize: none;
   border: none;
   background: none;
   ${(props) =>
     props.verticalText
       ? `
+        transform: translate(0%, 0%) rotate(-90deg);
         `
       : ``}
 `;
@@ -48,19 +60,33 @@ function setBgType(type: string | undefined): string {
   return result;
 }
 
+function validateTextareaInput(text: string): boolean {
+  return !/[^а-яa-z0-9- _,]/i.test(text);
+}
+
 export default function Cell(props: ICell) {
-  const { id, type, children, verticalText = false, editable, dropdown, colSpan, rowSpan } = props;
+  const { rowId: id, type, children, textareaRows = 1, textareaCols, verticalText = false, editable = false, dropdown, colSpan, rowSpan, widthPercent } = props;
+
   const dispatch = useDispatch();
   const bgType = setBgType(type);
 
   return (
-    <CellStyled verticalText={verticalText} colSpan={colSpan} rowSpan={rowSpan} bgType={bgType}>
+    <CellStyled widthPercent={widthPercent} editable={editable} verticalText={verticalText} colSpan={colSpan} rowSpan={rowSpan} bgType={bgType}>
       {editable ? (
-        <TextAreaStyled
-          verticalText={verticalText}
-          value={children}
-          onChange={(e) => dispatch(change({ id: id || "none", newValue: e.target.value, category: type ? type.split(" ") : ["none"] }))}
-        />
+        <ConteinerStyled>
+          <TextAreaStyled
+            cols={textareaCols}
+            rows={textareaRows}
+            verticalText={verticalText}
+            value={children}
+            onChange={(e) => {
+              console.log(e.target.value, validateTextareaInput(e.target.value));
+              if (validateTextareaInput(e.target.value)) {
+                dispatch(change({ id: id || "none", newValue: e.target.value, category: type ? type.split(" ") : ["none"] }));
+              }
+            }}
+          />
+        </ConteinerStyled>
       ) : (
         children
       )}
