@@ -7,9 +7,8 @@ import { IRowData } from "../../Interface";
 
 const TableStyled = styled.table`
   border-collapse: collapse;
-  /* table-layout: fixed;
-  width: 100%; */
-  margin: 10px;
+  table-layout: fixed;
+  width: 1048px;
 `;
 
 export default function PprTable() {
