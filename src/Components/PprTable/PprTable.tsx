@@ -7,9 +7,8 @@ import { IRowData } from "../../Interface";
 import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
 
 const TableStyled = styled.table`
-  margin: 10px;
   table-layout: fixed;
-  width: 200%;
+  width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
   font-size: 12px;
@@ -41,9 +40,9 @@ function verticalSpanCells(rowData: IRowData, index: number, data: IRowData[]) {
 export default function PprTable() {
   const data = useSelector((state: RootState) => state.ppr.value);
 
-  const infoColumnList = excludeFromList(fullInfoColumnsList, ["normOfTime"]);
-  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection","normOfTime"]);
-  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, ["factWork", "factNormTime", "factTime"]);
+  const infoColumnList = excludeFromList(fullInfoColumnsList, []);
+  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...[]]);
+  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, []);
   const mounthList = excludeFromList(fullMounthsList, []);
 
   const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {

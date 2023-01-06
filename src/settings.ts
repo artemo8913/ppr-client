@@ -18,9 +18,21 @@ const settings: any = {
     medium: "2em",
     large: "3em",
   },
-  hiddenPprColums: {
+  hiddenPprColumns: {
     none: [],
-    createPlan: [],
+    createPlan: [
+      "meter",
+      "totalCount",
+      "yearOfLaunch",
+      "periodicityNormal",
+      "periodicityFact",
+      "periodicityLast",
+      "normOfTime",
+      "normOfTimeDocumentSource",
+      "factWork",
+      "factNormTime",
+      "factTime",
+    ],
   },
   editablePprColumns: {
     none: [],
@@ -28,6 +40,7 @@ const settings: any = {
   pprColumnSettings: {
     textareaRows: 5,
     textareaCols: 10,
+    fullPlanwidthPercent: 30,
     section: {
       title: "Наименования и условия выполнения технологических операций, испытаний и измерений",
       widthPercent: 10,
@@ -90,7 +103,7 @@ const settings: any = {
     },
     normOfTimeDocumentSource: {
       title: "Обоснование нормы времени",
-      widthPercent: 4,
+      widthPercent: 2,
       titleRowSpan: 4,
     },
     unity: {

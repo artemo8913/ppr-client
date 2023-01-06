@@ -4,10 +4,9 @@ import settings from "../../settings";
 import { ReactNode } from "react";
 
 const colSett = settings.pprColumnSettings;
-let fullPlanColSpan = 0;
-let colCount = 1;
-
 export default function Title(props: ITitle) {
+  let fullPlanColSpan = 0;
+  let colCount = 1;
   const { infoColumnsList, mounthList, workAndTimeColumnsList } = props;
   const mounthTitles: Array<ReactNode> = [];
   const planFactTitles: Array<ReactNode> = [];
@@ -37,8 +36,8 @@ export default function Title(props: ITitle) {
       colCount++;
       fullPlanColSpan++;
     });
-    if(planColSpan > 0) planFactTitles.push(<Cell colSpan={planColSpan}>План</Cell>);
-    if(factColSpan > 0) planFactTitles.push(<Cell colSpan={factColSpan}>Факт</Cell>);
+    if (planColSpan > 0) planFactTitles.push(<Cell colSpan={planColSpan}>План</Cell>);
+    if (factColSpan > 0) planFactTitles.push(<Cell colSpan={factColSpan}>Факт</Cell>);
     mounthTitles.push(<Cell colSpan={planColSpan + factColSpan}>{colSett[mounth].title}</Cell>);
   });
 
@@ -48,7 +47,9 @@ export default function Title(props: ITitle) {
     <thead>
       <tr>
         {infoColumnsTitles}
-        <Cell colSpan={fullPlanColSpan}>Планируемое и фактическое выполнение работ за год и по месяцам:</Cell>
+        <Cell widthPercent={colSett.fullPlanwidthPercent} colSpan={fullPlanColSpan}>
+          Планируемое и фактическое выполнение работ за год и по месяцам:
+        </Cell>
       </tr>
       <tr>{mounthTitles}</tr>
       <tr>{planFactTitles}</tr>
