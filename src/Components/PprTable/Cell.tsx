@@ -4,10 +4,10 @@ import { useDispatch } from "react-redux";
 import { change } from "../../Redux/slice/pprSlice";
 import settings from "../../settings";
 //в классы переписать цвет фона для плана, вертикальный текст, editable
-const CellStyled = styled.td<{ bgType: string; verticalText: boolean; editable: boolean; widthPercent?: number }>`
+const CellStyled = styled.td<{ bgType: string; vText: boolean; editable: boolean; widthPercent?: number }>`
   background-color: ${(props) => (props.bgType ? settings.colors[props.bgType] : "")};
   ${(props) =>
-    props.verticalText && !props.editable
+    props.vText && !props.editable
       ? `
         writing-mode: vertical-rl;
         transform: rotate(180deg);
@@ -67,19 +67,38 @@ function validateTextareaInput(text: string): boolean {
 }
 
 export default function Cell(props: ICell) {
-  const { rowId, type, children, textareaRows = 1, textareaCols, verticalText = false, editable = false, dropdown, colSpan, rowSpan, widthPercent } = props;
+  const {
+    rowId,
+    type,
+    children,
+    textareaRows = 1,
+    textareaCols,
+    vText = false,
+    editable = false,
+    dropdown,
+    colSpan,
+    rowSpan,
+    widthPercent,
+  } = props;
 
   const dispatch = useDispatch();
   const bgType = setBgType(type);
 
   return (
-    <CellStyled widthPercent={widthPercent} editable={editable} verticalText={verticalText} colSpan={colSpan} rowSpan={rowSpan} bgType={bgType}>
+    <CellStyled
+      widthPercent={widthPercent}
+      editable={editable}
+      vText={vText}
+      colSpan={colSpan}
+      rowSpan={rowSpan}
+      bgType={bgType}
+    >
       {editable ? (
         <ConteinerStyled>
           <TextAreaStyled
             cols={textareaCols}
             rows={textareaRows}
-            verticalText={verticalText}
+            verticalText={vText}
             value={children}
             onChange={(e) => {
               console.log(e.target.value, validateTextareaInput(e.target.value));

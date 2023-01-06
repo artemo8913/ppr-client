@@ -4,7 +4,7 @@ import Row from "./Row";
 import { RootState } from "../../Redux/store";
 import { useSelector } from "react-redux";
 import { IRowData } from "../../Interface";
-import settings, { mounthListAll, columnListAll } from "../../settings";
+import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
 
 const TableStyled = styled.table`
   margin: 10px;
@@ -26,7 +26,8 @@ function verticalSpanCells(rowData: IRowData, index: number, data: IRowData[]) {
   let subsectionIsShow = true;
   if (index !== data.length - 1) {
     for (let j = index + 1; j < data.length && rowData.section === data[j].section; j++) sectionVSpan++;
-    for (let j = index + 1; j < data.length && rowData.subsection === data[j].subsection && rowData.section === data[j].section; j++) subsectionVSpan++;
+    for (let j = index + 1; j < data.length && rowData.subsection === data[j].subsection && rowData.section === data[j].section; j++)
+      subsectionVSpan++;
   }
   if (index !== 0) {
     const prevSection = data[index - 1].section;
@@ -40,19 +41,27 @@ function verticalSpanCells(rowData: IRowData, index: number, data: IRowData[]) {
 export default function PprTable() {
   const data = useSelector((state: RootState) => state.ppr.value);
 
-  const columnList = excludeFromList(columnListAll, settings.hiddenPprColums.createPlan);
-  const mounthList = excludeFromList(mounthListAll, []);
+  const infoColumnList = excludeFromList(fullInfoColumnsList, ["normOfTime"]);
+  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection","normOfTime"]);
+  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, ["factWork", "factNormTime", "factTime"]);
+  const mounthList = excludeFromList(fullMounthsList, []);
 
   const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
     const { sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = verticalSpanCells(rowData, index, data);
+    let bodyInfoColumnList = infoColumnList;
+    if (!sectionIsShow) {
+      bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);
+    }
+    if (!subsectionIsShow) {
+      bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["subsection"]);
+    }
     return (
       <Row
-        columnList={columnList}
+        infoColumnsList={bodyInfoColumnList}
+        workAndTimeColumnsList={workAndTimeColumnList}
         mounthList={mounthList}
         key={rowData.rowId}
         data={rowData}
-        sectionIsShow={sectionIsShow}
-        subsectionIsShow={subsectionIsShow}
         sectionVSpan={sectionVSpan}
         subsectionVSpan={subsectionVSpan}
       />
@@ -61,7 +70,7 @@ export default function PprTable() {
   return (
     <div className="app">
       <TableStyled>
-        <Title columnList={columnList} mounthList={mounthList} />
+        <Title workAndTimeColumnsList={workAndTimeColumnList} infoColumnsList={titleInfoColumnList} mounthList={mounthList} />
         <tbody>{rows}</tbody>
       </TableStyled>
     </div>

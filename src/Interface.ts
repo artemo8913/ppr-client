@@ -24,16 +24,16 @@ export interface IRowData {
 
 export interface IRow {
   data: IRowData;
-  columnList: Array<string>;
+  infoColumnsList: Array<string>;
+  workAndTimeColumnsList: Array<string>;
   mounthList: Array<string>;
-  sectionIsShow?: boolean;
-  subsectionIsShow?: boolean;
   sectionVSpan?: number;
   subsectionVSpan?: number;
 }
 
 export interface ITitle {
-  columnList: Array<string>;
+  infoColumnsList: Array<string>;
+  workAndTimeColumnsList: Array<string>;
   mounthList: Array<string>;
 }
 
@@ -56,8 +56,8 @@ export interface IMounthData {
 export interface ICell {
   rowId?: string;
   type?: string;
-  children: string | number | undefined;
-  verticalText?: boolean;
+  children?: string | number;
+  vText?: boolean;
   editable?: boolean;
   dropdown?: boolean;
   textareaRows?: number;
