@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { ICell } from "../../Interface";
 import { useDispatch } from "react-redux";
 import { change } from "../../Redux/slice/pprSlice";
-import theme from "../../theme";
-
+import settings from "../../settings";
+//в классы переписать цвет фона для плана, вертикальный текст, editable
 const CellStyled = styled.td<{ bgType: string; verticalText: boolean; editable: boolean; widthPercent?: number }>`
-  background-color: ${(props) => (props.bgType ? theme.colors[props.bgType] : "")};
+  background-color: ${(props) => (props.bgType ? settings.colors[props.bgType] : "")};
   ${(props) =>
     props.verticalText && !props.editable
       ? `
@@ -16,13 +16,15 @@ const CellStyled = styled.td<{ bgType: string; verticalText: boolean; editable: 
   width: ${(props) => (props.widthPercent ? `${props.widthPercent}%` : "unset")};
   max-height: 500px;
   min-height: 100px;
-  /* font-size: 12px; */
   word-break: normal;
   text-align: center;
   border: 1px solid black;
   cursor: default;
   &:hover {
     box-shadow: inset 0px 0px 10px #ff00dd;
+  }
+  &.green {
+    box-shadow: inset 0px 0px 10px #00ff0d;
   }
 `;
 const ConteinerStyled = styled.div`
@@ -31,7 +33,7 @@ const ConteinerStyled = styled.div`
   align-items: center;
   overflow: visible;
   min-height: 100px;
-  & *{
+  & * {
     flex: 1 0 auto;
   }
 `;
@@ -65,7 +67,7 @@ function validateTextareaInput(text: string): boolean {
 }
 
 export default function Cell(props: ICell) {
-  const { rowId: id, type, children, textareaRows = 1, textareaCols, verticalText = false, editable = false, dropdown, colSpan, rowSpan, widthPercent } = props;
+  const { rowId, type, children, textareaRows = 1, textareaCols, verticalText = false, editable = false, dropdown, colSpan, rowSpan, widthPercent } = props;
 
   const dispatch = useDispatch();
   const bgType = setBgType(type);
@@ -82,7 +84,7 @@ export default function Cell(props: ICell) {
             onChange={(e) => {
               console.log(e.target.value, validateTextareaInput(e.target.value));
               if (validateTextareaInput(e.target.value)) {
-                dispatch(change({ id: id || "none", newValue: e.target.value, category: type ? type.split(" ") : ["none"] }));
+                dispatch(change({ id: rowId || "none", newValue: e.target.value, category: type ? type.split(" ") : ["none"] }));
               }
             }}
           />

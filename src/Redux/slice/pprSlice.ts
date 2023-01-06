@@ -13,7 +13,7 @@ export const pprSlice = createSlice({
     change: (state, action: PayloadAction<{ id: string; newValue: string | number; category: Array<string> }>) => {
       for (let index = 0; index < state.value.length; index++) {
         const row = state.value[index];
-        if (row.id !== action.payload.id) {
+        if (row.rowId !== action.payload.id) {
           continue;
         }
         if (action.payload.category.length === 1) {

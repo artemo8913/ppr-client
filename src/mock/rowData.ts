@@ -1,7 +1,7 @@
 import { IRowData } from '../Interface';
 const data: Array<IRowData> = [
     {
-        id: '1',
+        rowId: '1',
         index_number:1,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сети',
@@ -17,12 +17,8 @@ const data: Array<IRowData> = [
         normOfTime: 12.198,
         normOfTimeDocumentSource: 'Норма времени №53 asd asd',
         unity: 'ЭЧК-47',
-        yearPlanWork: 1000,
-        yearPlanTime: 456.23,
-        yearFactWork: 0,
-        yearFactNormTime: 0,
-        yearFactTime: 0,
         planWork: {
+            year: 1000,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -37,6 +33,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         planTime: {
+            year: 456.23,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -51,6 +48,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factWork: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -65,6 +63,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factNormTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -79,6 +78,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -94,7 +94,7 @@ const data: Array<IRowData> = [
         },
     },
     {
-        id: '2',
+        rowId: '2',
         index_number:2,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сети',
@@ -110,12 +110,8 @@ const data: Array<IRowData> = [
         normOfTime: 12.198,
         normOfTimeDocumentSource: 'Норма времени №53 asd asd',
         unity: 'ЭЧК-47',
-        yearPlanWork: 1000,
-        yearPlanTime: 456.23,
-        yearFactWork: 0,
-        yearFactNormTime: 0,
-        yearFactTime: 0,
         planWork: {
+            year: 1000,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -130,6 +126,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         planTime: {
+            year: 456.23,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -144,6 +141,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factWork: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -158,6 +156,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factNormTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -172,6 +171,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -184,10 +184,10 @@ const data: Array<IRowData> = [
             oct: 0,
             nov: 0,
             dec: 0,
-        },
+        }
     },
     {
-        id: '3',
+        rowId: '3',
         index_number:3,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сети',
@@ -203,12 +203,8 @@ const data: Array<IRowData> = [
         normOfTime: 12.198,
         normOfTimeDocumentSource: 'Норма времени №53',
         unity: 'ЭЧК-47',
-        yearPlanWork: 0,
-        yearPlanTime: 0,
-        yearFactWork: 0,
-        yearFactNormTime: 0,
-        yearFactTime: 0,
         planWork: {
+            year: 1000,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -223,6 +219,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         planTime: {
+            year: 456.23,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -237,6 +234,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factWork: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -251,6 +249,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factNormTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -265,6 +264,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -277,10 +277,10 @@ const data: Array<IRowData> = [
             oct: 0,
             nov: 0,
             dec: 0,
-        },
+        }
     },
     {
-        id: '4',
+        rowId: '4',
         index_number:4,
         type: 'maintenance',
         section: 'Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd',
@@ -296,12 +296,8 @@ const data: Array<IRowData> = [
         normOfTime: 12.198,
         normOfTimeDocumentSource: 'Норма времени №53 asd asd',
         unity: 'ЭЧК-47',
-        yearPlanWork: 1000,
-        yearPlanTime: 456.23,
-        yearFactWork: 0,
-        yearFactNormTime: 0,
-        yearFactTime: 0,
         planWork: {
+            year: 1000,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -316,6 +312,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         planTime: {
+            year: 456.23,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -330,6 +327,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factWork: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -344,6 +342,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factNormTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -358,6 +357,7 @@ const data: Array<IRowData> = [
             dec: 0,
         },
         factTime: {
+            year: 0,
             jan: 0,
             feb: 0,
             mar: 0,
@@ -370,7 +370,7 @@ const data: Array<IRowData> = [
             oct: 0,
             nov: 0,
             dec: 0,
-        },
+        }
     },
 ];
 export default data;
