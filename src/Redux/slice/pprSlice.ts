@@ -1,6 +1,26 @@
-// мне не нравится применение splice для изменения значения
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import mockRowData from "../../mock/rowData";
+import { fullInfoColumnsList, fullWorkAndTimeColumnsList, fullMounthsList } from "../../settings";
+import { IRowData, IMounthData } from "../../Interface";
+
+function createNewEmptyRaw(
+  id: string,
+  fullInfoColumnsList: Array<string>,
+  fullWorkAndTimeColumnsList: Array<string>,
+  fullMounthsList: Array<string>
+) {
+  const newRow: any = {};
+  fullInfoColumnsList.forEach((col) => {
+    newRow[col] = "";
+  });
+  fullWorkAndTimeColumnsList.forEach((col) => {
+    fullMounthsList.forEach((mounth) => {
+      newRow[col] = newRow[col] ? { ...newRow[col], [mounth]: 0 } : { [mounth]: 0 };
+    });
+  });
+  newRow.id = id;
+  return newRow;
+}
 
 export const pprSlice = createSlice({
   name: "ppr",
@@ -8,12 +28,15 @@ export const pprSlice = createSlice({
     value: mockRowData,
   },
   reducers: {
-    addRow: (state) => {},
+    addRow: (state, action: PayloadAction<{ id: string }>) => {
+      const newRow = createNewEmptyRaw(action.payload.id, fullInfoColumnsList, fullWorkAndTimeColumnsList, fullMounthsList);
+      state.value.push(newRow as IRowData);
+    },
     removeRow: (state) => {},
     changeCellData: (state, action: PayloadAction<{ id: string; newValue: string | number; category: Array<string> }>) => {
       for (let index = 0; index < state.value.length; index++) {
         const row = state.value[index];
-        if (row.rowId !== action.payload.id) {
+        if (row.id !== action.payload.id) {
           continue;
         }
         if (action.payload.category.length === 1) {

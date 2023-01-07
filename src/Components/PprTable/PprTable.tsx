@@ -2,9 +2,11 @@ import styled from "styled-components";
 import Title from "./Title";
 import Row from "./Row";
 import { RootState } from "../../Redux/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addRow } from "../../Redux/slice/pprSlice";
 import { IRowData } from "../../Interface";
 import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
+import { nanoid } from "nanoid";
 
 const TableStyled = styled.table`
   table-layout: fixed;
@@ -39,15 +41,23 @@ function verticalSpanCells(rowData: IRowData, index: number, data: IRowData[]) {
 
 export default function PprTable() {
   const data = useSelector((state: RootState) => state.ppr.value);
+  const dispath = useDispatch();
+  function addNewRow() {
+    const newId = nanoid();
+    if(newId){
+      dispath(addRow({id: newId}));
+    }
+  }
 
-  const infoColumnList = excludeFromList(fullInfoColumnsList, []);
-  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...[]]);
-  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, []);
-  const mounthList = excludeFromList(fullMounthsList, []);
+  const infoColumnList = excludeFromList(fullInfoColumnsList, settings.hiddenPprColumns.createPlan);
+  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...settings.hiddenPprColumns.createPlan]);
+  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, settings.hiddenPprColumns.createPlan);
+  const mounthList = excludeFromList(fullMounthsList, settings.hiddenPprColumns.createPlan);
   const editableList = settings.editablePprColumns.createPlan;
 
   const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
-    const { sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = verticalSpanCells(rowData, index, data);
+    const sectionVSpan = 1, subsectionVSpan = 1, sectionIsShow = true, subsectionIsShow = true;
+    // const { sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = verticalSpanCells(rowData, index, data);
     let bodyInfoColumnList = infoColumnList;
     if (!sectionIsShow) {
       bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);
@@ -61,7 +71,7 @@ export default function PprTable() {
         infoColumnsList={bodyInfoColumnList}
         workAndTimeColumnsList={workAndTimeColumnList}
         mounthList={mounthList}
-        key={rowData.rowId}
+        key={rowData.id}
         data={rowData}
         sectionVSpan={sectionVSpan}
         subsectionVSpan={subsectionVSpan}
@@ -74,6 +84,7 @@ export default function PprTable() {
         <Title workAndTimeColumnsList={workAndTimeColumnList} infoColumnsList={titleInfoColumnList} mounthList={mounthList} />
         <tbody>{rows}</tbody>
       </TableStyled>
+      <button onClick={()=>addNewRow()}>Добавить строчечку</button>
     </div>
   );
 }

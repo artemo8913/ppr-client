@@ -12,9 +12,8 @@ const StyledRow = styled.tr`
 
 export default function Row(props: IRow) {
   const { editableColumnsList, workAndTimeColumnsList, infoColumnsList, mounthList, data, sectionVSpan = 1, subsectionVSpan = 1 } = props;
-  const { rowId } = data;
+  const { id } = data;
   const colSett = settings.pprColumnSettings;
-  const { textareaRows, textareaCols } = colSett;
 
   const columnsInformationData = infoColumnsList.map((column) => {
     //@ts-ignore
@@ -22,8 +21,19 @@ export default function Row(props: IRow) {
       const vSpan = column === "section" ? sectionVSpan : column === "subsection" ? subsectionVSpan : 1;
       const vText = !!colSett[column].vText;
       const editable = editableColumnsList.indexOf(column) !== -1;
+      const textareaRows = vText ? 1 : colSett.textareaRows;
+      const textareaCols = vText ? colSett.textareaCols : null;
       return (
-        <Cell textareaRows={textareaRows} editable={editable} rowId={rowId} type={column} vText={vText} key={column} rowSpan={vSpan}>
+        <Cell
+          textareaRows={textareaRows}
+          textareaCols={textareaCols}
+          editable={editable}
+          rowId={id}
+          type={column}
+          vText={vText}
+          key={column}
+          rowSpan={vSpan}
+        >
           {/*@ts-ignore*/}
           {data[column]}
         </Cell>
@@ -33,10 +43,21 @@ export default function Row(props: IRow) {
   const planData = mounthList.map((timePeriod) => {
     const workDataEl = workAndTimeColumnsList.map((column) => {
       const vText = !!colSett[column].vText;
-      const editable = editableColumnsList.indexOf(column) !== -1;
+      const editableCol = editableColumnsList.indexOf(column) !== -1;
+      const editableTimePeriod = editableColumnsList.indexOf(timePeriod) !== -1;
+      const editable = editableCol && editableTimePeriod;
+      const textareaRows = vText ? 1 : colSett.textareaRows;
+      const textareaCols = vText ? colSett.textareaCols : null;
       return (
         <Fragment key={`${column} ${timePeriod}`}>
-          <Cell textareaCols={textareaCols} editable={editable} vText={vText} rowId={rowId} type={`${column} ${timePeriod}`}>
+          <Cell
+            textareaRows={textareaRows}
+            textareaCols={textareaCols}
+            editable={editable}
+            vText={vText}
+            rowId={id}
+            type={`${column} ${timePeriod}`}
+          >
             {/*@ts-ignore*/}
             {data[column][timePeriod]}
           </Cell>

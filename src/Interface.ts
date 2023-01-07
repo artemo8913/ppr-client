@@ -1,18 +1,18 @@
 export interface IRowData {
-  rowId: string;
-  index_number: number;
+  id: string;
+  index: string;
   type: string;
   section: string;
   subsection: string;
   location: string;
   lineClass: string;
   meter: string;
-  totalCount: number;
-  yearOfLaunch: number;
+  totalCount: string;
+  yearOfLaunch: string;
   periodicityNormal: string;
   periodicityFact: string;
   periodicityLast: string;
-  normOfTime: number;
+  normOfTime: string;
   normOfTimeDocumentSource: string;
   unity: string;
   planWork: IMounthData;
