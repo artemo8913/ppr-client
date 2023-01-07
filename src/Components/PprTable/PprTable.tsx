@@ -44,6 +44,7 @@ export default function PprTable() {
   const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...[]]);
   const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, []);
   const mounthList = excludeFromList(fullMounthsList, []);
+  const editableList = settings.editablePprColumns.createPlan;
 
   const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
     const { sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = verticalSpanCells(rowData, index, data);
@@ -56,6 +57,7 @@ export default function PprTable() {
     }
     return (
       <Row
+        editableColumnsList={editableList}
         infoColumnsList={bodyInfoColumnList}
         workAndTimeColumnsList={workAndTimeColumnList}
         mounthList={mounthList}

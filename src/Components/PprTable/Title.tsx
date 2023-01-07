@@ -42,7 +42,6 @@ export default function Title(props: ITitle) {
   });
 
   const colCountTitleEl = new Array(colCount).fill(0).map((_, i) => <Cell>{i + 1}</Cell>);
-  console.log(colCount);
   return (
     <thead>
       <tr>

@@ -8,9 +8,9 @@ export const pprSlice = createSlice({
     value: mockRowData,
   },
   reducers: {
-    add: (state) => {},
-    remove: (state) => {},
-    change: (state, action: PayloadAction<{ id: string; newValue: string | number; category: Array<string> }>) => {
+    addRow: (state) => {},
+    removeRow: (state) => {},
+    changeCellData: (state, action: PayloadAction<{ id: string; newValue: string | number; category: Array<string> }>) => {
       for (let index = 0; index < state.value.length; index++) {
         const row = state.value[index];
         if (row.rowId !== action.payload.id) {
@@ -36,6 +36,6 @@ export const pprSlice = createSlice({
   },
 });
 
-export const { add, remove, change } = pprSlice.actions;
+export const { addRow, removeRow, changeCellData } = pprSlice.actions;
 
 export default pprSlice.reducer;

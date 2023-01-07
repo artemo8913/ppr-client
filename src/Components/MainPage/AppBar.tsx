@@ -16,7 +16,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./AppBarListItems";
 
-const drawerWidth: number = 240;
+const drawerWidth: number = 200;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -60,7 +60,7 @@ const Drawer = styled(MuiDrawer, {
       }),
       width: theme.spacing(7),
       [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
+        width: theme.spacing(7),
       },
     }),
   },
@@ -96,14 +96,7 @@ function DashboardContent() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component={Link}
-              to="/"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1, textDecoration:  "none"}}
-            >
+            <Typography component={Link} to="/" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, textDecoration: "none" }}>
               ТрансЭнерго. Цифровой ППР
             </Typography>
             <IconButton color="inherit">
@@ -136,10 +129,7 @@ function DashboardContent() {
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+            backgroundColor: (theme) => (theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900]),
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",

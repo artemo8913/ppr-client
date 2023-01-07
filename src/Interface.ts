@@ -25,6 +25,7 @@ export interface IRowData {
 export interface IRow {
   data: IRowData;
   infoColumnsList: Array<string>;
+  editableColumnsList: Array<string>;
   workAndTimeColumnsList: Array<string>;
   mounthList: Array<string>;
   sectionVSpan?: number;

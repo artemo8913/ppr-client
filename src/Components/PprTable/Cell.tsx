@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ICell } from "../../Interface";
 import { useDispatch } from "react-redux";
-import { change } from "../../Redux/slice/pprSlice";
+import { changeCellData } from "../../Redux/slice/pprSlice";
 import settings from "../../settings";
 //в классы переписать цвет фона для плана, вертикальный текст, editable
 const CellStyled = styled.td<{ bgType: string; vText: boolean; editable: boolean; widthPercent?: number }>`
@@ -85,14 +85,7 @@ export default function Cell(props: ICell) {
   const bgType = setBgType(type);
 
   return (
-    <CellStyled
-      widthPercent={widthPercent}
-      editable={editable}
-      vText={vText}
-      colSpan={colSpan}
-      rowSpan={rowSpan}
-      bgType={bgType}
-    >
+    <CellStyled widthPercent={widthPercent} editable={editable} vText={vText} colSpan={colSpan} rowSpan={rowSpan} bgType={bgType}>
       {editable ? (
         <ConteinerStyled>
           <TextAreaStyled
@@ -101,9 +94,8 @@ export default function Cell(props: ICell) {
             verticalText={vText}
             value={children}
             onChange={(e) => {
-              console.log(e.target.value, validateTextareaInput(e.target.value));
               if (validateTextareaInput(e.target.value)) {
-                dispatch(change({ id: rowId || "none", newValue: e.target.value, category: type ? type.split(" ") : ["none"] }));
+                dispatch(changeCellData({ id: rowId || "none", newValue: e.target.value, category: type ? type.split(" ") : ["none"] }));
               }
             }}
           />

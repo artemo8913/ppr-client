@@ -36,6 +36,7 @@ const settings: any = {
   },
   editablePprColumns: {
     none: [],
+    createPlan: ["section", "subsection", "planWork"],
   },
   pprColumnSettings: {
     textareaRows: 5,
