@@ -21,7 +21,6 @@ function createNewEmptyRaw(
   newRow.id = id;
   return newRow;
 }
-
 export const pprSlice = createSlice({
   name: "ppr",
   initialState: {
@@ -34,27 +33,17 @@ export const pprSlice = createSlice({
     },
     removeRow: (state) => {},
     changeCellData: (state, action: PayloadAction<{ id: string; newValue: string | number; category: Array<string> }>) => {
-      for (let index = 0; index < state.value.length; index++) {
-        const row = state.value[index];
-        if (row.id !== action.payload.id) {
-          continue;
-        }
-        if (action.payload.category.length === 1) {
-          state.value.splice(index, 1, { ...state.value[index], [action.payload.category[0]]: action.payload.newValue });
-          break;
-        }
-        if (action.payload.category.length === 2) {
-          state.value.splice(index, 1, {
-            ...state.value[index],
-            [action.payload.category[0]]: {
-              //@ts-ignore
-              ...state.value[index][action.payload.category[0]],
-              [action.payload.category[1]]: action.payload.newValue,
-            },
-          });
-          break;
-        }
-      }
+      const id = action.payload.id;
+      const firstPartOfCategory = action.payload.category[0];
+      const secondPartOfCategory = action.payload.category[1];
+      const newValue = action.payload.newValue;
+      state.value.forEach(row => {
+        if (row.id !== id) return;
+        //@ts-ignore
+        else if(firstPartOfCategory && !secondPartOfCategory) row[firstPartOfCategory] = newValue;
+        //@ts-ignore
+        else if(firstPartOfCategory && secondPartOfCategory) row[firstPartOfCategory][secondPartOfCategory] = newValue;
+      });
     },
   },
 });
