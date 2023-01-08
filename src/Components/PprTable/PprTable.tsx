@@ -56,8 +56,8 @@ export default function PprTable() {
   const editableList = settings.editablePprColumns.createPlan;
 
   const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
-    const sectionVSpan = 1, subsectionVSpan = 1, sectionIsShow = true, subsectionIsShow = true;
-    // const { sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = verticalSpanCells(rowData, index, data);
+    let sectionVSpan = 1, subsectionVSpan = 1, sectionIsShow = true, subsectionIsShow = true;
+    // ({ sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = verticalSpanCells(rowData, index, data));
     let bodyInfoColumnList = infoColumnList;
     if (!sectionIsShow) {
       bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);
@@ -80,11 +80,11 @@ export default function PprTable() {
   });
   return (
     <div className="app">
+      <button onClick={()=>addNewRow()}>Добавить строчечку</button>
       <TableStyled>
         <Title workAndTimeColumnsList={workAndTimeColumnList} infoColumnsList={titleInfoColumnList} mounthList={mounthList} />
         <tbody>{rows}</tbody>
       </TableStyled>
-      <button onClick={()=>addNewRow()}>Добавить строчечку</button>
     </div>
   );
 }
