@@ -20,7 +20,8 @@ const settings: any = {
   },
   hiddenPprColumns: {
     none: [],
-    createPlan: ["factWork", "factNormTime", "factTime"],
+    for_planning: ["factWork", "factNormTime", "factTime"],
+    for_fulfilling: []
   },
   editablePprColumns: {
     none: [],
@@ -164,6 +165,8 @@ const settings: any = {
   },
 };
 export default settings;
+export const pprStatuses = ["none", "creating", "on_agreement", "on_aprove", "fulfilling", "done"];
+export const pprHidingColumnsStates = ["none", "for_planning", "for_fulfilling"];
 export const fullMounthsList = ["year", "jan", "feb", "mar", "apr", "may", "june", "july", "aug", "sept", "oct", "nov", "dec"];
 export const fullInfoColumnsList = [
   "section",

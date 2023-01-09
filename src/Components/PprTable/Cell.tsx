@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ICell } from "../../Interface";
 import { useDispatch } from "react-redux";
-import { changeCellData } from "../../Redux/slice/pprSlice";
+import { changeCellData } from "../../Redux/slice/pprDataSlice";
 import settings from "../../settings";
 //в классы переписать цвет фона для плана, вертикальный текст, editable
 const CellStyled = styled.td<{ bgType: string; vText: boolean; editable: boolean; widthPercent?: number }>`

@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import Title from "./Title";
-import Row from "./Row";
+import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import { addRow } from "../../Redux/slice/pprSlice";
 import { IRowData } from "../../Interface";
 import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
-import { nanoid } from "nanoid";
+import Title from "./Title";
+import Row from "./Row";
+import PprStateSandbox from "./PprStateSandBox";
 
 const TableStyled = styled.table`
   table-layout: fixed;
@@ -16,11 +15,11 @@ const TableStyled = styled.table`
   font-size: 12px;
 `;
 
-function excludeFromList(fullList: Array<string>, excludedList: Array<string>) {
+function excludeFromList(fullList: Array<string>, excludedList: Array<string> = []) {
   return fullList.filter((el) => excludedList.indexOf(el) === -1);
 }
-
-function verticalSpanCells(rowData: IRowData, index: number, data: IRowData[]) {
+//не нравится эта функция, надо переделать способ объединения строк с возможностью выбора столбцов
+function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
   let sectionVSpan = 1;
   let subsectionVSpan = 1;
   let sectionIsShow = true;
@@ -40,24 +39,26 @@ function verticalSpanCells(rowData: IRowData, index: number, data: IRowData[]) {
 }
 
 export default function PprTable() {
-  const data = useSelector((state: RootState) => state.ppr.value);
-  const dispath = useDispatch();
-  function addNewRow() {
-    const newId = nanoid();
-    if(newId){
-      dispath(addRow({id: newId}));
-    }
-  }
+  const { status, fulfullingMounth, data } = useSelector((state: RootState) => state.pprData);
+  const { hidden, uniteSameCells } = useSelector((state: RootState) => state.pprUI);
 
-  const infoColumnList = excludeFromList(fullInfoColumnsList, settings.hiddenPprColumns.createPlan);
-  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...settings.hiddenPprColumns.createPlan]);
-  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, settings.hiddenPprColumns.createPlan);
-  const mounthList = excludeFromList(fullMounthsList, settings.hiddenPprColumns.createPlan);
+  const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
+  if(hidden==='for_fulfilling' && status === 'fulfilling' && fulfullingMounth !== "year"){
+    hiddenColumnsList.push(...excludeFromList(fullMounthsList, [fulfullingMounth]));
+  }
+  console.log(hiddenColumnsList);
+  const infoColumnList = excludeFromList(fullInfoColumnsList, hiddenColumnsList);
+  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...hiddenColumnsList]);
+  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, hiddenColumnsList);
+  const mounthList = excludeFromList(fullMounthsList, hiddenColumnsList);
   const editableList = settings.editablePprColumns.createPlan;
 
-  const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
-    let sectionVSpan = 1, subsectionVSpan = 1, sectionIsShow = true, subsectionIsShow = true;
-    // ({ sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = verticalSpanCells(rowData, index, data));
+  const rows = data.map((rowData: IRowData) => {
+    let sectionVSpan = 1,
+      subsectionVSpan = 1,
+      sectionIsShow = true,
+      subsectionIsShow = true;
+    // ({ sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = connectVCells(rowData, index, data));
     let bodyInfoColumnList = infoColumnList;
     if (!sectionIsShow) {
       bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);
@@ -79,8 +80,8 @@ export default function PprTable() {
     );
   });
   return (
-    <div className="app">
-      <button onClick={()=>addNewRow()}>Добавить строчечку</button>
+    <div>
+      <PprStateSandbox />
       <TableStyled>
         <Title workAndTimeColumnsList={workAndTimeColumnList} infoColumnsList={titleInfoColumnList} mounthList={mounthList} />
         <tbody>{rows}</tbody>

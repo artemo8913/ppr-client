@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import pprReducer from './slice/pprSlice';
+import pprDataReducer from './slice/pprDataSlice';
+import pprUIReducer from './slice/pprUISlice';
 
 const store = configureStore({
   reducer: {
-    ppr: pprReducer,
+    pprData: pprDataReducer,
+    pprUI: pprUIReducer,
   }
 });
 export default store;
