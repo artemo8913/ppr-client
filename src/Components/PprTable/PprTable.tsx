@@ -43,7 +43,7 @@ export default function PprTable() {
   const { hidden, uniteSameCells } = useSelector((state: RootState) => state.pprUI);
 
   const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
-  if(hidden==='for_fulfilling' && status === 'fulfilling' && fulfullingMounth !== "year"){
+  if(hidden==='fulfilling' && status === 'fulfilling' && fulfullingMounth !== "year"){
     hiddenColumnsList.push(...excludeFromList(fullMounthsList, [fulfullingMounth]));
   }
   console.log(hiddenColumnsList);
