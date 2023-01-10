@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { IRowData } from "../../Interface";
 import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
@@ -40,25 +40,33 @@ function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
 
 export default function PprTable() {
   const { status, fulfullingMounth, data } = useSelector((state: RootState) => state.pprData);
-  const { hidden, uniteSameCells } = useSelector((state: RootState) => state.pprUI);
-
+  const { hidden, uniteCells, editableState } = useSelector((state: RootState) => state.pprUI);
+  
   const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
-  if(hidden==='fulfilling' && status === 'fulfilling' && fulfullingMounth !== "year"){
+  const editableList = [...settings.editablePprColumns[editableState]];
+  
+  if (hidden === "fulfilling" && status === "fulfilling" && fulfullingMounth !== "year") {
     hiddenColumnsList.push(...excludeFromList(fullMounthsList, [fulfullingMounth]));
   }
-  console.log(hiddenColumnsList);
+  if(status === "fulfilling" && fulfullingMounth !== "year"){
+    editableList.push(fulfullingMounth);
+  } else if(status === "creating" && fulfullingMounth === "year"){
+    editableList.push(...excludeFromList(fullMounthsList, ["year"]));
+  }
+  console.log(editableList);
   const infoColumnList = excludeFromList(fullInfoColumnsList, hiddenColumnsList);
   const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...hiddenColumnsList]);
   const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, hiddenColumnsList);
   const mounthList = excludeFromList(fullMounthsList, hiddenColumnsList);
-  const editableList = settings.editablePprColumns.createPlan;
 
-  const rows = data.map((rowData: IRowData) => {
+  const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
     let sectionVSpan = 1,
       subsectionVSpan = 1,
       sectionIsShow = true,
       subsectionIsShow = true;
-    // ({ sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = connectVCells(rowData, index, data));
+    if(uniteCells){
+      ({ sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = connectVCells(rowData, index, data));
+    } 
     let bodyInfoColumnList = infoColumnList;
     if (!sectionIsShow) {
       bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);

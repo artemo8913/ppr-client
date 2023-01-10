@@ -1,3 +1,6 @@
+//перенести всё, что связано с состоянием UI или данных в redux! здесь оставить общие настройки (темы и т.д.)
+//в заголовок перенести настройки, связанные с заголовком таблицы (title)??? с другой стороны, здесь хранятся настройки для vText
+//vText - создать массив, в котором будут перечисленны столбы для которых текст будет вертикальным
 const settings: any = {
   colors: {
     firstQuarter: "rgba(0,26,255,0.5)",
@@ -26,7 +29,7 @@ const settings: any = {
   },
   editablePprColumns: {
     none: [],
-    createPlan: [
+    planning: [
       "section",
       "subsection",
       "location",
@@ -41,19 +44,8 @@ const settings: any = {
       "normOfTimeDocumentSource",
       "unity",
       "planWork",
-      "jan",
-      "feb",
-      "mar",
-      "apr",
-      "may",
-      "june",
-      "july",
-      "aug",
-      "sept",
-      "oct",
-      "nov",
-      "dec",
     ],
+    fulfilling: ["factWork", "factTime"],
   },
   pprColumnSettings: {
     textareaRows: 6,
@@ -66,90 +58,32 @@ const settings: any = {
       titleColSpan: 2,
     },
     subsection: { title: "" },
-    location: {
-      title: "Наименование места проведения работ / тип оборудования",
-      widthPercent: 4,
-      titleRowSpan: 4,
-    },
-    lineClass: {
-      title: "Класс участка / вид технического обслуживания и ремонта",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    meter: {
-      title: "Измеритель",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    totalCount: {
-      title: "Количество измерителей (всего)",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    yearOfLaunch: {
-      title: "Год ввода в эксплуатацию",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
+    location: { title: "Наименование места проведения работ / тип оборудования", widthPercent: 4, titleRowSpan: 4 },
+    lineClass: { title: "Класс участка / вид технического обслуживания и ремонта", widthPercent: 1, titleRowSpan: 4, vText: true },
+    meter: { title: "Измеритель", widthPercent: 1, titleRowSpan: 4, vText: true },
+    totalCount: { title: "Количество измерителей (всего)", widthPercent: 1, titleRowSpan: 4, vText: true },
+    yearOfLaunch: { title: "Год ввода в эксплуатацию", widthPercent: 1, titleRowSpan: 4, vText: true },
     periodicityNormal: {
       title: "Периодичность выполнения работ (в соответствии с действующими правилами)",
       widthPercent: 1,
       titleRowSpan: 4,
       vText: true,
     },
-    periodicityFact: {
-      title: "Периодичность выполнения работ (факт)",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
+    periodicityFact: { title: "Периодичность выполнения работ (факт)", widthPercent: 1, titleRowSpan: 4, vText: true },
     periodicityLast: {
       title: "Дата последнего выполнения (для работ с периодичностью более 1 года)",
       widthPercent: 1,
       titleRowSpan: 4,
       vText: true,
     },
-    normOfTime: {
-      title: "Норма времени на измеритель, чел.-ч",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    normOfTimeDocumentSource: {
-      title: "Обоснование нормы времени",
-      widthPercent: 2,
-      titleRowSpan: 4,
-    },
-    unity: {
-      title: "Подразделение / исполнитель",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    planWork: {
-      title: "кол-во",
-      vText: true,
-    },
-    planTime: {
-      title: "норм. время на плановый объем, чел.-ч",
-      vText: true,
-    },
-    factWork: {
-      title: "кол-во",
-      vText: true,
-    },
-    factNormTime: {
-      title: "трудозатраты по норме времени, чел.-ч",
-      vText: true,
-    },
-    factTime: {
-      title: "фактические трудозатраты, чел.-ч",
-      vText: true,
-    },
+    normOfTime: { title: "Норма времени на измеритель, чел.-ч", widthPercent: 1, titleRowSpan: 4, vText: true },
+    normOfTimeDocumentSource: { title: "Обоснование нормы времени", widthPercent: 2, titleRowSpan: 4 },
+    unity: { title: "Подразделение / исполнитель", widthPercent: 1, titleRowSpan: 4, vText: true },
+    planWork: { title: "кол-во", vText: true },
+    planTime: { title: "норм. время на плановый объем, чел.-ч", vText: true },
+    factWork: { title: "кол-во", vText: true },
+    factNormTime: { title: "трудозатраты по норме времени, чел.-ч", vText: true },
+    factTime: { title: "фактические трудозатраты, чел.-ч", vText: true },
     year: { title: "Всего за год", titleColSpan: 5 },
     jan: { title: "Январь", titleColSpan: 5 },
     feb: { title: "Февраль", titleColSpan: 5 },
@@ -167,7 +101,8 @@ const settings: any = {
 };
 export default settings;
 export const pprStatuses = ["none", "creating", "on_agreement", "on_aprove", "fulfilling", "done"];
-export const pprHidingColumnsStates = ["none", "for_planning", "for_fulfilling","only_work"];
+export const pprHidingColumnsStates = ["none", "planning", "fulfilling", "only_work"];
+export const pprEditableCellsStates = ["none", "planning", "fulfilling"];
 export const fullMounthsList = ["year", "jan", "feb", "mar", "apr", "may", "june", "july", "aug", "sept", "oct", "nov", "dec"];
 export const fullInfoColumnsList = [
   "section",
