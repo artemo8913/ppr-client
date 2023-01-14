@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { IRowData } from "../../Interface";
 import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";

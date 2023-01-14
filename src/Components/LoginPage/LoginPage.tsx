@@ -37,10 +37,12 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Typography component="h1" variant='h3'>Трансэнерго</Typography>
+          <Typography component="h3" variant='h4'>Цифровой ППР</Typography>
+          <Avatar sx={{ mt:4, mb:1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h3" variant="h5">
             Введите логин и пароль
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>

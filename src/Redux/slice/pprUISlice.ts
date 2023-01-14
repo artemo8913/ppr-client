@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { pprHidingColumnsStates, pprEditableCellsStates } from "../../settings";
-import store from "../store";
+import { pprHidingColumnsStates } from "../../settings";
 
 export const pprUISlice = createSlice({
   name: "pprUI",
