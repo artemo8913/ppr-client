@@ -1,7 +1,9 @@
+import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { IRowData } from "../../Interface";
+import apiFetch from "../../healper/ApiFetch";
 import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
 import Title from "./Title";
 import Row from "./Row";
@@ -41,19 +43,23 @@ function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
 export default function PprTable() {
   const { status, fulfullingMounth, data } = useSelector((state: RootState) => state.pprData);
   const { hidden, uniteCells, editableState } = useSelector((state: RootState) => state.pprUI);
-  
+
+  const [ppr, setPpr] = React.useState<IRowData[]>();
+  React.useEffect(() => {
+    console.log('юзе эфект');
+    apiFetch.getData(`http://localhost:5000/api/ppr/3`, "stringify", setPpr, "get");
+  }, []);
   const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
   const editableList = [...settings.editablePprColumns[editableState]];
-  
+
   if (hidden === "fulfilling" && status === "fulfilling" && fulfullingMounth !== "year") {
     hiddenColumnsList.push(...excludeFromList(fullMounthsList, [fulfullingMounth]));
   }
-  if(status === "fulfilling" && fulfullingMounth !== "year"){
+  if (status === "fulfilling" && fulfullingMounth !== "year") {
     editableList.push(fulfullingMounth);
-  } else if(status === "creating" && fulfullingMounth === "year"){
+  } else if (status === "creating" && fulfullingMounth === "year") {
     editableList.push(...excludeFromList(fullMounthsList, ["year"]));
   }
-  console.log(editableList);
   const infoColumnList = excludeFromList(fullInfoColumnsList, hiddenColumnsList);
   const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...hiddenColumnsList]);
   const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, hiddenColumnsList);
@@ -64,9 +70,9 @@ export default function PprTable() {
       subsectionVSpan = 1,
       sectionIsShow = true,
       subsectionIsShow = true;
-    if(uniteCells){
+    if (uniteCells) {
       ({ sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow } = connectVCells(rowData, index, data));
-    } 
+    }
     let bodyInfoColumnList = infoColumnList;
     if (!sectionIsShow) {
       bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);

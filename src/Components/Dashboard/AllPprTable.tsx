@@ -1,5 +1,6 @@
 import React from "react";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import apiFetch from "../../healper/ApiFetch";
 
 /**
@@ -20,13 +21,15 @@ const columns: GridColDef[] = [
 ];
 
 export default function AllPprTable() {
+  const navigate = useNavigate();
+
   const [allPpr, setallPpr] = React.useState({ data: [] });
   React.useEffect(() => {
     apiFetch.getData("http://localhost:5000/api/ppr", "parse", setallPpr, "get");
   }, []);
   return (
-    <div style={{backgroundColor:"white", height: 300, width: "100%" }}>
-      <DataGrid density="compact" rows={allPpr.data} columns={columns} pageSize={5} onRowClick={({id})=>console.log('clivk',id)} />
+    <div style={{ backgroundColor: "white", height: 300, width: "100%" }}>
+      <DataGrid density="compact" rows={allPpr.data} columns={columns} pageSize={5} onRowClick={({ id }) => navigate(`/ppr/${id}`)} />
     </div>
   );
 }

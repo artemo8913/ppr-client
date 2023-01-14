@@ -1,6 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import store from "./Redux/store";
 import { RootState } from "./Redux/store";
 
 import AppBar from "./Components/MainPage/AppBar";
@@ -14,11 +13,14 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {user.login && <Route path="/" element={<AppBar />}>
-          <Route path="" element={<Main />} />
-          <Route path="ppr" element={<PprTable />} />
-          <Route path="developer" element={<DeveloperPage />} />
-        </Route>}
+        {user.login && (
+          <Route path="/" element={<AppBar />}>
+            <Route path="" element={<Main />} />
+            <Route path="ppr/:id" element={<PprTable />} />
+            <Route path="developer" element={<DeveloperPage />} />
+            <Route path="*" element={<div>Ууппс, нет странички</div>} />
+          </Route>
+        )}
         <Route path="/" element={<LoginPage />} />
         <Route path="*" element={<div>Ууппс, нет странички</div>} />
       </Routes>
