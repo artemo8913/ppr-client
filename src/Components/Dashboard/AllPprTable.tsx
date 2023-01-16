@@ -18,6 +18,7 @@ const columns: GridColDef[] = [
   { field: "dis_name_short", headerName: "Дистанция", width: 90 },
   { field: "sub_name_short", headerName: "Подразделение", width: 130 },
   { field: "status", headerName: "Статус", width: 90 },
+  { field: "mounth", headerName: "Месяц заполнения", width: 90 },
 ];
 
 export default function AllPprTable() {

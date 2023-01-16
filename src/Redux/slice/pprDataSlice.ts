@@ -25,8 +25,20 @@ function createNewEmptyRaw(
 export const pprDataSlice = createSlice({
   name: "pprData",
   initialState: {
+    id: "",
+    name: "",
+    year: "",
     status: "none",
     fulfullingMounth: "year",
+    idDirection: 1,
+    idDistance: 1,
+    idSubdivision: 1,
+    dirName: "Красноярская дирекция по энергообеспечению",
+    disName: "Красноярская дистанция электроснабжения",
+    subName: "Район контактной сети ЭЧК-9",
+    dirNameShort: "КрасНТЭ",
+    disNameShort: "ЭЧ-3",
+    subNameShort: "ЭЧК-9",
     data: mockRowData,
   },
   reducers: {
@@ -45,7 +57,7 @@ export const pprDataSlice = createSlice({
       state.data.push(newRow as IRowData);
     },
     removeData: (state, action: PayloadAction<{ id: string }>) => {
-      state.data = state.data.filter(el => el.id !== action.payload.id);
+      state.data = state.data.filter((el) => el.id !== action.payload.id);
     },
     changeCellData: (state, action: PayloadAction<{ id: string; newValue: string | number; category: Array<string> }>) => {
       const id = action.payload.id;

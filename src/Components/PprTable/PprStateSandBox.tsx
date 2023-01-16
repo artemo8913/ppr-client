@@ -30,7 +30,7 @@ export default function PprStateSandbox() {
   const updateEditableState = (status: string, fulfullingMounth: string) => dispatch(toggleEditableState({status, fulfullingMounth}));
 
   return (
-    <div>
+    <div style={{padding: '10px'}}>
       <button onClick={() => addNewRow()}>Добавить строчечку</button>
       <button onClick={() => removeRow()}>
         Удалить строчечку с id=

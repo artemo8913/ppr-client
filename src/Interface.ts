@@ -1,19 +1,21 @@
 export interface IRowData {
   id: string;
   index: string;
-  type: string;
+  branch: string;
+  subbranch: string;
   section: string;
-  subsection: string;
+  subsectionFirst: string;
+  subsectionSecond: string;
   location: string;
   lineClass: string;
-  meter: string;
+  measure: string;
   totalCount: string;
-  yearOfLaunch: string;
+  entryYear: string;
   periodicityNormal: string;
-  periodicityFact: string;
+  lastMaintenanceYear: string;
   periodicityLast: string;
   normOfTime: string;
-  normOfTimeDocumentSource: string;
+  normOfTimeDocument: string;
   unity: string;
   planWork: IMounthData;
   planTime: IMounthData;

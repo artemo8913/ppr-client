@@ -16,7 +16,7 @@ export default function App() {
         {user.login && (
           <Route path="/" element={<AppBar />}>
             <Route path="" element={<Main />} />
-            <Route path="ppr/:id" element={<PprTable />} />
+            <Route path="ppr/:pprId" element={<PprTable />} />
             <Route path="developer" element={<DeveloperPage />} />
             <Route path="*" element={<div>Ууппс, нет странички</div>} />
           </Route>

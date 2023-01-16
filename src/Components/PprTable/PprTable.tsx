@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { IRowData } from "../../Interface";
 import apiFetch from "../../healper/ApiFetch";
@@ -28,14 +29,14 @@ function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
   let subsectionIsShow = true;
   if (index !== data.length - 1) {
     for (let j = index + 1; j < data.length && rowData.section === data[j].section; j++) sectionVSpan++;
-    for (let j = index + 1; j < data.length && rowData.subsection === data[j].subsection && rowData.section === data[j].section; j++)
+    for (let j = index + 1; j < data.length && rowData.subsectionFirst === data[j].subsectionFirst && rowData.section === data[j].section; j++)
       subsectionVSpan++;
   }
   if (index !== 0) {
     const prevSection = data[index - 1].section;
-    const prevSubsection = data[index - 1].subsection;
+    const prevSubsection = data[index - 1].subsectionFirst;
     if (rowData.section === prevSection) sectionIsShow = false;
-    if (rowData.subsection === prevSubsection && rowData.section === prevSection) subsectionIsShow = false;
+    if (rowData.subsectionFirst === prevSubsection && rowData.section === prevSection) subsectionIsShow = false;
   }
   return { sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow };
 }
@@ -43,11 +44,11 @@ function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
 export default function PprTable() {
   const { status, fulfullingMounth, data } = useSelector((state: RootState) => state.pprData);
   const { hidden, uniteCells, editableState } = useSelector((state: RootState) => state.pprUI);
-
+  const path = useLocation();
+  const {pprId} = useParams();
   const [ppr, setPpr] = React.useState<IRowData[]>();
   React.useEffect(() => {
-    console.log('юзе эфект');
-    apiFetch.getData(`http://localhost:5000/api/ppr/3`, "stringify", setPpr, "get");
+    apiFetch.getData(`http://localhost:5000/api/ppr/${pprId}`, "stringify", setPpr, "get");
   }, []);
   const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
   const editableList = [...settings.editablePprColumns[editableState]];
@@ -61,7 +62,7 @@ export default function PprTable() {
     editableList.push(...excludeFromList(fullMounthsList, ["year"]));
   }
   const infoColumnList = excludeFromList(fullInfoColumnsList, hiddenColumnsList);
-  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection", ...hiddenColumnsList]);
+  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsectionFirst", ...hiddenColumnsList]);
   const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, hiddenColumnsList);
   const mounthList = excludeFromList(fullMounthsList, hiddenColumnsList);
 
@@ -78,7 +79,7 @@ export default function PprTable() {
       bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);
     }
     if (!subsectionIsShow) {
-      bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["subsection"]);
+      bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["subsectionFirst"]);
     }
     return (
       <Row
@@ -95,7 +96,6 @@ export default function PprTable() {
   });
   return (
     <div>
-      <PprStateSandbox />
       <TableStyled>
         <Title workAndTimeColumnsList={workAndTimeColumnList} infoColumnsList={titleInfoColumnList} mounthList={mounthList} />
         <tbody>{rows}</tbody>

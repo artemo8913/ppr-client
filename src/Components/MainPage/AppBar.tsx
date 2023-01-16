@@ -16,6 +16,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./AppBarListItems";
 
+import PprStateSandbox from "../PprTable/PprStateSandBox";
+
 const drawerWidth: number = 200;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -136,6 +138,7 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
+          <PprStateSandbox />
           <Outlet />
         </Box>
       </Box>
