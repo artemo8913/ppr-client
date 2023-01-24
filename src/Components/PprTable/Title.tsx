@@ -7,8 +7,8 @@ const colSett = settings.pprColumnSettings;
 export default function Title(props: ITitle) {
   let fullPlanColSpan = 0;
   let colCount = 1;
-  const { infoColumnsList, mounthList, workAndTimeColumnsList } = props;
-  const mounthTitles: Array<ReactNode> = [];
+  const { infoColumnsList, monthList, workAndTimeColumnsList } = props;
+  const monthTitles: Array<ReactNode> = [];
   const planFactTitles: Array<ReactNode> = [];
   const workAndTimeColumnsTitles: Array<ReactNode> = [];
 
@@ -24,21 +24,21 @@ export default function Title(props: ITitle) {
     );
   });
 
-  mounthList.forEach((mounth) => {
-    let mounthColSpan = 0;
+  monthList.forEach((month) => {
+    let monthColSpan = 0;
     let planColSpan = 0;
     let factColSpan = 0;
     workAndTimeColumnsList.forEach((col) => {
       if (col.startsWith("plan")) planColSpan++;
       else if (col.startsWith("fact")) factColSpan++;
       workAndTimeColumnsTitles.push(<Cell vText>{colSett[col].title}</Cell>);
-      mounthColSpan++;
+      monthColSpan++;
       colCount++;
       fullPlanColSpan++;
     });
     if (planColSpan > 0) planFactTitles.push(<Cell colSpan={planColSpan}>План</Cell>);
     if (factColSpan > 0) planFactTitles.push(<Cell colSpan={factColSpan}>Факт</Cell>);
-    mounthTitles.push(<Cell colSpan={planColSpan + factColSpan}>{colSett[mounth].title}</Cell>);
+    monthTitles.push(<Cell colSpan={planColSpan + factColSpan}>{colSett[month].title}</Cell>);
   });
 
   const colCountTitleEl = new Array(colCount).fill(0).map((_, i) => <Cell>{i + 1}</Cell>);
@@ -50,7 +50,7 @@ export default function Title(props: ITitle) {
           Планируемое и фактическое выполнение работ за год и по месяцам:
         </Cell>
       </tr>
-      <tr>{mounthTitles}</tr>
+      <tr>{monthTitles}</tr>
       <tr>{planFactTitles}</tr>
       <tr>{workAndTimeColumnsTitles}</tr>
       <tr>{colCountTitleEl}</tr>

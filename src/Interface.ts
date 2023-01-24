@@ -17,11 +17,11 @@ export interface IRowData {
   normOfTime: string;
   normOfTimeDocument: string;
   unity: string;
-  planWork: IMounthData;
-  planTime: IMounthData;
-  factWork: IMounthData;
-  factNormTime: IMounthData;
-  factTime: IMounthData;
+  planWork: IMonthData;
+  planTime: IMonthData;
+  factWork: IMonthData;
+  factNormTime: IMonthData;
+  factTime: IMonthData;
 }
 
 export interface IRow {
@@ -29,7 +29,7 @@ export interface IRow {
   infoColumnsList: Array<string>;
   editableColumnsList: Array<string>;
   workAndTimeColumnsList: Array<string>;
-  mounthList: Array<string>;
+  monthList: Array<string>;
   sectionVSpan?: number;
   subsectionVSpan?: number;
 }
@@ -37,10 +37,10 @@ export interface IRow {
 export interface ITitle {
   infoColumnsList: Array<string>;
   workAndTimeColumnsList: Array<string>;
-  mounthList: Array<string>;
+  monthList: Array<string>;
 }
 
-export interface IMounthData {
+export interface IMonthData {
   year: number;
   jan: number;
   feb: number;

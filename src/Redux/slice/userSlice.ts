@@ -5,7 +5,9 @@ export const userSlice = createSlice({
   initialState: {
     login: "asd",
     roles: [""],
-    division: "",
+    id_subdivision: 0,
+    id_distance: 0,
+    id_direction: 0,
   },
   reducers: {},
 });

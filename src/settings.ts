@@ -103,7 +103,7 @@ export default settings;
 export const pprStatuses = ["none", "template", "creating", "on_agreement", "on_aprove", "fulfilling", "done"];
 export const pprHidingColumnsStates = ["none", "planning", "fulfilling", "only_work"];
 export const pprEditableCellsStates = ["none", "planning", "fulfilling"];
-export const fullMounthsList = ["year", "jan", "feb", "mar", "apr", "may", "june", "july", "aug", "sept", "oct", "nov", "dec"];
+export const fullMonthsList = ["year", "jan", "feb", "mar", "apr", "may", "june", "july", "aug", "sept", "oct", "nov", "dec"];
 export const fullInfoColumnsList = [
   "section",
   "subsectionFirst",

@@ -5,10 +5,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import { IRowData } from "../../Interface";
 import apiFetch from "../../healper/ApiFetch";
-import settings, { fullMounthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
+import settings, { fullMonthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
 import Title from "./Title";
 import Row from "./Row";
-import PprStateSandbox from "./PprStateSandBox";
 
 const TableStyled = styled.table`
   table-layout: fixed;
@@ -42,9 +41,8 @@ function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
 }
 
 export default function PprTable() {
-  const { status, fulfullingMounth, data } = useSelector((state: RootState) => state.pprData);
+  const { status, fulfullingMonth, data } = useSelector((state: RootState) => state.pprData);
   const { hidden, uniteCells, editableState } = useSelector((state: RootState) => state.pprUI);
-  const path = useLocation();
   const {pprId} = useParams();
   const [ppr, setPpr] = React.useState<IRowData[]>();
   React.useEffect(() => {
@@ -53,18 +51,18 @@ export default function PprTable() {
   const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
   const editableList = [...settings.editablePprColumns[editableState]];
 
-  if (hidden === "fulfilling" && status === "fulfilling" && fulfullingMounth !== "year") {
-    hiddenColumnsList.push(...excludeFromList(fullMounthsList, [fulfullingMounth]));
+  if (hidden === "fulfilling" && status === "fulfilling" && fulfullingMonth !== "year") {
+    hiddenColumnsList.push(...excludeFromList(fullMonthsList, [fulfullingMonth]));
   }
-  if (status === "fulfilling" && fulfullingMounth !== "year") {
-    editableList.push(fulfullingMounth);
-  } else if (status === "creating" && fulfullingMounth === "year") {
-    editableList.push(...excludeFromList(fullMounthsList, ["year"]));
+  if (status === "fulfilling" && fulfullingMonth !== "year") {
+    editableList.push(fulfullingMonth);
+  } else if (status === "creating" && fulfullingMonth === "year") {
+    editableList.push(...excludeFromList(fullMonthsList, ["year"]));
   }
   const infoColumnList = excludeFromList(fullInfoColumnsList, hiddenColumnsList);
   const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsectionFirst", ...hiddenColumnsList]);
   const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, hiddenColumnsList);
-  const mounthList = excludeFromList(fullMounthsList, hiddenColumnsList);
+  const monthList = excludeFromList(fullMonthsList, hiddenColumnsList);
 
   const rows = data.map((rowData: IRowData, index: number, data: IRowData[]) => {
     let sectionVSpan = 1,
@@ -86,7 +84,7 @@ export default function PprTable() {
         editableColumnsList={editableList}
         infoColumnsList={bodyInfoColumnList}
         workAndTimeColumnsList={workAndTimeColumnList}
-        mounthList={mounthList}
+        monthList={monthList}
         key={rowData.id}
         data={rowData}
         sectionVSpan={sectionVSpan}
@@ -97,7 +95,7 @@ export default function PprTable() {
   return (
     <div>
       <TableStyled>
-        <Title workAndTimeColumnsList={workAndTimeColumnList} infoColumnsList={titleInfoColumnList} mounthList={mounthList} />
+        <Title workAndTimeColumnsList={workAndTimeColumnList} infoColumnsList={titleInfoColumnList} monthList={monthList} />
         <tbody>{rows}</tbody>
       </TableStyled>
     </div>

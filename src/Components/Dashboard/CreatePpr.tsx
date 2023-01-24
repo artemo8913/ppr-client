@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { Typography, Button } from '@mui/material';
+import { Button } from "@mui/material";
+import apiFetch from "../../healper/ApiFetch";
+import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Redux/store";
 
 const ListItem = styled.div`
   display: flex;
@@ -9,11 +13,27 @@ const ListItem = styled.div`
     flex: 1 1 auto;
   }
   & button {
-    
   }
 `;
 
 export default function CreatePpr() {
+  const user = useSelector((store: RootState) => store.user);
+  const status = "creating";
+  const [newPprData, setNewPprData] = React.useState<{
+    prototypePlanId: string;
+    year: string;
+  }>();
+  const dataForCreating = {
+    prototypePlanId: newPprData?.prototypePlanId,
+    year: newPprData?.year,
+    id_subdivision: user.id_subdivision,
+    id_distance: user.id_distance,
+    id_direction: user.id_direction,
+    status: status,
+  };
+  function createNewPpr() {
+    apiFetch.getData("http://localhost:5000/api/ppr", "stringify", console.log, "post", dataForCreating);
+  }
   return (
     <div>
       <ListItem>

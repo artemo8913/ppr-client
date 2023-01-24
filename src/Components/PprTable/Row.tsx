@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import styled from "styled-components";
-import { IMounthData, IRow, IRowData } from "../../Interface";
+import { IRow } from "../../Interface";
 import Cell from "./Cell";
 import settings from "../../settings";
 
@@ -11,7 +11,7 @@ const StyledRow = styled.tr`
 `;
 
 export default function Row(props: IRow) {
-  const { editableColumnsList, workAndTimeColumnsList, infoColumnsList, mounthList, data, sectionVSpan = 1, subsectionVSpan = 1 } = props;
+  const { editableColumnsList, workAndTimeColumnsList, infoColumnsList, monthList, data, sectionVSpan = 1, subsectionVSpan = 1 } = props;
   const { id } = data;
   const colSett = settings.pprColumnSettings;
 
@@ -40,7 +40,7 @@ export default function Row(props: IRow) {
       );
     }
   });
-  const planData = mounthList.map((timePeriod) => {
+  const planData = monthList.map((timePeriod) => {
     const workDataEl = workAndTimeColumnsList.map((column) => {
       const vText = !!colSett[column].vText;
       const editableCol = editableColumnsList.indexOf(column) !== -1;

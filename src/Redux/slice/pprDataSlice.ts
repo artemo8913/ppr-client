@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import mockRowData from "../../mock/rowData";
-import { fullInfoColumnsList, fullWorkAndTimeColumnsList, fullMounthsList, pprStatuses } from "../../settings";
+import { fullInfoColumnsList, fullWorkAndTimeColumnsList, fullMonthsList, pprStatuses } from "../../settings";
 import { IRowData } from "../../Interface";
 
 function createNewEmptyRaw(
   id: string,
   fullInfoColumnsList: Array<string>,
   fullWorkAndTimeColumnsList: Array<string>,
-  fullMounthsList: Array<string>
+  fullMonthsList: Array<string>
 ) {
   const newRow: any = {};
   fullInfoColumnsList.forEach((col) => {
     newRow[col] = "";
   });
   fullWorkAndTimeColumnsList.forEach((col) => {
-    fullMounthsList.forEach((mounth) => {
-      newRow[col] = newRow[col] ? { ...newRow[col], [mounth]: 0 } : { [mounth]: 0 };
+    fullMonthsList.forEach((month) => {
+      newRow[col] = newRow[col] ? { ...newRow[col], [month]: 0 } : { [month]: 0 };
     });
   });
   newRow.id = id;
@@ -29,7 +29,7 @@ export const pprDataSlice = createSlice({
     name: "",
     year: "",
     status: "none",
-    fulfullingMounth: "year",
+    fulfullingMonth: "year",
     idDirection: 1,
     idDistance: 1,
     idSubdivision: 1,
@@ -47,13 +47,13 @@ export const pprDataSlice = createSlice({
       const isValid = pprStatuses.indexOf(newStatus) !== -1;
       if (isValid) state.status = newStatus;
     },
-    toggleFulfullingMounth: (state, action: PayloadAction<{ mounth: string }>) => {
-      const mounth = action.payload.mounth;
-      const isValid = fullMounthsList.indexOf(mounth) !== -1;
-      if (isValid) state.fulfullingMounth = mounth;
+    toggleFulfullingMonth: (state, action: PayloadAction<{ month: string }>) => {
+      const month = action.payload.month;
+      const isValid = fullMonthsList.indexOf(month) !== -1;
+      if (isValid) state.fulfullingMonth = month;
     },
     addData: (state, action: PayloadAction<{ id: string }>) => {
-      const newRow = createNewEmptyRaw(action.payload.id, fullInfoColumnsList, fullWorkAndTimeColumnsList, fullMounthsList);
+      const newRow = createNewEmptyRaw(action.payload.id, fullInfoColumnsList, fullWorkAndTimeColumnsList, fullMonthsList);
       state.data.push(newRow as IRowData);
     },
     removeData: (state, action: PayloadAction<{ id: string }>) => {
@@ -75,6 +75,6 @@ export const pprDataSlice = createSlice({
   },
 });
 
-export const { addData, removeData, changeCellData, toggleStatus, toggleFulfullingMounth } = pprDataSlice.actions;
+export const { addData, removeData, changeCellData, toggleStatus, toggleFulfullingMonth } = pprDataSlice.actions;
 
 export default pprDataSlice.reducer;

@@ -2,9 +2,9 @@ import { nanoid } from "nanoid";
 import React, { ChangeEventHandler } from "react";
 import { RootState } from "../../Redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { addData, removeData, toggleStatus, toggleFulfullingMounth } from "../../Redux/slice/pprDataSlice";
+import { addData, removeData, toggleStatus, toggleFulfullingMonth } from "../../Redux/slice/pprDataSlice";
 import { toggleHiddenColumns, toggleUniteCells, toggleEditableState } from "../../Redux/slice/pprUISlice";
-import { pprStatuses, pprHidingColumnsStates, fullMounthsList } from "../../settings";
+import { pprStatuses, pprHidingColumnsStates, fullMonthsList } from "../../settings";
 
 function Select(props: { list: Array<string>; handleChange: ChangeEventHandler<HTMLSelectElement> }) {
   const options = props.list.map((option) => <option>{option}</option>);
@@ -24,10 +24,10 @@ export default function PprStateSandbox() {
   };
   const removeRow = () => dispatch(removeData({ id }));
   const changePprStatus = (status: string) => dispatch(toggleStatus({ status }));
-  const changeFulfullingMounth = (mounth: string) => dispatch(toggleFulfullingMounth({ mounth }));
+  const changeFulfullingMonth = (month: string) => dispatch(toggleFulfullingMonth({ month }));
   const changeHiddenColumns = (hiddenColumnsState: string) => dispatch(toggleHiddenColumns({ hiddenColumnsState }));
   const changeUnitCellsProperty = (shouldUnit: boolean) => dispatch(toggleUniteCells({ shouldUnit }));
-  const updateEditableState = (status: string, fulfullingMounth: string) => dispatch(toggleEditableState({status, fulfullingMounth}));
+  const updateEditableState = (status: string, fulfullingMonth: string) => dispatch(toggleEditableState({status, fulfullingMonth}));
 
   return (
     <div style={{padding: '10px'}}>
@@ -40,12 +40,12 @@ export default function PprStateSandbox() {
       <Select
         handleChange={(e) => {
           changePprStatus(e.target.value);
-          updateEditableState(e.target.value, pprDataState.fulfullingMounth);
+          updateEditableState(e.target.value, pprDataState.fulfullingMonth);
         }}
         list={pprStatuses}
       ></Select>
-      <span>Период ввода данных: {pprDataState.fulfullingMounth}</span>
-      <Select handleChange={(e) => changeFulfullingMounth(e.target.value)} list={fullMounthsList}></Select>
+      <span>Период ввода данных: {pprDataState.fulfullingMonth}</span>
+      <Select handleChange={(e) => changeFulfullingMonth(e.target.value)} list={fullMonthsList}></Select>
       <span>Скрыть столбы: {pprUIState.hidden}</span>
       <Select handleChange={(e) => changeHiddenColumns(e.target.value)} list={pprHidingColumnsStates}></Select>
       <span>Объединять ячейки? {pprUIState.uniteCells.toString()}</span>

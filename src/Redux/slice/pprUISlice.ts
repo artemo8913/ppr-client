@@ -17,17 +17,17 @@ export const pprUISlice = createSlice({
     toggleUniteCells: (state, action: PayloadAction<{ shouldUnit: boolean }>) => {
       state.uniteCells = action.payload.shouldUnit;
     },
-    toggleEditableState: (state, action: PayloadAction<{status: string, fulfullingMounth: string}>) => {
+    toggleEditableState: (state, action: PayloadAction<{status: string, fulfullingMonth: string}>) => {
       const status = action.payload.status;
-      const fulfullingMounth = action.payload.fulfullingMounth;
-      if (state.editableState !== "planning" && status === "creating" && fulfullingMounth === "year") {
+      const fulfullingMonth = action.payload.fulfullingMonth;
+      if (state.editableState !== "planning" && status === "creating" && fulfullingMonth === "year") {
         state.editableState = "planning";
-      } else if (state.editableState !== "fulfilling" && status === "fulfilling" && fulfullingMounth !== "year") {
+      } else if (state.editableState !== "fulfilling" && status === "fulfilling" && fulfullingMonth !== "year") {
         state.editableState = "fulfilling";
       } else if (state.editableState !== "none") {
         state.editableState = "none";
       }
-      console.log(fulfullingMounth,status,state.editableState);
+      console.log(fulfullingMonth,status,state.editableState);
     },
   },
 });

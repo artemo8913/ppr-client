@@ -1,5 +1,11 @@
 class ApiFetch {
-  async getData(url: string, resultType: "stringify" | "parse", callback: Function, method: string, data?: object | Array<any>) {
+  async getData(
+    url: string,
+    resultType: "stringify" | "parse",
+    callback: Function,
+    method: "get" | "post" | "put" | "delete",
+    data?: object | Array<any>
+  ) {
     await fetch(url, { body: JSON.stringify(data), method })
       .then((data) => data.json())
       .then((json) => {
