@@ -7,7 +7,7 @@ export default function ButtonForApiTest(props: {
 }) {
   const { url, callback, method } = props;
   return (
-    <button onClick={() => apiFetch.getData(url, 'stringify' , callback, method)}>
+    <button onClick={() => apiFetch.exchangeData(url, 'stringify' , callback, method)}>
       {method + " " + url}
     </button>
   );

@@ -46,7 +46,7 @@ export default function PprTable() {
   const {pprId} = useParams();
   const [ppr, setPpr] = React.useState<IRowData[]>();
   React.useEffect(() => {
-    apiFetch.getData(`http://localhost:5000/api/ppr/${pprId}`, "stringify", setPpr, "get");
+    apiFetch.exchangeData(`http://localhost:5000/api/ppr/${pprId}`, "stringify", setPpr, "get");
   }, []);
   const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
   const editableList = [...settings.editablePprColumns[editableState]];
