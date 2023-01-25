@@ -7,7 +7,7 @@ export interface IRowData {
   subsection_first: string;
   subsection_second: string;
   location: string;
-  lineClass: string;
+  line_class: string;
   measure: string;
   total_count: string;
   entry_year: string;

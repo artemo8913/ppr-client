@@ -16,8 +16,8 @@ export default function Row(props: IRow) {
   const colSett = settings.pprColumnSettings;
 
   const columnsInformationData = infoColumnsList.map((column) => {
-    //@ts-ignore
-    if (typeof data[column] === "string" || typeof data[column] === "number") {
+    /*@ts-ignore*/
+    if (workAndTimeColumnsList.indexOf(column) === -1) {
       const vSpan = column === "section" ? sectionVSpan : column === "subsection_first" ? subsectionVSpan : 1;
       const vText = !!colSett[column].vText;
       const editable = editableColumnsList.indexOf(column) !== -1;
