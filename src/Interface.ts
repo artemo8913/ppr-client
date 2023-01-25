@@ -4,24 +4,24 @@ export interface IRowData {
   branch: string;
   subbranch: string;
   section: string;
-  subsectionFirst: string;
-  subsectionSecond: string;
+  subsection_first: string;
+  subsection_second: string;
   location: string;
   lineClass: string;
   measure: string;
-  totalCount: string;
-  entryYear: string;
-  periodicityNormal: string;
-  lastMaintenanceYear: string;
-  periodicityLast: string;
-  normOfTime: string;
-  normOfTimeDocument: string;
+  total_count: string;
+  entry_year: string;
+  periodicity_normal: string;
+  periodicity_fact: string;
+  last_maintenance_year: string;
+  norm_of_time: string;
+  norm_of_time_document: string;
   unity: string;
-  planWork: IMonthData;
-  planTime: IMonthData;
-  factWork: IMonthData;
-  factNormTime: IMonthData;
-  factTime: IMonthData;
+  plan_work: IMonthData;
+  plan_time: IMonthData;
+  fact_work: IMonthData;
+  fact_norm_time: IMonthData;
+  fact_time: IMonthData;
 }
 
 export interface IRow {

@@ -6,7 +6,7 @@ import settings from "../../settings";
 
 const StyledRow = styled.tr`
   &:hover {
-    box-shadow: inset 0px 0px 10px #00ff1e;
+    box-shadow: inset 0px 0px 10px #0040ff;
   }
 `;
 
@@ -18,7 +18,7 @@ export default function Row(props: IRow) {
   const columnsInformationData = infoColumnsList.map((column) => {
     //@ts-ignore
     if (typeof data[column] === "string" || typeof data[column] === "number") {
-      const vSpan = column === "section" ? sectionVSpan : column === "subsectionFirst" ? subsectionVSpan : 1;
+      const vSpan = column === "section" ? sectionVSpan : column === "subsection_first" ? subsectionVSpan : 1;
       const vText = !!colSett[column].vText;
       const editable = editableColumnsList.indexOf(column) !== -1;
       const textareaRows = vText ? 1 : colSett.textareaRows;

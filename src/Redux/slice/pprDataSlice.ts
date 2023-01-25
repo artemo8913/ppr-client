@@ -52,6 +52,12 @@ export const pprDataSlice = createSlice({
       const isValid = fullMonthsList.indexOf(month) !== -1;
       if (isValid) state.fulfullingMonth = month;
     },
+    setData: (state, action: PayloadAction<{ apiResult: {data: Array<IRowData>} }>) => {
+      console.log('REDUX');
+      console.log(action.payload.apiResult);
+      console.log(action.payload.apiResult.data);
+      state.data = action.payload.apiResult.data;
+    },
     addData: (state, action: PayloadAction<{ id: string }>) => {
       const newRow = createNewEmptyRaw(action.payload.id, fullInfoColumnsList, fullWorkAndTimeColumnsList, fullMonthsList);
       state.data.push(newRow as IRowData);
@@ -75,6 +81,6 @@ export const pprDataSlice = createSlice({
   },
 });
 
-export const { addData, removeData, changeCellData, toggleStatus, toggleFulfullingMonth } = pprDataSlice.actions;
+export const { addData, setData, removeData, changeCellData, toggleStatus, toggleFulfullingMonth } = pprDataSlice.actions;
 
 export default pprDataSlice.reducer;

@@ -27,7 +27,6 @@ export const pprUISlice = createSlice({
       } else if (state.editableState !== "none") {
         state.editableState = "none";
       }
-      console.log(fulfullingMonth,status,state.editableState);
     },
   },
 });

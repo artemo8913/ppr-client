@@ -6,20 +6,20 @@ const data: Array<IRowData> = [
     branch: "maintenance",
     subbranch:'',
     section: "Текущий ремонт контактной сети",
-    subsectionFirst: "на главных путях",
-    subsectionSecond: "",
+    subsection_first: "на главных путях",
+    subsection_second: "",
     location: "ст.Красноярск-Восточный",
     lineClass: "1",
     measure: "км",
-    totalCount: "28.1",
-    entryYear: "1982",
-    periodicityNormal: "1/2",
-    lastMaintenanceYear: "1/2",
-    periodicityLast: "",
-    normOfTime: "12.198",
-    normOfTimeDocument: "Норма времени №53 asd asd",
+    total_count: "28.1",
+    entry_year: "1982",
+    periodicity_normal: "1/2",
+    last_maintenance_year: "1/2",
+    periodicity_fact: "",
+    norm_of_time: "12.198",
+    norm_of_time_document: "Норма времени №53 asd asd",
     unity: "ЭЧК-47",
-    planWork: {
+    plan_work: {
       year: 1000,
       jan: 0,
       feb: 0,
@@ -34,7 +34,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    planTime: {
+    plan_time: {
       year: 456.23,
       jan: 0,
       feb: 0,
@@ -49,7 +49,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factWork: {
+    fact_work: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -64,7 +64,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factNormTime: {
+    fact_norm_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -79,7 +79,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factTime: {
+    fact_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -101,20 +101,20 @@ const data: Array<IRowData> = [
     branch: "maintenance",
     subbranch: "",
     section: "Текущий ремонт контактной сети",
-    subsectionFirst: "на главных путях",
-    subsectionSecond: "на главных путях",
+    subsection_first: "на главных путях",
+    subsection_second: "на главных путях",
     location: "пер.Кр.Восточный - Кр.Северный",
     lineClass: "1",
     measure: "км",
-    totalCount: "28.1",
-    entryYear: "1982",
-    periodicityNormal: "1/2",
-    lastMaintenanceYear: "1/2",
-    periodicityLast: "",
-    normOfTime: "12.198",
-    normOfTimeDocument: "Норма времени №53 asd asd",
+    total_count: "28.1",
+    entry_year: "1982",
+    periodicity_normal: "1/2",
+    last_maintenance_year: "1/2",
+    periodicity_fact: "",
+    norm_of_time: "12.198",
+    norm_of_time_document: "Норма времени №53 asd asd",
     unity: "ЭЧК-47",
-    planWork: {
+    plan_work: {
       year: 1000,
       jan: 0,
       feb: 0,
@@ -129,7 +129,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    planTime: {
+    plan_time: {
       year: 456.23,
       jan: 0,
       feb: 0,
@@ -144,7 +144,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factWork: {
+    fact_work: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -159,7 +159,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factNormTime: {
+    fact_norm_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -174,7 +174,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factTime: {
+    fact_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -196,20 +196,20 @@ const data: Array<IRowData> = [
     branch: "maintenance",
     subbranch: "",
     section: "Текущий ремонт контактной сети",
-    subsectionFirst: "на боковых путях",
-    subsectionSecond: "на боковых путях",
+    subsection_first: "на боковых путях",
+    subsection_second: "на боковых путях",
     location: "ст.Красноярск-Восточный",
     lineClass: "1",
     measure: "км",
-    totalCount: "28.1",
-    entryYear: "1982",
-    periodicityNormal: "1/2",
-    lastMaintenanceYear: "1/2",
-    periodicityLast: "",
-    normOfTime: "12.198",
-    normOfTimeDocument: "Норма времени №53",
+    total_count: "28.1",
+    entry_year: "1982",
+    periodicity_normal: "1/2",
+    last_maintenance_year: "1/2",
+    periodicity_fact: "",
+    norm_of_time: "12.198",
+    norm_of_time_document: "Норма времени №53",
     unity: "ЭЧК-47",
-    planWork: {
+    plan_work: {
       year: 1000,
       jan: 0,
       feb: 0,
@@ -224,7 +224,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    planTime: {
+    plan_time: {
       year: 456.23,
       jan: 0,
       feb: 0,
@@ -239,7 +239,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factWork: {
+    fact_work: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -254,7 +254,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factNormTime: {
+    fact_norm_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -269,7 +269,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factTime: {
+    fact_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -291,20 +291,20 @@ const data: Array<IRowData> = [
     branch: "maintenance",
     subbranch: "",
     section: "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-    subsectionFirst: "на главных путях",
-    subsectionSecond: "asf",
+    subsection_first: "на главных путях",
+    subsection_second: "asf",
     location: "ст.Красноярск-Восточный",
     lineClass: "1",
     measure: "км",
-    totalCount: "28.1",
-    entryYear: "1982",
-    periodicityNormal: "1/2",
-    lastMaintenanceYear: "1/2",
-    periodicityLast: "",
-    normOfTime: "12.198",
-    normOfTimeDocument: "Норма времени №53 asd asd",
+    total_count: "28.1",
+    entry_year: "1982",
+    periodicity_normal: "1/2",
+    last_maintenance_year: "1/2",
+    periodicity_fact: "",
+    norm_of_time: "12.198",
+    norm_of_time_document: "Норма времени №53 asd asd",
     unity: "ЭЧК-47",
-    planWork: {
+    plan_work: {
       year: 1000,
       jan: 0,
       feb: 0,
@@ -319,7 +319,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    planTime: {
+    plan_time: {
       year: 456.23,
       jan: 0,
       feb: 0,
@@ -334,7 +334,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factWork: {
+    fact_work: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -349,7 +349,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factNormTime: {
+    fact_norm_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -364,7 +364,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factTime: {
+    fact_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -386,20 +386,20 @@ const data: Array<IRowData> = [
     branch: "maintenance",
     subbranch: "maintenance",
     section: "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-    subsectionFirst: "на главных путях",
-    subsectionSecond: "gfs",
+    subsection_first: "на главных путях",
+    subsection_second: "gfs",
     location: "ст.Красноярск-Восточный",
     lineClass: "1",
     measure: "км",
-    totalCount: "28.1",
-    entryYear: "1982",
-    periodicityNormal: "1/2",
-    lastMaintenanceYear: "1/2",
-    periodicityLast: "",
-    normOfTime: "12.198",
-    normOfTimeDocument: "Норма времени №53 asd asd",
+    total_count: "28.1",
+    entry_year: "1982",
+    periodicity_normal: "1/2",
+    last_maintenance_year: "1/2",
+    periodicity_fact: "",
+    norm_of_time: "12.198",
+    norm_of_time_document: "Норма времени №53 asd asd",
     unity: "ЭЧК-47",
-    planWork: {
+    plan_work: {
       year: 1000,
       jan: 0,
       feb: 0,
@@ -414,7 +414,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    planTime: {
+    plan_time: {
       year: 456.23,
       jan: 0,
       feb: 0,
@@ -429,7 +429,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factWork: {
+    fact_work: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -444,7 +444,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factNormTime: {
+    fact_norm_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -459,7 +459,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factTime: {
+    fact_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -481,20 +481,20 @@ const data: Array<IRowData> = [
     branch: "maintenance",
     subbranch: "",
     section: "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-    subsectionFirst: "на главных путях",
-    subsectionSecond: "sdf",
+    subsection_first: "на главных путях",
+    subsection_second: "sdf",
     location: "ст.Красноярск-Восточный",
     lineClass: "1",
     measure: "км",
-    totalCount: "28.1",
-    entryYear: "1982",
-    periodicityNormal: "1/2",
-    lastMaintenanceYear: "1/2",
-    periodicityLast: "",
-    normOfTime: "12.198",
-    normOfTimeDocument: "Норма времени №53 asd asd",
+    total_count: "28.1",
+    entry_year: "1982",
+    periodicity_normal: "1/2",
+    last_maintenance_year: "1/2",
+    periodicity_fact: "",
+    norm_of_time: "12.198",
+    norm_of_time_document: "Норма времени №53 asd asd",
     unity: "ЭЧК-47",
-    planWork: {
+    plan_work: {
       year: 1000,
       jan: 0,
       feb: 0,
@@ -509,7 +509,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    planTime: {
+    plan_time: {
       year: 456.23,
       jan: 0,
       feb: 0,
@@ -524,7 +524,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factWork: {
+    fact_work: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -539,7 +539,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factNormTime: {
+    fact_norm_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -554,7 +554,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factTime: {
+    fact_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -576,20 +576,20 @@ const data: Array<IRowData> = [
     branch: "maintenance",
     subbranch: "maintenance",
     section: "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-    subsectionFirst: "на главных путях",
-    subsectionSecond: "sdf",
+    subsection_first: "на главных путях",
+    subsection_second: "sdf",
     location: "ст.Красноярск-Восточный",
     lineClass: "1",
     measure: "км",
-    totalCount: "28.1",
-    entryYear: "1982",
-    periodicityNormal: "1/2",
-    lastMaintenanceYear: "1/2",
-    periodicityLast: "",
-    normOfTime: "12.198",
-    normOfTimeDocument: "Норма времени №53 asd asd",
+    total_count: "28.1",
+    entry_year: "1982",
+    periodicity_normal: "1/2",
+    last_maintenance_year: "1/2",
+    periodicity_fact: "",
+    norm_of_time: "12.198",
+    norm_of_time_document: "Норма времени №53 asd asd",
     unity: "ЭЧК-47",
-    planWork: {
+    plan_work: {
       year: 1000,
       jan: 0,
       feb: 0,
@@ -604,7 +604,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    planTime: {
+    plan_time: {
       year: 456.23,
       jan: 0,
       feb: 0,
@@ -619,7 +619,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factWork: {
+    fact_work: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -634,7 +634,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factNormTime: {
+    fact_norm_time: {
       year: 0,
       jan: 0,
       feb: 0,
@@ -649,7 +649,7 @@ const data: Array<IRowData> = [
       nov: 0,
       dec: 0,
     },
-    factTime: {
+    fact_time: {
       year: 0,
       jan: 0,
       feb: 0,

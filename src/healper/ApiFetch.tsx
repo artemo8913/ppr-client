@@ -6,7 +6,6 @@ class ApiFetch {
     method: "get" | "post" | "put" | "delete",
     data?: object | Array<any>
   ) {
-    console.log(data)
     await fetch(url, {
       body: JSON.stringify(data),
       method,

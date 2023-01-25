@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { useLocation, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../Redux/store";
+import { setData } from "../../Redux/slice/pprDataSlice";
 import { IRowData } from "../../Interface";
 import apiFetch from "../../healper/ApiFetch";
 import settings, { fullMonthsList, fullWorkAndTimeColumnsList, fullInfoColumnsList } from "../../settings";
@@ -28,14 +29,18 @@ function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
   let subsectionIsShow = true;
   if (index !== data.length - 1) {
     for (let j = index + 1; j < data.length && rowData.section === data[j].section; j++) sectionVSpan++;
-    for (let j = index + 1; j < data.length && rowData.subsectionFirst === data[j].subsectionFirst && rowData.section === data[j].section; j++)
+    for (
+      let j = index + 1;
+      j < data.length && rowData.subsection_first === data[j].subsection_first && rowData.section === data[j].section;
+      j++
+    )
       subsectionVSpan++;
   }
   if (index !== 0) {
     const prevSection = data[index - 1].section;
-    const prevSubsection = data[index - 1].subsectionFirst;
+    const prevSubsection = data[index - 1].subsection_first;
     if (rowData.section === prevSection) sectionIsShow = false;
-    if (rowData.subsectionFirst === prevSubsection && rowData.section === prevSection) subsectionIsShow = false;
+    if (rowData.subsection_first === prevSubsection && rowData.section === prevSection) subsectionIsShow = false;
   }
   return { sectionVSpan, subsectionVSpan, sectionIsShow, subsectionIsShow };
 }
@@ -43,11 +48,18 @@ function connectVCells(rowData: IRowData, index: number, data: IRowData[]) {
 export default function PprTable() {
   const { status, fulfullingMonth, data } = useSelector((state: RootState) => state.pprData);
   const { hidden, uniteCells, editableState } = useSelector((state: RootState) => state.pprUI);
-  const {pprId} = useParams();
+  const dispatch = useDispatch();
+  const { pprId } = useParams();
   const [ppr, setPpr] = React.useState<IRowData[]>();
   React.useEffect(() => {
-    apiFetch.exchangeData(`http://localhost:5000/api/ppr/${pprId}`, "stringify", setPpr, "get");
+    apiFetch.exchangeData(
+      `http://localhost:5000/api/ppr/${pprId}`,
+      "parse",
+      (apiResult: { data: Array<IRowData> }) => dispatch(setData({ apiResult })),
+      "get"
+    );
   }, []);
+  console.log(data);
   const hiddenColumnsList = [...settings.hiddenPprColumns[hidden]];
   const editableList = [...settings.editablePprColumns[editableState]];
 
@@ -60,7 +72,7 @@ export default function PprTable() {
     editableList.push(...excludeFromList(fullMonthsList, ["year"]));
   }
   const infoColumnList = excludeFromList(fullInfoColumnsList, hiddenColumnsList);
-  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsectionFirst", ...hiddenColumnsList]);
+  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection_first", ...hiddenColumnsList]);
   const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, hiddenColumnsList);
   const monthList = excludeFromList(fullMonthsList, hiddenColumnsList);
 
@@ -77,7 +89,7 @@ export default function PprTable() {
       bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["section"]);
     }
     if (!subsectionIsShow) {
-      bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["subsectionFirst"]);
+      bodyInfoColumnList = excludeFromList(bodyInfoColumnList, ["subsection_first"]);
     }
     return (
       <Row
