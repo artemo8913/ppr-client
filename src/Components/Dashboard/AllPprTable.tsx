@@ -47,8 +47,9 @@ export default function AllPprTable() {
   React.useEffect(() => {
     apiFetch.exchangeData("http://localhost:5000/api/ppr", "parse", setAllPpr, "get");
   }, []);
-  function createNewPpr() {
-    apiFetch.exchangeData("http://localhost:5000/api/ppr", "stringify", console.log, "post", dataForCreating);
+  async function createNewPpr() {
+    await apiFetch.exchangeData("http://localhost:5000/api/ppr", "stringify", console.log, "post", dataForCreating);
+    await apiFetch.exchangeData("http://localhost:5000/api/ppr", "parse", setAllPpr, "get");
   }
 
   return (
@@ -58,7 +59,7 @@ export default function AllPprTable() {
       </Box>
       <Box sx={{ p: 2, display: "flex", width: "100%", justifyContent: "space-around", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
         <CreatePpr
-          handleClick={() => createNewPpr()}
+          handleClick={async () => await createNewPpr()}
           dataForCreatingNewPpr={dataForCreatingNewPpr}
           dataSelect={dataSelect}
           yearList={years}
