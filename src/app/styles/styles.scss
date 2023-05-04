@@ -1,0 +1,8 @@
+@import url(./reset.scss);
+@import url(./themes/light.scss);
+@import url(./themes/dark.scss);
+
+.app {
+  color: var(--text-primary-color);
+  background-color: var(--bg-primary-color);
+}
