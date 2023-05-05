@@ -3,14 +3,21 @@ import { createClassName } from "shared/lib/createClassName";
 
 interface AsideProps {
   additionalClassName?: string;
+  isOpen: boolean;
+  children?: JSX.Element | JSX.Element[];
 }
 
-export function Aside({ additionalClassName }: AsideProps) {
-  return <div className={createClassName(css.Aside, {}, [additionalClassName])}>
-    <div>1</div>
-    <div>1</div>
-    <div>1</div>
-    <div>1</div>
-    <div>1</div>
-  </div>;
+interface AsideSwitcherProps {
+  additionalClassName?: string;
+  isOpen: boolean;
+  toggle: () => void;
 }
+
+function AsideSwitcher({ isOpen, toggle, additionalClassName }: AsideSwitcherProps) {
+  return <button onClick={toggle}>Перелючить aside</button>;
+}
+
+function Aside({ additionalClassName, isOpen, children }: AsideProps) {
+  return <div className={createClassName(css.Aside, { [css.open]: isOpen }, [additionalClassName])}>{children}</div>;
+}
+export { Aside, AsideSwitcher };

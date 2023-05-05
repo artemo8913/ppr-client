@@ -8,21 +8,13 @@
   background-color: var(--bg-primary-color);
   min-height: var(--window-height);
 
-  .Top {
-    display: flex;
-    background-color: var(--bg-secondary-color);
-    height: var(--top-height);
-  }
-
   .conteiner {
     display: flex;
     height: calc(var(--window-height) - var(--top-height));
   }
 
-  .Aside {
+  .AsideLayout {
     flex-shrink: 0;
-    width: var(--aside-width-open);
-    background-color: var(--bg-third-color);
   }
 
   .content {

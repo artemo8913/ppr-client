@@ -1,3 +1,3 @@
-import { Aside } from "./ui/Aside";
+import { Aside, AsideSwitcher } from "./ui/Aside";
 
-export { Aside };
+export { Aside, AsideSwitcher };

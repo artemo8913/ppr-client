@@ -3,14 +3,11 @@ import { createClassName } from "shared/lib/createClassName";
 
 interface TopProps {
   additionalClassName?: string;
+  children?: JSX.Element | JSX.Element[];
 }
 
-function Top({ additionalClassName }: TopProps) {
-  return (
-    <header className={createClassName(css.Top, {}, [additionalClassName])}>
-      <h1>Цифровая дистанция электроснабжения. ППР</h1>
-    </header>
-  );
+function Top({ additionalClassName, children }: TopProps) {
+  return <header className={createClassName(css.Top, {}, [additionalClassName])}>{children}</header>;
 }
 
 export { Top };
