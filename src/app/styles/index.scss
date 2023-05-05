@@ -16,11 +16,7 @@
 
   .conteiner {
     display: flex;
-    height: calc(100% - var(--top-height));
-
-    * {
-      height: calc(var(--window-height) - var(--top-height));
-    }
+    height: calc(var(--window-height) - var(--top-height));
   }
 
   .Aside {
