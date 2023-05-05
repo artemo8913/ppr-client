@@ -1,5 +1,5 @@
 import App from "app";
-import "app/styles/styles.scss";
+import "app/styles/index.scss";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "app/providers/theme/ThemeProvider";
 

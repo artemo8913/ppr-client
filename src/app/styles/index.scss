@@ -1,0 +1,36 @@
+@import url(./reset.scss);
+@import url(./global.scss);
+@import url(./themes/light.scss);
+@import url(./themes/dark.scss);
+
+.App {
+  color: var(--text-primary-color);
+  background-color: var(--bg-primary-color);
+  min-height: var(--window-height);
+
+  .Top {
+    display: flex;
+    background-color: var(--bg-secondary-color);
+    height: var(--top-height);
+  }
+
+  .conteiner {
+    display: flex;
+    height: calc(100% - var(--top-height));
+
+    * {
+      height: calc(var(--window-height) - var(--top-height));
+    }
+  }
+
+  .Aside {
+    flex-shrink: 0;
+    width: var(--aside-width-open);
+    background-color: var(--bg-third-color);
+  }
+
+  .content {
+    flex-grow: 1;
+    overflow: auto;
+  }
+}
