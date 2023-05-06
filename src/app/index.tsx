@@ -13,10 +13,9 @@ export default function App() {
   const [isAsideOpen, setIsAsideOpen] = useState(true);
   const toggle = () => setIsAsideOpen((prevState) => !prevState);
   // Текущая тема
-  const { theme } = useTheme();
 
   return (
-    <div className={`App ${theme}`}>
+    <div className="App">
       <Top>
         <AsideSwitcher isOpen={isAsideOpen} toggle={toggle} />
         <h1>Цифровая дистанция электроснабжения. ППР</h1>

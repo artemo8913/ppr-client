@@ -3,8 +3,8 @@ import { PropsWithChildren, createContext, useContext, useMemo, useState } from 
 const LOCAL_STORAGE_KEY = "theme";
 
 enum themesEnum {
-  LIGHT = "light",
-  DARK = "dark",
+  LIGHT = "app_light",
+  DARK = "app_dark",
 }
 
 interface ThemeContextProps {
@@ -36,6 +36,7 @@ function ThemeProvider(props: PropsWithChildren) {
     }),
     [theme]
   );
+  document.body.className = theme;
   return <themeContext.Provider value={defaultValue}>{props.children}</themeContext.Provider>;
 }
 
