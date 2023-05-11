@@ -1,6 +1,13 @@
 :root {
+  --font-size-s: 12px;
+  --font-size-m: 16px;
+  --font-size-l: 24px;
+  --font-size-xl: 32px;
+  
   --window-height: 100vh;
-  --top-height: 40px;
-  --aside-width-open: 200px;
-  --aside-width-closed: 40px;
+  --top-height: 52px;
+
+  --sidebar-width-open: 200px;
+  --sidebar-width-closed: 56px;
+  --sidebar-closing-speed: 0.3s;
 }

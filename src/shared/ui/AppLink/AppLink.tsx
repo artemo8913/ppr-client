@@ -4,6 +4,7 @@ import { Link, LinkProps } from "react-router-dom";
 
 interface AppLinkProps extends LinkProps {
   additionalClassName?: string;
+  // isFull: boolean;
 }
 
 export function AppLink({ additionalClassName, children, to }: AppLinkProps) {

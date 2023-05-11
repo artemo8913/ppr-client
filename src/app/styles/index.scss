@@ -4,7 +4,10 @@
 @import url(./themes/dark.scss);
 
 .App {
-  color: var(--text-primary-color);
+  font-family: 'Times New Roman', Times, serif;
+  font-size: var(--font-size-m);
+
+  color: var(--font-primary-color);
   background-color: var(--bg-primary-color);
   min-height: var(--window-height);
 
@@ -13,7 +16,7 @@
     height: calc(var(--window-height) - var(--top-height));
   }
 
-  .AsideLayout {
+  .SidebarLayout {
     flex-shrink: 0;
   }
 
@@ -21,4 +24,5 @@
     flex-grow: 1;
     overflow: auto;
   }
+
 }

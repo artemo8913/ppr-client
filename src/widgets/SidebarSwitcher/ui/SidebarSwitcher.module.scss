@@ -1,0 +1,10 @@
+.SidebarSwitcher {
+  flex-shrink: 0;
+  fill: var(--bg-primary-color);
+  width: 40px;
+  transition: var(--sidebar-closing-speed) transform;
+
+  &.isOpen {
+    transform: rotate(90deg);
+  }
+}
