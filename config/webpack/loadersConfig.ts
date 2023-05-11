@@ -25,10 +25,15 @@ export default function createRules(options: ConfigOptions): RuleSetRule[] {
       "sass-loader",
     ],
   };
-  const assetsLoader = {
-    test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+  const svgLoader = {
+    test: /\.svg$/i,
+    issuer: /\.[jt]sx?$/,
+    use: ["@svgr/webpack"],
+  };
+  const assetsLoader: RuleSetRule = {
+    test: /\.(eot|ttf|woff|woff2|png|jpg|gif)$/i,
     type: "asset",
   };
 
-  return [tsLoader, scssLoader, assetsLoader];
+  return [tsLoader, scssLoader, svgLoader, assetsLoader];
 }

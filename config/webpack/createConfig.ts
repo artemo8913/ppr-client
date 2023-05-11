@@ -1,7 +1,7 @@
 /// <reference path="../../node_modules/webpack-dev-server/types/lib/Server.d.ts"/>
 import { Configuration } from "webpack";
 import createPlugins from "./pluginsConfig";
-import createRules from "./rulesConfig";
+import createRules from "./loadersConfig";
 import createResolves from "./resolvesConfig";
 import createDevServerConfig from "./devServerConfig";
 
