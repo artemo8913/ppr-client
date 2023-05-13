@@ -1,5 +1,6 @@
 {
-  "locale":"english",
+  "main_title": "Digital power supply distance",
+  "locale": "english",
   "locale_short": "en",
-  "hello": "h e l l o"
+  "hello": "hello"
 }
