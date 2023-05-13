@@ -4,6 +4,13 @@ import { ConfigOptions } from "./createConfig";
 
 export default function createRules(options: ConfigOptions): RuleSetRule[] {
   const stylesHandler = MiniCssExtractPlugin.loader;
+  const babelLoader = {
+    test: /\.(ts|tsx)$/,
+    exclude: /node_modules/,
+    use: {
+      loader: "babel-loader",
+    },
+  };
   const tsLoader = {
     test: /\.(ts|tsx)$/i,
     loader: "ts-loader",
@@ -35,5 +42,5 @@ export default function createRules(options: ConfigOptions): RuleSetRule[] {
     type: "asset",
   };
 
-  return [tsLoader, scssLoader, svgLoader, assetsLoader];
+  return [scssLoader, svgLoader, assetsLoader, babelLoader];
 }
