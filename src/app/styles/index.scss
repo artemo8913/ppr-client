@@ -1,13 +1,13 @@
-@import url(./reset.scss);
-@import url(./global.scss);
-@import url(./themes/light.scss);
-@import url(./themes/dark.scss);
+@import "./reset";
+@import "./global";
+@import "./themes/light";
+@import "./themes/dark";
 
 .App {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: var(--font-size-m);
-
   color: var(--font-primary-color);
+
   background-color: var(--bg-primary-color);
   min-height: var(--window-height);
 
@@ -25,5 +25,4 @@
     overflow: auto;
     padding: 16px;
   }
-
 }

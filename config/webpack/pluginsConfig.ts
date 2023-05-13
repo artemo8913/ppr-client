@@ -1,7 +1,7 @@
 import webpack, { WebpackPluginInstance } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import WorkboxWebpackPlugin from "workbox-webpack-plugin";
+// import WorkboxWebpackPlugin from "workbox-webpack-plugin";
 import { ConfigOptions } from "./createConfig";
 
 export default function createPlugins(options: ConfigOptions): WebpackPluginInstance[] {

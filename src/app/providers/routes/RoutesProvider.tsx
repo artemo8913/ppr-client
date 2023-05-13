@@ -1,5 +1,5 @@
 import { pagesEnum, pagesPaths } from "pages";
-import { RouteObject, RouterProvider, createBrowserRouter, Routes, Route } from "react-router-dom";
+import { RouteObject, Routes, Route } from "react-router-dom";
 
 import { MainPage } from "pages/MainPage";
 

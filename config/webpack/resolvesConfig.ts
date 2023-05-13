@@ -5,7 +5,7 @@ export default function createResolves(options: ConfigOptions): ResolveOptions {
   return {
     extensions: [".tsx", ".ts", ".js"],
     preferAbsolute: true,
-    mainFiles: ['index'],
+    mainFiles: ["index"],
     modules: [options.paths.src, "node_modules"]
   };
 }

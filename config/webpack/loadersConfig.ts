@@ -11,11 +11,6 @@ export default function createRules(options: ConfigOptions): RuleSetRule[] {
       loader: "babel-loader",
     },
   };
-  const tsLoader = {
-    test: /\.(ts|tsx)$/i,
-    loader: "ts-loader",
-    exclude: ["/node_modules/"],
-  };
   const scssLoader = {
     test: /\.s[ac]ss$/i,
     use: [
