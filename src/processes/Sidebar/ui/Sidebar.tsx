@@ -1,9 +1,14 @@
 import css from "./Sidebar.module.scss";
+
 import { pagesPaths } from "pages";
+
+import { ThemeSwitcher } from "widgets/ThemeSwitcher";
+
 import { AppLink } from "shared/ui/AppLink/AppLink";
 import { createClassName } from "shared/lib/createClassName";
 import HomeIcon from "shared/assets/icons/homeIcon.svg";
 import ContactSupportIcon from "shared/assets/icons/contactSupport.svg";
+import { LanguageSwitcher } from "widgets/LanguageSwitcher";
 
 interface SidebarProps {
   additionalClassName?: string;
@@ -21,6 +26,8 @@ function Sidebar({ additionalClassName, isOpen }: SidebarProps) {
         <ContactSupportIcon className={css.icon} />
         <span className={css.text}>О сайте</span>
       </AppLink>
+      <ThemeSwitcher />
+      <LanguageSwitcher />
     </div>
   );
 }

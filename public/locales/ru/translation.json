@@ -1,4 +1,5 @@
 {
-  "title": "Welcome to react using react-i18next",
+  "locale":"русский",
+  "locale_short": "ru",
   "hello": "привет"
 }
