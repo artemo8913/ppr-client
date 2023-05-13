@@ -5,9 +5,6 @@ export default function createDevServerConfig(options: ConfigOptions): DevServer
   return {
     port: options.port,
     open: false,
-    static: {
-      directory: options.paths.output,
-    },
     hot: true,
     historyApiFallback: true,
     client: {

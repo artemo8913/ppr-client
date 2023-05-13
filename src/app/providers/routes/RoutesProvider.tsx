@@ -1,9 +1,11 @@
 import { pagesEnum, pagesPaths } from "pages";
 import { RouteObject, RouterProvider, createBrowserRouter, Routes, Route } from "react-router-dom";
 
+import { MainPage } from "pages/MainPage";
+
 const routesConfig: Record<pagesEnum, RouteObject> = {
   [pagesEnum.MAIN]: {
-    element: <div>MainPage</div>,
+    element: <MainPage />,
     path: pagesPaths.main,
   },
   [pagesEnum.ABOUT]: { element: <div>About</div>, path: pagesPaths.about },
