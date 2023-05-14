@@ -17,7 +17,7 @@ interface SidebarProps {
 
 function Sidebar({ additionalClassName, isOpen }: SidebarProps) {
   return (
-    <div className={createClassName(css.Sidebar, { [css.open]: isOpen }, [additionalClassName])}>
+    <div data-testid="sidebar" className={createClassName(css.Sidebar, { [css.open]: isOpen }, [additionalClassName])}>
       <AppLink to={pagesPaths.main}>
         <HomeIcon className={css.icon} />
         <span className={css.text}>Главная страница</span>

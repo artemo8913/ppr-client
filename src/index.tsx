@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { Suspense } from "react";
 import { ThemeProvider } from "app/providers/theme/ThemeProvider";
 
-import "shared/config/i18n/i18n";
+import "config/i18n/i18n";
 
 const root = createRoot(document.getElementById("root"));
 

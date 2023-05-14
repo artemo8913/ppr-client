@@ -1,6 +1,6 @@
 import css from "./LanguageSwitcher.module.scss";
 import { createClassName } from "shared/lib/createClassName";
-import { LocalesEnum } from "shared/config/i18n/i18n";
+import { LocalesEnum } from "shared/i18n/i18nConfig";
 import { useTranslation } from "react-i18next";
 
 interface LanguageSwitcherProps {
