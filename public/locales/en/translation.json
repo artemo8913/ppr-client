@@ -2,5 +2,7 @@
   "main_title": "Digital power supply distance",
   "locale": "english",
   "locale_short": "en",
-  "hello": "hello"
+  "hello": "hello",
+  "main_page": "Main",
+  "about_page": "About"
 }
