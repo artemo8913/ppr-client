@@ -1,4 +1,4 @@
-#Цифровой ППР дистанции электроснабжения (client side)
+# Цифровой ППР дистанции электроснабжения (client side)
 React + TypeScript + StyledComponents
  
 # Описание задачи 
