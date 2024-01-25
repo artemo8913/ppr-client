@@ -7,9 +7,6 @@ export const createColumnsList: <T>(
 ) => number = (columns, result, depth = 0) => {
   let colNumber = 0;
   columns.forEach((col) => {
-    if (depth === 0) {
-      colNumber = 0;
-    }
     result[depth] ? result[depth].push(col) : (result[depth] = [col]);
     if (!col.subColumns) {
       colNumber += 1;
