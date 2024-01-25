@@ -1,5 +1,5 @@
-import { IRowData } from "../model/pprSchema";
-const data: Array<IRowData> = [
+import { IData } from "../model/pprSchema";
+const data: Array<IData> = [
   {
     id: "1",
     index: "1",

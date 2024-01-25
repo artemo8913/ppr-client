@@ -1,4 +1,20 @@
-export interface IRowData {
+export interface IMonthData {
+  year: number;
+  jan: number;
+  feb: number;
+  mar: number;
+  apr: number;
+  may: number;
+  june: number;
+  july: number;
+  aug: number;
+  sept: number;
+  oct: number;
+  nov: number;
+  dec: number;
+}
+
+export interface IData {
   id: string;
   index: string;
   branch: string;
@@ -22,64 +38,4 @@ export interface IRowData {
   fact_work: IMonthData;
   fact_norm_time: IMonthData;
   fact_time: IMonthData;
-}
-
-export interface IRow {
-  data: IRowData;
-  infoColumnsList: Array<string>;
-  editableColumnsList: Array<string>;
-  workAndTimeColumnsList: Array<string>;
-  monthList: Array<string>;
-  sectionVSpan?: number;
-  subsectionVSpan?: number;
-}
-
-export interface ITitle {
-  infoColumnsList: Array<string>;
-  workAndTimeColumnsList: Array<string>;
-  monthList: Array<string>;
-}
-
-export interface IMonthData {
-  year: number;
-  jan: number;
-  feb: number;
-  mar: number;
-  apr: number;
-  may: number;
-  june: number;
-  july: number;
-  aug: number;
-  sept: number;
-  oct: number;
-  nov: number;
-  dec: number;
-}
-
-export interface ICell {
-  type?: "none" | "input" | "textarea";
-  value?: string;
-  vText?: boolean;
-  maxWidth?: number;
-  maxHeight?: number;
-  textAreaRows?:number
-  colSpan?: number;
-  rowSpan?: number;
-}
-
-export interface IPprGeneralData {
-  id: string;
-  year: string;
-  id_subdivision: string;
-  id_distance: string;
-  id_direction: string;
-  status: string;
-  name: string;
-  month: string;
-  dir_name: string;
-  dis_name: string;
-  sub_name: string;
-  dir_name_short: string;
-  dis_name_short: string;
-  sub_name_short: string;
 }

@@ -1,44 +1,32 @@
-import Cell from "@/2entities/PprTable/ui/Cell";
-import Row from "@/2entities/PprTable/ui/Row";
-import data from "@/2entities/PprTable/mock/rowData";
-import settings, {
-  fullInfoColumnsList,
-  fullMonthsList,
-  fullWorkAndTimeColumnsList,
-} from "@/2entities/PprTable/model/pprSettings";
+import { createColumnsList } from "@/1shared/ui/table/lib/createColumnsList";
+import { ITableColumn, ITableData } from "@/1shared/ui/table/model/tableSchema";
+import { Table } from "@/1shared/ui/table/ui/Table";
 
-function excludeFromList(fullList: Array<string>, excludedList: Array<string> = []) {
-  return fullList.filter((el) => excludedList.indexOf(el) === -1);
-}
+type TNames = keyof { id: 1; val: 2; a: 1; b: 2; c: 5; d: 6; e: 1; f: 1; g: 0 };
+const columns: ITableColumn<TNames>[] = [
+  { name: "a", subColumns: [{ name: "val", subColumns: [{ name: "c" }, { name: "d" }] }, { name: "e" }] },
+  { name: "f", subColumns: [{ name: "g" }] },
+  {
+    name: "id",
+    subColumns: [
+      {
+        name: "b",
+        subColumns: [{ name: "c" }, { name: "d" }, { name: "g", subColumns: [{ name: "b" }, { name: "e" }] }],
+      },
+      { name: "e" },
+    ],
+  },
+];
+const data: ITableData<TNames>[] = [{ name: "val" }];
 
 export default function Home() {
-  const hiddenColumnsList = [...settings.hiddenPprColumns["none"]];
-  const editableList = [...settings.editablePprColumns["none"]];
-  const infoColumnList = excludeFromList(fullInfoColumnsList, hiddenColumnsList);
-  const titleInfoColumnList = excludeFromList(fullInfoColumnsList, ["subsection_first", ...hiddenColumnsList]);
-  const workAndTimeColumnList = excludeFromList(fullWorkAndTimeColumnsList, hiddenColumnsList);
-  const monthList = excludeFromList(fullMonthsList, hiddenColumnsList);
+  const columnsList: ITableColumn<TNames>[][] = [];
+  createColumnsList(columns, columnsList);
+  console.log(columnsList);
   return (
     <main>
-      <div className="bg-slate-600">
-        Главная страница
-        <table>
-          <tbody>
-            {data.map((rowData) => (
-              <Row
-                key={rowData.id}
-                data={rowData}
-                editableColumnsList={editableList}
-                infoColumnsList={infoColumnList}
-                monthList={monthList}
-                workAndTimeColumnsList={workAndTimeColumnList}
-                sectionVSpan={1}
-                subsectionVSpan={1}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <div className="bg-slate-600">Главная страница</div>
+      <Table<TNames> columns={columns} data={data} />
     </main>
   );
 }
