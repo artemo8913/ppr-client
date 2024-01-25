@@ -7,11 +7,16 @@ export const createColumnsList: <T>(
 ) => number = (columns, result, depth = 0) => {
   let colNumber = 0;
   columns.forEach((col) => {
-    colNumber += 1;
+    if (depth === 0) {
+      colNumber = 0;
+    }
     result[depth] ? result[depth].push(col) : (result[depth] = [col]);
-    if (col.subColumns) {
-      colNumber += createColumnsList(col.subColumns, result, depth + 1);
-      col.colSpan = colNumber;
+    if (!col.subColumns) {
+      colNumber += 1;
+    } else {
+      const subCount = createColumnsList(col.subColumns, result, depth + 1);
+      col.colSpan = subCount;
+      colNumber += subCount;
     }
   });
   return colNumber;
