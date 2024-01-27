@@ -1,4 +1,3 @@
-import { createColumnsList } from "@/1shared/ui/table/lib/createColumnsList";
 import { ITableColumn, ITableData } from "@/1shared/ui/table/model/tableSchema";
 import { Table } from "@/1shared/ui/table/ui/Table";
 
@@ -20,9 +19,6 @@ const columns: ITableColumn<TNames>[] = [
 const data: ITableData<TNames>[] = [{ name: "val" }];
 
 export default function Home() {
-  const columnsList: ITableColumn<TNames>[][] = [];
-  createColumnsList(columns, columnsList);
-  console.log(columnsList);
   return (
     <main>
       <div className="bg-slate-600">Главная страница</div>
