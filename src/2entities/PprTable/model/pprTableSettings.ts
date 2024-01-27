@@ -1,15 +1,16 @@
 import { ITableColumn } from "@/1shared/ui/table/model/tableSchema";
-import { IPprData, IWorkAndTimeData } from "./pprSchema";
+import { IPprData } from "./pprSchema";
+import { IMonths, TMonths } from "@/1shared/types/date";
 
-export const fullWorkAndTimeDataList: ITableColumn<keyof IWorkAndTimeData>[] = [
-  { name: "plan_work", value: "кол-во" },
-  { name: "plan_time", value: "норм. время на плановый объем, чел.-ч" },
-  { name: "fact_work", value: "кол-во" },
-  { name: "fact_norm_time", value: "трудозатраты по норме времени, чел.-ч" },
-  { name: "fact_time", value: "фактические трудозатраты, чел.-ч" },
+const fullWorkAndTimeDataList = (mounth: keyof IMonths): ITableColumn<IPprData>[] => [
+  { name: `${mounth}_plan_work`, value: "кол-во" },
+  { name: `${mounth}_plan_time`, value: "норм. время на плановый объем, чел.-ч" },
+  { name: `${mounth}_fact_work`, value: "кол-во" },
+  { name: `${mounth}_fact_norm_time`, value: "трудозатраты по норме времени, чел.-ч" },
+  { name: `${mounth}_fact_time`, value: "фактические трудозатраты, чел.-ч" },
 ];
 
-export const fullColumnsList: ITableColumn<keyof IPprData | keyof IWorkAndTimeData>[] = [
+export const fullColumnsList: ITableColumn<IPprData>[] = [
   {
     name: "section",
     value: "Наименования и условия выполнения технологических операций, испытаний и измерений",
@@ -41,19 +42,19 @@ export const fullColumnsList: ITableColumn<keyof IPprData | keyof IWorkAndTimeDa
   { name: "norm_of_time", value: "Норма времени на измеритель, чел.-ч" },
   { name: "norm_of_time_document", value: "Обоснование нормы времени" },
   { name: "unity", value: "Подразделение / исполнитель" },
-  { name: "year", value: "Всего за год", subColumns: fullWorkAndTimeDataList },
-  { name: "jan", value: "Январь", subColumns: fullWorkAndTimeDataList },
-  { name: "feb", value: "Февраль", subColumns: fullWorkAndTimeDataList },
-  { name: "mar", value: "Март", subColumns: fullWorkAndTimeDataList },
-  { name: "apr", value: "Апрель", subColumns: fullWorkAndTimeDataList },
-  { name: "may", value: "Май", subColumns: fullWorkAndTimeDataList },
-  { name: "june", value: "Июнь", subColumns: fullWorkAndTimeDataList },
-  { name: "july", value: "Июль", subColumns: fullWorkAndTimeDataList },
-  { name: "aug", value: "Август", subColumns: fullWorkAndTimeDataList },
-  { name: "sept", value: "Сентябрь", subColumns: fullWorkAndTimeDataList },
-  { name: "oct", value: "Октябрь", subColumns: fullWorkAndTimeDataList },
-  { name: "nov", value: "Ноябрь", subColumns: fullWorkAndTimeDataList },
-  { name: "dec", value: "Декабрь", subColumns: fullWorkAndTimeDataList },
+  { name: "year", value: "Всего за год", subColumns: fullWorkAndTimeDataList("year") },
+  { name: "jan", value: "Январь", subColumns: fullWorkAndTimeDataList("jan") },
+  { name: "feb", value: "Февраль", subColumns: fullWorkAndTimeDataList("feb") },
+  { name: "mar", value: "Март", subColumns: fullWorkAndTimeDataList("mar") },
+  { name: "apr", value: "Апрель", subColumns: fullWorkAndTimeDataList("apr") },
+  { name: "may", value: "Май", subColumns: fullWorkAndTimeDataList("may") },
+  { name: "june", value: "Июнь", subColumns: fullWorkAndTimeDataList("june") },
+  { name: "july", value: "Июль", subColumns: fullWorkAndTimeDataList("july") },
+  { name: "aug", value: "Август", subColumns: fullWorkAndTimeDataList("aug") },
+  { name: "sept", value: "Сентябрь", subColumns: fullWorkAndTimeDataList("sept") },
+  { name: "oct", value: "Октябрь", subColumns: fullWorkAndTimeDataList("oct") },
+  { name: "nov", value: "Ноябрь", subColumns: fullWorkAndTimeDataList("nov") },
+  { name: "dec", value: "Декабрь", subColumns: fullWorkAndTimeDataList("dec") },
 ];
 
 //перенести всё, что связано с состоянием UI или данных в redux! здесь оставить общие настройки (темы и т.д.)

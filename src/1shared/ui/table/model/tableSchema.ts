@@ -1,15 +1,16 @@
 export interface ITableColumn<T> {
-  name: T;
+  name: keyof T | string;
   value?: string | number;
   colSpan?: number;
   rowSpan?: number;
   subColumns?: ITableColumn<T>[];
 }
 
-export interface ITableData<T> {
-  name: T;
-  cellSettings?: ITableCell;
-}
+export type TColumnsByDepth<T> = ITableColumn<T>[][];
+
+export type ITableData<T> = {
+  [key in keyof T]: string | number | undefined;
+};
 
 export interface ITableCell {
   type?: "none" | "input" | "textarea";

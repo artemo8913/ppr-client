@@ -1,15 +1,29 @@
+export type TMonths =
+  | "year"
+  | "jan"
+  | "feb"
+  | "mar"
+  | "apr"
+  | "may"
+  | "june"
+  | "july"
+  | "aug"
+  | "sept"
+  | "oct"
+  | "nov"
+  | "dec";
 export interface IMonths {
-  year: number;
-  jan: number;
-  feb: number;
-  mar: number;
-  apr: number;
-  may: number;
-  june: number;
-  july: number;
-  aug: number;
-  sept: number;
-  oct: number;
-  nov: number;
-  dec: number;
+  year: string;
+  jan: string;
+  feb: string;
+  mar: string;
+  apr: string;
+  may: string;
+  june: string;
+  july: string;
+  aug: string;
+  sept: string;
+  oct: string;
+  nov: string;
+  dec: string;
 }
