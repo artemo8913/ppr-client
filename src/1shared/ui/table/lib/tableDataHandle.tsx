@@ -10,7 +10,6 @@ const dfs: <T>(
   columns.forEach((col) => {
     colListForTitle[depth] ? colListForTitle[depth].push(col) : (colListForTitle[depth] = [col]);
     if (!col.subColumns) {
-      
       colListForData.push(col.name);
       colNumber += 1;
     } else {

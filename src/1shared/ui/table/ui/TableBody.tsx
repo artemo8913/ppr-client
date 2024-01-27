@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { ITableColumn, ITableData } from "../model/tableSchema";
+import { ITableData } from "../model/tableSchema";
 
 interface ITableBodyProps<T> {
   columnsList: (keyof T)[];
