@@ -22,5 +22,13 @@ const dfs: <T>(columns: ITableColumn<T>[], result: ITableColumn<T>[][], depth?: 
 export const createColumnsList: <T>(columns: ITableColumn<T>[], depth?: number) => ITableColumn<T>[][] = (columns) => {
   const result = [] as (typeof columns)[];
   dfs(columns, result);
+  const maxDepth = result.length;
+  result.forEach((depthArr, depth)=>{
+    depthArr.forEach(col => {
+      if(!col.subColumns){
+        col.rowSpan = maxDepth - depth
+      }
+    })
+  })
   return result;
 };
