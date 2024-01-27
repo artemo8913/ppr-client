@@ -15,10 +15,10 @@ export const TableTitle: <T>(props: PropsWithChildren<ITableTitleProps<T>>) => J
           <th
             colSpan={cell.colSpan}
             rowSpan={cell.rowSpan}
-            className="border-2 border-black min-w-[20px]"
+            className="border-2 border-black"
             key={String(cell.name) + index}
           >
-            {String(cell.name)}
+            {String(cell.value)}
           </th>
         ))}
       </tr>

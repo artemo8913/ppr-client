@@ -1,20 +1,11 @@
-export interface IMonthData {
-  year: number;
-  jan: number;
-  feb: number;
-  mar: number;
-  apr: number;
-  may: number;
-  june: number;
-  july: number;
-  aug: number;
-  sept: number;
-  oct: number;
-  nov: number;
-  dec: number;
+export interface IWorkAndTimeData {
+  plan_work: number;
+  plan_time: number;
+  fact_work: number;
+  fact_norm_time: number;
+  fact_time: number;
 }
-
-export interface IData {
+export interface IPprData {
   id: string;
   index: string;
   branch: string;
@@ -23,19 +14,27 @@ export interface IData {
   subsection_first: string;
   subsection_second: string;
   location: string;
-  line_class: string;
+  line_class: number;
   measure: string;
-  total_count: string;
-  entry_year: string;
-  periodicity_normal: string;
-  periodicity_fact: string;
-  last_maintenance_year: string;
-  norm_of_time: string;
+  total_count: number;
+  entry_year: number;
+  periodicity_normal: number;
+  periodicity_fact: number;
+  last_maintenance_year: number;
+  norm_of_time: number;
   norm_of_time_document: string;
   unity: string;
-  plan_work: IMonthData;
-  plan_time: IMonthData;
-  fact_work: IMonthData;
-  fact_norm_time: IMonthData;
-  fact_time: IMonthData;
+  year: IWorkAndTimeData;
+  jan: IWorkAndTimeData;
+  feb: IWorkAndTimeData;
+  mar: IWorkAndTimeData;
+  apr: IWorkAndTimeData;
+  may: IWorkAndTimeData;
+  june: IWorkAndTimeData;
+  july: IWorkAndTimeData;
+  aug: IWorkAndTimeData;
+  sept: IWorkAndTimeData;
+  oct: IWorkAndTimeData;
+  nov: IWorkAndTimeData;
+  dec: IWorkAndTimeData;
 }

@@ -1,3 +1,61 @@
+import { ITableColumn } from "@/1shared/ui/table/model/tableSchema";
+import { IPprData, IWorkAndTimeData } from "./pprSchema";
+
+export const fullWorkAndTimeDataList: ITableColumn<keyof IWorkAndTimeData>[] = [
+  { name: "plan_work", value: "кол-во" },
+  { name: "plan_time", value: "норм. время на плановый объем, чел.-ч" },
+  { name: "fact_work", value: "кол-во" },
+  { name: "fact_norm_time", value: "трудозатраты по норме времени, чел.-ч" },
+  { name: "fact_time", value: "фактические трудозатраты, чел.-ч" },
+];
+
+export const fullColumnsList: ITableColumn<keyof IPprData | keyof IWorkAndTimeData>[] = [
+  {
+    name: "section",
+    value: "Наименования и условия выполнения технологических операций, испытаний и измерений",
+  },
+  { name: "subsection_first", value: "" },
+  {
+    name: "location",
+    value: "Наименование места проведения работ / тип оборудования",
+  },
+  {
+    name: "line_class",
+    value: "Класс участка / вид технического обслуживания и ремонта",
+  },
+  { name: "measure", value: "Измеритель" },
+  { name: "total_count", value: "Количество измерителей (всего)" },
+  { name: "entry_year", value: "Год ввода в эксплуатацию" },
+  {
+    name: "periodicity_normal",
+    value: "Периодичность выполнения работ (в соответствии с действующими правилами)",
+  },
+  {
+    name: "last_maintenance_year",
+    value: "Периодичность выполнения работ (факт)",
+  },
+  {
+    name: "periodicity_fact",
+    value: "Дата последнего выполнения (для работ с периодичностью более 1 года)",
+  },
+  { name: "norm_of_time", value: "Норма времени на измеритель, чел.-ч" },
+  { name: "norm_of_time_document", value: "Обоснование нормы времени" },
+  { name: "unity", value: "Подразделение / исполнитель" },
+  { name: "year", value: "Всего за год", subColumns: fullWorkAndTimeDataList },
+  { name: "jan", value: "Январь", subColumns: fullWorkAndTimeDataList },
+  { name: "feb", value: "Февраль", subColumns: fullWorkAndTimeDataList },
+  { name: "mar", value: "Март", subColumns: fullWorkAndTimeDataList },
+  { name: "apr", value: "Апрель", subColumns: fullWorkAndTimeDataList },
+  { name: "may", value: "Май", subColumns: fullWorkAndTimeDataList },
+  { name: "june", value: "Июнь", subColumns: fullWorkAndTimeDataList },
+  { name: "july", value: "Июль", subColumns: fullWorkAndTimeDataList },
+  { name: "aug", value: "Август", subColumns: fullWorkAndTimeDataList },
+  { name: "sept", value: "Сентябрь", subColumns: fullWorkAndTimeDataList },
+  { name: "oct", value: "Октябрь", subColumns: fullWorkAndTimeDataList },
+  { name: "nov", value: "Ноябрь", subColumns: fullWorkAndTimeDataList },
+  { name: "dec", value: "Декабрь", subColumns: fullWorkAndTimeDataList },
+];
+
 //перенести всё, что связано с состоянием UI или данных в redux! здесь оставить общие настройки (темы и т.д.)
 //в заголовок перенести настройки, связанные с заголовком таблицы (title)??? с другой стороны, здесь хранятся настройки для vText
 //vText - создать массив, в котором будут перечисленны столбы для которых текст будет вертикальным

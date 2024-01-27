@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactElement } from "react";
+import { PropsWithChildren } from "react";
 import { TableBody } from "./TableBody";
 import { TableTitle } from "./TableTitle";
 import { ITableColumn, ITableData } from "../model/tableSchema";
