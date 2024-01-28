@@ -14,7 +14,7 @@ const dfs: <T>(
       colNumber += 1;
     } else {
       const subCount = dfs(col.subColumns, colListForTitle, colListForData, depth + 1);
-      col.colSpan = subCount;
+      col.thColSpan = subCount;
       colNumber += subCount;
     }
   });
@@ -32,7 +32,7 @@ export const createColumnsLists: <T>(
   colListForTitle.forEach((depthArr, depth) => {
     depthArr.forEach((col) => {
       if (!col.subColumns && maxDepth - depth > 1) {
-        col.rowSpan = maxDepth - depth;
+        col.thRowSpan = maxDepth - depth;
       }
     });
   });

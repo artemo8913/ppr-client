@@ -10,6 +10,7 @@ export const PprTable: FC<IPprTableProps> = () => {
   return (
     <div>
       <Table
+        className="table-fixed w-[100%] [font-size:12px]"
         RowComponent={(props) => <tr {...props}></tr>}
         CellComponent={TableCell}
         columns={fullColumnsList}

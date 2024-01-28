@@ -1,98 +1,184 @@
 import { ITableColumn } from "@/1shared/ui/table/model/tableSchema";
 import { IPprData } from "./pprSchema";
 import { TMonths } from "@/1shared/types/date";
+import { setQuartaerBgColor } from "../lib/setBgColor";
 
 const fullWorkAndTimeDataList = (mounth: TMonths): ITableColumn<IPprData>[] => [
-  { name: `${mounth}_plan_work`, value: "кол-во", isThVertical: true, isTdVertical: true },
   {
+    isTdVertical: true,
+    isThVertical: true,
+    name: `${mounth}_plan_work`,
+    cell: { cellType: "input", style: { backgroundColor: setQuartaerBgColor(mounth) } },
+    titleText: "кол-во",
+  },
+  {
+    isTdVertical: true,
+    isThVertical: true,
     name: `${mounth}_plan_time`,
-    value: "норм. время на плановый объем, чел.-ч",
-    isThVertical: true,
-    isTdVertical: true,
+    cell: { style: { backgroundColor: setQuartaerBgColor(mounth) } },
+    titleText: "норм. время на плановый объем, чел.-ч",
   },
-  { name: `${mounth}_fact_work`, value: "кол-во", isThVertical: true, isTdVertical: true },
   {
-    name: `${mounth}_fact_norm_time`,
-    value: "трудозатраты по норме времени, чел.-ч",
-    isThVertical: true,
     isTdVertical: true,
+    isThVertical: true,
+    name: `${mounth}_fact_work`,
+    cell: { style: { backgroundColor: setQuartaerBgColor(mounth, true) } },
+    titleText: "кол-во",
   },
-  { name: `${mounth}_fact_time`, value: "фактические трудозатраты, чел.-ч", isThVertical: true, isTdVertical: true },
+  {
+    isTdVertical: true,
+    isThVertical: true,
+    name: `${mounth}_fact_norm_time`,
+    cell: { style: { backgroundColor: setQuartaerBgColor(mounth, true) } },
+    titleText: "трудозатраты по норме времени, чел.-ч",
+  },
+  {
+    isTdVertical: true,
+    isThVertical: true,
+    name: `${mounth}_fact_time`,
+    cell: { style: { backgroundColor: setQuartaerBgColor(mounth, true) } },
+    titleText: "фактические трудозатраты, чел.-ч",
+  },
 ];
 
 export const fullColumnsList: ITableColumn<IPprData>[] = [
   {
     name: "section",
-    value: "Наименования и условия выполнения технологических операций, испытаний и измерений",
+    titleText: "Наименования и условия выполнения технологических операций, испытаний и измерений",
     isThVertical: true,
-    width: "10%",
-    cellType:'textarea'
+    cell: {
+      width: "10%",
+      cellType: "textarea",
+    },
   },
-  { name: "subsection_first", value: "", isThVertical: true },
+  {
+    name: "subsection_first",
+    titleText: "",
+    isThVertical: true,
+    cell: {
+      width: "5%",
+    },
+  },
   {
     name: "location",
-    value: "Наименование места проведения работ / тип оборудования",
+    titleText: "Наименование места проведения работ / тип оборудования",
     isThVertical: true,
+    cell: {
+      width: "10%",
+    },
   },
   {
     name: "line_class",
-    value: "Класс участка / вид технического обслуживания и ремонта",
+    titleText: "Класс участка / вид технического обслуживания и ремонта",
     isThVertical: true,
   },
-  { name: "measure", value: "Измеритель", isThVertical: true },
-  { name: "total_count", value: "Количество измерителей (всего)", isThVertical: true },
-  { name: "entry_year", value: "Год ввода в эксплуатацию", isThVertical: true },
+  {
+    name: "measure",
+    titleText: "Измеритель",
+    isThVertical: true,
+    cell: {
+      width: "2%",
+    },
+  },
+  {
+    name: "total_count",
+    titleText: "Количество измерителей (всего)",
+    isThVertical: true,
+    cell: {
+      width: "2%",
+    },
+  },
+  {
+    name: "entry_year",
+    titleText: "Год ввода в эксплуатацию",
+    isThVertical: true,
+    cell: {
+      width: "2%",
+    },
+  },
   {
     name: "periodicity_normal",
-    value: "Периодичность выполнения работ (в соответствии с действующими правилами)",
+    titleText: "Периодичность выполнения работ (в соответствии с действующими правилами)",
     isThVertical: true,
-  },
-  {
-    name: "last_maintenance_year",
-    value: "Периодичность выполнения работ (факт)",
-    isThVertical: true,
+    cell: {
+      width: "2%",
+    },
   },
   {
     name: "periodicity_fact",
-    value: "Дата последнего выполнения (для работ с периодичностью более 1 года)",
+    titleText: "Периодичность выполнения работ (факт)",
     isThVertical: true,
+    cell: {
+      width: "2%",
+    },
   },
-  { name: "norm_of_time", value: "Норма времени на измеритель, чел.-ч", isThVertical: true },
-  { name: "norm_of_time_document", value: "Обоснование нормы времени", isThVertical: true },
-  { name: "unity", value: "Подразделение / исполнитель", isThVertical: true },
-  { name: "year", value: "Всего за год", subColumns: fullWorkAndTimeDataList("year") },
-  { name: "jan", value: "Январь", subColumns: fullWorkAndTimeDataList("jan") },
-  { name: "feb", value: "Февраль", subColumns: fullWorkAndTimeDataList("feb") },
-  { name: "mar", value: "Март", subColumns: fullWorkAndTimeDataList("mar") },
-  { name: "apr", value: "Апрель", subColumns: fullWorkAndTimeDataList("apr") },
-  { name: "may", value: "Май", subColumns: fullWorkAndTimeDataList("may") },
-  { name: "june", value: "Июнь", subColumns: fullWorkAndTimeDataList("june") },
-  { name: "july", value: "Июль", subColumns: fullWorkAndTimeDataList("july") },
-  { name: "aug", value: "Август", subColumns: fullWorkAndTimeDataList("aug") },
-  { name: "sept", value: "Сентябрь", subColumns: fullWorkAndTimeDataList("sept") },
-  { name: "oct", value: "Октябрь", subColumns: fullWorkAndTimeDataList("oct") },
-  { name: "nov", value: "Ноябрь", subColumns: fullWorkAndTimeDataList("nov") },
-  { name: "dec", value: "Декабрь", subColumns: fullWorkAndTimeDataList("dec") },
+  {
+    name: "last_maintenance_year",
+    titleText: "Дата последнего выполнения (для работ с периодичностью более 1 года)",
+    isThVertical: true,
+    cell: {
+      width: "2%",
+    },
+  },
+  {
+    name: "norm_of_time",
+    titleText: "Норма времени на измеритель, чел.-ч",
+    isThVertical: true,
+    cell: {
+      width: "3%",
+    },
+  },
+  {
+    name: "norm_of_time_document",
+    titleText: "Обоснование нормы времени",
+    isThVertical: true,
+    cell: {
+      width: "3%",
+      style: { fontSize: "0.5vw" },
+    },
+  },
+  {
+    name: "unity",
+    titleText: "Подразделение / исполнитель",
+    isThVertical: true,
+    cell: {
+      width: "3%",
+    },
+  },
+  { name: "year", titleText: "Всего за год", subColumns: fullWorkAndTimeDataList("year") },
+  {
+    name: "jan",
+    titleText: "Январь",
+    subColumns: fullWorkAndTimeDataList("jan"),
+  },
+  {
+    name: "feb",
+    titleText: "Февраль",
+    subColumns: fullWorkAndTimeDataList("feb"),
+  },
+  {
+    name: "mar",
+    titleText: "Март",
+    subColumns: fullWorkAndTimeDataList("mar"),
+  },
+  { name: "apr", titleText: "Апрель", subColumns: fullWorkAndTimeDataList("apr") },
+  { name: "may", titleText: "Май", subColumns: fullWorkAndTimeDataList("may") },
+  { name: "june", titleText: "Июнь", subColumns: fullWorkAndTimeDataList("june") },
+  { name: "july", titleText: "Июль", subColumns: fullWorkAndTimeDataList("july") },
+  { name: "aug", titleText: "Август", subColumns: fullWorkAndTimeDataList("aug") },
+  { name: "sept", titleText: "Сентябрь", subColumns: fullWorkAndTimeDataList("sept") },
+  { name: "oct", titleText: "Октябрь", subColumns: fullWorkAndTimeDataList("oct") },
+  { name: "nov", titleText: "Ноябрь", subColumns: fullWorkAndTimeDataList("nov") },
+  { name: "dec", titleText: "Декабрь", subColumns: fullWorkAndTimeDataList("dec") },
 ];
 
 //перенести всё, что связано с состоянием UI или данных в redux! здесь оставить общие настройки (темы и т.д.)
 //в заголовок перенести настройки, связанные с заголовком таблицы (title)??? с другой стороны, здесь хранятся настройки для vText
 //vText - создать массив, в котором будут перечисленны столбы для которых текст будет вертикальным
 const settings = {
-  colors: {
-    firstQuarter: "rgba(0,26,255,0.5)",
-    secondQuarter: "rgba(1,129,16,0.5)",
-    thirdQuarter: "rgba(6,180,154,0.5)",
-    fourthQuarter: "rgba(255,132,0,0.5)",
-    firstQuarterTransparent: "rgba(0,26,255,0.2)",
-    secondQuarterTransparent: "rgba(1,129,16,0.2)",
-    thirdQuarterTransparent: "rgba(6,180,154,0.2)",
-    fourthQuarterTransparent: "rgba(255,132,0,0.2)",
-  },
   cellSize: {
     small: { width: "30px", height: "50px" },
   },
-  fonts: ["sans-serif", "Roboto"],
   fontSizes: {
     small: "1em",
     medium: "2em",
@@ -123,67 +209,6 @@ const settings = {
       "plan_work",
     ],
     fulfilling: ["fact_work", "fact_time"],
-  },
-  pprColumnSettings: {
-    textareaRows: 6,
-    textareaCols: 10,
-    fullPlanwidthPercent: 30,
-    section: {
-      title: "Наименования и условия выполнения технологических операций, испытаний и измерений",
-      widthPercent: 10,
-      titleRowSpan: 4,
-      titleColSpan: 2,
-    },
-    subsection_first: { title: "" },
-    location: { title: "Наименование места проведения работ / тип оборудования", widthPercent: 4, titleRowSpan: 4 },
-    line_class: {
-      title: "Класс участка / вид технического обслуживания и ремонта",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    measure: { title: "Измеритель", widthPercent: 1, titleRowSpan: 4, vText: true },
-    total_count: { title: "Количество измерителей (всего)", widthPercent: 1, titleRowSpan: 4, vText: true },
-    entry_year: { title: "Год ввода в эксплуатацию", widthPercent: 1, titleRowSpan: 4, vText: true },
-    periodicity_normal: {
-      title: "Периодичность выполнения работ (в соответствии с действующими правилами)",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    last_maintenance_year: {
-      title: "Периодичность выполнения работ (факт)",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    periodicity_fact: {
-      title: "Дата последнего выполнения (для работ с периодичностью более 1 года)",
-      widthPercent: 1,
-      titleRowSpan: 4,
-      vText: true,
-    },
-    norm_of_time: { title: "Норма времени на измеритель, чел.-ч", widthPercent: 1, titleRowSpan: 4, vText: true },
-    norm_of_time_document: { title: "Обоснование нормы времени", widthPercent: 2, titleRowSpan: 4 },
-    unity: { title: "Подразделение / исполнитель", widthPercent: 1, titleRowSpan: 4, vText: true },
-    plan_work: { title: "кол-во", vText: true },
-    plan_time: { title: "норм. время на плановый объем, чел.-ч", vText: true },
-    fact_work: { title: "кол-во", vText: true },
-    fact_norm_time: { title: "трудозатраты по норме времени, чел.-ч", vText: true },
-    fact_time: { title: "фактические трудозатраты, чел.-ч", vText: true },
-    year: { title: "Всего за год", titleColSpan: 5 },
-    jan: { title: "Январь", titleColSpan: 5 },
-    feb: { title: "Февраль", titleColSpan: 5 },
-    mar: { title: "Март", titleColSpan: 5 },
-    apr: { title: "Апрель", titleColSpan: 5 },
-    may: { title: "Май", titleColSpan: 5 },
-    june: { title: "Июнь", titleColSpan: 5 },
-    july: { title: "Июль", titleColSpan: 5 },
-    aug: { title: "Август", titleColSpan: 5 },
-    sept: { title: "Сентябрь", titleColSpan: 5 },
-    oct: { title: "Октябрь", titleColSpan: 5 },
-    nov: { title: "Ноябрь", titleColSpan: 5 },
-    dec: { title: "Декабрь", titleColSpan: 5 },
   },
 };
 export default settings;
