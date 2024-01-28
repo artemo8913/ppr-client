@@ -8,9 +8,9 @@ interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = () => {
   return (
-    <div>
+    <div className="w-full overflow-scroll">
       <Table
-        className="table-fixed w-[100%] [font-size:12px]"
+        className="table-fixed w-[120%] [font-size:12px]"
         RowComponent={(props) => <tr {...props}></tr>}
         CellComponent={TableCell}
         columns={fullColumnsList}
