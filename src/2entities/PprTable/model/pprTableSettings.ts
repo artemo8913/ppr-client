@@ -1,47 +1,65 @@
 import { ITableColumn } from "@/1shared/ui/table/model/tableSchema";
 import { IPprData } from "./pprSchema";
-import { IMonths, TMonths } from "@/1shared/types/date";
+import { TMonths } from "@/1shared/types/date";
 
-const fullWorkAndTimeDataList = (mounth: keyof IMonths): ITableColumn<IPprData>[] => [
-  { name: `${mounth}_plan_work`, value: "кол-во" },
-  { name: `${mounth}_plan_time`, value: "норм. время на плановый объем, чел.-ч" },
-  { name: `${mounth}_fact_work`, value: "кол-во" },
-  { name: `${mounth}_fact_norm_time`, value: "трудозатраты по норме времени, чел.-ч" },
-  { name: `${mounth}_fact_time`, value: "фактические трудозатраты, чел.-ч" },
+const fullWorkAndTimeDataList = (mounth: TMonths): ITableColumn<IPprData>[] => [
+  { name: `${mounth}_plan_work`, value: "кол-во", isThVertical: true, isTdVertical: true },
+  {
+    name: `${mounth}_plan_time`,
+    value: "норм. время на плановый объем, чел.-ч",
+    isThVertical: true,
+    isTdVertical: true,
+  },
+  { name: `${mounth}_fact_work`, value: "кол-во", isThVertical: true, isTdVertical: true },
+  {
+    name: `${mounth}_fact_norm_time`,
+    value: "трудозатраты по норме времени, чел.-ч",
+    isThVertical: true,
+    isTdVertical: true,
+  },
+  { name: `${mounth}_fact_time`, value: "фактические трудозатраты, чел.-ч", isThVertical: true, isTdVertical: true },
 ];
 
 export const fullColumnsList: ITableColumn<IPprData>[] = [
   {
     name: "section",
     value: "Наименования и условия выполнения технологических операций, испытаний и измерений",
+    isThVertical: true,
+    width: "10%",
+    cellType:'textarea'
   },
-  { name: "subsection_first", value: "" },
+  { name: "subsection_first", value: "", isThVertical: true },
   {
     name: "location",
     value: "Наименование места проведения работ / тип оборудования",
+    isThVertical: true,
   },
   {
     name: "line_class",
     value: "Класс участка / вид технического обслуживания и ремонта",
+    isThVertical: true,
   },
-  { name: "measure", value: "Измеритель" },
-  { name: "total_count", value: "Количество измерителей (всего)" },
-  { name: "entry_year", value: "Год ввода в эксплуатацию" },
+  { name: "measure", value: "Измеритель", isThVertical: true },
+  { name: "total_count", value: "Количество измерителей (всего)", isThVertical: true },
+  { name: "entry_year", value: "Год ввода в эксплуатацию", isThVertical: true },
   {
     name: "periodicity_normal",
     value: "Периодичность выполнения работ (в соответствии с действующими правилами)",
+    isThVertical: true,
   },
   {
     name: "last_maintenance_year",
     value: "Периодичность выполнения работ (факт)",
+    isThVertical: true,
   },
   {
     name: "periodicity_fact",
     value: "Дата последнего выполнения (для работ с периодичностью более 1 года)",
+    isThVertical: true,
   },
-  { name: "norm_of_time", value: "Норма времени на измеритель, чел.-ч" },
-  { name: "norm_of_time_document", value: "Обоснование нормы времени" },
-  { name: "unity", value: "Подразделение / исполнитель" },
+  { name: "norm_of_time", value: "Норма времени на измеритель, чел.-ч", isThVertical: true },
+  { name: "norm_of_time_document", value: "Обоснование нормы времени", isThVertical: true },
+  { name: "unity", value: "Подразделение / исполнитель", isThVertical: true },
   { name: "year", value: "Всего за год", subColumns: fullWorkAndTimeDataList("year") },
   { name: "jan", value: "Январь", subColumns: fullWorkAndTimeDataList("jan") },
   { name: "feb", value: "Февраль", subColumns: fullWorkAndTimeDataList("feb") },

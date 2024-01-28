@@ -3,14 +3,14 @@ import { ITableColumn, TColumnsByDepth } from "../model/tableSchema";
 const dfs: <T>(
   columns: ITableColumn<T>[],
   colListFortitle: TColumnsByDepth<T>,
-  colListForData: (keyof T)[],
+  colListForData: ITableColumn<T>[],
   depth?: number
 ) => number = (columns, colListForTitle, colListForData, depth = 0) => {
   let colNumber = 0;
   columns.forEach((col) => {
     colListForTitle[depth] ? colListForTitle[depth].push(col) : (colListForTitle[depth] = [col]);
     if (!col.subColumns) {
-      colListForData.push(col.name);
+      colListForData.push(col);
       colNumber += 1;
     } else {
       const subCount = dfs(col.subColumns, colListForTitle, colListForData, depth + 1);
@@ -24,9 +24,9 @@ const dfs: <T>(
 export const createColumnsLists: <T>(
   columns: ITableColumn<T>[],
   depth?: number
-) => { colListForTitle: TColumnsByDepth<T>; colListForData: (keyof T)[] } = (columns) => {
+) => { colListForTitle: TColumnsByDepth<T>; colListForData: ITableColumn<T>[] } = (columns) => {
   const colListForTitle: (typeof columns)[] = [];
-  const colListForData = [];
+  const colListForData: typeof columns = [];
   dfs(columns, colListForTitle, colListForData);
   const maxDepth = colListForTitle.length;
   colListForTitle.forEach((depthArr, depth) => {
