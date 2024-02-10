@@ -2,12 +2,14 @@ import { FC } from "react";
 import { Table } from "@/1shared/ui/table/ui/Table";
 import { TableCell } from "@/1shared/ui/table/ui/TableCell";
 import { fullColumnsList } from "../model/pprTableSettings";
-import data from "../mock/data";
+import { IPprData } from "..";
 
-interface IPprTableProps {}
+interface IPprTableProps {
+  data: IPprData[];
+}
 
-export const PprTable: FC<IPprTableProps> = () => {
-  return (
+export const PprTable: FC<IPprTableProps> = async ({ data }) => {
+    return (
     <Table
       className="table-fixed w-[120%] [font-size:12px]"
       RowComponent={(props) => <tr {...props}></tr>}

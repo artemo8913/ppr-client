@@ -1,3 +1,10 @@
+export interface IPpr {
+  id: string;
+  status: string;
+  created_at: string;
+  data: IPprData[];
+}
+
 export interface IPprData {
   id: string;
   index: string;
