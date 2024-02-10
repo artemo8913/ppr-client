@@ -1,15 +1,13 @@
 import { MainLayoutSider } from "@/1shared/ui/Sider";
 import { Layout } from "antd";
-import { Content, Header } from "antd/es/layout/layout";
+import { Content } from "antd/es/layout/layout";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ height: "100vh" }}>
       <Layout>
         <MainLayoutSider />
-        <Content className="mx-3 my-1">
-          <div className="w-full h-full overflow-hidden">{children}</div>
-        </Content>
+        <Content className="mx-2 my-2 overflow-hidden">{children}</Content>
       </Layout>
     </Layout>
   );
