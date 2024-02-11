@@ -1,8 +1,8 @@
-import { IPpr, PprTable } from "@/2entities/PprTable";
+import { PprTable } from "@/2entities/PprTable";
+import { pprTableService } from "@/2entities/PprTable/api/pprTable.service";
 
-export default async function PprPageId() {
-  const query = await fetch(process.env.NEXT_PUBLIC_API_DEV + "/pprs/draft");
-  const { data, id, created_at, status}: IPpr = await query.json();
+export default async function PprPageId({ params }: { params: { id: string } }) {
+  const { data, id, created_at, status } = await pprTableService.getPpr(params.id);
 
   return (
     <div className="w-full h-full overflow-scroll">
