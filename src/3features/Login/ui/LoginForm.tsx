@@ -1,27 +1,38 @@
 "use client";
 import { Button, Input } from "antd";
-import { authenticate } from "../lib/actions";
-import { useFormState, useFormStatus } from "react-dom";
+import { signIn } from "next-auth/react";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
-
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const res = await signIn("credentials", {
+      username: formData?.get("username"),
+      password: formData?.get("password"),
+      redirect: false,
+    });
+    if (!res?.error) {
+      router.push("/");
+      router.refresh();
+    } else {
+      setErrorMessage("Не верный логин / пароль");
+    }
+    setIsLoading(false);
+  };
   return (
-    <form action={dispatch}>
-      <Input type="email" name="email" placeholder="Почта" required />
+    <form className="w-[300px] m-auto flex flex-col gap-4 justify-center" onSubmit={handleSubmit}>
+      <Input type="text" name="username" placeholder="Почта" required />
       <Input type="password" name="password" placeholder="Пароль" required />
-      <div>{errorMessage && <p>{errorMessage}</p>}</div>
-      <LoginButton />
+      <Button loading={isLoading} aria-disabled={isLoading} htmlType="submit">
+        Войти
+      </Button>
+      {Boolean(errorMessage) && <div>{errorMessage}</div>}
     </form>
-  );
-}
-
-function LoginButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button loading={pending} aria-disabled={pending} htmlType="submit">
-      Войти
-    </Button>
   );
 }

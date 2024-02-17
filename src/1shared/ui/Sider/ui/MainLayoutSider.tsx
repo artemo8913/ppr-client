@@ -1,9 +1,10 @@
 "use client";
 import { FC, useState } from "react";
 import { Menu, MenuProps } from "antd";
-import { BarChartOutlined, DotChartOutlined, HomeFilled, TableOutlined } from "@ant-design/icons";
+import { BarChartOutlined, DotChartOutlined, FullscreenExitOutlined, HomeFilled, LogoutOutlined, TableOutlined } from "@ant-design/icons";
 import Sider from "antd/es/layout/Sider";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 type MenuItem = Required<MenuProps>["items"][number];
 function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
@@ -20,6 +21,7 @@ const items: MenuItem[] = [
   getItem(<Link href={"/ppr"}>Годовые планы</Link>, "year", <TableOutlined />),
   getItem(<Link href={"/"}>Месячные планы</Link>, "mounth", <DotChartOutlined />),
   getItem(<Link href={"/reports"}>Отчеты</Link>, "reports", <BarChartOutlined />),
+  getItem(<a onClick={()=>signOut()}>Выйти</a>, "logout", <LogoutOutlined />),
 ];
 
 interface ISiderProps {}
