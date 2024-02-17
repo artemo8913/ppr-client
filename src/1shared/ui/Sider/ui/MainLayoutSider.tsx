@@ -1,8 +1,19 @@
 "use client";
 import { FC, useState } from "react";
-import { Layout, Menu, MenuProps } from "antd";
-import { DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { Menu, MenuProps } from "antd";
+import {
+  BarChartOutlined,
+  DesktopOutlined,
+  FileOutlined,
+  HomeFilled,
+  PieChartOutlined,
+  TableOutlined,
+  TabletFilled,
+  TeamOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Sider from "antd/es/layout/Sider";
+import Link from "next/link";
 
 type MenuItem = Required<MenuProps>["items"][number];
 function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
@@ -15,19 +26,20 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const items: MenuItem[] = [
-  getItem("Option 1", "1", <PieChartOutlined />),
-  getItem("Option 2", "2", <DesktopOutlined />),
-  getItem("User", "sub1", <UserOutlined />, [getItem("Tom", "3"), getItem("Bill", "4"), getItem("Alex", "5")]),
-  getItem("Team", "sub2", <TeamOutlined />, [getItem("Team 1", "6"), getItem("Team 2", "8")]),
-  getItem("Files", "9", <FileOutlined />),
+  getItem(<Link href={"/"}>Главная</Link>, "home", <HomeFilled />),
+  getItem("Планы", "pprs", <TableOutlined />, [
+    getItem(<Link href={"/ppr"}>Годовые планы</Link>, "year"),
+    getItem(<Link href={"/"}>Месячные планы</Link>, "mounth"),
+  ]),
+  getItem(<Link href={"/reports"}>Отчеты</Link>, "reports", <BarChartOutlined />),
 ];
 
 interface ISiderProps {}
 export const MainLayoutSider: FC<ISiderProps> = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-      <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={items} />
+      <Menu theme="dark" mode="inline" items={items} />
     </Sider>
   );
 };

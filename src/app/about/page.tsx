@@ -1,13 +1,10 @@
-import React from 'react'
-import { Button } from 'antd'
+import Button from "antd/es/button";
 
-function AboutPage() {
-	return (
-		<div>
-			<Button className='m-4 bg-slate-600' type='primary'>Кнопочка</Button>
-			<div className='bg-red-500'>asd</div>
-		</div>
-	)
+export default function AboutPage() {
+  return (
+    <div>
+      About
+      <Button>asd</Button>
+    </div>
+  );
 }
-
-export default AboutPage

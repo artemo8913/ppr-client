@@ -7,7 +7,6 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
   return (
     <div className="w-full h-full overflow-scroll">
       ППРы с индексом
-      <div className="bg-slate-900">sad</div>
       <PprTable data={data} />
     </div>
   );
