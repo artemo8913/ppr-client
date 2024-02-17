@@ -3,7 +3,8 @@ import { FC } from "react";
 import { IPprInfo } from "../model/pprInfoShema";
 import { Table, TableProps } from "antd";
 import { directions } from "@/1shared/types/transEnergoDivisions";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface IPprInfoProps {
   data: IPprInfo[];
@@ -14,6 +15,7 @@ const columns: TableProps<IPprInfo>["columns"] = [
     title: "Наименование",
     dataIndex: "name",
     key: "name",
+    render: (value, record, index) => <Link href={`ppr/${record.id}`}>{value}</Link>,
   },
   {
     title: "Год",
@@ -42,16 +44,5 @@ const columns: TableProps<IPprInfo>["columns"] = [
 ];
 
 export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
-  const router = useRouter()
-  return (
-    <Table
-      onRow={(record) => {
-        return {
-          onClick: (event) => router.push(`ppr/${record.id}`), // click row
-        };
-      }}
-      dataSource={data}
-      columns={columns}
-    />
-  );
+  return <Table dataSource={data} columns={columns} />;
 };
