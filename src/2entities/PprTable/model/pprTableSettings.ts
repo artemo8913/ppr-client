@@ -1,4 +1,4 @@
-import { ITableColumn } from "@/1shared/ui/table/model/tableSchema";
+import { ITableColumn } from "@/1shared/ui/Table/model/tableSchema";
 import { IPprData } from "./pprSchema";
 import { TMonths } from "@/1shared/types/date";
 import { setQuartaerBgColor } from "../lib/setBgColor";

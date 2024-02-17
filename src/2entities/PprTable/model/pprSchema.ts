@@ -6,7 +6,7 @@ export interface IPpr {
 }
 
 export interface IPprData {
-  id: string;
+  id: number;
   index: string;
   branch: string;
   subbranch: string;

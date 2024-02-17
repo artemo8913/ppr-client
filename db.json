@@ -10,9 +10,21 @@
   "profile": {
     "name": "typicode"
   },
+  "all_pprs": [
+    {
+      "id": 0,
+      "name": "ППР ЭЧК-9",
+      "year": 2024,
+      "id_direction": 88,
+      "id_distance": 3,
+      "id_subdivision": 9,
+      "status": "created",
+      "month": ""
+    }
+  ],
   "ppr": [
     {
-      "id": "draft",
+      "id": 0,
       "status": "created",
       "created_at": "",
       "data": [
