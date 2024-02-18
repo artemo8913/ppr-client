@@ -1,7 +1,7 @@
 "use client";
 import { FC } from "react";
 import clsx from "clsx";
-import { ITableCell } from "../model/tableSchema";
+import { ITableCell } from "../model/table.schema";
 
 export const TableCell: FC<ITableCell> = (props) => {
   const { cellType = "none", value, isVertical = false, children, height, width, colSpan, rowSpan, style } = props;

@@ -1,15 +1,11 @@
-import { authOptions } from "@/1shared/auth/authConfig";
-import { PprInfoTable, pprInfoTableService } from "@/2entities/PprInfoTable";
-import Button from "antd/es/button";
-import { getServerSession } from "next-auth";
+import { PprInfoTable, getPprsInfo } from "@/2entities/PprInfo";
+import { PprInfoCreatePprForm } from "@/3features/PprInfoCreatePpr";
 
 export default async function PprPage() {
-  const data = await pprInfoTableService.getPprs();
-  const session = await getServerSession(authOptions);
-
+  const data = await getPprsInfo();
   return (
     <div>
-      <Button type="primary">Добавить</Button>
+      <PprInfoCreatePprForm />
       <PprInfoTable data={data} />
     </div>
   );

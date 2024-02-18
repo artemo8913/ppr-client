@@ -3,9 +3,9 @@ import { FC } from "react";
 import { IPprInfo } from "../model/pprInfo.shema";
 import { Table, TableProps } from "antd";
 import { directions } from "@/1shared/types/transEnergoDivisions";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { SessionProvider, useSession } from "next-auth/react";
+import { DeleteTwoTone } from "@ant-design/icons";
+import { deletePprInfo } from "..";
 
 interface IPprInfoProps {
   data: IPprInfo[];
@@ -27,23 +27,44 @@ const columns: TableProps<IPprInfo>["columns"] = [
     title: "Подразделение",
     dataIndex: "id_subdivision",
     key: "id_subdivision",
-    render: (_, data) =>
-      directions[data.id_direction].distances[data.id_distance].subdivisions[data.id_subdivision].short_name,
+    render: (_, data) => {
+      if (!data.id_direction || !data.id_distance || !data.id_subdivision) {
+        return "-";
+      }
+      return directions[data.id_direction].distances[data.id_distance].subdivisions[data.id_subdivision].short_name;
+    },
   },
   {
     title: "Дистанция",
     dataIndex: "id_distance",
     key: "id_distance",
-    render: (_, data) => directions[data.id_direction].distances[data.id_distance].short_name,
+    render: (_, data) => {
+      if (!data.id_direction || !data.id_distance) {
+        return "-";
+      }
+      return directions[data.id_direction].distances[data.id_distance].short_name;
+    },
   },
   {
     title: "Дирекция",
     dataIndex: "id_direction",
     key: "id_direction",
-    render: (_, data) => directions[data.id_direction].short_name,
+    render: (_, data) => {
+      if (!data.id_direction) {
+        return "-";
+      }
+      return directions[data.id_direction].short_name;
+    },
+  },
+  {
+    title: "Действия",
+    dataIndex: "id",
+    render: (id) => {
+      return <DeleteTwoTone className="cursor-pointer" onClick={() => deletePprInfo(id)} />;
+    },
   },
 ];
 
 export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
-  return <Table dataSource={data} columns={columns} rowKey="id"/>;
+  return <Table dataSource={data} columns={columns} rowKey="id" />;
 };

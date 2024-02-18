@@ -1,2 +1,2 @@
 export type { IUser, TUserRole } from "./model/user.schema";
-export { userService } from "./api/user.service";
+export { getUserData } from "./api/user.actions";

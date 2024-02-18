@@ -1,4 +1,4 @@
-import { ITableColumn, TColumnsByDepth } from "../model/tableSchema";
+import { ITableColumn, TColumnsByDepth } from "../model/table.schema";
 
 const dfs: <T>(
   columns: ITableColumn<T>[],

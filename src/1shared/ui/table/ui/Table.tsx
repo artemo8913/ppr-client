@@ -1,4 +1,4 @@
-import { ITableCell, ITableColumn, ITableData } from "../model/tableSchema";
+import { ITableCell, ITableColumn, ITableData } from "../model/table.schema";
 import { createColumnsLists } from "../lib/tableDataHandle";
 import { ComponentType } from "react";
 

@@ -1,8 +1,8 @@
 export type TUserRole = "subdivision" | "distance_engineer" | "distance_boss" | "direction" | "transenergo";
 export interface IUser {
-  id: number;
+  id: string;
   roles: TUserRole;
-  id_subdivision: string | null;
-  id_distance: string | null;
-  id_direction: string | null;
+  id_subdivision: number | null;
+  id_distance: number | null;
+  id_direction: number | null;
 }
