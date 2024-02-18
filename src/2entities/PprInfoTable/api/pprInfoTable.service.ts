@@ -1,4 +1,4 @@
-import { IPprInfo } from "../model/pprInfoShema";
+import { IPprInfo } from "../model/pprInfo.shema";
 
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/all_pprs";
 

@@ -1,10 +1,11 @@
 "use client";
 import { FC } from "react";
-import { IPprInfo } from "../model/pprInfoShema";
+import { IPprInfo } from "../model/pprInfo.shema";
 import { Table, TableProps } from "antd";
 import { directions } from "@/1shared/types/transEnergoDivisions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SessionProvider, useSession } from "next-auth/react";
 
 interface IPprInfoProps {
   data: IPprInfo[];
