@@ -27,7 +27,7 @@ export function LoginForm() {
   };
   return (
     <form className="w-[300px] m-auto flex flex-col gap-4 justify-center" onSubmit={handleSubmit}>
-      <Input type="text" name="username" placeholder="Почта" required />
+      <Input type="text" name="username" placeholder="Логин" required />
       <Input type="password" name="password" placeholder="Пароль" required />
       <Button loading={isLoading} aria-disabled={isLoading} htmlType="submit">
         Войти
