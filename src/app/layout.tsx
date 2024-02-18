@@ -4,7 +4,7 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { MainLayout } from "@/6app/Layouts";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/1shared/api/authConfig";
+import { authOptions } from "@/1shared/auth/authConfig";
 
 const inter = Inter({ subsets: ["latin"] });
 

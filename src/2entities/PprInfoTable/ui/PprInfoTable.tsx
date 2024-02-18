@@ -45,5 +45,5 @@ const columns: TableProps<IPprInfo>["columns"] = [
 ];
 
 export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
-  return <Table dataSource={data} columns={columns} />;
+  return <Table dataSource={data} columns={columns} rowKey="id"/>;
 };
