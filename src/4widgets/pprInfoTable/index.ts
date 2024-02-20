@@ -1,0 +1,1 @@
+export { PprInfoTable } from "./ui/PprInfoTable";
