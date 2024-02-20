@@ -1,4 +1,4 @@
-import { MainLayoutSider } from "@/1shared/ui/Sider";
+import { MainLayoutSider } from "@/1shared/ui/sider";
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 

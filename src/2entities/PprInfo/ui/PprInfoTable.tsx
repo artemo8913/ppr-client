@@ -1,11 +1,11 @@
 "use client";
 import { FC } from "react";
-import { IPprInfo } from "../model/pprInfo.shema";
-import { Table, TableProps } from "antd";
-import { directions } from "@/1shared/types/transEnergoDivisions";
 import Link from "next/link";
+import { Table, TableProps } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
-import { deletePpr } from "@/3features/DeletePpr";
+import { directions } from "@/1shared/types/transEnergoDivisions";
+import { deletePpr } from "@/3features/deletePpr";
+import { IPprInfo } from "../model/pprInfo.shema";
 
 interface IPprInfoProps {
   data: IPprInfo[];

@@ -1,6 +1,6 @@
 "use server";
-import { deletePprInfo } from "@/2entities/PprInfo";
-import { deletePprTable } from "@/2entities/PprTable";
+import { deletePprInfo } from "@/2entities/pprInfo";
+import { deletePprTable } from "@/2entities/pprTable";
 
 export async function deletePpr(id: string) {
   await deletePprInfo(id);

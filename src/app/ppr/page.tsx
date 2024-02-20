@@ -1,5 +1,5 @@
-import { PprInfoTable, getPprsInfo } from "@/2entities/PprInfo";
-import { PprInfoCreatePprForm } from "@/3features/CreatePpr";
+import { PprInfoTable, getPprsInfo } from "@/2entities/pprInfo";
+import { PprInfoCreatePprForm } from "@/3features/createPpr";
 
 export default async function PprPage() {
   const data = await getPprsInfo();

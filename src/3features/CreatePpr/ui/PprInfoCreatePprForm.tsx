@@ -1,6 +1,6 @@
-import { authOptions } from "@/1shared/auth/authConfig";
-import { IAddPprInfoRequest } from "@/2entities/PprInfo/model/pprInfo.shema";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authConfig";
+import { IAddPprInfoRequest } from "@/2entities/pprInfo/model/pprInfo.shema";
 import { Submit } from "./PprInfoCreatePprFormSubmit";
 import { createPpr } from "..";
 

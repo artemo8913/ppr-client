@@ -1,4 +1,4 @@
-import { LoginForm } from "@/3features/Login";
+import { LoginForm } from "@/3features/login";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 export default function LoginPage() {

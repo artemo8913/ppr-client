@@ -1,4 +1,4 @@
-import { PprTable, getPprTable } from "@/2entities/PprTable";
+import { PprTable, getPprTable } from "@/2entities/pprTable";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const { data, id, created_at, status } = await getPprTable(params.id);

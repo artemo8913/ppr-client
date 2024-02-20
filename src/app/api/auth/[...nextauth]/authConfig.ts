@@ -1,5 +1,5 @@
-import { getUserData } from "@/2entities/User";
-import { getAllLoginsData } from "@/3features/Login";
+import { getUserData } from "@/2entities/user";
+import { getAllLoginsData } from "@/3features/login";
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
