@@ -2,7 +2,7 @@ import { authOptions } from "@/1shared/auth/authConfig";
 import { IAddPprInfoRequest } from "@/2entities/PprInfo/model/pprInfo.shema";
 import { getServerSession } from "next-auth";
 import { Submit } from "./PprInfoCreatePprFormSubmit";
-import { addPprInfo } from "@/2entities/PprInfo";
+import { createPpr } from "..";
 
 export async function PprInfoCreatePprForm() {
   const session = await getServerSession(authOptions);
@@ -17,7 +17,7 @@ export async function PprInfoCreatePprForm() {
     <form
       action={async () => {
         "use server";
-        const result = await addPprInfo(newPprData);
+        await createPpr(newPprData);
       }}
     >
       <Submit />

@@ -3,8 +3,24 @@ import { IPpr } from "..";
 
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/ppr";
 
-export async function getPpr(id: string) {
+export async function getPprTable(id: string) {
   const query = await fetch(`${PPR_API_URL}/${id}`);
   const responce: Promise<IPpr> = query.json();
   return responce;
+}
+export async function addPprTable(id: string) {
+  const params: IPpr = { created_at: new Date().toString(), data: [], id, status: "creating" };
+  const query = await fetch(`${PPR_API_URL}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  });
+  const responce: Promise<IPpr> = await query.json();
+  return responce;
+}
+export async function deletePprTable(id: string) {
+  const query = await fetch(`${PPR_API_URL}/${id}`, {
+    method: "DELETE",
+  });
+  return query;
 }

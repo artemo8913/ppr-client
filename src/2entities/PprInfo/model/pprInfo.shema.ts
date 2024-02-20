@@ -1,6 +1,5 @@
 import { TMonths } from "@/1shared/types/date";
-
-export type TPprStatus = "none" | "template" | "creating" | "on_agreement" | "on_aprove" | "fulfilling" | "done";
+import { TPprStatus } from "@/1shared/types/ppr";
 
 export interface IPprInfo {
   id: string;

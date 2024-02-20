@@ -1,6 +1,8 @@
+import { TPprStatus } from "@/1shared/types/ppr";
+
 export interface IPpr {
   id: string;
-  status: string;
+  status: TPprStatus;
   created_at: string;
   data: IPprData[];
 }

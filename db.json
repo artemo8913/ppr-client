@@ -25,23 +25,7 @@
       "year": 2024
     },
     {
-      "id": "4c56",
-      "id_direction": 88,
-      "id_distance": 3,
-      "id_subdivision": 9,
-      "name": "ППР",
-      "year": 2024
-    },
-    {
-      "id": "4ebf",
-      "id_direction": 88,
-      "id_distance": 3,
-      "id_subdivision": 9,
-      "name": "ППР",
-      "year": 2024
-    },
-    {
-      "id": "13c7",
+      "id": "7d87",
       "id_direction": 88,
       "id_distance": 3,
       "id_subdivision": 9,
@@ -651,6 +635,12 @@
           "dec_fact_time": 2
         }
       ]
+    },
+    {
+      "id": "7d87",
+      "created_at": "Tue Feb 20 2024 13:37:31 GMT+0700 (Красноярск, стандартное время)",
+      "data": [],
+      "status": "creating"
     }
   ]
 }

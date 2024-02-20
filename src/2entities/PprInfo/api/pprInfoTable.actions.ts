@@ -19,11 +19,10 @@ export async function addPprInfo(params: IAddPprInfoRequest) {
   revalidateTag("pprs_info");
   return responce;
 }
-export async function deletePprInfo(id: number) {
+export async function deletePprInfo(id: string) {
   const query = await fetch(`${PPR_API_URL}/${id}`, {
     method: "DELETE",
   });
-  const responce: Promise<IPprInfo> = await query.json();
   revalidateTag("pprs_info");
-  return responce;
+  return query;
 }

@@ -5,7 +5,7 @@ import { Table, TableProps } from "antd";
 import { directions } from "@/1shared/types/transEnergoDivisions";
 import Link from "next/link";
 import { DeleteTwoTone } from "@ant-design/icons";
-import { deletePprInfo } from "..";
+import { deletePpr } from "@/3features/DeletePpr";
 
 interface IPprInfoProps {
   data: IPprInfo[];
@@ -60,7 +60,14 @@ const columns: TableProps<IPprInfo>["columns"] = [
     title: "Действия",
     dataIndex: "id",
     render: (id) => {
-      return <DeleteTwoTone className="cursor-pointer" onClick={() => deletePprInfo(id)} />;
+      return (
+        <DeleteTwoTone
+          className="cursor-pointer"
+          onClick={() => {
+            deletePpr(id);
+          }}
+        />
+      );
     },
   },
 ];
