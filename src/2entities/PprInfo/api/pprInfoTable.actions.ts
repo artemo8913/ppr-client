@@ -1,5 +1,5 @@
 "use server";
-import { IAddPprInfoRequest, IPprInfo } from "../model/pprInfo.shema";
+import { IAddPprInfoRequest, IPprInfo } from "../model/pprInfo.schema";
 import { revalidateTag } from "next/cache";
 
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/all_pprs";
