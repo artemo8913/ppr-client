@@ -9,12 +9,9 @@ export interface IPpr {
 
 export interface IPprData {
   id: string;
-  index: string;
   branch: string;
   subbranch: string;
-  section: string;
-  subsection_first: string;
-  subsection_second: string;
+  name: string;
   location: string;
   line_class: number;
   measure: string;

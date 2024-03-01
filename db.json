@@ -1,9 +1,26 @@
 {
+  "work": [
+    {
+      "id": "1",
+      "name": "Текущий ремонт контактной сети главных путей (АДМ)",
+      "periodicity_normal_data": { "1": 0.3, "2": 0.3, "3": 0.125, "4": 0.125, "5": 0 },
+      "measure": "км",
+      "norm_of_time": 12.198,
+      "norm_of_time_document": "Норма времени №53"
+    }
+  ],
   "user": [
     {
       "id": "1",
-      "roles": "subdivision",
+      "role": "subdivision",
       "id_subdivision": 9,
+      "id_distance": 3,
+      "id_direction": 88
+    },
+    {
+      "id": "2",
+      "role": "distance_engineer",
+      "id_subdivision": null,
       "id_distance": 3,
       "id_direction": 88
     }
@@ -49,12 +66,9 @@
       "data": [
         {
           "id": 1,
-          "index": "1",
           "branch": "maintenance",
           "subbranch": "",
-          "section": "Текущий ремонт контактной сети",
-          "subsection_first": "на главных путях",
-          "subsection_second": "",
+          "name": "Текущий ремонт контактной сети",
           "location": "ст.Красноярск-Восточный",
           "line_class": 1,
           "measure": "км",
@@ -134,12 +148,9 @@
         },
         {
           "id": 2,
-          "index": "2",
           "branch": "maintenance",
           "subbranch": "",
-          "section": "Текущий ремонт контактной сети",
-          "subsection_first": "на главных путях",
-          "subsection_second": "на главных путях",
+          "name": "Текущий ремонт контактной сети",
           "location": "пер.Кр.Восточный - Кр.Северный",
           "line_class": 1,
           "measure": "км",
@@ -219,12 +230,9 @@
         },
         {
           "id": 3,
-          "index": "3",
           "branch": "maintenance",
           "subbranch": "",
-          "section": "Текущий ремонт контактной сети",
-          "subsection_first": "на боковых путях",
-          "subsection_second": "на боковых путях",
+          "name": "Текущий ремонт контактной сети",
           "location": "ст.Красноярск-Восточный",
           "line_class": 1,
           "measure": "км",
@@ -304,12 +312,9 @@
         },
         {
           "id": 4,
-          "index": "4",
           "branch": "maintenance",
           "subbranch": "",
-          "section": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-          "subsection_first": "на главных путях",
-          "subsection_second": "asf",
+          "name": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
           "location": "ст.Красноярск-Восточный",
           "line_class": 1,
           "measure": "км",
@@ -389,12 +394,9 @@
         },
         {
           "id": 5,
-          "index": "5",
           "branch": "maintenance",
           "subbranch": "maintenance",
-          "section": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-          "subsection_first": "на главных путях",
-          "subsection_second": "gfs",
+          "name": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
           "location": "ст.Красноярск-Восточный",
           "line_class": 1,
           "measure": "км",
@@ -474,12 +476,9 @@
         },
         {
           "id": 6,
-          "index": "6",
           "branch": "maintenance",
           "subbranch": "",
-          "section": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-          "subsection_first": "на главных путях",
-          "subsection_second": "sdf",
+          "name": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
           "location": "ст.Красноярск-Восточный",
           "line_class": 1,
           "measure": "км",
@@ -559,12 +558,9 @@
         },
         {
           "id": 7,
-          "index": "7",
           "branch": "maintenance",
           "subbranch": "maintenance",
-          "section": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
-          "subsection_first": "на главных путях",
-          "subsection_second": "sdf",
+          "name": "Текущий ремонт контактной сетиddddd ddddddddddddddd ddddddddddddddddd",
           "location": "ст.Красноярск-Восточный",
           "line_class": 1,
           "measure": "км",

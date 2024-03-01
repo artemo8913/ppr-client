@@ -43,20 +43,12 @@ const fullWorkAndTimeDataList = (mounth: TMonths): ITableColumn<IPprData>[] => [
 
 export const fullColumnsList: ITableColumn<IPprData>[] = [
   {
-    name: "section",
+    name: "name",
     titleText: "Наименования и условия выполнения технологических операций, испытаний и измерений",
     isThVertical: true,
     cell: {
       width: "10%",
       cellType: "textarea",
-    },
-  },
-  {
-    name: "subsection_first",
-    titleText: "",
-    isThVertical: true,
-    cell: {
-      width: "5%",
     },
   },
   {
