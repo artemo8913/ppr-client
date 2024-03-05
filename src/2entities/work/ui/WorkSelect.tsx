@@ -1,7 +1,7 @@
 "use client";
 import { Table as TableAntd, TableProps } from "antd";
 import { FC, useState } from "react";
-import { IWork } from "..";
+import { IWork, getWorkById } from "..";
 import { TLineClassData } from "../model/work.schema";
 import Button from "antd/es/button";
 
@@ -45,11 +45,18 @@ const columns: TableProps<IWork>["columns"] = [
 
 export const WorkSelect: FC<IWorkTableProps> = ({ data, onFinish }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [workId, setWorkId] = useState<string>();
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
+    setIsLoading(true)
+    if (!workId) {
+      return;
+    }
+    const work = await getWorkById(workId);
     setSelectedRowKeys([]);
     setWorkId(undefined);
+    setIsLoading(false)
     onFinish && onFinish();
   };
   return (
@@ -67,7 +74,9 @@ export const WorkSelect: FC<IWorkTableProps> = ({ data, onFinish }) => {
         columns={columns}
         rowKey={"id"}
       />
-      <Button onClick={handleFinish} type="primary" disabled={!Boolean(workId)}>Добавить</Button>
+      <Button onClick={handleFinish} type="primary" disabled={!Boolean(workId)} loading={isLoading}>
+        Добавить
+      </Button>
     </>
   );
 };
