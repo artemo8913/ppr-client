@@ -3,10 +3,30 @@
     {
       "id": "1",
       "name": "Текущий ремонт контактной сети главных путей (АДМ)",
-      "periodicity_normal_data": { "1": 0.3, "2": 0.3, "3": 0.125, "4": 0.125, "5": 0 },
+      "periodicity_normal_data": {
+        "1": 0.3,
+        "2": 0.3,
+        "3": 0.125,
+        "4": 0.125,
+        "5": 0
+      },
       "measure": "км",
       "norm_of_time": 12.198,
       "norm_of_time_document": "Норма времени №53"
+    },
+    {
+      "id": "2",
+      "name": "Текущий ремонт контактной сети главных путей (лейтер)",
+      "periodicity_normal_data": {
+        "1": 0.3,
+        "2": 0.3,
+        "3": 0.125,
+        "4": 0.125,
+        "5": 0
+      },
+      "measure": "км",
+      "norm_of_time": 15.3,
+      "norm_of_time_document": "Норма времени №54"
     }
   ],
   "user": [
@@ -50,7 +70,15 @@
       "year": 2024
     },
     {
-      "id": "c9a3",
+      "id": "6727",
+      "id_direction": 88,
+      "id_distance": 3,
+      "id_subdivision": 9,
+      "name": "ППР",
+      "year": 2024
+    },
+    {
+      "id": "461e",
       "id_direction": 88,
       "id_distance": 3,
       "id_subdivision": 9,
@@ -647,8 +675,14 @@
       "status": "creating"
     },
     {
-      "id": "c9a3",
-      "created_at": "Tue Feb 20 2024 22:32:15 GMT+0700 (Красноярск, стандартное время)",
+      "id": "6727",
+      "created_at": "Tue Mar 05 2024 09:05:10 GMT+0700 (Красноярск, стандартное время)",
+      "data": [],
+      "status": "creating"
+    },
+    {
+      "id": "461e",
+      "created_at": "Tue Mar 05 2024 09:12:21 GMT+0700 (Красноярск, стандартное время)",
       "data": [],
       "status": "creating"
     }
