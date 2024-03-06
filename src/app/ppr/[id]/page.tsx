@@ -1,5 +1,6 @@
 import { PprTable, getPprTable } from "@/2entities/pprTable";
 import { WorkModal, getAllWorks } from "@/2entities/work";
+import Button from "antd/es/button";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const { data, id, created_at, status } = await getPprTable(params.id);
@@ -10,6 +11,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
       <div className="sticky top-0 bg-emerald-500 z-10 w-[120%]">
         ППРы с индексом
         <WorkModal data={works} />
+        <Button>Сохранить изменения</Button>
       </div>
       <PprTable data={data} />
     </div>
