@@ -1,10 +1,11 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authConfig";
 import { IAddPprInfoRequest } from "@/2entities/pprInfo";
-import { Submit } from "./PprInfoCreatePprFormSubmit";
+import { ActionButton } from "@/1shared/ui/button";
 import { createPpr } from "..";
+import { Submit } from "./PprInfoCreateNewFormSubmit";
 
-export async function PprInfoCreatePprForm() {
+export async function PprInfoCreateNewForm() {
   const session = await getServerSession(authOptions);
   const newPprData: IAddPprInfoRequest = {
     id_direction: session?.user.id_direction || null,

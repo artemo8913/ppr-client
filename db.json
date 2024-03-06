@@ -62,7 +62,7 @@
       "year": 2024
     },
     {
-      "id": "7d87",
+      "id": "ae81",
       "id_direction": 88,
       "id_distance": 3,
       "id_subdivision": 9,
@@ -70,15 +70,7 @@
       "year": 2024
     },
     {
-      "id": "6727",
-      "id_direction": 88,
-      "id_distance": 3,
-      "id_subdivision": 9,
-      "name": "ППР",
-      "year": 2024
-    },
-    {
-      "id": "461e",
+      "id": "0e73",
       "id_direction": 88,
       "id_distance": 3,
       "id_subdivision": 9,
@@ -669,20 +661,14 @@
       ]
     },
     {
-      "id": "7d87",
-      "created_at": "Tue Feb 20 2024 13:37:31 GMT+0700 (Красноярск, стандартное время)",
+      "id": "ae81",
+      "created_at": "Wed Mar 06 2024 12:05:01 GMT+0700 (Красноярск, стандартное время)",
       "data": [],
       "status": "creating"
     },
     {
-      "id": "6727",
-      "created_at": "Tue Mar 05 2024 09:05:10 GMT+0700 (Красноярск, стандартное время)",
-      "data": [],
-      "status": "creating"
-    },
-    {
-      "id": "461e",
-      "created_at": "Tue Mar 05 2024 09:12:21 GMT+0700 (Красноярск, стандартное время)",
+      "id": "0e73",
+      "created_at": "Wed Mar 06 2024 12:05:37 GMT+0700 (Красноярск, стандартное время)",
       "data": [],
       "status": "creating"
     }

@@ -1,12 +1,12 @@
 import { getPprsInfo } from "@/2entities/pprInfo";
-import { PprInfoCreatePprForm } from "@/3features/pprInfoOperations";
+import { PprInfoCreateNewForm } from "@/3features/pprInfoOperations/ui/PprInfoCreateNewForm";
 import { PprInfoTable } from "@/4widgets/pprInfoTable";
 
 export default async function PprPage() {
   const data = await getPprsInfo();
   return (
     <div>
-      <PprInfoCreatePprForm />
+      <PprInfoCreateNewForm />
       <PprInfoTable data={data} />
     </div>
   );
