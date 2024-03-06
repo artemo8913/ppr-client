@@ -1,5 +1,5 @@
 import { getUserData } from "@/1shared/api/user";
-import { getAllLoginsData } from "@/3features/login";
+import { getAllLoginsData } from "@/1shared/api/login";
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 

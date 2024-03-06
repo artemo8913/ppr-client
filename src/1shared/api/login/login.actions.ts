@@ -1,5 +1,5 @@
 "use server";
-import { ILoginData } from "../model/login.schema";
+import { ILoginData } from "./login.schema";
 
 const LOGIN_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/login";
 
