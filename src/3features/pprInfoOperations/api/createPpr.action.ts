@@ -1,6 +1,6 @@
 "use server";
-import { addPprInfo } from "@/2entities/pprInfo";
-import { IAddPprInfoRequest } from "@/2entities/pprInfo";
+import { addPprInfo } from "@/1shared/api/pprInfo";
+import { IAddPprInfoRequest } from "@/1shared/api/pprInfo";
 import { addPprTable } from "@/2entities/pprTable";
 
 export async function createPpr(newPprInfo: IAddPprInfoRequest) {
