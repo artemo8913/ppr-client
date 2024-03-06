@@ -1,13 +1,11 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authConfig";
-import { IAddPprInfoRequest } from "@/1shared/api/pprInfo";
-import { ActionButton } from "@/1shared/ui/button";
-import { createPpr } from "..";
-import { Submit } from "./PprInfoCreateNewFormSubmit";
+import { createPpr } from "@/1shared/api/ppr";
+import { Submit } from "./PprCreateNewSubmit";
 
-export async function PprInfoCreateNewForm() {
+export async function PprCreateNewForm() {
   const session = await getServerSession(authOptions);
-  const newPprData: IAddPprInfoRequest = {
+  const newPprData = {
     id_direction: session?.user.id_direction || null,
     id_distance: session?.user.id_distance || null,
     id_subdivision: session?.user.id_subdivision || null,

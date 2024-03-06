@@ -5,7 +5,7 @@ import { Table, TableProps } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { directions } from "@/1shared/types/transEnergoDivisions";
 import { IPprInfo } from "@/1shared/api/pprInfo";
-import { deletePpr } from "@/3features/pprInfoOperations";
+import { deletePpr } from "@/1shared/api/ppr";
 
 interface IPprInfoProps {
   data: IPprInfo[];
