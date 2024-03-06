@@ -1,1 +1,0 @@
-export { deletePpr } from "./api/deletePpr.action";
