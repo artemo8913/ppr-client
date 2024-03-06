@@ -1,13 +1,12 @@
-import { IUser } from "@/2entities/User";
+import { IUser } from "@/1shared/api/user";
 import NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    expires: string
-    user: IUser
+    expires: string;
+    user: IUser;
   }
-  interface User{
-    id: string
+  interface User {
+    id: string;
   }
-
 }

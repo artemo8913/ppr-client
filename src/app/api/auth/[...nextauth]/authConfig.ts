@@ -1,4 +1,4 @@
-import { getUserData } from "@/2entities/user";
+import { getUserData } from "@/1shared/api/user";
 import { getAllLoginsData } from "@/3features/login";
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
