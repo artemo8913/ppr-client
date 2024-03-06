@@ -1,6 +1,8 @@
 import { getPprTable } from "@/1shared/api/pprTable";
+import { getAllWorks } from "@/1shared/api/work";
 import { PprTable } from "@/2entities/pprTable";
-import { WorkModal, getAllWorks } from "@/1shared/api/work";
+import { WorkModal } from "@/3features/work";
+
 import Button from "antd/es/button";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
