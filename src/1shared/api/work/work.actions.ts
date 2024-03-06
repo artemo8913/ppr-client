@@ -1,5 +1,5 @@
 "use server";
-import { IWork } from "..";
+import { IWork } from ".";
 
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/work";
 

@@ -1,5 +1,5 @@
-import { IPprData } from "../../../1shared/api/pprTable";
 import { FC } from "react";
+import { IPprData } from "@/1shared/api/pprTable";
 import { TableCell, Table } from "@/1shared/ui/table";
 import { fullColumnsList } from "../lib/pprTableSettings";
 

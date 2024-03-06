@@ -1,7 +1,7 @@
 "use client";
 import { FC, FormEventHandler, useEffect, useState } from "react";
 import Input from "antd/es/input";
-import { IWork } from "..";
+import { IWork } from "@/1shared/api/work";
 import Form, { FormInstance } from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
