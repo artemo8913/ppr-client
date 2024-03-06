@@ -1,13 +1,11 @@
 import { getPprTable } from "@/1shared/api/pprTable";
 import { getAllWorks } from "@/1shared/api/work";
-import { PprTable } from "@/2entities/pprTable";
+import { PprTable, PprTableDataProvider } from "@/2entities/pprTable";
 import { PprTableUpdateButton } from "@/3features/pprTableUpdate";
 import { WorkModal } from "@/3features/workSelect";
 
-import Button from "antd/es/button";
-
 export default async function PprPageId({ params }: { params: { id: string } }) {
-  const { data, id, created_at, status } = await getPprTable(params.id);
+  const ppr = await getPprTable(params.id);
   const works = await getAllWorks();
 
   return (
@@ -17,7 +15,9 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
         <WorkModal data={works} />
         <PprTableUpdateButton action={async () => {}} />
       </div>
-      <PprTable data={data} />
+      <PprTableDataProvider ppr={ppr}>
+        <PprTable />
+      </PprTableDataProvider>
     </div>
   );
 }
