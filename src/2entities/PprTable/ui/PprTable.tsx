@@ -1,7 +1,7 @@
-import { IPprData } from "..";
+import { IPprData } from "../../../1shared/api/pprTable";
 import { FC } from "react";
 import { TableCell, Table } from "@/1shared/ui/table";
-import { fullColumnsList } from "../model/pprTableSettings";
+import { fullColumnsList } from "../lib/pprTableSettings";
 
 interface IPprTableProps {
   data: IPprData[];

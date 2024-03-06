@@ -1,5 +1,5 @@
 "use server";
-import { IPpr } from "..";
+import { IPpr } from ".";
 
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/ppr";
 

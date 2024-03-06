@@ -1,4 +1,5 @@
-import { PprTable, getPprTable } from "@/2entities/pprTable";
+import { getPprTable } from "@/1shared/api/pprTable";
+import { PprTable } from "@/2entities/pprTable";
 import { WorkModal, getAllWorks } from "@/2entities/work";
 import Button from "antd/es/button";
 
