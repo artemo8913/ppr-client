@@ -1,6 +1,5 @@
 "use client";
-import { FC, useEffect } from "react";
-import { IPpr, IPprData } from "@/1shared/api/pprTable";
+import { FC } from "react";
 import { TableCell, Table } from "@/1shared/ui/table";
 import { fullColumnsList } from "../lib/pprTableSettings";
 import { usePprTableData } from "../model/PprTableDataProvider";
