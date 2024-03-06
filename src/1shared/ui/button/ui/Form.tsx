@@ -8,7 +8,7 @@ interface IPprTableUpdateFormProps extends ComponentProps<typeof Submit> {
 
 export const Form: FC<IPprTableUpdateFormProps> = async ({ action, children, ...otherProps }) => {
   return (
-    <form action={action}>
+    <form className="inline" action={action}>
       <Submit {...otherProps}>{children}</Submit>
     </form>
   );
