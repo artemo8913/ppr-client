@@ -1,7 +1,7 @@
 import { getPprTable } from "@/1shared/api/pprTable";
 import { getAllWorks } from "@/1shared/api/work";
 import { PprTable } from "@/2entities/pprTable";
-import { WorkModal } from "@/3features/work";
+import { WorkModal } from "@/3features/workSelect";
 
 import Button from "antd/es/button";
 
