@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authConfig";
 import { createPpr } from "@/1shared/api/ppr";
-import { Submit } from "./PprCreateNewSubmit";
+import { ServerSubmitButton } from "@/1shared/ui/button";
 
-export async function PprCreateNewForm() {
+export async function PprCreateNewButton() {
   const session = await getServerSession(authOptions);
   const newPprData = {
     id_direction: session?.user.id_direction || null,
@@ -13,13 +13,14 @@ export async function PprCreateNewForm() {
     year: 2024,
   };
   return (
-    <form
+    <ServerSubmitButton
+      type="primary"
       action={async () => {
         "use server";
         await createPpr(newPprData);
       }}
     >
-      <Submit />
-    </form>
+      Добавить
+    </ServerSubmitButton>
   );
 }

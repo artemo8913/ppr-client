@@ -76,6 +76,14 @@
       "id_subdivision": 9,
       "name": "ППР",
       "year": 2024
+    },
+    {
+      "id": "3ef2",
+      "id_direction": 88,
+      "id_distance": 3,
+      "id_subdivision": 9,
+      "name": "ППР",
+      "year": 2024
     }
   ],
   "ppr": [
@@ -669,6 +677,12 @@
     {
       "id": "0e73",
       "created_at": "Wed Mar 06 2024 12:05:37 GMT+0700 (Красноярск, стандартное время)",
+      "data": [],
+      "status": "creating"
+    },
+    {
+      "id": "3ef2",
+      "created_at": "Wed Mar 06 2024 14:00:43 GMT+0700 (Красноярск, стандартное время)",
       "data": [],
       "status": "creating"
     }
