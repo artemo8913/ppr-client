@@ -19,6 +19,10 @@ export type ITableData<T> = {
   [key in keyof T]: string | number | undefined;
 };
 
+export interface ITableRow {
+  
+}
+
 export interface ITableCell extends Omit<ComponentPropsWithoutRef<"td">, "onChange"> {
   cellType?: TCell;
   isVertical?: boolean;

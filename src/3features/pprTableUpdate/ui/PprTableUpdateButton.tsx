@@ -4,7 +4,7 @@ import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
 import { updatePprTable } from "@/1shared/api/pprTable/pprTable.actions";
-import { usePprTableData } from "@/2entities/PprTable";
+import { usePprTableData } from "@/4widgets/pprTable";
 
 interface IPprTableUpdateFormProps {
   id: string;

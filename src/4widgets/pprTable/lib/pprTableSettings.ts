@@ -1,7 +1,7 @@
-import { ITableColumn } from "@/1shared/ui/table/model/table.schema";
-import { TMonths } from "@/1shared/types/date";
-import { setQuartaerBgColor } from "./setBgColor";
 import { IPprData } from "@/1shared/api/pprTable";
+import { TMonths } from "@/1shared/types/date";
+import { ITableColumn } from "@/1shared/ui/table";
+import { setQuartaerBgColor } from "./setBgColor";
 
 const fullWorkAndTimeDataList = (mounth: TMonths): ITableColumn<IPprData>[] => [
   {

@@ -1,5 +1,5 @@
 import { getPprTable } from "@/1shared/api/pprTable";
-import { PprTable, PprTableDataProvider } from "@/2entities/PprTable";
+import { PprTable, PprTableDataProvider } from "@/4widgets/pprTable";
 import { PprTableUpdateButton } from "@/3features/pprTableUpdate";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
@@ -9,7 +9,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
     <PprTableDataProvider ppr={ppr}>
       <div className="w-full h-full overflow-scroll">
         <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300">
-          Ппр такого-то года, такого-то ЭЧК
+          Ппр такого-то года, такого-то ЭЧК в таком-то статусе
           <PprTableUpdateButton id={params.id} />
         </div>
         <PprTable />

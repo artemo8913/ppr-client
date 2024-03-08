@@ -56,7 +56,7 @@ export const TableCell: FC<ITableCell> = (props) => {
           />
         )}
         {/* JUST VALUE */}
-        {cellType === "none" && (value || children)}
+        {cellType === "none" && children}
       </div>
     </td>
   );

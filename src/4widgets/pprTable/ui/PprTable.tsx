@@ -4,6 +4,7 @@ import { usePprTableData } from "..";
 import { fullColumnsList } from "../lib/pprTableSettings";
 import { TableCell, Table } from "@/1shared/ui/table";
 import { IPprData } from "@/1shared/api/pprTable";
+import { TableCellWithAdd } from "@/3features/pprAddWork";
 
 interface IPprTableProps {}
 
@@ -39,7 +40,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       }}
       CellComponent={({ rowIndex, colName, ...otherProps }) => {
         return (
-          <TableCell
+          <TableCellWithAdd
             onBlur={(e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement> & FormEvent<HTMLTableCellElement>) =>
               handleChange({ value: e.target.value, rowIndex, colName })
             }
