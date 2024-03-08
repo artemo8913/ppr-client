@@ -1,0 +1,1 @@
+export type TPprStatus = "none" | "template" | "creating" | "on_agreement" | "on_aprove" | "fulfilling" | "done";

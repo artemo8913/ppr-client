@@ -1,0 +1,35 @@
+{
+  "name": "ech-ppr-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "server": "json-server --watch db.json --port 3001",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.2.6",
+    "@ant-design/nextjs-registry": "^1.0.0",
+    "@tanstack/react-table": "^8.13.2",
+    "antd": "^5.12.5",
+    "clsx": "^2.1.0",
+    "next": "14.0.4",
+    "next-auth": "^4.24.6",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "json-server": "^1.0.0-alpha.21",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
