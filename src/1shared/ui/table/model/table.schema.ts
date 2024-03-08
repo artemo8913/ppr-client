@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from "react";
+import { ChangeEventHandler, ComponentPropsWithoutRef, FormEventHandler } from "react";
 
 type TCell = "none" | "input" | "textarea";
 
@@ -19,8 +19,11 @@ export type ITableData<T> = {
   [key in keyof T]: string | number | undefined;
 };
 
-export interface ITableCell extends ComponentPropsWithoutRef<"td"> {
+export interface ITableCell extends Omit<ComponentPropsWithoutRef<"td">, "onChange"> {
   cellType?: TCell;
   isVertical?: boolean;
   value?: string | number;
+  onChange?: ChangeEventHandler<HTMLInputElement> &
+    ChangeEventHandler<HTMLTextAreaElement> &
+    FormEventHandler<HTMLTableCellElement>;
 }

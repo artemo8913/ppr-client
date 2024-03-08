@@ -7,8 +7,10 @@ interface ITableProps<T> {
   data: ITableData<T>[];
   className?: string;
   width?: number | string;
-  RowComponent: ComponentType<React.AllHTMLAttributes<HTMLTableRowElement>>;
-  CellComponent: ComponentType<React.AllHTMLAttributes<HTMLTableCellElement> & ITableCell>;
+  RowComponent: ComponentType<React.AllHTMLAttributes<HTMLTableRowElement> & { rowData?: ITableData<T> }>;
+  CellComponent: ComponentType<
+    React.AllHTMLAttributes<HTMLTableCellElement> & ITableCell & { colName?: keyof T; rowIndex?: number }
+  >;
 }
 
 export const Table: <T>(props: ITableProps<T>) => JSX.Element | null = ({
@@ -40,10 +42,17 @@ export const Table: <T>(props: ITableProps<T>) => JSX.Element | null = ({
       </RowComponent>
     );
   });
-  const bodyRows = data.map((row, index) => (
-    <RowComponent key={index}>
+  const bodyRows = data.map((row, rowIndex) => (
+    <RowComponent key={rowIndex} rowData={row}>
       {colListForData.map((col, index) => (
-        <CellComponent key={String(col.name) + index} isVertical={col.isTdVertical} value={row[col.name]} {...col.cell}>
+        <CellComponent
+          colName={col.name}
+          rowIndex={rowIndex}
+          key={String(col.name) + index}
+          isVertical={col.isTdVertical}
+          value={row[col.name]}
+          {...col.cell}
+        >
           {row[col.name]}
         </CellComponent>
       ))}

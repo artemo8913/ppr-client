@@ -1,2 +1,2 @@
 export { PprTable } from "./ui/PprTable";
-export { PprTableDataProvider } from "./model/PprTableDataProvider";
+export { PprTableDataProvider, usePprTableData } from "./model/PprTableDataProvider";
