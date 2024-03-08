@@ -29,6 +29,7 @@ export const Table: <T>(props: ITableProps<T>) => JSX.Element | null = ({
             <CellComponent
               {...col.cell}
               key={String(col.name)}
+              name={String(col.name)}
               isVertical={col.isThVertical}
               colSpan={col.thColSpan}
               rowSpan={col.thRowSpan}
@@ -51,6 +52,7 @@ export const Table: <T>(props: ITableProps<T>) => JSX.Element | null = ({
           key={String(col.name) + index}
           isVertical={col.isTdVertical}
           value={row[col.name]}
+          name={String(col.name)}
           {...col.cell}
         >
           {row[col.name]}

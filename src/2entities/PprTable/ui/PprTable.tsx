@@ -9,7 +9,6 @@ interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
-
   const handleChange = ({
     value,
     rowIndex,
@@ -22,7 +21,6 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     if (typeof rowIndex === "undefined" || typeof colName === "undefined") {
       return;
     }
-    console.log(rowIndex, colName);
     setPprData((prev) => ({
       ...prev,
       data: [
@@ -42,7 +40,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       CellComponent={({ rowIndex, colName, ...otherProps }) => {
         return (
           <TableCell
-            onChange={(e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement> & FormEvent<HTMLTableCellElement>) =>
+            onBlur={(e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement> & FormEvent<HTMLTableCellElement>) =>
               handleChange({ value: e.target.value, rowIndex, colName })
             }
             {...otherProps}

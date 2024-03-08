@@ -14,7 +14,8 @@ export const TableCell: FC<ITableCell> = (props) => {
     colSpan,
     rowSpan,
     style,
-    onChange,
+    name,
+    onBlur,
   } = props;
   return (
     <td width={width} colSpan={colSpan} rowSpan={rowSpan} style={style} className="border border-black break-words">
@@ -30,8 +31,9 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* TEXTAREA */}
         {cellType === "textarea" && (
           <textarea
-            value={value}
-            onChange={onChange}
+            name={name}
+            defaultValue={value}
+            onBlur={onBlur}
             className={clsx(
               "resize-none border-none bg-inherit transition-transform",
               !isVertical && "w-full",
@@ -43,8 +45,9 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* INPUT */}
         {cellType === "input" && (
           <input
-            value={value}
-            onChange={onChange}
+            name={name}
+            defaultValue={value}
+            onBlur={onBlur}
             className={clsx(
               "w-full cursor-pointer focus:cursor-text text-center border-none bg-transparent transition-transform",
               isVertical && "h-[90px] focus:rotate-90 focus-within:bg-white"

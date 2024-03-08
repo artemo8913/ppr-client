@@ -23,7 +23,8 @@ export interface ITableCell extends Omit<ComponentPropsWithoutRef<"td">, "onChan
   cellType?: TCell;
   isVertical?: boolean;
   value?: string | number;
-  onChange?: ChangeEventHandler<HTMLInputElement> &
+  name?:string;
+  onBlur?: ChangeEventHandler<HTMLInputElement> &
     ChangeEventHandler<HTMLTextAreaElement> &
     FormEventHandler<HTMLTableCellElement>;
 }

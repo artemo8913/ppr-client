@@ -1,19 +1,33 @@
+"use client";
+import { updatePprTable } from "@/1shared/api/pprTable/pprTable.actions";
 import { ServerSubmitButton } from "@/1shared/ui/button";
-import { FC } from "react";
+import { usePprTableData } from "@/2entities/PprTable";
+import { SaveOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
+import Button from "antd/es/button";
+import { FC, useState } from "react";
 
 interface IPprTableUpdateFormProps {
-  action: () => Promise<void>;
+  id: string;
 }
 
-export const PprTableUpdateButton: FC<IPprTableUpdateFormProps> = async ({ action }) => {
+export const PprTableUpdateButton: FC<IPprTableUpdateFormProps> = ({ id }) => {
+  const { pprData } = usePprTableData();
+  const [isLoading, setIsLoading] = useState(false);
   return (
-    <ServerSubmitButton
-      type="primary"
-      action={async () => {
-        "use server";
-      }}
-    >
-      Сохранить
-    </ServerSubmitButton>
+    <Tooltip title="сохранить">
+      <Button
+        icon={<SaveOutlined />}
+        loading={isLoading}
+        disabled={isLoading}
+        type="primary"
+        shape="circle"
+        onClick={async () => {
+          setIsLoading(true);
+          await updatePprTable(id, pprData);
+          setIsLoading(false);
+        }}
+      />
+    </Tooltip>
   );
 };
