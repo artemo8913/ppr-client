@@ -1,8 +1,8 @@
 "use client";
 import { ChangeEvent, FC, FormEvent } from "react";
-import { TableCell, Table } from "@/1shared/ui/table";
-import { fullColumnsList } from "../lib/pprTableSettings";
 import { usePprTableData } from "..";
+import { fullColumnsList } from "../lib/pprTableSettings";
+import { TableCell, Table } from "@/1shared/ui/table";
 import { IPprData } from "@/1shared/api/pprTable";
 
 interface IPprTableProps {}

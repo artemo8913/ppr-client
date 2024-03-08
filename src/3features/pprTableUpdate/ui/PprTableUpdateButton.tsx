@@ -1,11 +1,10 @@
 "use client";
-import { updatePprTable } from "@/1shared/api/pprTable/pprTable.actions";
-import { ServerSubmitButton } from "@/1shared/ui/button";
-import { usePprTableData } from "@/2entities/PprTable";
-import { SaveOutlined } from "@ant-design/icons";
+import { FC, useState } from "react";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
-import { FC, useState } from "react";
+import { SaveOutlined } from "@ant-design/icons";
+import { updatePprTable } from "@/1shared/api/pprTable/pprTable.actions";
+import { usePprTableData } from "@/2entities/PprTable";
 
 interface IPprTableUpdateFormProps {
   id: string;
@@ -21,6 +20,7 @@ export const PprTableUpdateButton: FC<IPprTableUpdateFormProps> = ({ id }) => {
         loading={isLoading}
         disabled={isLoading}
         type="primary"
+        ghost
         shape="circle"
         onClick={async () => {
           setIsLoading(true);
