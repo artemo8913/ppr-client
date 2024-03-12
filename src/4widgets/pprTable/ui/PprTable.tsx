@@ -1,55 +1,62 @@
 "use client";
-import { ChangeEvent, FC, FormEvent } from "react";
+import { FC } from "react";
 import { usePprTableData } from "..";
-import { fullColumnsList } from "../lib/pprTableSettings";
-import { TableCell, Table } from "@/1shared/ui/table";
+import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { IPprData } from "@/1shared/api/pprTable";
-import { TableCellWithAdd } from "@/3features/pprAddWork";
+import { createDefaultColumns } from "../lib/pprTableSettings";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
-  const handleChange = ({
-    value,
-    rowIndex,
-    colName,
-  }: {
-    value: string;
-    rowIndex?: number;
-    colName?: keyof IPprData;
-  }) => {
-    if (typeof rowIndex === "undefined" || typeof colName === "undefined") {
-      return;
-    }
-    setPprData((prev) => ({
-      ...prev,
-      data: [
-        ...prev.data.slice(0, rowIndex),
-        { ...prev.data[rowIndex], [colName]: value },
-        ...prev.data.slice(rowIndex + 1),
-      ],
-    }));
-  };
+
+  const verticalDiv = "[writing-mode:vertical-rl] rotate-180";
+
+  const table: Table<IPprData> = useReactTable({
+    data: pprData.data,
+    columns: createDefaultColumns(),
+    getCoreRowModel: getCoreRowModel(),
+    meta: {
+      updateData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
+        // Skip page index reset until after next rerender
+        setPprData((prev) => ({
+          ...prev,
+          data: prev.data.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...prev.data[rowIndex]!,
+                [columnId]: value,
+              };
+            }
+            return row;
+          }),
+        }));
+      },
+    },
+  });
 
   return (
-    <Table
-      className="table-fixed w-[120%] [font-size:12px]"
-      RowComponent={({ rowData, ...otherProps }) => {
-        return <tr {...otherProps}></tr>;
-      }}
-      CellComponent={({ rowIndex, colName, ...otherProps }) => {
-        return (
-          <TableCellWithAdd
-            onBlur={(e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement> & FormEvent<HTMLTableCellElement>) =>
-              handleChange({ value: e.target.value, rowIndex, colName })
-            }
-            {...otherProps}
-          />
-        );
-      }}
-      columns={fullColumnsList}
-      data={pprData.data}
-    />
+    <table className="table-fixed [font-size:12px]">
+      <thead>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <th key={header.id} colSpan={header.colSpan}>
+                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody>
+        {table.getRowModel().rows.map((row) => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };

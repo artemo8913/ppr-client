@@ -4,27 +4,15 @@ import clsx from "clsx";
 import { ITableCell } from "../model/table.schema";
 
 export const TableCell: FC<ITableCell> = (props) => {
-  const {
-    cellType = "none",
-    value,
-    isVertical = false,
-    children,
-    height,
-    width,
-    colSpan,
-    rowSpan,
-    style,
-    name,
-    onBlur,
-  } = props;
+  const { cellType = "none", value, isVertical = false, height, width, colSpan, rowSpan, style, name, onBlur } = props;
   return (
-    <td width={width} colSpan={colSpan} rowSpan={rowSpan} style={style} className="border border-black break-words">
+    <>
       {/* Контейнер содержимого td */}
       <div
         style={{ height }}
         className={clsx(
           "w-full flex justify-center items-center bg-transparent",
-          "focus-within:relative focus-within:z-10",
+          "border-none focus-within:relative focus-within:z-10",
           isVertical && "[writing-mode:vertical-rl] rotate-180"
         )}
       >
@@ -56,8 +44,8 @@ export const TableCell: FC<ITableCell> = (props) => {
           />
         )}
         {/* JUST VALUE */}
-        {cellType === "none" && children}
+        {cellType === "none" && value}
       </div>
-    </td>
+    </>
   );
 };
