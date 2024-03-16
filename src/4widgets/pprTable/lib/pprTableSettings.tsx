@@ -143,6 +143,7 @@ export const createDefaultColumns = (
         cell: (info) => (
           <TableCell
             value={info.getValue()}
+            handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
             {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
           />
         ),
@@ -160,6 +161,7 @@ export const createDefaultColumns = (
                 <TableCell
                   isVertical
                   value={info.getValue()}
+                  handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
                   {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
                 />
               ),

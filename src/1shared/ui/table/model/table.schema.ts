@@ -9,7 +9,5 @@ export interface ITableCell {
   isVertical?: boolean;
   className?: string;
   bgColor?: string;
-  onBlur?: ChangeEventHandler<HTMLInputElement> &
-    ChangeEventHandler<HTMLTextAreaElement> &
-    FormEventHandler<HTMLTableCellElement>;
+  handleBlur?: (value: string) => void;
 }

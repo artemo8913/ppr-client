@@ -1,10 +1,11 @@
 "use client";
-import { FC } from "react";
+import { FC, SyntheticEvent, useState } from "react";
 import clsx from "clsx";
 import { ITableCell } from "../model/table.schema";
 
 export const TableCell: FC<ITableCell> = (props) => {
-  const { cellType = "none", value, isVertical = false, bgColor, onBlur, className } = props;
+  const { cellType = "none", value, isVertical = false, bgColor, handleBlur, className } = props;
+  const [currentValue, setCurrentValue] = useState(value);
   return (
     <>
       {/* Контейнер содержимого ячейки */}
@@ -20,8 +21,9 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* TEXTAREA */}
         {cellType === "textarea" && (
           <textarea
-            defaultValue={value}
-            onBlur={onBlur}
+            value={currentValue}
+            onChange={(e) => setCurrentValue(e.target.value)}
+            onBlur={() => handleBlur && handleBlur(String(currentValue))}
             className={clsx(
               "cursor-pointer focus:cursor-text resize-none border-none bg-inherit transition-transform",
               !isVertical && "w-full",
@@ -33,8 +35,9 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* INPUT */}
         {cellType === "input" && (
           <input
-            defaultValue={value}
-            onBlur={onBlur}
+            value={currentValue}
+            onChange={(e) => setCurrentValue(e.target.value)}
+            onBlur={() => handleBlur && handleBlur(String(currentValue))}
             className={clsx(
               "w-full cursor-pointer focus:cursor-text text-center border-none bg-transparent transition-transform",
               isVertical && "h-[80px] focus:rotate-90 focus-within:bg-white"

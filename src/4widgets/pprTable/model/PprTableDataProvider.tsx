@@ -24,6 +24,6 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
   const [pprData, setPprData] = useState(defaultValue);
   useEffect(() => {
     setPprData({ ...ppr });
-  }, [setPprData, ppr]);
+  }, []);
   return <PprTableDataContext.Provider value={{ pprData, setPprData }}>{children}</PprTableDataContext.Provider>;
 };
