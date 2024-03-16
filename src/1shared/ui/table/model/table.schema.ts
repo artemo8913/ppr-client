@@ -1,5 +1,3 @@
-import { ChangeEventHandler, FormEventHandler } from "react";
-
 export type TCell = "none" | "input" | "textarea";
 
 export interface ITableCell {

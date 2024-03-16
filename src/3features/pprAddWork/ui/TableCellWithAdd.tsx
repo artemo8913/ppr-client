@@ -4,12 +4,9 @@ import { ITableCell, TableCell } from "@/1shared/ui/table";
 import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 
-export const TableCellWithAdd: FC<ITableCell> = ({ children, ...otherProps }) => {
+export const TableCellWithAdd: FC<ITableCell> = ({ ...otherProps }) => {
   return (
-    <TableCell className="relative" {...otherProps}>
-      <AddButton />
-      {children}
-    </TableCell>
+    <TableCell className="relative" {...otherProps} />
   );
 };
 
