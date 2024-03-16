@@ -3,18 +3,19 @@ import { FC } from "react";
 import { usePprTableData } from "..";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { IPprData } from "@/1shared/api/pprTable";
-import { createDefaultColumns } from "../lib/pprTableSettings";
+import { createDefaultColumns, getTdStyle, getThStyle } from "../lib/pprTableSettings";
+import { TMonths, months } from "@/1shared/types/date";
+import { TPprStatus } from "@/1shared/types/ppr";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
-
-  const verticalDiv = "[writing-mode:vertical-rl] rotate-180";
-
+  const status: TPprStatus = "creating";
+  const currentMonth: TMonths = "year";
   const table: Table<IPprData> = useReactTable({
     data: pprData.data,
-    columns: createDefaultColumns(),
+    columns: createDefaultColumns(status, months, currentMonth),
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
@@ -36,12 +37,17 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   });
 
   return (
-    <table className="table-fixed [font-size:12px]">
+    <table className="table-fixed w-full [font-size:10px]">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <th key={header.id} colSpan={header.colSpan}>
+              <th
+                className="border border-black max-h-[250px]"
+                style={getThStyle(header.column.id as keyof IPprData)}
+                key={header.id}
+                colSpan={header.colSpan}
+              >
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
               </th>
             ))}
@@ -52,7 +58,9 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              <td className="border border-black" key={cell.id} style={getTdStyle(cell.column.id as keyof IPprData)}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
             ))}
           </tr>
         ))}

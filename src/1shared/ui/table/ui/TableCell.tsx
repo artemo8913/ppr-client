@@ -4,26 +4,26 @@ import clsx from "clsx";
 import { ITableCell } from "../model/table.schema";
 
 export const TableCell: FC<ITableCell> = (props) => {
-  const { cellType = "none", value, isVertical = false, height, width, colSpan, rowSpan, style, name, onBlur } = props;
+  const { cellType = "none", value, isVertical = false, bgColor, onBlur, className } = props;
   return (
     <>
-      {/* Контейнер содержимого td */}
+      {/* Контейнер содержимого ячейки */}
       <div
-        style={{ height }}
+        style={{ backgroundColor: bgColor }}
         className={clsx(
           "w-full flex justify-center items-center bg-transparent",
           "border-none focus-within:relative focus-within:z-10",
-          isVertical && "[writing-mode:vertical-rl] rotate-180"
+          isVertical && "[writing-mode:vertical-rl] rotate-180",
+          className
         )}
       >
         {/* TEXTAREA */}
         {cellType === "textarea" && (
           <textarea
-            name={name}
             defaultValue={value}
             onBlur={onBlur}
             className={clsx(
-              "resize-none border-none bg-inherit transition-transform",
+              "cursor-pointer focus:cursor-text resize-none border-none bg-inherit transition-transform",
               !isVertical && "w-full",
               isVertical && "focus:rotate-90 "
             )}
@@ -33,12 +33,11 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* INPUT */}
         {cellType === "input" && (
           <input
-            name={name}
             defaultValue={value}
             onBlur={onBlur}
             className={clsx(
               "w-full cursor-pointer focus:cursor-text text-center border-none bg-transparent transition-transform",
-              isVertical && "h-[90px] focus:rotate-90 focus-within:bg-white"
+              isVertical && "h-[80px] focus:rotate-90 focus-within:bg-white"
             )}
             maxLength={8}
           />

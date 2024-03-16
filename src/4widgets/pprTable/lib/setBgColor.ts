@@ -1,14 +1,29 @@
-import { TMonths } from "@/1shared/types/date";
 import { QuarterColors } from "../../../../tailwind.config";
+import { IPprData } from "@/1shared/api/pprTable";
 
-export function setQuartaerBgColor(type: TMonths, isTransparent?: boolean): QuarterColors | undefined {
-  if (type.endsWith("jan") || type.endsWith("feb") || type.endsWith("mar")) {
-    return isTransparent ? QuarterColors.FIRST_QUARTER_TRANSPARENT : QuarterColors.FIRST_QUARTER;
-  } else if (type.endsWith("apr") || type.endsWith("may") || type.endsWith("june")) {
-    return isTransparent ? QuarterColors.SECOND_QARTER_TRANSPARENT : QuarterColors.SECOND_QARTER;
-  } else if (type.endsWith("july") || type.endsWith("aug") || type.endsWith("sept")) {
-    return isTransparent ? QuarterColors.THIRD_QARTER_TRANSPARENT : QuarterColors.THIRD_QARTER;
-  } else if (type.endsWith("oct") || type.endsWith("nov") || type.endsWith("dec")) {
-    return isTransparent ? QuarterColors.FOURTH_QARTER_TRANSPARENT : QuarterColors.FOURTH_QARTER;
+export function setBgColor(type: keyof IPprData): QuarterColors | undefined {
+  // 1 квартал
+  if (type.startsWith("jan_plan") || type.startsWith("feb_plan") || type.startsWith("mar_plan")) {
+    return QuarterColors.FIRST_QUARTER;
+  } else if (type.startsWith("jan_fact") || type.startsWith("feb_fact") || type.startsWith("mar_fact")) {
+    return QuarterColors.FIRST_QUARTER_TRANSPARENT;
+  }
+  // 2 квартал
+  if (type.startsWith("apr_plan") || type.startsWith("may_plan") || type.startsWith("june_plan")) {
+    return QuarterColors.SECOND_QARTER;
+  } else if (type.startsWith("apr_fact") || type.startsWith("may_fact") || type.startsWith("june_fact")) {
+    return QuarterColors.SECOND_QARTER_TRANSPARENT;
+  }
+  // 3 квартал
+  if (type.startsWith("july_plan") || type.startsWith("aug_plan") || type.startsWith("sept_plan")) {
+    return QuarterColors.THIRD_QARTER;
+  } else if (type.startsWith("july_fact") || type.startsWith("aug_fact") || type.startsWith("sept_fact")) {
+    return QuarterColors.THIRD_QARTER_TRANSPARENT;
+  }
+  // 4 квартал
+  if (type.startsWith("oct_plan") || type.startsWith("nov_plan") || type.startsWith("dec_plan")) {
+    return QuarterColors.FOURTH_QARTER;
+  } else if (type.startsWith("oct_fact") || type.startsWith("nov_fact") || type.startsWith("dec_fact")) {
+    return QuarterColors.FOURTH_QARTER_TRANSPARENT;
   }
 }

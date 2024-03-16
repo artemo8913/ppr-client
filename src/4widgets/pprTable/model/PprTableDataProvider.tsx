@@ -7,7 +7,7 @@ interface IPprTableDataContextProps {
   setPprData: Dispatch<SetStateAction<IPpr>>;
 }
 
-const defaultValue: IPpr = { created_at: "", data: [], id: "", status: "none" };
+const defaultValue: IPpr = { created_at: "", data: [], id: "", status: "none", month: "year" };
 
 const PprTableDataContext = createContext<IPprTableDataContextProps>({
   pprData: defaultValue,
@@ -17,7 +17,7 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
 export const usePprTableData = () => useContext(PprTableDataContext);
 
 interface IPprTableDataProviderProps extends PropsWithChildren {
-    ppr: IPpr
+  ppr: IPpr;
 }
 
 export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, ppr }) => {
