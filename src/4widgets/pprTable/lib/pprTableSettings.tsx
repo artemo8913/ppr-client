@@ -4,6 +4,9 @@ import { TPprStatus } from "@/1shared/types/ppr";
 import { ITableCell, TableCell } from "@/1shared/ui/table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { setBgColor } from "./setBgColor";
+import Button from "antd/es/button";
+import { PlusOutlined } from "@ant-design/icons";
+import { TableCellWithAdd } from "@/3features/pprAddWork";
 
 const columnsDefault: Array<keyof IPprData> = [
   "name",
@@ -142,7 +145,7 @@ export function handlePprData(data: IPprData[]): IHandlePprData[] {
     lastIndex = index;
   }
 
-  const rowSpanData: { [id: string]: number } = {};
+  const rowSpanData: { [id: string]: number | undefined } = {};
 
   data.forEach((datum, index, arr) => {
     if (index === 0) {
@@ -168,8 +171,6 @@ export function handlePprData(data: IPprData[]): IHandlePprData[] {
   });
 }
 
-function getRowSpan(sortedData: IHandlePprData[]) {}
-
 export const createDefaultColumns = (
   status: TPprStatus,
   months: TMonths[],
@@ -181,13 +182,24 @@ export const createDefaultColumns = (
     ...columnsDefault.map((column) => {
       return columnHelper.accessor(column, {
         header: (info) => <TableCell isVertical value={columnsTitles[info.header.id as keyof IPprData]} />,
-        cell: (info) => (
-          <TableCell
-            value={info.getValue()}
-            handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-            {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
-          />
-        ),
+        cell: (info) => {
+          if (info.column.id === "name") {
+            return (
+              <TableCellWithAdd
+                value={info.getValue()}
+                handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
+                {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
+              />
+            );
+          }
+          return (
+            <TableCell
+              value={info.getValue()}
+              handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
+              {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
+            />
+          );
+        },
       });
     }),
     // Часть таблицы с данными объемов и чел.-ч по году и месяцами

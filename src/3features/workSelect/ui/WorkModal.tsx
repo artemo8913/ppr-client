@@ -22,27 +22,22 @@ export const WorkModal: FC<IWorkModalProps> = ({ data }) => {
   };
 
   return (
-    <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
-      <Modal title="Выберите работу" width={1024} open={isModalOpen} onCancel={hideModal} footer={null}>
-        <Tabs
-          defaultActiveKey="1"
-          items={[
-            {
-              label: "Выбрать из перечня работ",
-              key: "1",
-              children: <WorkSelect data={data} onFinish={hideModal} />,
-            },
-            {
-              label: "Добавить самостоятельно",
-              key: "2",
-              children: <WorkCreateForm onFinish={hideModal} />,
-            },
-          ]}
-        />
-      </Modal>
-    </>
+    <Modal title="Выберите работу" width={1024} open={isModalOpen} onCancel={hideModal} footer={null}>
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            label: "Выбрать из перечня работ",
+            key: "1",
+            children: <WorkSelect data={data} onFinish={hideModal} />,
+          },
+          {
+            label: "Добавить самостоятельно",
+            key: "2",
+            children: <WorkCreateForm onFinish={hideModal} />,
+          },
+        ]}
+      />
+    </Modal>
   );
 };

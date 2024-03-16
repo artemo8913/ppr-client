@@ -58,7 +58,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <td className="border border-black" key={cell.id} style={getTdStyle(cell.column.id as keyof IPprData)}>
+              <td className="border border-black relative" key={cell.id} style={getTdStyle(cell.column.id as keyof IPprData)}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}

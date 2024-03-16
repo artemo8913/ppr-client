@@ -7,5 +7,6 @@ export interface ITableCell {
   isVertical?: boolean;
   className?: string;
   bgColor?: string;
+  handleClick?: () => void;
   handleBlur?: (value: string) => void;
 }
