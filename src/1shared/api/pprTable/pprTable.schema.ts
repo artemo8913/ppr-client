@@ -9,8 +9,15 @@ export interface IPpr {
   data: IPprData[];
 }
 
+
+export interface IHandlePprData extends IPprData {
+  rowSpan?: number;
+  isHandMade?: boolean;
+}
+
 export interface IPprData {
   id: string;
+  workId: string | null;
   branch: string;
   subbranch: string;
   name: string;

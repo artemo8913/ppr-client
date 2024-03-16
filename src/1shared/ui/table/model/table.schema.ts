@@ -1,7 +1,7 @@
 export type TCell = "none" | "input" | "textarea";
 
 export interface ITableCell {
-  value?: string | number;
+  value?: string | number | boolean | null;
   cellType?: TCell;
   width?: string;
   isVertical?: boolean;

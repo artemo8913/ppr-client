@@ -21,7 +21,7 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* TEXTAREA */}
         {cellType === "textarea" && (
           <textarea
-            value={currentValue}
+            value={String(currentValue)}
             onChange={(e) => setCurrentValue(e.target.value)}
             onBlur={() => handleBlur && handleBlur(String(currentValue))}
             className={clsx(
@@ -35,7 +35,7 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* INPUT */}
         {cellType === "input" && (
           <input
-            value={currentValue}
+            value={String(currentValue)}
             onChange={(e) => setCurrentValue(e.target.value)}
             onBlur={() => handleBlur && handleBlur(String(currentValue))}
             className={clsx(
