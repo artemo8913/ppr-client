@@ -4,11 +4,9 @@ import { TPprStatus } from "@/1shared/types/ppr";
 import { ITableCell, TableCell } from "@/1shared/ui/table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { setBgColor } from "./setBgColor";
-import Button from "antd/es/button";
-import { PlusOutlined } from "@ant-design/icons";
 import { TableCellWithAdd } from "@/3features/pprAddWork";
 
-const columnsDefault: Array<keyof IPprData> = [
+export const columnsDefault: Array<keyof IPprData> = [
   "name",
   "location",
   "line_class",
@@ -23,7 +21,7 @@ const columnsDefault: Array<keyof IPprData> = [
   "unity",
 ] as const;
 
-const columnsTitles: { [key in keyof IPprData]?: string } = {
+export const columnsTitles: { [key in keyof IPprData]?: string } = {
   name: "Наименования и условия выполнения технологических операций, испытаний и измерений",
   location: "Наименование места проведения работ / тип оборудования",
   line_class: "Класс участка / вид технического обслуживания и ремонта",
@@ -73,7 +71,7 @@ export function getTdStyle(key: keyof IPprData): React.CSSProperties {
   return { backgroundColor: setBgColor(key) };
 }
 
-function getColumnSettings(status: TPprStatus, month: TMonths): { [name in keyof IPprData]?: ITableCell } {
+export function getColumnSettings(status: TPprStatus, month: TMonths): { [name in keyof IPprData]?: ITableCell } {
   if (status === "creating") {
     return {
       name: { cellType: "textarea" },
@@ -110,7 +108,7 @@ function getColumnSettings(status: TPprStatus, month: TMonths): { [name in keyof
   return {};
 }
 
-function findPlanFactTitle(string: string) {
+export function findPlanFactTitle(string: string) {
   if (string.endsWith("work")) {
     return "кол-во";
   } else if (string.endsWith("plan_time")) {
@@ -122,7 +120,7 @@ function findPlanFactTitle(string: string) {
   }
 }
 
-function getPlanTimeColumnsNames(month: TMonths): Array<keyof IPprData> {
+export function getPlanTimeColumnsNames(month: TMonths): Array<keyof IPprData> {
   return [
     `${month}_plan_work`,
     `${month}_plan_time`,
@@ -170,58 +168,3 @@ export function handlePprData(data: IPprData[]): IHandlePprData[] {
     return { ...datum, rowSpan: rowSpanData[datum.id] };
   });
 }
-
-export const createDefaultColumns = (
-  status: TPprStatus,
-  months: TMonths[],
-  currentMonth: TMonths
-): ColumnDef<IPprData, any>[] => {
-  const columnHelper = createColumnHelper<IPprData>();
-  return [
-    // Часть таблицы до времени
-    ...columnsDefault.map((column) => {
-      return columnHelper.accessor(column, {
-        header: (info) => <TableCell isVertical value={columnsTitles[info.header.id as keyof IPprData]} />,
-        cell: (info) => {
-          if (info.column.id === "name") {
-            return (
-              <TableCellWithAdd
-                value={info.getValue()}
-                handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-                {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
-              />
-            );
-          }
-          return (
-            <TableCell
-              value={info.getValue()}
-              handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-              {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
-            />
-          );
-        },
-      });
-    }),
-    // Часть таблицы с данными объемов и чел.-ч по году и месяцами
-    ...months.map((month) => {
-      return columnHelper.group({
-        header: monthsIntlRu[month],
-        columns: [
-          ...getPlanTimeColumnsNames(month).map<ColumnDef<IPprData, any>>((field) => {
-            return columnHelper.accessor(field, {
-              header: (info) => <TableCell isVertical value={findPlanFactTitle(info.header.id)} />,
-              cell: (info) => (
-                <TableCell
-                  isVertical
-                  value={info.getValue()}
-                  handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-                  {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
-                />
-              ),
-            });
-          }),
-        ],
-      });
-    }),
-  ];
-};

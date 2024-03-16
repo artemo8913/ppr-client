@@ -1,9 +1,10 @@
 "use client";
 import { FC } from "react";
-import { usePprTableData } from "..";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { usePprTableData } from "..";
+import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
+import { createDefaultColumns } from "./PprTableColumns";
 import { IPprData } from "@/1shared/api/pprTable";
-import { createDefaultColumns, getTdStyle, getThStyle } from "../lib/pprTableSettings";
 import { TMonths, months } from "@/1shared/types/date";
 import { TPprStatus } from "@/1shared/types/ppr";
 
@@ -58,7 +59,11 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <td className="border border-black relative" key={cell.id} style={getTdStyle(cell.column.id as keyof IPprData)}>
+              <td
+                className="border border-black relative"
+                key={cell.id}
+                style={getTdStyle(cell.column.id as keyof IPprData)}
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}
