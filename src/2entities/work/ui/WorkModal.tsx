@@ -2,7 +2,6 @@
 import { FC, useState } from "react";
 import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
-import Button from "antd/es/button";
 import { WorkCreateForm } from "./WorkCreateForm";
 import { IWork } from "@/1shared/api/work";
 import { WorkSelect } from "./WorkSelect";
