@@ -1,39 +1,33 @@
 "use client";
-import { FC, useState } from "react";
+import { FC } from "react";
 import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
 import { WorkCreateForm } from "./WorkCreateForm";
 import { IWork } from "@/1shared/api/work";
-import { WorkSelect } from "./WorkSelect";
+import { WorkSelectTable } from "./WorkSelectTable";
+import { useWorkModal } from "..";
 
 interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
   data: IWork[];
 }
 
 export const WorkModal: FC<IWorkModalProps> = ({ data }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const hideModal = () => {
-    setIsModalOpen(false);
-  };
+  const { closeModal, isOpen } = useWorkModal();
 
   return (
-    <Modal title="Выберите работу" width={1024} open={isModalOpen} onCancel={hideModal} footer={null}>
+    <Modal title="Выберите работу" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
       <Tabs
         defaultActiveKey="1"
         items={[
           {
             label: "Выбрать из перечня работ",
             key: "1",
-            children: <WorkSelect data={data} onFinish={hideModal} />,
+            children: <WorkSelectTable data={data} onFinish={closeModal} />,
           },
           {
             label: "Добавить самостоятельно",
             key: "2",
-            children: <WorkCreateForm onFinish={hideModal} />,
+            children: <WorkCreateForm onFinish={closeModal} />,
           },
         ]}
       />

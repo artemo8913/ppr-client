@@ -43,20 +43,20 @@ const columns: TableProps<IWork>["columns"] = [
   },
 ];
 
-export const WorkSelect: FC<IWorkTableProps> = ({ data, onFinish }) => {
+export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [workId, setWorkId] = useState<string>();
 
   const handleFinish = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     if (!workId) {
       return;
     }
     const work = await getWorkById(workId);
     setSelectedRowKeys([]);
     setWorkId(undefined);
-    setIsLoading(false)
+    setIsLoading(false);
     onFinish && onFinish();
   };
   return (
