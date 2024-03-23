@@ -1,10 +1,12 @@
 import { TMonths } from "@/1shared/types/date";
 import { TPprStatus } from "@/1shared/types/ppr";
+import { IUser } from "../user";
 
 export interface IPpr {
   id: string;
   status: TPprStatus;
   created_at: string;
+  created_by: IUser;
   month: TMonths;
   data: IPprData[];
 }
