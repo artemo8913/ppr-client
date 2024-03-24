@@ -5,12 +5,12 @@ import { IPpr } from ".";
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/ppr";
 
 export async function getPprTable(id: string) {
-  const query = await fetch(`${PPR_API_URL}/${id}`, { next: { tags: [`ppr-${id}`], revalidate:1 } });
+  const query = await fetch(`${PPR_API_URL}/${id}`, { next: { tags: [`ppr-${id}`], revalidate: 1 } });
   const responce: Promise<IPpr> = query.json();
   return responce;
 }
 export async function addPprTable(id: string) {
-  const params: IPpr = { created_at: new Date().toString(), data: [], id, status: "plan_creating", monthsStatus:'year' };
+  const params: Partial<IPpr> = { created_at: new Date().toString(), id, status: "plan_creating" };
   const query = await fetch(`${PPR_API_URL}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

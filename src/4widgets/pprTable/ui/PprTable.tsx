@@ -12,8 +12,10 @@ interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
+  
   const status: TYearPprStatus = "plan_creating";
   const currentMonth: TPprTimePeriod = "year";
+
   const table: Table<IPprData> = useReactTable({
     data: pprData.data,
     columns: createDefaultColumns(status, pprTimePeriods, currentMonth),
