@@ -10,6 +10,11 @@ interface IPprTableDataContextProps {
 const defaultValue: IPpr = {
   created_at: "",
   data: [],
+  id_direction: 0,
+  id_distance: 0,
+  id_subdivision: 0,
+  name: "",
+  year: 0,
   id: "",
   status: "none",
   created_by: { id: "", id_direction: 0, id_distance: 0, id_subdivision: 0, role: "subdivision" },

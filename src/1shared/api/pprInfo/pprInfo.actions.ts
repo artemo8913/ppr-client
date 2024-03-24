@@ -1,12 +1,13 @@
 "use server";
-import { IAddPprInfoRequest, IPprInfo } from "./pprInfo.schema";
+import { IPpr } from "../pprTable";
+import { IAddPprInfoRequest } from "./pprInfo.schema";
 import { revalidateTag } from "next/cache";
 
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/all_pprs";
 
 export async function getPprsInfo() {
   const query = await fetch(`${PPR_API_URL}`, { next: { tags: ["pprs_info"] } });
-  const responce: Promise<IPprInfo[]> = query.json();
+  const responce: Promise<IPpr[]> = query.json();
   return responce;
 }
 export async function addPprInfo(params: IAddPprInfoRequest) {
@@ -15,7 +16,7 @@ export async function addPprInfo(params: IAddPprInfoRequest) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
   });
-  const responce: Promise<IPprInfo> = await query.json();
+  const responce: Promise<IPpr> = await query.json();
   revalidateTag("pprs_info");
   return responce;
 }

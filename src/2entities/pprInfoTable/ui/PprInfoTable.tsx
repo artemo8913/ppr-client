@@ -4,14 +4,14 @@ import Link from "next/link";
 import { Table, TableProps } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { directions } from "@/1shared/types/transEnergoDivisions";
-import { IPprInfo } from "@/1shared/api/pprInfo";
+import { IPpr } from "@/1shared/api/pprTable";
 import { deletePpr } from "@/1shared/api/ppr";
 
 interface IPprInfoProps {
-  data: IPprInfo[];
+  data: IPpr[];
 }
 
-const columns: TableProps<IPprInfo>["columns"] = [
+const columns: TableProps<IPpr>["columns"] = [
   {
     title: "Наименование",
     dataIndex: "name",

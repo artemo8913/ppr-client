@@ -3,10 +3,15 @@ import { IUser } from "../user";
 
 export interface IPpr {
   id: string;
+  name: string;
+  year: number;
   status: TYearPprStatus;
   created_at: string;
   created_by: IUser;
   monthsStatus: TAllMonthStatuses;
+  id_direction: number | null;
+  id_distance: number | null;
+  id_subdivision: number | null;
   data: IPprData[];
 }
 
