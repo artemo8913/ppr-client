@@ -143,8 +143,68 @@
   ],
   "ppr": [
     {
-      "id": 1,
-      "val": 2
+      "data": [],
+      "id_direction": 88,
+      "id_distance": 3,
+      "id_subdivision": 9,
+      "name": "ППР",
+      "status": "plan_creating",
+      "year": 2024,
+      "created_at": "Sun Mar 24 2024 16:36:16 GMT+0700 (Красноярск, стандартное время)",
+      "created_by": {
+        "id": "1",
+        "role": "subdivision",
+        "id_subdivision": 9,
+        "id_distance": 3,
+        "id_direction": 88
+      },
+      "months_statuses": {
+        "jan": "none",
+        "feb": "none",
+        "mar": "none",
+        "apr": "none",
+        "may": "none",
+        "june": "none",
+        "july": "none",
+        "aug": "none",
+        "sept": "none",
+        "oct": "none",
+        "nov": "none",
+        "dec": "none"
+      },
+      "id": 9
+    },
+    {
+      "data": [],
+      "id_direction": 88,
+      "id_distance": 3,
+      "id_subdivision": 10,
+      "name": "ППР",
+      "status": "plan_creating",
+      "year": 2024,
+      "created_at": "Sun Mar 24 2024 16:36:35 GMT+0700 (Красноярск, стандартное время)",
+      "created_by": {
+        "id": "2",
+        "role": "subdivision",
+        "id_subdivision": 10,
+        "id_distance": 3,
+        "id_direction": 88
+      },
+      "months_statuses": {
+        "jan": "none",
+        "feb": "none",
+        "mar": "none",
+        "apr": "none",
+        "may": "none",
+        "june": "none",
+        "july": "none",
+        "aug": "none",
+        "sept": "none",
+        "oct": "none",
+        "nov": "none",
+        "dec": "none"
+      },
+      "id": 18
     }
   ]
 }

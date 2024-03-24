@@ -1,5 +1,5 @@
 import { getPprsInfo } from "@/1shared/api/pprInfo";
-import { PprInfoTable } from "@/2entities/pprInfoTable";
+import { PprInfoTable } from "@/4widgets/pprInfoTable";
 import { PprCreateNewButton } from "@/3features/pprCreateNew";
 
 export default async function PprPage() {

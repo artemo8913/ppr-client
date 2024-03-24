@@ -7,5 +7,5 @@ interface ISessionProviderProps {
 }
 
 export const SessionProvider: FC<ISessionProviderProps> = ({ children }) => {
-  return <NextAuthSessionProvider>{children}</NextAuthSessionProvider>;
+  return <NextAuthSessionProvider basePath="/api/auth">{children}</NextAuthSessionProvider>;
 };

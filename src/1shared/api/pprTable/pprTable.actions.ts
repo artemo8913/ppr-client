@@ -12,6 +12,7 @@ export async function getPprTable(id: string) {
 export async function addPprTable(params: Omit<IPpr, "id">) {
   const query = await fetch(`${PPR_API_URL}`, {
     method: "POST",
+    cache: "no-cache",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
   });
@@ -22,6 +23,7 @@ export async function addPprTable(params: Omit<IPpr, "id">) {
 export async function updatePprTable(id: string, params: Partial<Omit<IPpr, "id">>) {
   const query = await fetch(`${PPR_API_URL}/${id}`, {
     method: "PATCH",
+    cache: "no-cache",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
   });
@@ -30,9 +32,8 @@ export async function updatePprTable(id: string, params: Partial<Omit<IPpr, "id"
   return responce;
 }
 export async function deletePprTable(id: string) {
-  const query = await fetch(`${PPR_API_URL}/${id}`, {
-    method: "DELETE",
-  });
+  const query = await fetch(`${PPR_API_URL}/${id}`, { method: "DELETE", cache: "no-cache" });
   revalidateTag(`ppr-${id}`);
-  return query;
+  revalidateTag(`pprs_info`);
+  return JSON.parse(JSON.stringify(query));
 }
