@@ -36,25 +36,59 @@ export const PprTableStatusUpdate: FC<IPprTableStatusUpdateProps> = () => {
     role: user_role,
   } = data.user;
 
-  const isMyPpr = ppr_created_by?.id_subdivision === user_id_subdivision;
+  const isMySubdivision = ppr_created_by?.id_subdivision === user_id_subdivision;
+  const isMyDistance = ppr_created_by?.id_distance === user_id_distance;
 
-  if (isMyPpr && ppr_status === "none") {
-    return <Button>Создать ППР</Button>;
+  const isForSubdivision = user_role === "subdivision" && isMySubdivision;
+  const isForEngineer = user_role === "distance_engineer" && isMyDistance;
+  const isForTimeNorm = user_role === "distance_time_norm" && isMyDistance;
+  const isForSecurityEngineer = user_role === "distance_security_engineer" && isMyDistance;
+  const isForSubBoss = user_role === "distance_time_norm" && isMyDistance;
+  const isForBoss = user_role === "distance_boss" && isMyDistance;
+
+  // Состояния для начальника цеха
+  if (isForSubdivision) {
+    if (ppr_status === "none") {
+      return <Button>Создать ППР</Button>;
+    }
+    if (ppr_status === "plan_creating") {
+      return <Button>Отправить на согласование</Button>;
+    }
+    if (ppr_status === "plan_on_correction") {
+      return <Button>Исправить замечания ППР</Button>;
+    }
+    if (ppr_status === "plan_aproved") {
+      return <Button>Взять в работу</Button>;
+    }
+    if (ppr_status === "in_process" && isAllMonthsPprStatusesIsDone(ppr_months_statuses)) {
+      return <Button>Завершить выполнение ППР</Button>;
+    }
   }
-  if (isMyPpr && ppr_status === "plan_creating") {
-    return <Button>Отправить на согласование</Button>;
+  // Состояния для согласующих инеженера, нормировщика и специалиста по охране труда
+  if (
+    (isForEngineer && ppr_status === "plan_on_agreement_engineer") ||
+    (isForTimeNorm && ppr_status === "plan_on_agreement_time_norm") ||
+    (isForSecurityEngineer && ppr_status === "plan_on_agreement_security_engineer") ||
+    (isForSubBoss && ppr_status === "plan_on_agreement_sub_boss")
+  ) {
+    return (
+      <>
+        <Button>Отклонить</Button>
+        <Button>Согласовать</Button>
+      </>
+    );
   }
-  if (isMyPpr && ppr_status === "plan_on_correction") {
-    return <Button>Исправить замечания ППР</Button>;
+  // Состояние для начальника (ответственного за электрохозяйство)
+  if (isForBoss && ppr_status === "plan_on_aprove") {
+    <>
+      <Button>Отклонить</Button>
+      <Button>Утвердить</Button>
+    </>;
   }
-  if (isMyPpr && ppr_status === "plan_aproved") {
-    return <Button>Взять в работу</Button>;
-  }
-  if (isMyPpr && ppr_status === "in_process" && isAllMonthsPprStatusesIsDone(ppr_months_statuses)) {
-    return <Button>Завершить выполнение ППР</Button>;
-  }
-  if (!isMyPpr || ppr_status === "template") {
+
+  if (ppr_status === "plan_aproved" || ppr_status === "template") {
     return <Button>Создать ППР на основе шаблона</Button>;
   }
+  // Все остальные варианты
   return null;
 };

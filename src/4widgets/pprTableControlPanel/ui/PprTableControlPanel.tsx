@@ -1,16 +1,18 @@
+import { IPpr } from "@/1shared/api/pprTable";
 import { PprTableSaveButton } from "@/3features/pprTableSave";
 import { PprTableStatusUpdate } from "@/3features/pprTableStatusUpdate";
 import { FC } from "react";
 
 interface IPprTableControlPanelProps {
-  id: string;
+  ppr: IPpr;
 }
 
-export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ id }) => {
+export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ ppr }) => {
   return (
     <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300">
-      Ппр такого-то года, такого-то ЭЧК в таком-то статусе
-      <PprTableSaveButton id={id} />
+      Статус: {ppr.status} Создан: {new Date(ppr.created_at).toLocaleDateString()} Год: {ppr.year} {ppr.id_subdivision}-
+      {ppr.id_distance}-{ppr.id_direction}
+      <PprTableSaveButton id={ppr.id} />
       <PprTableStatusUpdate />
     </div>
   );
