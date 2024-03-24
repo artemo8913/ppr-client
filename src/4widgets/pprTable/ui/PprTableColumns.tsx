@@ -1,6 +1,6 @@
 import { IPprData } from "@/1shared/api/pprTable";
-import { TMonths, monthsIntlRu } from "@/1shared/types/date";
-import { TPprStatus } from "@/1shared/types/ppr";
+import { TPprTimePeriod, monthsIntlRu } from "@/1shared/types/date";
+import { TYearPprStatus } from "@/1shared/types/ppr";
 import { TableCell } from "@/1shared/ui/table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { TableCellWithAdd } from "@/3features/pprAddWork";
@@ -13,9 +13,9 @@ import {
 } from "../lib/pprTableSettings";
 
 export const createDefaultColumns = (
-  status: TPprStatus,
-  months: TMonths[],
-  currentMonth: TMonths
+  status: TYearPprStatus,
+  months: TPprTimePeriod[],
+  currentMonth: TPprTimePeriod
 ): ColumnDef<IPprData, any>[] => {
   const columnHelper = createColumnHelper<IPprData>();
   return [

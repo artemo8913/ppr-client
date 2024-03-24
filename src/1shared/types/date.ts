@@ -1,4 +1,6 @@
-export type TMonths =
+export type TMonths = "jan" | "feb" | "mar" | "apr" | "may" | "june" | "july" | "aug" | "sept" | "oct" | "nov" | "dec";
+
+export type TPprTimePeriod =
   | "year"
   | "jan"
   | "feb"
@@ -13,7 +15,7 @@ export type TMonths =
   | "nov"
   | "dec";
 
-export const months: TMonths[] = [
+export const pprTimePeriods: TPprTimePeriod[] = [
   "year",
   "jan",
   "feb",

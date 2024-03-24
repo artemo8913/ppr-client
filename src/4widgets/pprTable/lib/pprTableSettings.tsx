@@ -1,10 +1,8 @@
 import { IPprData, IHandlePprData } from "@/1shared/api/pprTable";
-import { TMonths, monthsIntlRu } from "@/1shared/types/date";
-import { TPprStatus } from "@/1shared/types/ppr";
-import { ITableCell, TableCell } from "@/1shared/ui/table";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { TPprTimePeriod } from "@/1shared/types/date";
+import { TYearPprStatus } from "@/1shared/types/ppr";
+import { ITableCell } from "@/1shared/ui/table";
 import { setBgColor } from "./setBgColor";
-import { TableCellWithAdd } from "@/3features/pprAddWork";
 
 export const columnsDefault: Array<keyof IPprData> = [
   "name",
@@ -71,8 +69,8 @@ export function getTdStyle(key: keyof IPprData): React.CSSProperties {
   return { backgroundColor: setBgColor(key) };
 }
 
-export function getColumnSettings(status: TPprStatus, month: TMonths): { [name in keyof IPprData]?: ITableCell } {
-  if (status === "creating") {
+export function getColumnSettings(status: TYearPprStatus, month: TPprTimePeriod): { [name in keyof IPprData]?: ITableCell } {
+  if (status === "plan_creating") {
     return {
       name: { cellType: "textarea" },
       location: { cellType: "textarea" },
@@ -99,7 +97,7 @@ export function getColumnSettings(status: TPprStatus, month: TMonths): { [name i
       nov_plan_work: { cellType: "input" },
       dec_plan_work: { cellType: "input" },
     };
-  } else if (status === "fulfilling") {
+  } else if (status === "in_process") {
     return {
       [`${month}_fact_work`]: { type: "input" },
       [`${month}_fact_time`]: { type: "input" },
@@ -120,7 +118,7 @@ export function findPlanFactTitle(string: string) {
   }
 }
 
-export function getPlanTimeColumnsNames(month: TMonths): Array<keyof IPprData> {
+export function getPlanTimeColumnsNames(month: TPprTimePeriod): Array<keyof IPprData> {
   return [
     `${month}_plan_work`,
     `${month}_plan_time`,

@@ -10,7 +10,7 @@ export async function getPprTable(id: string) {
   return responce;
 }
 export async function addPprTable(id: string) {
-  const params: IPpr = { created_at: new Date().toString(), data: [], id, status: "creating", month:'year' };
+  const params: IPpr = { created_at: new Date().toString(), data: [], id, status: "plan_creating", monthsStatus:'year' };
   const query = await fetch(`${PPR_API_URL}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

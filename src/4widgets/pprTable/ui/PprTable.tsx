@@ -5,18 +5,18 @@ import { usePprTableData } from "..";
 import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
 import { createDefaultColumns } from "./PprTableColumns";
 import { IPprData } from "@/1shared/api/pprTable";
-import { TMonths, months } from "@/1shared/types/date";
-import { TPprStatus } from "@/1shared/types/ppr";
+import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
+import { TYearPprStatus } from "@/1shared/types/ppr";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
-  const status: TPprStatus = "creating";
-  const currentMonth: TMonths = "year";
+  const status: TYearPprStatus = "plan_creating";
+  const currentMonth: TPprTimePeriod = "year";
   const table: Table<IPprData> = useReactTable({
     data: pprData.data,
-    columns: createDefaultColumns(status, months, currentMonth),
+    columns: createDefaultColumns(status, pprTimePeriods, currentMonth),
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {

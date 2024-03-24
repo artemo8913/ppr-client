@@ -1,12 +1,11 @@
-import { TMonths } from "@/1shared/types/date";
-import { TPprStatus } from "@/1shared/types/ppr";
+import { TAllMonthStatuses, TYearPprStatus } from "@/1shared/types/ppr";
 
 export interface IPprInfo {
   id: string;
   name: string;
   year: number;
-  status: TPprStatus;
-  month?: TMonths;
+  status: TYearPprStatus;
+  monthsStatus?: TAllMonthStatuses;
   id_direction: number | null;
   id_distance: number | null;
   id_subdivision: number | null;
