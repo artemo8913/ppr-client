@@ -1,7 +1,7 @@
 "use client";
 import { FC, useState } from "react";
 import { Menu, MenuProps } from "antd";
-import { BarChartOutlined, DotChartOutlined, FullscreenExitOutlined, HomeFilled, LogoutOutlined, TableOutlined } from "@ant-design/icons";
+import { BarChartOutlined, DotChartOutlined, HomeFilled, LogoutOutlined, TableOutlined } from "@ant-design/icons";
 import Sider from "antd/es/layout/Sider";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
