@@ -1,9 +1,9 @@
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { IPprData } from "@/1shared/api/pprTable";
 import { TPprTimePeriod, monthsIntlRu } from "@/1shared/types/date";
 import { TYearPprStatus } from "@/1shared/types/ppr";
 import { TableCell } from "@/1shared/ui/table";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { TableCellWithAdd } from "@/3features/pprAddWork";
+import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 import {
   columnsDefault,
   columnsTitles,

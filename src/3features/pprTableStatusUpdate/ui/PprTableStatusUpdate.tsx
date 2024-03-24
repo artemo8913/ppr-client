@@ -1,5 +1,5 @@
 "use client";
-import { usePprTableData } from "@/2entities/pprTable";
+import { usePprTableData } from "@/2entities/pprTableProvider";
 import { useSession } from "next-auth/react";
 import { FC } from "react";
 

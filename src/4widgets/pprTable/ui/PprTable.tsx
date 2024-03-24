@@ -1,7 +1,7 @@
 "use client";
 import { FC } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { usePprTableData } from "..";
+import { usePprTableData } from "@/2entities/pprTableProvider";
 import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
 import { createDefaultColumns } from "./PprTableColumns";
 import { IPprData } from "@/1shared/api/pprTable";
@@ -12,7 +12,7 @@ interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
-  
+
   const status: TYearPprStatus = "plan_creating";
   const currentMonth: TPprTimePeriod = "year";
 
