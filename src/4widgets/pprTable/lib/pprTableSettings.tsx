@@ -1,6 +1,6 @@
 import { IPprData, IHandlePprData } from "@/1shared/api/pprTable";
 import { TPprTimePeriod } from "@/1shared/types/date";
-import { TYearPprStatus } from "@/1shared/types/ppr";
+import { TYearPprStatus } from "@/1shared/api/pprTable";
 import { ITableCell } from "@/1shared/ui/table";
 import { setBgColor } from "./setBgColor";
 

@@ -1,12 +1,12 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authConfig";
-import { createPpr } from "@/1shared/api/ppr";
 import { ServerSubmitButton } from "@/1shared/ui/button";
-import { IAddPprInfoRequest } from "@/1shared/api/pprInfo";
+import { IPpr, addPprTable } from "@/1shared/api/pprTable";
 
 export async function PprCreateNewButton() {
   const session = await getServerSession(authOptions);
-  const newPprData: IAddPprInfoRequest = {
+  const newPprData: Omit<IPpr, "id"> = {
+    data: [],
     id_direction: session?.user.id_direction || null,
     id_distance: session?.user.id_distance || null,
     id_subdivision: session?.user.id_subdivision || null,
@@ -15,8 +15,7 @@ export async function PprCreateNewButton() {
     year: new Date().getFullYear(),
     created_at: new Date().toString(),
     created_by: session?.user!,
-    data: [],
-    monthsStatus: {
+    months_statuses: {
       jan: "none",
       feb: "none",
       mar: "none",
@@ -36,7 +35,7 @@ export async function PprCreateNewButton() {
       type="primary"
       action={async () => {
         "use server";
-        await createPpr(newPprData);
+        await addPprTable(newPprData);
       }}
     >
       Добавить

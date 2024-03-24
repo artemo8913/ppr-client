@@ -4,8 +4,7 @@ import Link from "next/link";
 import { Table, TableProps } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { directions } from "@/1shared/types/transEnergoDivisions";
-import { IPpr } from "@/1shared/api/pprTable";
-import { deletePpr } from "@/1shared/api/ppr";
+import { IPpr, deletePprTable } from "@/1shared/api/pprTable";
 
 interface IPprInfoProps {
   data: IPpr[];
@@ -64,7 +63,7 @@ const columns: TableProps<IPpr>["columns"] = [
         <DeleteTwoTone
           className="cursor-pointer"
           onClick={() => {
-            deletePpr(id);
+            deletePprTable(id);
           }}
         />
       );

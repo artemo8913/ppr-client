@@ -6,7 +6,7 @@ import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
 import { createDefaultColumns } from "./PprTableColumns";
 import { IPprData } from "@/1shared/api/pprTable";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
-import { TYearPprStatus } from "@/1shared/types/ppr";
+import { TYearPprStatus } from "@/1shared/api/pprTable";
 
 interface IPprTableProps {}
 
@@ -17,24 +17,29 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   const currentMonth: TPprTimePeriod = "year";
 
   const table: Table<IPprData> = useReactTable({
-    data: pprData.data,
+    data: pprData ? pprData.data : [],
     columns: createDefaultColumns(status, pprTimePeriods, currentMonth),
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
         // Skip page index reset until after next rerender
-        setPprData((prev) => ({
-          ...prev,
-          data: prev.data.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...prev.data[rowIndex]!,
-                [columnId]: value,
-              };
-            }
-            return row;
-          }),
-        }));
+        setPprData((prev) => {
+          if (!prev) {
+            return prev;
+          }
+          return {
+            ...prev,
+            data: prev.data.map((row, index) => {
+              if (index === rowIndex) {
+                return {
+                  ...prev.data[rowIndex]!,
+                  [columnId]: value,
+                };
+              }
+              return row;
+            }),
+          };
+        });
       },
     },
   });

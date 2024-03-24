@@ -1,5 +1,20 @@
 export type TMonths = "jan" | "feb" | "mar" | "apr" | "may" | "june" | "july" | "aug" | "sept" | "oct" | "nov" | "dec";
 
+export const months: TMonths[] = [
+  "jan",
+  "feb",
+  "mar",
+  "apr",
+  "may",
+  "june",
+  "july",
+  "aug",
+  `sept`,
+  "oct",
+  "nov",
+  "dec",
+] as const;
+
 export type TPprTimePeriod =
   | "year"
   | "jan"

@@ -24,7 +24,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = ({ id }) => {
         shape="circle"
         onClick={async () => {
           setIsLoading(true);
-          await updatePprTable(id, pprData);
+          pprData && (await updatePprTable(id, pprData));
           setIsLoading(false);
         }}
       />
