@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { MainLayout } from "@/4widgets/layouts";
+import { SessionProvider } from "@/6app/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body className={inter.className}>
         <AntdRegistry>
-          <MainLayout>{children}</MainLayout>
+          <SessionProvider>
+            <MainLayout>{children}</MainLayout>
+          </SessionProvider>
         </AntdRegistry>
       </body>
     </html>

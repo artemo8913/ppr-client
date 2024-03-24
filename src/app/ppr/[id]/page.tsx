@@ -1,8 +1,8 @@
 import { getPprTable } from "@/1shared/api/pprTable";
 import { getAllWorks } from "@/1shared/api/work";
 import { WorkModal, WorkModalProvider } from "@/2entities/work";
-import { PprTable, PprTableDataProvider } from "@/4widgets/pprTable";
-import { PprTableControlPanel } from "@/4widgets/pprTable/ui/PprTableControlPanel";
+import { PprTable, PprTableDataProvider } from "@/2entities/pprTable";
+import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
