@@ -12,12 +12,16 @@ interface IPprDeleteButtonProps {
 
 export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ ppr }) => {
   const { data: userData } = useSession();
-  const isMyPpr = userData?.user.id_subdivision === ppr.created_by.id_subdivision;
-  const isSuitableStatus = ppr.status === "none" || ppr.status === "plan_creating" || ppr.status === "template";
+  const isMyPpr =
+    userData?.user.id_subdivision === ppr.created_by.id_subdivision &&
+    userData.user.id_distance === ppr.created_by.id_distance &&
+    userData.user.id_direction === ppr.created_by.id_direction;
+  const isStatusCanBeDeleted = ppr.status === "none" || ppr.status === "plan_creating" || ppr.status === "template";
+  const isPprCanBeDeleted = isMyPpr && isStatusCanBeDeleted;
   return (
     <Tooltip title="Удалить">
       <Button
-        disabled={!(isMyPpr && isSuitableStatus)}
+        disabled={!isPprCanBeDeleted}
         icon={<DeleteTwoTone className="cursor-pointer" />}
         onClick={() => deletePprTable(ppr.id)}
       />
