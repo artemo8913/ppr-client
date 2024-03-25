@@ -16,7 +16,7 @@ export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ ppr }) => {
     userData?.user.id_subdivision === ppr.created_by.id_subdivision &&
     userData.user.id_distance === ppr.created_by.id_distance &&
     userData.user.id_direction === ppr.created_by.id_direction;
-  const isStatusCanBeDeleted = ppr.status === "none" || ppr.status === "plan_creating" || ppr.status === "template";
+  const isStatusCanBeDeleted = ppr.status === "plan_creating" || ppr.status === "template";
   const isPprCanBeDeleted = isMyPpr && isStatusCanBeDeleted;
   return (
     <Tooltip title="Удалить">

@@ -6,11 +6,9 @@ import { SaveOutlined } from "@ant-design/icons";
 import { updatePprTable } from "@/1shared/api/pprTable/pprTable.actions";
 import { usePprTableData } from "@/2entities/pprTableProvider";
 
-interface IPprTableUpdateFormProps {
-  id: string;
-}
+interface IPprTableUpdateFormProps {}
 
-export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = ({ id }) => {
+export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
   const { pprData } = usePprTableData();
   const [isLoading, setIsLoading] = useState(false);
   return (
@@ -24,7 +22,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = ({ id }) => {
         shape="circle"
         onClick={async () => {
           setIsLoading(true);
-          pprData && (await updatePprTable(id, pprData));
+          pprData && (await updatePprTable(pprData.id, pprData));
           setIsLoading(false);
         }}
       />

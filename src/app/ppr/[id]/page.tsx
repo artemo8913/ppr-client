@@ -13,7 +13,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
     <PprTableDataProvider ppr={ppr}>
       <WorkModalProvider>
         <div className="w-full h-full overflow-scroll">
-          <PprTableControlPanel ppr={ppr} />
+          <PprTableControlPanel pprData={ppr} />
           <PprTable />
         </div>
         <WorkModal data={works} />
