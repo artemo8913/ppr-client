@@ -2,7 +2,6 @@ import { IUser } from "../user";
 import { TMonths } from "@/1shared/types/date";
 
 export type TYearPprStatus =
-  | "none"
   | "template"
   | "plan_creating"
   | "plan_on_agreement_engineer"
