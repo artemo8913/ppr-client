@@ -1,19 +1,23 @@
 "use client";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
-import { usePprTableData } from "@/2entities/pprTableProvider";
 import { isAllMonthsPprStatusesIsDone } from "../lib/checkMonthStatus";
+import { updatePprTable } from "@/1shared/api/pprTable/pprTable.actions";
+import { TYearPprStatus } from "@/1shared/api/pprTable";
+import { usePprTableData } from "@/2entities/pprTableProvider";
 
 interface IPprTableStatusUpdateProps {}
 
-export const PprTableStatusUpdate: FC<IPprTableStatusUpdateProps> = () => {
+export const PprTableStatusUpdate: FC<IPprTableStatusUpdateProps> = ({}) => {
   const { data } = useSession();
   const { pprData } = usePprTableData();
-  if (!data) {
-    throw Error("Unauthorized");
-  }
-  if (!pprData) {
+
+  const updateStatus = useCallback(
+    (status: TYearPprStatus) => pprData?.id && updatePprTable(pprData.id, { status }),
+    [pprData]
+  );
+  if (!data || !pprData) {
     return null;
   }
   const {
@@ -43,50 +47,75 @@ export const PprTableStatusUpdate: FC<IPprTableStatusUpdateProps> = () => {
   const isForEngineer = user_role === "distance_engineer" && isMyDistance;
   const isForTimeNorm = user_role === "distance_time_norm" && isMyDistance;
   const isForSecurityEngineer = user_role === "distance_security_engineer" && isMyDistance;
-  const isForSubBoss = user_role === "distance_time_norm" && isMyDistance;
+  const isForSubBoss = user_role === "distance_sub_boss" && isMyDistance;
   const isForBoss = user_role === "distance_boss" && isMyDistance;
-
   // Состояния для начальника цеха
   if (isForSubdivision) {
-    if (ppr_status === "none") {
-      return <Button>Создать ППР</Button>;
-    }
     if (ppr_status === "plan_creating") {
-      return <Button>Отправить на согласование</Button>;
+      return <Button onClick={() => updateStatus("plan_on_agreement_engineer")}>Отправить на согласование</Button>;
     }
     if (ppr_status === "plan_on_correction") {
-      return <Button>Исправить замечания ППР</Button>;
+      return <Button onClick={() => updateStatus("plan_creating")}>Исправить замечания ППР</Button>;
     }
     if (ppr_status === "plan_aproved") {
-      return <Button>Взять в работу</Button>;
+      return <Button onClick={() => updateStatus("in_process")}>Взять в работу</Button>;
     }
     if (ppr_status === "in_process" && isAllMonthsPprStatusesIsDone(ppr_months_statuses)) {
-      return <Button>Завершить выполнение ППР</Button>;
+      return <Button onClick={() => updateStatus("done")}>Завершить выполнение ППР</Button>;
     }
   }
-  // Состояния для согласующих инеженера, нормировщика и специалиста по охране труда
-  if (
-    (isForEngineer && ppr_status === "plan_on_agreement_engineer") ||
-    (isForTimeNorm && ppr_status === "plan_on_agreement_time_norm") ||
-    (isForSecurityEngineer && ppr_status === "plan_on_agreement_security_engineer") ||
-    (isForSubBoss && ppr_status === "plan_on_agreement_sub_boss")
-  ) {
+  // Состояния для инеженера
+  if (isForEngineer && ppr_status === "plan_on_agreement_engineer") {
     return (
       <>
-        <Button>Отклонить</Button>
-        <Button>Согласовать</Button>
+        <Button onClick={() => updateStatus("plan_on_correction")}>Отклонить</Button>
+        <Button onClick={() => updateStatus("plan_on_agreement_time_norm")}>Согласовать</Button>
+      </>
+    );
+  }
+  // Состояния для нормировщика
+  if (isForTimeNorm && ppr_status === "plan_on_agreement_time_norm") {
+    return (
+      <>
+        <Button onClick={() => updateStatus("plan_on_correction")}>Отклонить</Button>
+        <Button onClick={() => updateStatus("plan_on_agreement_security_engineer")}>Согласовать</Button>
+      </>
+    );
+  }
+  // Состояния для специалиста по охране труда
+  if (isForSecurityEngineer && ppr_status === "plan_on_agreement_security_engineer") {
+    return (
+      <>
+        <Button onClick={() => updateStatus("plan_on_correction")}>Отклонить</Button>
+        <Button onClick={() => updateStatus("plan_on_agreement_sub_boss")}>Согласовать</Button>
+      </>
+    );
+  }
+  // Состояния для замначальника дистанции
+  if (isForSubBoss && ppr_status === "plan_on_agreement_sub_boss") {
+    return (
+      <>
+        <Button onClick={() => updateStatus("plan_on_correction")}>Отклонить</Button>
+        <Button onClick={() => updateStatus("plan_on_aprove")}>Согласовать</Button>
       </>
     );
   }
   // Состояние для начальника (ответственного за электрохозяйство)
   if (isForBoss && ppr_status === "plan_on_aprove") {
-    <>
-      <Button>Отклонить</Button>
-      <Button>Утвердить</Button>
-    </>;
+    return (
+      <>
+        <Button onClick={() => updateStatus("plan_on_correction")}>Отклонить</Button>
+        <Button onClick={() => updateStatus("plan_aproved")}>Утвердить</Button>
+      </>
+    );
   }
-
-  if (ppr_status === "plan_aproved" || ppr_status === "template") {
+  // Создать ППР на основе шаблона
+  if (
+    ppr_status === "template" ||
+    ppr_status === "plan_aproved" ||
+    ppr_status === "in_process" ||
+    ppr_status === "done"
+  ) {
     return <Button>Создать ППР на основе шаблона</Button>;
   }
   // Все остальные варианты
