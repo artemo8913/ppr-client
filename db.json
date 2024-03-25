@@ -148,7 +148,7 @@
       "id_distance": 3,
       "id_subdivision": 9,
       "name": "ППР",
-      "status": "plan_creating",
+      "status": "in_process",
       "year": 2024,
       "created_at": "Sun Mar 24 2024 16:36:16 GMT+0700 (Красноярск, стандартное время)",
       "created_by": {
