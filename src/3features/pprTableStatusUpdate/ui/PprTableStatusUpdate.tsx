@@ -20,25 +20,8 @@ export const PprTableStatusUpdate: FC<IPprTableStatusUpdateProps> = ({}) => {
   if (!data || !pprData) {
     return null;
   }
-  const {
-    created_at: ppr_created_at,
-    created_by: ppr_created_by,
-    data: ppr_data,
-    id: ppr_id,
-    id_direction: ppr_id_direction,
-    id_distance: ppr_id_distance,
-    id_subdivision: ppr_id_subdivision,
-    months_statuses: ppr_months_statuses,
-    name: ppr_name,
-    status: ppr_status,
-  } = pprData;
-  const {
-    id: user_id,
-    id_direction: user_id_direction,
-    id_distance: user_id_distance,
-    id_subdivision: user_id_subdivision,
-    role: user_role,
-  } = data.user;
+  const { created_by: ppr_created_by, months_statuses: ppr_months_statuses, status: ppr_status } = pprData;
+  const { id_distance: user_id_distance, id_subdivision: user_id_subdivision, role: user_role } = data.user;
 
   const isMySubdivision = ppr_created_by?.id_subdivision === user_id_subdivision;
   const isMyDistance = ppr_created_by?.id_distance === user_id_distance;

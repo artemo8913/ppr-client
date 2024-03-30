@@ -1,10 +1,10 @@
 "use client";
-import { FC, SyntheticEvent, useState } from "react";
+import { FC, useState } from "react";
 import clsx from "clsx";
 import { ITableCell } from "../model/table.schema";
 
 export const TableCell: FC<ITableCell> = (props) => {
-  const { cellType = "none", value, isVertical = false, bgColor, handleBlur, className } = props;
+  const { cellType = "none", value, isVertical = false, bgColor, className, handleBlur } = props;
   const [currentValue, setCurrentValue] = useState(value);
   return (
     <>

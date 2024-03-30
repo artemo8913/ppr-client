@@ -22,24 +22,22 @@ export const createDefaultColumns = (
     // Часть таблицы до времени
     ...columnsDefault.map((column) => {
       return columnHelper.accessor(column, {
-        header: (info) => <TableCell isVertical value={columnsTitles[info.header.id as keyof IPprData]} />,
-        cell: (info) => {
+        header: (info) => {
           if (info.column.id === "name") {
-            return (
-              <TableCellWithAdd
-                value={info.getValue()}
-                handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-                {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
-              />
-            );
+            return <TableCellWithAdd isVertical value={columnsTitles[info.header.id as keyof IPprData]}  />;
           }
-          return (
-            <TableCell
-              value={info.getValue()}
-              handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-              {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
-            />
-          );
+          return <TableCell isVertical value={columnsTitles[info.header.id as keyof IPprData]} />;
+        },
+        cell: (info) => {
+          const props = {
+            value: info.getValue(),
+            handleBlur: (value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value),
+            ...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData],
+          };
+          if (info.column.id === "name") {
+            return <TableCellWithAdd {...props} />;
+          }
+          return <TableCell {...props} />;
         },
       });
     }),

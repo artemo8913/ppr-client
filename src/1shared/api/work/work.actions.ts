@@ -11,6 +11,6 @@ export async function getAllWorks() {
 
 export async function getWorkById(id: string) {
   const query = await fetch(`${PPR_API_URL}/${id}`);
-  const responce: Promise<IWork[]> = query.json();
+  const responce: Promise<IWork> = query.json();
   return responce;
 }

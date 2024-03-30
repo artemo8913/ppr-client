@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 import { IWork, TLineClassData, getWorkById } from "@/1shared/api/work";
 
 import Button from "antd/es/button";
+import { usePprTableData } from "@/2entities/pprTableProvider";
 
 interface IWorkTableProps {
   data: IWork[];
@@ -48,12 +49,21 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [workId, setWorkId] = useState<string>();
 
+  const { addWork } = usePprTableData();
+
   const handleFinish = async () => {
     setIsLoading(true);
     if (!workId) {
       return;
     }
     const work = await getWorkById(workId);
+    addWork({
+      workId: work.id,
+      name: work.name,
+      measure: work.measure,
+      norm_of_time: work.norm_of_time,
+      norm_of_time_document: work.norm_of_time_document,
+    });
     setSelectedRowKeys([]);
     setWorkId(undefined);
     setIsLoading(false);
