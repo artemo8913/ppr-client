@@ -35,18 +35,18 @@ export const TableCell: FC<ITableCell> = (props) => {
         {/* INPUT */}
         {cellType === "input" && (
           <input
-            value={String(currentValue)}
+            value={String(currentValue || "")}
             onChange={(e) => setCurrentValue(e.target.value)}
-            onBlur={() => handleBlur && handleBlur(String(currentValue))}
+            onBlur={() => handleBlur && handleBlur(String(currentValue || ""))}
             className={clsx(
-              "w-full cursor-pointer focus:cursor-text text-center border-none bg-transparent transition-transform",
+              "w-full cursor-pointer focus:cursor-text border-none bg-transparent transition-transform",
               isVertical && "h-[80px] focus:rotate-90 focus-within:bg-white"
             )}
             maxLength={8}
           />
         )}
         {/* JUST VALUE */}
-        {cellType === "none" && value}
+        {(cellType === "none" && value) || ""}
       </div>
     </>
   );
