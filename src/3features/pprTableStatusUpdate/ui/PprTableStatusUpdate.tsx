@@ -46,6 +46,15 @@ export const PprTableStatusUpdate: FC<IPprTableStatusUpdateProps> = ({}) => {
     if (ppr_status === "in_process" && isAllMonthsPprStatusesIsDone(ppr_months_statuses)) {
       return <Button onClick={() => updateStatus("done")}>Завершить выполнение ППР</Button>;
     }
+    if (
+      ppr_status === "plan_on_agreement_engineer" ||
+      ppr_status === "plan_on_agreement_time_norm" ||
+      ppr_status === "plan_on_agreement_security_engineer" ||
+      ppr_status === "plan_on_agreement_sub_boss" ||
+      ppr_status === "plan_on_aprove"
+    ) {
+      return <Button onClick={() => updateStatus("plan_creating")}>Отозвать</Button>;
+    }
   }
   // Состояния для инеженера
   if (isForEngineer && ppr_status === "plan_on_agreement_engineer") {
