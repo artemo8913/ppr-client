@@ -28,6 +28,7 @@ export async function updatePprTable(id: string, params: Partial<Omit<IPpr, "id"
     body: JSON.stringify(params),
   });
   revalidateTag(`ppr-${id}`);
+  revalidateTag(`pprs_info`);
   const responce: Promise<IPpr> = await query.json();
   return responce;
 }
