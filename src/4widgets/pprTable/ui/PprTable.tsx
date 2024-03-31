@@ -51,7 +51,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <th
-                className="border border-black max-h-[250px] relative"
+                className="border border-black max-h-[300px] relative"
                 style={getThStyle(header.column.id as keyof IPprData)}
                 key={header.id}
                 colSpan={header.colSpan}
