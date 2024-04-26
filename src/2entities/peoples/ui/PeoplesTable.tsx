@@ -1,18 +1,12 @@
-'use client'
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import type { GetRef, InputRef } from 'antd';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+"use client";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import type { GetRef, InputRef } from "antd";
+import { Button, Form, Input, Popconfirm, Table } from "antd";
+import { IPprWorkersHours, IWorkingManYearPlan } from "@/1shared/api/pprPeoples";
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
-
-interface Item {
-  key: string;
-  name: string;
-  age: string;
-  address: string;
-}
 
 interface EditableRowProps {
   index: number;
@@ -33,9 +27,9 @@ interface EditableCellProps {
   title: React.ReactNode;
   editable: boolean;
   children: React.ReactNode;
-  dataIndex: keyof Item;
-  record: Item;
-  handleSave: (record: Item) => void;
+  dataIndex: keyof IWorkingManYearPlan;
+  record: IWorkingManYearPlan;
+  handleSave: (record: IWorkingManYearPlan) => void;
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
@@ -69,7 +63,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       toggleEdit();
       handleSave({ ...record, ...values });
     } catch (errInfo) {
-      console.log('Save failed:', errInfo);
+      console.log("Save failed:", errInfo);
     }
   };
 
@@ -101,59 +95,48 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 type EditableTableProps = Parameters<typeof Table>[0];
 
-interface DataType {
-  key: React.Key;
-  name: string;
-  age: string;
-  address: string;
-}
-
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
+type ColumnTypes = Exclude<EditableTableProps["columns"], undefined>;
 
 const PeoplesTable: React.FC = () => {
-  const [dataSource, setDataSource] = useState<DataType[]>([
+  const [dataSource, setDataSource] = useState<IWorkingManYearPlan[]>([
     {
-      key: '0',
-      name: 'Edward King 0',
-      age: '32',
-      address: 'London, Park Lane no. 0',
-    },
-    {
-      key: '1',
-      name: 'Edward King 1',
-      age: '32',
-      address: 'London, Park Lane no. 1',
+      id: "1",
+      full_name: "Темыч",
+      participation: 0.5,
+      work_position: "Работяга",
     },
   ]);
 
   const [count, setCount] = useState(2);
 
   const handleDelete = (key: React.Key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
+    const newData = dataSource.filter((item) => item.id !== key);
     setDataSource(newData);
   };
 
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
     {
-      title: 'name',
-      dataIndex: 'name',
-      width: '30%',
+      title: "Ф.И.О.",
+      dataIndex: "full_name",
+      width: "30%",
       editable: true,
     },
     {
-      title: 'age',
-      dataIndex: 'age',
+      title: "Должность",
+      dataIndex: "work_position",
+      editable: true,
     },
     {
-      title: 'address',
-      dataIndex: 'address',
+      title: "Доля участия",
+      dataIndex: "participation",
+      editable: true,
     },
     {
-      title: 'operation',
-      dataIndex: 'operation',
+      title: "operation",
+      dataIndex: "operation",
       render: (_, record) =>
         dataSource.length >= 1 ? (
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
             <a>Delete</a>
           </Popconfirm>
         ) : null,
@@ -161,19 +144,19 @@ const PeoplesTable: React.FC = () => {
   ];
 
   const handleAdd = () => {
-    const newData: DataType = {
-      key: count,
-      name: `Edward King ${count}`,
-      age: '32',
-      address: `London, Park Lane no. ${count}`,
+    const newData: IWorkingManYearPlan = {
+      id: String(count),
+      full_name: `Edward King ${count}`,
+      participation: Math.random(),
+      work_position: "Работяжечка",
     };
     setDataSource([...dataSource, newData]);
     setCount(count + 1);
   };
 
-  const handleSave = (row: DataType) => {
+  const handleSave = (row: IWorkingManYearPlan) => {
     const newData = [...dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
+    const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -195,7 +178,7 @@ const PeoplesTable: React.FC = () => {
     }
     return {
       ...col,
-      onCell: (record: DataType) => ({
+      onCell: (record: IWorkingManYearPlan) => ({
         record,
         editable: col.editable,
         dataIndex: col.dataIndex,
@@ -211,8 +194,10 @@ const PeoplesTable: React.FC = () => {
         Add a row
       </Button>
       <Table
+        rowKey={"id"}
+        pagination={false}
         components={components}
-        rowClassName={() => 'editable-row'}
+        rowClassName={() => "editable-row"}
         bordered
         dataSource={dataSource}
         columns={columns as ColumnTypes}
