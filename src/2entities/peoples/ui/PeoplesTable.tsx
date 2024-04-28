@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import type { GetRef, InputRef } from "antd";
 import { Button, Form, Input, Popconfirm, Table } from "antd";
-import { IPprWorkersHours, IWorkingManYearPlan } from "@/1shared/api/pprPeoples";
+import { IWorkingManYearPlan } from "@/1shared/api/pprTable";
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -118,7 +118,7 @@ const PeoplesTable: React.FC = () => {
     {
       title: "Ф.И.О.",
       dataIndex: "full_name",
-      width: "30%",
+      width: "20%",
       editable: true,
     },
     {
@@ -131,6 +131,12 @@ const PeoplesTable: React.FC = () => {
       dataIndex: "participation",
       editable: true,
     },
+    { title: "Год план", dataIndex: "year_plan_time" },
+    { title: "Год факт", dataIndex: "year_fact_time" },
+    { title: "Январь план", dataIndex: "jan_plan_time", editable: true },
+    { title: "Январь факт", dataIndex: "jan_fact_time", editable: true },
+    { title: "Февраль план", dataIndex: "feb_plan_time", editable: true },
+    { title: "Февраль факт", dataIndex: "feb_fact_time", editable: true },
     {
       title: "operation",
       dataIndex: "operation",
@@ -149,6 +155,12 @@ const PeoplesTable: React.FC = () => {
       full_name: `Edward King ${count}`,
       participation: Math.random(),
       work_position: "Работяжечка",
+      year_plan_time: 200,
+      year_fact_time: 150,
+      jan_plan_time: 100,
+      jan_fact_time: 50,
+      feb_plan_time: 100,
+      feb_fact_time: 100,
     };
     setDataSource([...dataSource, newData]);
     setCount(count + 1);

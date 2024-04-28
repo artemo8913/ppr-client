@@ -15,6 +15,7 @@ export async function PprCreateNewButton() {
     year: new Date().getFullYear(),
     created_at: new Date().toString(),
     created_by: session?.user!,
+    peoples: [],
     months_statuses: {
       jan: "none",
       feb: "none",

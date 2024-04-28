@@ -45,12 +45,46 @@ export interface IPpr {
   id_direction: number | null;
   id_distance: number | null;
   id_subdivision: number | null;
+  peoples: IWorkingManYearPlan[];
   data: IPprData[];
 }
 
 export interface IHandlePprData extends IPprData {
   rowSpan?: number;
   isHandMade?: boolean;
+}
+
+export interface IWorkingManYearPlan {
+  id: string;
+  full_name: string;
+  work_position: string;
+  participation: number;
+  year_plan_time?: number;
+  jan_plan_time?: number;
+  feb_plan_time?: number;
+  mar_plan_time?: number;
+  apr_plan_time?: number;
+  may_plan_time?: number;
+  june_plan_time?: number;
+  july_plan_time?: number;
+  aug_plan_time?: number;
+  sept_plan_time?: number;
+  oct_plan_time?: number;
+  nov_plan_time?: number;
+  dec_plan_time?: number;
+  year_fact_time?: number;
+  jan_fact_time?: number;
+  feb_fact_time?: number;
+  mar_fact_time?: number;
+  apr_fact_time?: number;
+  may_fact_time?: number;
+  june_fact_time?: number;
+  july_fact_time?: number;
+  aug_fact_time?: number;
+  sept_fact_time?: number;
+  oct_fact_time?: number;
+  nov_fact_time?: number;
+  dec_fact_time?: number;
 }
 
 export interface IPprData {
