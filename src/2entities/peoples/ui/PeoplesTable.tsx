@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import type { GetRef, InputRef } from "antd";
 import { Button, Form, Input, Popconfirm, Table } from "antd";
 import { IWorkingManYearPlan } from "@/1shared/api/pprTable";
+import { monthsIntlRu, pprTimePeriods } from "@/1shared/types/date";
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -41,18 +42,18 @@ const EditableCell: React.FC<EditableCellProps> = ({
   handleSave,
   ...restProps
 }) => {
-  const [editing, setEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<InputRef>(null);
   const form = useContext(EditableContext)!;
 
   useEffect(() => {
-    if (editing) {
+    if (isEditing) {
       inputRef.current?.focus();
     }
-  }, [editing]);
+  }, [isEditing]);
 
   const toggleEdit = () => {
-    setEditing(!editing);
+    setIsEditing(!isEditing);
     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
   };
 
@@ -68,23 +69,22 @@ const EditableCell: React.FC<EditableCellProps> = ({
   };
 
   let childNode = children;
-
   if (editable) {
-    childNode = editing ? (
+    childNode = isEditing ? (
       <Form.Item
-        style={{ margin: 0 }}
+        style={{ margin: 0, padding: 0 }}
         name={dataIndex}
         rules={[
           {
             required: true,
-            message: `${title} is required.`,
+            message: `введите значение`,
           },
         ]}
       >
         <Input ref={inputRef} onPressEnter={save} onBlur={save} />
       </Form.Item>
     ) : (
-      <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
+      <div className="editable-cell-value-wrap" onClick={toggleEdit}>
         {children}
       </div>
     );
@@ -104,6 +104,10 @@ const PeoplesTable: React.FC = () => {
       full_name: "Темыч",
       participation: 0.5,
       work_position: "Работяга",
+      year_plan_time: 123,
+      year_fact_time: 123,
+      jan_plan_time: 123,
+      jan_fact_time: 123,
     },
   ]);
 
@@ -114,11 +118,14 @@ const PeoplesTable: React.FC = () => {
     setDataSource(newData);
   };
 
-  const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
+  type TColumnsIndexes = keyof IWorkingManYearPlan | "operation";
+  type TColumns = (ColumnTypes[number] & { editable?: boolean; dataIndex?: TColumnsIndexes; children?: TColumns })[];
+
+  const defaultColumns: TColumns = [
     {
       title: "Ф.И.О.",
       dataIndex: "full_name",
-      width: "20%",
+      width: "25%",
       editable: true,
     },
     {
@@ -131,12 +138,14 @@ const PeoplesTable: React.FC = () => {
       dataIndex: "participation",
       editable: true,
     },
-    { title: "Год план", dataIndex: "year_plan_time" },
-    { title: "Год факт", dataIndex: "year_fact_time" },
-    { title: "Январь план", dataIndex: "jan_plan_time", editable: true },
-    { title: "Январь факт", dataIndex: "jan_fact_time", editable: true },
-    { title: "Февраль план", dataIndex: "feb_plan_time", editable: true },
-    { title: "Февраль факт", dataIndex: "feb_fact_time", editable: true },
+    ...pprTimePeriods.map((time) => ({
+      title: monthsIntlRu[time],
+      editable: true,
+      children: [
+        { title: "план", dataIndex: `${time}_plan_time` as TColumnsIndexes, editable: true },
+        { title: "факт", dataIndex: `${time}_fact_time` as TColumnsIndexes, editable: true },
+      ],
+    })),
     {
       title: "operation",
       dataIndex: "operation",
@@ -190,6 +199,18 @@ const PeoplesTable: React.FC = () => {
     }
     return {
       ...col,
+      children: col.children?.map((subCol) => {
+        return {
+          ...subCol,
+          onCell: (record: IWorkingManYearPlan) => ({
+            record,
+            editable: subCol.editable,
+            dataIndex: subCol.dataIndex,
+            title: subCol.title,
+            handleSave,
+          }),
+        };
+      }),
       onCell: (record: IWorkingManYearPlan) => ({
         record,
         editable: col.editable,
@@ -201,11 +222,12 @@ const PeoplesTable: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className="overflow-auto">
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
         Add a row
       </Button>
       <Table
+        className="w-[150%]"
         rowKey={"id"}
         pagination={false}
         components={components}
