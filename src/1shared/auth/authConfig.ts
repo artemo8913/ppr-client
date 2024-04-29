@@ -13,7 +13,7 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token: { id } }) {
-      const user = await getUserData(Number(id));
+      const user = await getUserData(String(id));
       if (user) {
         return { expires: session.expires, user: { ...user } };
       }

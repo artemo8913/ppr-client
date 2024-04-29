@@ -1,12 +1,18 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../1shared/auth/authConfig";
-import { IUser } from "@/2entities/user";
+import { IUser, getUserData } from "@/2entities/user";
 import { directions } from "@/1shared/types/transEnergoDivisions";
 
 export default async function Home() {
   const user = await getServerSession(authOptions);
-  const userData: IUser = user?.user;
-  const { id, id_direction, id_distance, id_subdivision, role } = userData;
+  if (!user) {
+    return null;
+  }
+
+  const credentials: IUser = user?.user;
+  const { id, id_direction, id_distance, id_subdivision, role } = credentials;
+  const userData = await getUserData(id);
+  
   return (
     <main>
       <div>{id_direction ? directions[id_direction].short_name : null}</div>
