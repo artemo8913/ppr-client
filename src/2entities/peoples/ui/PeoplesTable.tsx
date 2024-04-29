@@ -1,10 +1,9 @@
 "use client";
 import { FC, useState } from "react";
-
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { IWorkingManYearPlan } from "@/1shared/api/pprTable";
 import { monthsIntlRu, pprTimePeriods } from "@/1shared/types/date";
-import { setBgColor } from "@/4widgets/pprTable/lib/setBgColor";
+import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
 
 const defaultData: IWorkingManYearPlan[] = [
@@ -67,13 +66,13 @@ export const PeoplesTable: FC<IPeoplesTableProps> = ({}) => {
   });
 
   return (
-    <div className="p-2">
-      <table>
+    <div className="overflow-auto">
+      <table className="shadow-lg block rounded-md border ">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th className="border border-black" key={header.id} colSpan={header.colSpan}>
+                <th className="border-b border-r " key={header.id} colSpan={header.colSpan}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
@@ -84,11 +83,7 @@ export const PeoplesTable: FC<IPeoplesTableProps> = ({}) => {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td
-                  className="border border-black"
-                  key={cell.id}
-                  style={{ backgroundColor: setBgColor(cell.column.id) }}
-                >
+                <td className="border-t border-r" key={cell.id} style={{ backgroundColor: setBgColor(cell.column.id) }}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}

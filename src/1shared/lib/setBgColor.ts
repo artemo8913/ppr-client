@@ -1,7 +1,6 @@
-import { QuarterColors } from "../../../../tailwind.config";
-import { IPprData } from "@/1shared/api/pprTable";
+import { QuarterColors } from "../../../tailwind.config";
 
-export function setBgColor(type: keyof IPprData): QuarterColors | undefined {
+export function setBgColor(type: string): QuarterColors | undefined {
   // 1 квартал
   if (type.startsWith("jan_plan") || type.startsWith("feb_plan") || type.startsWith("mar_plan")) {
     return QuarterColors.FIRST_QUARTER;
