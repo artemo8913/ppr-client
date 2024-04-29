@@ -1,10 +1,11 @@
 "use client";
-import { ComponentType, FC } from "react";
+import { FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { IWorkingManYearPlan } from "@/2entities/pprTable";
 import { monthsIntlRu, pprTimePeriods } from "@/1shared/types/date";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
+import { WorkingManDelete } from "@/3features/workingManDelete";
 
 const columnHelper = createColumnHelper<IWorkingManYearPlan>();
 
@@ -45,21 +46,18 @@ const columns = [
 
 interface IPeoplesTableProps {
   data?: IWorkingManYearPlan[];
-  OperationsInRow?: ComponentType<{ id: string }>;
 }
 
-export const PeoplesTable: FC<IPeoplesTableProps> = ({ OperationsInRow, data }) => {
+export const PeoplesTable: FC<IPeoplesTableProps> = ({ data }) => {
   const table = useReactTable({
     data: data || [],
-    columns: Boolean(OperationsInRow)
-      ? [
-          ...columns,
-          columnHelper.display({
-            header: "Опер-ии",
-            cell: (props) => OperationsInRow && <OperationsInRow id={props.row.original.id} />,
-          }),
-        ]
-      : columns,
+    columns: [
+      ...columns,
+      columnHelper.display({
+        header: "Опер-ии",
+        cell: (props) => <WorkingManDelete id={props.row.original.id} />,
+      }),
+    ],
     getCoreRowModel: getCoreRowModel(),
   });
   return (
