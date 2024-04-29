@@ -1,5 +1,5 @@
 import { months } from "@/1shared/types/date";
-import { TAllMonthStatuses } from "@/1shared/api/pprTable";
+import { TAllMonthStatuses } from "@/2entities/pprTable";
 
 export function isAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {
   let result = true;

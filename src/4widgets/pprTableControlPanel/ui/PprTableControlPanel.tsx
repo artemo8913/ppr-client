@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { IPpr } from "@/1shared/api/pprTable";
+import { IPpr } from "@/2entities/pprTable";
 import { PprTableSaveButton } from "@/3features/pprTableSave";
 import { PprTableStatusUpdate } from "@/3features/pprTableStatusUpdate";
 

@@ -2,11 +2,10 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Badge, Table, TableProps } from "antd";
-import { DeleteTwoTone } from "@ant-design/icons";
 import { directions } from "@/1shared/types/transEnergoDivisions";
-import { IPpr, deletePprTable } from "@/1shared/api/pprTable";
-import { PprDeleteButton } from "@/3features/pprDeleteTable";
 import { months, monthsIntlRu } from "@/1shared/types/date";
+import { IPpr } from "@/2entities/pprTable";
+import { PprDeleteButton } from "@/3features/pprDeleteTable";
 
 interface IPprInfoProps {
   data: IPpr[];
