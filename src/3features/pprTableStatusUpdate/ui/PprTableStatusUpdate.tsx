@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { isAllMonthsPprStatusesIsDone } from "../lib/checkMonthStatus";
 import { updatePprTable } from "@/1shared/api/pprTable/pprTable.actions";
 import { TYearPprStatus } from "@/1shared/api/pprTable";
-import { usePprTableData } from "@/2entities/pprTableProvider";
+import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 interface IPprTableStatusUpdateProps {}
 

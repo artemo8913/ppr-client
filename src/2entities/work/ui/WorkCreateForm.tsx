@@ -6,7 +6,7 @@ import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import Button from "antd/es/button";
-import { usePprTableData } from "@/2entities/pprTableProvider";
+import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;

@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { IWork, TLineClassData, getWorkById } from "@/1shared/api/work";
 
 import Button from "antd/es/button";
-import { usePprTableData } from "@/2entities/pprTableProvider";
+import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 interface IWorkTableProps {
   data: IWork[];

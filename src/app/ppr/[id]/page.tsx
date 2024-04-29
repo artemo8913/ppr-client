@@ -1,11 +1,12 @@
 import Tabs from "antd/es/tabs";
 import { getPprTable } from "@/1shared/api/pprTable";
 import { getAllWorks } from "@/1shared/api/work";
-import { PprTableDataProvider } from "@/2entities/pprTableProvider";
-import { WorkModal, WorkModalProvider } from "@/2entities/work";
+import { WorkModalProvider } from "@/1shared/providers/workModalProvider";
+import { PprTableDataProvider } from "@/1shared/providers/pprTableProvider";
+import { WorkModal } from "@/2entities/work";
+import { PeoplesTable } from "@/2entities/peoples";
 import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
-import { PeoplesTable } from "@/2entities/peoples";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
