@@ -1,8 +1,8 @@
 import { IPprData, IHandlePprData } from "@/2entities/pprTable";
 import { TPprTimePeriod } from "@/1shared/types/date";
-import { TYearPprStatus } from "@/2entities/pprTable";
 import { ITableCell } from "@/1shared/ui/table";
 import { setBgColor } from "@/1shared/lib/setBgColor";
+import { TYearPprStatus } from "@/2entities/pprTable";
 
 export const columnsDefault: Array<keyof IPprData> = [
   "name",

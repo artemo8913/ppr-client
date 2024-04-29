@@ -1,11 +1,11 @@
 "use client";
 import { FC } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
 import { createDefaultColumns } from "./PprTableColumns";
-import { IPprData } from "@/2entities/pprTable";
+import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
+import { IPprData } from "@/2entities/pprTable";
 import { TYearPprStatus } from "@/2entities/pprTable";
 
 interface IPprTableProps {}
