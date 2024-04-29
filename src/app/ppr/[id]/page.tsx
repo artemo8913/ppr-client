@@ -23,10 +23,10 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
               key: "1",
               label: "Настой часов",
               children: (
-                <>
-                  <WorkingManAdd className="mb-2"/>
+                <div className="h-[80vh] overflow-auto">
+                  <WorkingManAdd className="mb-2" />
                   <PeoplesTable />
-                </>
+                </div>
               ),
             },
             {

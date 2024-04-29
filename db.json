@@ -849,20 +849,35 @@
           "participation": 1,
           "work_position": "",
           "jan_plan_time": "123",
-          "year_plan_time": "",
+          "year_plan_time": "246",
           "jan_fact_time": "123",
           "feb_plan_time": "123",
-          "feb_fact_time": ""
+          "feb_fact_time": "",
+          "year_fact_time": "123"
         },
         {
-          "id": "Mon Apr 29 2024 11:52:41 GMT+0700 (Красноярск, стандартное время)0.6418236697118447",
+          "id": "Mon Apr 29 2024 14:24:11 GMT+0700 (Красноярск, стандартное время)0.15422954924222854",
           "full_name": "Иванов И.И.",
-          "participation": 1,
-          "work_position": "",
-          "jan_plan_time": "321",
-          "year_plan_time": "",
-          "jan_fact_time": "321",
-          "feb_plan_time": "321"
+          "work_position": "мкс",
+          "participation": 1
+        },
+        {
+          "id": "Mon Apr 29 2024 14:24:12 GMT+0700 (Красноярск, стандартное время)0.8870139900437672",
+          "full_name": "Иванов И.И.",
+          "work_position": "мкс",
+          "participation": 1
+        },
+        {
+          "id": "Mon Apr 29 2024 14:24:13 GMT+0700 (Красноярск, стандартное время)0.18274085927677008",
+          "full_name": "Иванов И.И.",
+          "work_position": "мкс",
+          "participation": 1
+        },
+        {
+          "id": "Mon Apr 29 2024 14:24:13 GMT+0700 (Красноярск, стандартное время)0.0825280946419138",
+          "full_name": "Иванов И.И.",
+          "work_position": "мкс",
+          "participation": 1
         }
       ],
       "id_direction": 88,

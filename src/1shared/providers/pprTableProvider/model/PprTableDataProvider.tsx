@@ -68,8 +68,8 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
           {
             id: String(new Date().toString() + Math.random()),
             full_name: "Иванов И.И.",
+            work_position: "мкс",
             participation: 1,
-            work_position: "",
           },
         ],
       };
