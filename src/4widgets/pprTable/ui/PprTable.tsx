@@ -45,7 +45,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   });
 
   return (
-    <table className="table-fixed w-[120%] [font-size:12px]">
+    <table className="table-fixed w-[100%] [font-size:12px]">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
