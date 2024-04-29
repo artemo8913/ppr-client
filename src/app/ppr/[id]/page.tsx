@@ -21,7 +21,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
             { key: "1", label: "Настой часов", children: <PeoplesTable /> },
             {
               key: "2",
-              label: "ППР",
+              label: "План ТОиР",
               children: (
                 // TODO #16 Переписать на свой компонент табы. Здесь костыль с высотой
                 <div className="h-[89vh] overflow-auto">
