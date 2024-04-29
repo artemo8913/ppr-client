@@ -10,7 +10,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { IPpr, IPprData } from "@/1shared/api/pprTable";
+import { IPpr, IPprData } from "@/2entities/pprTable";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 
 interface IPprTableDataContextProps {

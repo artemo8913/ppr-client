@@ -1,4 +1,4 @@
-import { IUser } from "../user";
+import { IUser } from "../../user";
 import { TMonths } from "@/1shared/types/date";
 
 export type TYearPprStatus =

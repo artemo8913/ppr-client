@@ -1,5 +1,5 @@
 "use server";
-import { IUser } from ".";
+import { IUser } from "..";
 
 const USER_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/user";
 

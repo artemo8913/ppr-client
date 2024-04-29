@@ -1,7 +1,7 @@
 "use client";
 import { Table as TableAntd, TableProps } from "antd";
 import { FC, useState } from "react";
-import { IWork, TLineClassData, getWorkById } from "@/1shared/api/work";
+import { IWork, TLineClassData, getWorkById } from "@/2entities/work";
 
 import Button from "antd/es/button";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";

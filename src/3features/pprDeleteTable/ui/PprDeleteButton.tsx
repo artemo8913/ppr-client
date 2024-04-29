@@ -1,5 +1,5 @@
 "use client";
-import { IPpr, deletePprTable } from "@/1shared/api/pprTable";
+import { IPpr, deletePprTable } from "@/2entities/pprTable";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";

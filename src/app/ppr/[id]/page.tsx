@@ -1,12 +1,12 @@
 import Tabs from "antd/es/tabs";
-import { getPprTable } from "@/1shared/api/pprTable";
-import { getAllWorks } from "@/1shared/api/work";
+import { getPprTable } from "@/2entities/pprTable";
+import { getAllWorks } from "@/2entities/work";
 import { WorkModalProvider } from "@/1shared/providers/workModalProvider";
 import { PprTableDataProvider } from "@/1shared/providers/pprTableProvider";
-import { WorkModal } from "@/2entities/work";
-import { PeoplesTable } from "@/2entities/peoples";
+import { WorkModal } from "@/4widgets/workModal";
 import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
+import { PeoplesWidget } from "@/4widgets/peoplesWidget";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
@@ -19,7 +19,11 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
         <Tabs
           defaultActiveKey="2"
           items={[
-            { key: "1", label: "Настой часов", children: <PeoplesTable /> },
+            {
+              key: "1",
+              label: "Настой часов",
+              children: <PeoplesWidget />,
+            },
             {
               key: "2",
               label: "План ТОиР",

@@ -4,9 +4,9 @@ import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/rea
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
 import { createDefaultColumns } from "./PprTableColumns";
-import { IPprData } from "@/1shared/api/pprTable";
+import { IPprData } from "@/2entities/pprTable";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
-import { TYearPprStatus } from "@/1shared/api/pprTable";
+import { TYearPprStatus } from "@/2entities/pprTable";
 
 interface IPprTableProps {}
 

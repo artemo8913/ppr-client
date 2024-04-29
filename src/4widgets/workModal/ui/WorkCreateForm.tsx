@@ -1,11 +1,11 @@
 "use client";
 import { FC } from "react";
 import Input from "antd/es/input";
-import { IWork } from "@/1shared/api/work";
 import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import Button from "antd/es/button";
+import { IWork } from "@/2entities/work";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 interface IWorkCreateNewWorkFormProps {

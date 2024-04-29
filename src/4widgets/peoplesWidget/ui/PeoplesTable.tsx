@@ -1,21 +1,10 @@
 "use client";
-import { FC, useState } from "react";
+import { ComponentType, FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { IWorkingManYearPlan } from "@/1shared/api/pprTable";
+import { IWorkingManYearPlan } from "@/2entities/pprTable";
 import { monthsIntlRu, pprTimePeriods } from "@/1shared/types/date";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
-
-const defaultData: IWorkingManYearPlan[] = [
-  {
-    id: "1",
-    full_name: "Спиряев Артем Сергеевич",
-    work_position: "инженер",
-    participation: 0.5,
-    year_plan_time: 100,
-    year_fact_time: 100,
-  },
-];
 
 const columnHelper = createColumnHelper<IWorkingManYearPlan>();
 
@@ -54,17 +43,25 @@ const columns = [
   ),
 ];
 
-interface IPeoplesTableProps {}
+interface IPeoplesTableProps {
+  data?: IWorkingManYearPlan[];
+  OperationsInRow?: ComponentType<{ id: string }>;
+}
 
-export const PeoplesTable: FC<IPeoplesTableProps> = ({}) => {
-  const [data, setData] = useState(() => [...defaultData]);
-
+export const PeoplesTable: FC<IPeoplesTableProps> = ({ OperationsInRow, data }) => {
   const table = useReactTable({
-    data,
-    columns,
+    data: data || [],
+    columns: Boolean(OperationsInRow)
+      ? [
+          ...columns,
+          columnHelper.display({
+            header: "Опер-ии",
+            cell: (props) => OperationsInRow && <OperationsInRow id={props.row.original.id} />,
+          }),
+        ]
+      : columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
   return (
     <div className="overflow-auto">
       <table className="shadow-lg block rounded-md border ">

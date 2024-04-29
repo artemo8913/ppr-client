@@ -6,5 +6,5 @@ export type {
   TMonthPprStatus,
   TYearPprStatus,
   IWorkingManYearPlan
-} from "./pprTable.schema";
-export { getPprTable, addPprTable, deletePprTable } from "./pprTable.actions";
+} from "./model/pprTable.schema";
+export { getPprTable, addPprTable, deletePprTable } from "./model/pprTable.actions";

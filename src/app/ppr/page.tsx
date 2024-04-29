@@ -1,4 +1,4 @@
-import { getPprsInfo } from "@/1shared/api/pprInfo";
+import { getPprsInfo } from "@/2entities/pprInfo";
 import { PprInfoTable } from "@/4widgets/pprInfoTable";
 import { PprCreateNewButton } from "@/3features/pprCreateNewTable";
 
