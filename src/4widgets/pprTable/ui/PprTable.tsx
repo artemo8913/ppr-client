@@ -1,12 +1,12 @@
 "use client";
 import { FC } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { usePprTableData } from "@/2entities/pprTableProvider";
+import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
 import { createDefaultColumns } from "./PprTableColumns";
-import { IPprData } from "@/1shared/api/pprTable";
+import { IPprData } from "@/2entities/pprTable";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
-import { TYearPprStatus } from "@/1shared/api/pprTable";
+import { TYearPprStatus } from "@/2entities/pprTable";
 
 interface IPprTableProps {}
 
@@ -45,7 +45,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   });
 
   return (
-    <table className="table-fixed w-[120%] [font-size:12px]">
+    <table className="table-fixed w-[100%] [font-size:12px]">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>

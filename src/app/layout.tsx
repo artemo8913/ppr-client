@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { MainLayout } from "@/4widgets/layouts";
-import { SessionProvider } from "@/6app/providers";
+import { SessionProvider } from "@/1shared/providers/sessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
