@@ -2,7 +2,8 @@ import { IPprData } from "@/2entities/pprTable";
 
 export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData => {
   return {
-    id: '',
+    // TODO #17 id пустой! Может привести к ошибке в дальнейшем!
+    id: String(new Date().toString() + Math.random()),
     workId: null,
     branch: "",
     subbranch: "",

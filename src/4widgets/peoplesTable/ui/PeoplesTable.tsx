@@ -6,6 +6,7 @@ import { monthsIntlRu, pprTimePeriods } from "@/1shared/types/date";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
 import { WorkingManDelete } from "@/3features/workingManDelete";
+import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 const columnHelper = createColumnHelper<IWorkingManYearPlan>();
 
@@ -23,6 +24,7 @@ const columns = [
       }),
       columnHelper.accessor("participation", {
         header: "доля участия",
+        footer: "Итого",
         cell: (props) => props.getValue(),
       }),
     ],
@@ -33,24 +35,47 @@ const columns = [
       columns: [
         columnHelper.accessor(`${time}_plan_time`, {
           header: "план",
-          cell: (props) => <TableCell value={props.getValue()} cellType="input" />,
+          cell: (props) => (
+            <TableCell
+              value={props.getValue()}
+              handleBlur={(value: string) =>
+                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
+              }
+              cellType="input"
+            />
+          ),
+          footer: (props) =>
+            props.table
+              .getRowModel()
+              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_plan_time`] || 0), 0),
         }),
         columnHelper.accessor(`${time}_fact_time`, {
           header: "факт",
-          cell: (props) => <TableCell value={props.getValue()} cellType="input" />,
+          cell: (props) => (
+            <TableCell
+              value={props.getValue()}
+              handleBlur={(value: string) =>
+                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
+              }
+              cellType="input"
+            />
+          ),
+          footer: (props) =>
+            props.table
+              .getRowModel()
+              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_fact_time`] || 0), 0),
         }),
       ],
     })
   ),
 ];
 
-interface IPeoplesTableProps {
-  data?: IWorkingManYearPlan[];
-}
+interface IPeoplesTableProps {}
 
-export const PeoplesTable: FC<IPeoplesTableProps> = ({ data }) => {
+export const PeoplesTable: FC<IPeoplesTableProps> = () => {
+  const { pprData, setPprData } = usePprTableData();
   const table = useReactTable({
-    data: data || [],
+    data: pprData?.peoples || [],
     columns: [
       ...columns,
       columnHelper.display({
@@ -58,6 +83,27 @@ export const PeoplesTable: FC<IPeoplesTableProps> = ({ data }) => {
         cell: (props) => <WorkingManDelete id={props.row.original.id} />,
       }),
     ],
+    meta: {
+      updateData(rowIndex: number, columnId: keyof IWorkingManYearPlan | string, value: unknown) {
+        setPprData((prev) => {
+          if (!prev) {
+            return prev;
+          }
+          return {
+            ...prev,
+            peoples: prev.peoples.map((man, arrayIndex) => {
+              if (arrayIndex === rowIndex) {
+                return {
+                  ...man,
+                  [columnId]: value,
+                };
+              }
+              return man;
+            }),
+          };
+        });
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
   });
   return (
@@ -89,15 +135,14 @@ export const PeoplesTable: FC<IPeoplesTableProps> = ({ data }) => {
           {table.getFooterGroups().map((footerGroup) => (
             <tr key={footerGroup.id}>
               {footerGroup.headers.map((header) => (
-                <th key={header.id} colSpan={header.colSpan}>
+                <td className="font-bold border-t border-r" key={header.id} colSpan={header.colSpan} style={{ backgroundColor: setBgColor(header.column.id) }}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
-                </th>
+                </td>
               ))}
             </tr>
           ))}
         </tfoot>
       </table>
-      <div className="h-4" />
     </div>
   );
 };

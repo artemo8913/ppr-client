@@ -17,6 +17,8 @@ interface IPprTableDataContextProps {
   pprData: IPpr | null;
   setPprData: Dispatch<SetStateAction<IPpr | null>>;
   addWork: (newWork: Partial<IPprData>) => void;
+  addWorkingMan: () => void;
+  deleteWorkingMan: (id: string) => void;
 }
 
 const defaultValue = null;
@@ -25,6 +27,8 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   pprData: defaultValue,
   setPprData: () => {},
   addWork: () => {},
+  addWorkingMan: () => {},
+  deleteWorkingMan: (id: string) => {},
 });
 
 export const usePprTableData = () => useContext(PprTableDataContext);
@@ -35,9 +39,11 @@ interface IPprTableDataProviderProps extends PropsWithChildren {
 
 export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, ppr }) => {
   const [pprData, setPprData] = useState<IPpr | null>(defaultValue);
+
   useEffect(() => {
     setPprData({ ...ppr });
   }, [ppr]);
+
   const addWork = useCallback((newWork: Partial<IPprData>) => {
     setPprData((prev) => {
       if (!prev) {
@@ -49,7 +55,41 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       };
     });
   }, []);
+
+  const addWorkingMan = useCallback(() => {
+    setPprData((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        peoples: [
+          ...prev.peoples,
+          {
+            id: String(new Date().toString() + Math.random()),
+            full_name: "Иванов И.И.",
+            participation: 1,
+            work_position: "",
+          },
+        ],
+      };
+    });
+  }, []);
+
+  const deleteWorkingMan = useCallback((id: string) => {
+    setPprData((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        peoples: prev.peoples.filter((man) => man.id !== id),
+      };
+    });
+  }, []);
   return (
-    <PprTableDataContext.Provider value={{ pprData, setPprData, addWork }}>{children}</PprTableDataContext.Provider>
+    <PprTableDataContext.Provider value={{ pprData, setPprData, addWork, addWorkingMan, deleteWorkingMan }}>
+      {children}
+    </PprTableDataContext.Provider>
   );
 };

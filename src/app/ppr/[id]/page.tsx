@@ -7,11 +7,11 @@ import { WorkModal } from "@/4widgets/workModal";
 import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { PeoplesTable } from "@/4widgets/peoplesTable";
+import { WorkingManAdd } from "@/3features/workingManAdd";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
   const works = await getAllWorks();
-  const peoples = ppr.peoples;
   return (
     <PprTableDataProvider ppr={ppr}>
       <WorkModalProvider>
@@ -22,7 +22,12 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
             {
               key: "1",
               label: "Настой часов",
-              children: <PeoplesTable data={peoples} />,
+              children: (
+                <>
+                  <WorkingManAdd className="mb-2"/>
+                  <PeoplesTable />
+                </>
+              ),
             },
             {
               key: "2",
