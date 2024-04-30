@@ -4,15 +4,15 @@ import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffec
 import { usePprTableData } from "./PprTableDataProvider";
 import { findPossibleCurrentPprPeriod } from "../lib/findPossibleCurrentPprPeriod";
 
-export type TFilterMonthsOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
+export type TFilterTimePeriodOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
 export type TFilterPlanFactOption = "SHOW_ALL" | "SHOW_ONLY_PLAN" | "SHOW_ONLY_FACT" | "SHOW_ONLY_VALUES";
 
 interface IPprTableSettings {
-  filterColumns: { months: TFilterMonthsOption; planFact: TFilterPlanFactOption };
+  filterColumns: { months: TFilterTimePeriodOption; planFact: TFilterPlanFactOption };
   currentTimePeriod: TPprTimePeriod;
 }
 interface IPprTableSettingsContext extends IPprTableSettings {
-  setFilterMonths: (state: TFilterMonthsOption) => void;
+  setFilterMonths: (state: TFilterTimePeriodOption) => void;
   setFilterPlanFact: (state: TFilterPlanFactOption) => void;
   setTimePeriod: (timePeriod: TPprTimePeriod) => void;
 }
@@ -40,7 +40,7 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
   const { pprData } = usePprTableData();
 
   const setFilterMonths = useCallback(
-    (state: TFilterMonthsOption) =>
+    (state: TFilterTimePeriodOption) =>
       setPprTableSettings((prev) => ({
         ...prev,
         filterColumns: {

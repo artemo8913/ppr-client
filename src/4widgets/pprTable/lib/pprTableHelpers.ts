@@ -1,8 +1,8 @@
 import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
-import { setBgColor } from "@/1shared/lib/setBgColor";
-import { TFilterMonthsOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
-import { TMonths, TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { ITableCell } from "@/1shared/ui/table";
+import { setBgColor } from "@/1shared/lib/setBgColor";
+import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
+import { TFilterMonthsOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
 import { IHandlePprData, IPprData, TYearPprStatus } from "@/2entities/pprTable";
 
 export const columnsDefault: Array<keyof IPprData> = [
@@ -20,12 +20,15 @@ export const columnsDefault: Array<keyof IPprData> = [
   "unity",
 ] as const;
 
-export function getTimePeriodsColumns(currentMonth?: TMonths, option?: TFilterMonthsOption): TPprTimePeriod[] {
+export function getTimePeriodsColumns(
+  currentTimePeriod?: TPprTimePeriod,
+  option?: TFilterMonthsOption
+): TPprTimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":
-      return pprTimePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentMonth);
+      return pprTimePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
     case "SHOW_CURRENT_QUARTAL":
-      return getQuartalMonths(getCurrentQuartal(currentMonth));
+      return getQuartalMonths(getCurrentQuartal(currentTimePeriod));
     default:
       return pprTimePeriods;
   }

@@ -1,6 +1,6 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { usePprTableSettings } from "@/1shared/providers/pprTableProvider";
-import { TMonths, monthsIntlRu } from "@/1shared/types/date";
+import { monthsIntlRu } from "@/1shared/types/date";
 import { TableCell } from "@/1shared/ui/table";
 import { IPprData, TYearPprStatus } from "@/2entities/pprTable";
 import { TableCellWithAdd } from "@/3features/pprTableAddWork";
@@ -13,8 +13,8 @@ import {
   getTimePeriodsColumns,
 } from "../lib/pprTableHelpers";
 
-export const useCreateDefaultColumns = (status: TYearPprStatus, currentMonth?: TMonths): ColumnDef<IPprData, any>[] => {
-  const { filterColumns } = usePprTableSettings();
+export const useCreateDefaultColumns = (status: TYearPprStatus): ColumnDef<IPprData, any>[] => {
+  const { filterColumns, currentTimePeriod } = usePprTableSettings();
 
   const columnHelper = createColumnHelper<IPprData>();
   return [
@@ -31,7 +31,7 @@ export const useCreateDefaultColumns = (status: TYearPprStatus, currentMonth?: T
           const props = {
             value: info.getValue(),
             handleBlur: (value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value),
-            ...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData],
+            ...getColumnSettings(status, currentTimePeriod)[info.column.id as keyof IPprData],
           };
           if (info.column.id === "name") {
             return <TableCellWithAdd {...props} />;
@@ -41,7 +41,7 @@ export const useCreateDefaultColumns = (status: TYearPprStatus, currentMonth?: T
       });
     }),
     // Часть таблицы с данными объемов и чел.-ч по году и месяцами
-    ...getTimePeriodsColumns(currentMonth, filterColumns.months).map((month) => {
+    ...getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) => {
       return columnHelper.group({
         header: monthsIntlRu[month],
         columns: [
@@ -53,7 +53,7 @@ export const useCreateDefaultColumns = (status: TYearPprStatus, currentMonth?: T
                   isVertical
                   value={info.getValue()}
                   handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-                  {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
+                  {...getColumnSettings(status, currentTimePeriod)[info.column.id as keyof IPprData]}
                 />
               ),
             });
