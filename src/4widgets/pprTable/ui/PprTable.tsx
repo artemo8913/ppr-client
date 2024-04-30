@@ -12,7 +12,7 @@ interface IPprTableProps {}
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
 
-  const status: TYearPprStatus = "plan_creating";
+  const status: TYearPprStatus = pprData?.status || "done";
 
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
