@@ -1,5 +1,9 @@
 import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { setBgColor } from "@/1shared/lib/setBgColor";
+import {
+  TFilterMonthsOption,
+  TFilterPlanFactOption,
+} from "@/1shared/providers/pprTableProvider/model/PprTableSettingsProvider";
 import { TMonths, TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { ITableCell } from "@/1shared/ui/table";
 import { IHandlePprData, IPprData, TYearPprStatus } from "@/2entities/pprTable";
@@ -19,8 +23,6 @@ export const columnsDefault: Array<keyof IPprData> = [
   "unity",
 ] as const;
 
-export type TFilterMonthsOption = "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
-
 export function getTimePeriodsColumns(currentMonth?: TMonths, option?: TFilterMonthsOption): TPprTimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":
@@ -31,8 +33,6 @@ export function getTimePeriodsColumns(currentMonth?: TMonths, option?: TFilterMo
       return pprTimePeriods;
   }
 }
-
-export type TFilterPlanFactOption = "SHOW_ONLY_PLAN" | "SHOW_ONLY_FACT" | "SHOW_ONLY_VALUES";
 
 export function getPlanFactColumns(
   pprTimePeriod: TPprTimePeriod,
