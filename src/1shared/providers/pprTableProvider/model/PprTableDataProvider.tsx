@@ -12,23 +12,26 @@ import {
 } from "react";
 import { IPpr, IPprData } from "@/2entities/pprTable";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
+import { TMonths } from "@/1shared/types/date";
 
 interface IPprTableDataContextProps {
   pprData: IPpr | null;
+  currentMonth: TMonths | null;
   setPprData: Dispatch<SetStateAction<IPpr | null>>;
+  setCurrentMonth: Dispatch<SetStateAction<TMonths | null>>;
   addWork: (newWork: Partial<IPprData>) => void;
   addWorkingMan: () => void;
   deleteWorkingMan: (id: string) => void;
 }
 
-const defaultValue = null;
-
 const PprTableDataContext = createContext<IPprTableDataContextProps>({
-  pprData: defaultValue,
+  pprData: null,
+  currentMonth: null,
   setPprData: () => {},
+  setCurrentMonth: () => {},
   addWork: () => {},
   addWorkingMan: () => {},
-  deleteWorkingMan: (id: string) => {},
+  deleteWorkingMan: () => {},
 });
 
 export const usePprTableData = () => useContext(PprTableDataContext);
@@ -38,12 +41,15 @@ interface IPprTableDataProviderProps extends PropsWithChildren {
 }
 
 export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, ppr }) => {
-  const [pprData, setPprData] = useState<IPpr | null>(defaultValue);
+  const [pprData, setPprData] = useState<IPpr | null>(null);
+  const [currentMonth, setCurrentMonth] = useState<TMonths | null>(null);
 
+  // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
     setPprData({ ...ppr });
   }, [ppr]);
 
+  /**Добавить работу в ППР */
   const addWork = useCallback((newWork: Partial<IPprData>) => {
     setPprData((prev) => {
       if (!prev) {
@@ -56,6 +62,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
 
+  /**Добавить рабочего в список людей ППР */
   const addWorkingMan = useCallback(() => {
     setPprData((prev) => {
       if (!prev) {
@@ -76,6 +83,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
 
+  /**Убрать рабочего из списка людей ППР */
   const deleteWorkingMan = useCallback((id: string) => {
     setPprData((prev) => {
       if (!prev) {
@@ -88,7 +96,9 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
   return (
-    <PprTableDataContext.Provider value={{ pprData, setPprData, addWork, addWorkingMan, deleteWorkingMan }}>
+    <PprTableDataContext.Provider
+      value={{ pprData, setPprData, currentMonth, setCurrentMonth, addWork, addWorkingMan, deleteWorkingMan }}
+    >
       {children}
     </PprTableDataContext.Provider>
   );

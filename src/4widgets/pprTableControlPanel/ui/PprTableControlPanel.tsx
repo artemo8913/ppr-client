@@ -2,6 +2,8 @@ import { FC } from "react";
 import { IPpr } from "@/2entities/pprTable";
 import { PprTableSaveButton } from "@/3features/pprTableSave";
 import { PprTableStatusUpdate } from "@/3features/pprTableStatusUpdate";
+import { PprTableSelectTimePeriod } from "@/3features/pprTableSelectTimePeriod";
+import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettingsChange";
 
 interface IPprTableControlPanelProps {
   pprData: IPpr;
@@ -14,6 +16,9 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
       {pprData?.id_subdivision}-{pprData?.id_distance}-{pprData?.id_direction}
       <PprTableSaveButton />
       <PprTableStatusUpdate />
+      <PprTableSelectTimePeriod />
+      <PprTableSelectFilterTimePeriod />
+      <PprTableSelectFilterPlanFact />
     </div>
   );
 };

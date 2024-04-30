@@ -1,8 +1,9 @@
-import { IPprData, IHandlePprData } from "@/2entities/pprTable";
-import { TPprTimePeriod } from "@/1shared/types/date";
-import { TYearPprStatus } from "@/2entities/pprTable";
+import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCell } from "@/1shared/ui/table";
 import { setBgColor } from "@/1shared/lib/setBgColor";
+import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
+import { TFilterMonthsOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
+import { IHandlePprData, IPprData, TYearPprStatus } from "@/2entities/pprTable";
 
 export const columnsDefault: Array<keyof IPprData> = [
   "name",
@@ -18,6 +19,42 @@ export const columnsDefault: Array<keyof IPprData> = [
   "measure",
   "unity",
 ] as const;
+
+export function getTimePeriodsColumns(
+  currentTimePeriod?: TPprTimePeriod,
+  option?: TFilterMonthsOption
+): TPprTimePeriod[] {
+  switch (option) {
+    case "SHOW_ONLY_CURRENT_MONTH":
+      return pprTimePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
+    case "SHOW_CURRENT_QUARTAL":
+      return getQuartalMonths(getCurrentQuartal(currentTimePeriod));
+    default:
+      return pprTimePeriods;
+  }
+}
+
+export function getPlanFactColumns(
+  pprTimePeriod: TPprTimePeriod,
+  option?: TFilterPlanFactOption
+): Array<keyof IPprData> {
+  switch (option) {
+    case "SHOW_ONLY_PLAN":
+      return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_plan_time`];
+    case "SHOW_ONLY_FACT":
+      return [`${pprTimePeriod}_fact_work`, `${pprTimePeriod}_fact_norm_time`, `${pprTimePeriod}_fact_time`];
+    case "SHOW_ONLY_VALUES":
+      return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_fact_work`];
+    default:
+      return [
+        `${pprTimePeriod}_plan_work`,
+        `${pprTimePeriod}_plan_time`,
+        `${pprTimePeriod}_fact_work`,
+        `${pprTimePeriod}_fact_norm_time`,
+        `${pprTimePeriod}_fact_time`,
+      ];
+  }
+}
 
 export const columnsTitles: { [key in keyof IPprData]?: string } = {
   name: "Наименования и условия выполнения технологических операций, испытаний и измерений",
@@ -69,7 +106,10 @@ export function getTdStyle(key: keyof IPprData): React.CSSProperties {
   return { backgroundColor: setBgColor(key) };
 }
 
-export function getColumnSettings(status: TYearPprStatus, month: TPprTimePeriod): { [name in keyof IPprData]?: ITableCell } {
+export function getColumnSettings(
+  status: TYearPprStatus,
+  month?: TPprTimePeriod
+): { [name in keyof IPprData]?: ITableCell } {
   if (status === "plan_creating") {
     return {
       name: { cellType: "textarea" },
@@ -97,7 +137,7 @@ export function getColumnSettings(status: TYearPprStatus, month: TPprTimePeriod)
       nov_plan_work: { cellType: "input" },
       dec_plan_work: { cellType: "input" },
     };
-  } else if (status === "in_process") {
+  } else if (status === "in_process" && month) {
     return {
       [`${month}_fact_work`]: { type: "input" },
       [`${month}_fact_time`]: { type: "input" },
@@ -116,16 +156,6 @@ export function findPlanFactTitle(string: string) {
   } else if (string.endsWith("fact_time")) {
     return "фактические трудозатраты, чел.-ч";
   }
-}
-
-export function getPlanTimeColumnsNames(month: TPprTimePeriod): Array<keyof IPprData> {
-  return [
-    `${month}_plan_work`,
-    `${month}_plan_time`,
-    `${month}_fact_work`,
-    `${month}_fact_norm_time`,
-    `${month}_fact_time`,
-  ];
 }
 
 export function handlePprData(data: IPprData[]): IHandlePprData[] {

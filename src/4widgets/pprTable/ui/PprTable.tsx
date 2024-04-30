@@ -1,11 +1,10 @@
 "use client";
 import { FC } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
+import { useCreateDefaultColumns } from "./PprTableColumns";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
-import { getTdStyle, getThStyle } from "../lib/pprTableSettings";
-import { createDefaultColumns } from "./PprTableColumns";
 import { IPprData } from "@/2entities/pprTable";
-import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { TYearPprStatus } from "@/2entities/pprTable";
 
 interface IPprTableProps {}
@@ -13,12 +12,11 @@ interface IPprTableProps {}
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
 
-  const status: TYearPprStatus = "plan_creating";
-  const currentMonth: TPprTimePeriod = "year";
+  const status: TYearPprStatus = pprData?.status || "done";
 
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
-    columns: createDefaultColumns(status, pprTimePeriods, currentMonth),
+    columns: useCreateDefaultColumns(status),
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {

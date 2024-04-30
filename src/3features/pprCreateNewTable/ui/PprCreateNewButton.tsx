@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authConfig";
+import { authOptions } from "@/1shared/auth/authConfig";
 import { ServerSubmitButton } from "@/1shared/ui/button";
 import { IPpr, addPprTable } from "@/2entities/pprTable";
 

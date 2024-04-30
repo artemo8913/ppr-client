@@ -1,22 +1,21 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { IPprData } from "@/2entities/pprTable";
-import { TPprTimePeriod, monthsIntlRu } from "@/1shared/types/date";
-import { TYearPprStatus } from "@/2entities/pprTable";
+import { usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { monthsIntlRu } from "@/1shared/types/date";
 import { TableCell } from "@/1shared/ui/table";
+import { IPprData, TYearPprStatus } from "@/2entities/pprTable";
 import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 import {
   columnsDefault,
   columnsTitles,
   findPlanFactTitle,
   getColumnSettings,
-  getPlanTimeColumnsNames,
-} from "../lib/pprTableSettings";
+  getPlanFactColumns,
+  getTimePeriodsColumns,
+} from "../lib/pprTableHelpers";
 
-export const createDefaultColumns = (
-  status: TYearPprStatus,
-  months: TPprTimePeriod[],
-  currentMonth: TPprTimePeriod
-): ColumnDef<IPprData, any>[] => {
+export const useCreateDefaultColumns = (status: TYearPprStatus): ColumnDef<IPprData, any>[] => {
+  const { filterColumns, currentTimePeriod } = usePprTableSettings();
+
   const columnHelper = createColumnHelper<IPprData>();
   return [
     // Часть таблицы до времени
@@ -24,7 +23,7 @@ export const createDefaultColumns = (
       return columnHelper.accessor(column, {
         header: (info) => {
           if (info.column.id === "name") {
-            return <TableCellWithAdd isVertical value={columnsTitles[info.header.id as keyof IPprData]}  />;
+            return <TableCellWithAdd isVertical value={columnsTitles[info.header.id as keyof IPprData]} />;
           }
           return <TableCell isVertical value={columnsTitles[info.header.id as keyof IPprData]} />;
         },
@@ -32,7 +31,7 @@ export const createDefaultColumns = (
           const props = {
             value: info.getValue(),
             handleBlur: (value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value),
-            ...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData],
+            ...getColumnSettings(status, currentTimePeriod)[info.column.id as keyof IPprData],
           };
           if (info.column.id === "name") {
             return <TableCellWithAdd {...props} />;
@@ -42,11 +41,11 @@ export const createDefaultColumns = (
       });
     }),
     // Часть таблицы с данными объемов и чел.-ч по году и месяцами
-    ...months.map((month) => {
+    ...getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) => {
       return columnHelper.group({
         header: monthsIntlRu[month],
         columns: [
-          ...getPlanTimeColumnsNames(month).map<ColumnDef<IPprData, any>>((field) => {
+          ...getPlanFactColumns(month, filterColumns.planFact).map<ColumnDef<IPprData, any>>((field) => {
             return columnHelper.accessor(field, {
               header: (info) => <TableCell isVertical value={findPlanFactTitle(info.header.id)} />,
               cell: (info) => (
@@ -54,7 +53,7 @@ export const createDefaultColumns = (
                   isVertical
                   value={info.getValue()}
                   handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-                  {...getColumnSettings(status, currentMonth)[info.column.id as keyof IPprData]}
+                  {...getColumnSettings(status, currentTimePeriod)[info.column.id as keyof IPprData]}
                 />
               ),
             });
