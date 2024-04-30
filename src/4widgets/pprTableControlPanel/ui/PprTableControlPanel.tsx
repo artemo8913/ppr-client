@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { IPpr } from "@/2entities/pprTable";
 import { PprTableSaveButton } from "@/3features/pprTableSave";
-import { PprTableStatusUpdate } from "@/3features/pprTableStatusUpdate";
+import { PprTableYearStatusUpdate } from "@/3features/pprTableStatusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSelectTimePeriod";
 import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettingsChange";
 
@@ -15,7 +15,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
       Статус: {pprData?.status} Создан: {new Date(pprData?.created_at!).toLocaleDateString()} Год: {pprData?.year}{" "}
       {pprData?.id_subdivision}-{pprData?.id_distance}-{pprData?.id_direction}
       <PprTableSaveButton />
-      <PprTableStatusUpdate />
+      <PprTableYearStatusUpdate />
       <PprTableSelectTimePeriod />
       <PprTableSelectFilterTimePeriod />
       <PprTableSelectFilterPlanFact />

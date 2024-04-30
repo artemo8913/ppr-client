@@ -19,7 +19,6 @@ export type TMonthPprStatus =
   | "plan_creating"
   | "plan_on_agreement_engineer"
   | "plan_on_agreement_time_norm"
-  | "plan_on_agreement_security_engineer"
   | "plan_on_correction"
   | "plan_on_aprove"
   | "plan_aproved"

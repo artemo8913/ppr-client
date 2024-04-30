@@ -1,1 +1,1 @@
-export { PprTableStatusUpdate } from "./ui/PprTableStatusUpdate";
+export { PprTableYearStatusUpdate } from "./ui/PprTableYearStatusUpdate";
