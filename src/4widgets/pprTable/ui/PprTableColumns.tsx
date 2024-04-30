@@ -1,8 +1,8 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { TPprTimePeriod, monthsIntlRu } from "@/1shared/types/date";
+import { usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { TMonths, monthsIntlRu } from "@/1shared/types/date";
 import { TableCell } from "@/1shared/ui/table";
-import { IPprData } from "@/2entities/pprTable";
-import { TYearPprStatus } from "@/2entities/pprTable";
+import { IPprData, TYearPprStatus } from "@/2entities/pprTable";
 import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 import {
   columnsDefault,
@@ -10,13 +10,12 @@ import {
   findPlanFactTitle,
   getColumnSettings,
   getPlanFactColumns,
-} from "../lib/pprTableSettings";
+  getTimePeriodsColumns,
+} from "../lib/pprTableHelpers";
 
-export const createDefaultColumns = (
-  status: TYearPprStatus,
-  pprTimePeriods: TPprTimePeriod[],
-  currentMonth: TPprTimePeriod
-): ColumnDef<IPprData, any>[] => {
+export const useCreateDefaultColumns = (status: TYearPprStatus, currentMonth?: TMonths): ColumnDef<IPprData, any>[] => {
+  const { filterColumns } = usePprTableSettings();
+
   const columnHelper = createColumnHelper<IPprData>();
   return [
     // Часть таблицы до времени
@@ -24,7 +23,7 @@ export const createDefaultColumns = (
       return columnHelper.accessor(column, {
         header: (info) => {
           if (info.column.id === "name") {
-            return <TableCellWithAdd isVertical value={columnsTitles[info.header.id as keyof IPprData]}  />;
+            return <TableCellWithAdd isVertical value={columnsTitles[info.header.id as keyof IPprData]} />;
           }
           return <TableCell isVertical value={columnsTitles[info.header.id as keyof IPprData]} />;
         },
@@ -42,11 +41,11 @@ export const createDefaultColumns = (
       });
     }),
     // Часть таблицы с данными объемов и чел.-ч по году и месяцами
-    ...pprTimePeriods.map((month) => {
+    ...getTimePeriodsColumns(currentMonth, filterColumns.months).map((month) => {
       return columnHelper.group({
         header: monthsIntlRu[month],
         columns: [
-          ...getPlanFactColumns(month).map<ColumnDef<IPprData, any>>((field) => {
+          ...getPlanFactColumns(month, filterColumns.planFact).map<ColumnDef<IPprData, any>>((field) => {
             return columnHelper.accessor(field, {
               header: (info) => <TableCell isVertical value={findPlanFactTitle(info.header.id)} />,
               cell: (info) => (

@@ -1,9 +1,6 @@
 import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { setBgColor } from "@/1shared/lib/setBgColor";
-import {
-  TFilterMonthsOption,
-  TFilterPlanFactOption,
-} from "@/1shared/providers/pprTableProvider/model/PprTableSettingsProvider";
+import { TFilterMonthsOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
 import { TMonths, TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { ITableCell } from "@/1shared/ui/table";
 import { IHandlePprData, IPprData, TYearPprStatus } from "@/2entities/pprTable";
@@ -108,7 +105,7 @@ export function getTdStyle(key: keyof IPprData): React.CSSProperties {
 
 export function getColumnSettings(
   status: TYearPprStatus,
-  month: TPprTimePeriod
+  month?: TPprTimePeriod
 ): { [name in keyof IPprData]?: ITableCell } {
   if (status === "plan_creating") {
     return {
@@ -137,7 +134,7 @@ export function getColumnSettings(
       nov_plan_work: { cellType: "input" },
       dec_plan_work: { cellType: "input" },
     };
-  } else if (status === "in_process") {
+  } else if (status === "in_process" && month) {
     return {
       [`${month}_fact_work`]: { type: "input" },
       [`${month}_fact_time`]: { type: "input" },

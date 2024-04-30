@@ -1,31 +1,45 @@
 "use client";
-import { FC, PropsWithChildren, createContext, useCallback, useContext, useState } from "react";
+import { TPprTimePeriod } from "@/1shared/types/date";
+import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
+import { usePprTableData } from "./PprTableDataProvider";
+import { findPossibleCurrentPprPeriod } from "../lib/findPossibleCurrentPprPeriod";
 
 export type TFilterMonthsOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
 export type TFilterPlanFactOption = "SHOW_ALL" | "SHOW_ONLY_PLAN" | "SHOW_ONLY_FACT" | "SHOW_ONLY_VALUES";
 
-interface IPprTableSettingsProps {
+interface IPprTableSettings {
   filterColumns: { months: TFilterMonthsOption; planFact: TFilterPlanFactOption };
-  filterMonths: (state: TFilterMonthsOption) => void;
-  filterPlanFact: (state: TFilterPlanFactOption) => void;
+  currentTimePeriod: TPprTimePeriod;
+}
+interface IPprTableSettingsContext extends IPprTableSettings {
+  setFilterMonths: (state: TFilterMonthsOption) => void;
+  setFilterPlanFact: (state: TFilterPlanFactOption) => void;
+  setTimePeriod: (timePeriod: TPprTimePeriod) => void;
 }
 
-const initialSetting: IPprTableSettingsProps = {
+const intitalSettings: IPprTableSettings = {
   filterColumns: {
     months: "SHOW_ALL",
     planFact: "SHOW_ALL",
   },
-  filterMonths: () => {},
-  filterPlanFact: () => {},
+  currentTimePeriod: "year",
 };
 
-const PprTableSettingsContext = createContext<IPprTableSettingsProps>(initialSetting);
+const initialContext: IPprTableSettingsContext = {
+  ...intitalSettings,
+  setFilterMonths: () => {},
+  setFilterPlanFact: () => {},
+  setTimePeriod: () => {},
+};
+
+const PprTableSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
 export const usePprTableSettings = () => useContext(PprTableSettingsContext);
 
 export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [pprTableSettings, setPprTableSettings] = useState(initialSetting);
+  const [pprTableSettings, setPprTableSettings] = useState<IPprTableSettings>(intitalSettings);
+  const { pprData } = usePprTableData();
 
-  const filterMonths = useCallback(
+  const setFilterMonths = useCallback(
     (state: TFilterMonthsOption) =>
       setPprTableSettings((prev) => ({
         ...prev,
@@ -37,7 +51,7 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     []
   );
 
-  const filterPlanFact = useCallback(
+  const setFilterPlanFact = useCallback(
     (state: TFilterPlanFactOption) =>
       setPprTableSettings((prev) => ({
         ...prev,
@@ -49,8 +63,23 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     []
   );
 
+  const setTimePeriod = useCallback(
+    (timePeriod: TPprTimePeriod) =>
+      setPprTableSettings((prev) => ({
+        ...prev,
+        currentTimePeriod: timePeriod,
+      })),
+    []
+  );
+
+  useEffect(() => {
+    setTimePeriod(findPossibleCurrentPprPeriod(pprData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pprData?.months_statuses]);
   return (
-    <PprTableSettingsContext.Provider value={{ ...pprTableSettings, filterMonths, filterPlanFact }}>
+    <PprTableSettingsContext.Provider
+      value={{ ...pprTableSettings, setFilterMonths, setFilterPlanFact, setTimePeriod }}
+    >
       {children}
     </PprTableSettingsContext.Provider>
   );
