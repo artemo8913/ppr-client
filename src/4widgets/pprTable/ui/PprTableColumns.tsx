@@ -9,12 +9,12 @@ import {
   columnsTitles,
   findPlanFactTitle,
   getColumnSettings,
-  getPlanTimeColumnsNames,
+  getPlanFactColumns,
 } from "../lib/pprTableSettings";
 
 export const createDefaultColumns = (
   status: TYearPprStatus,
-  months: TPprTimePeriod[],
+  pprTimePeriods: TPprTimePeriod[],
   currentMonth: TPprTimePeriod
 ): ColumnDef<IPprData, any>[] => {
   const columnHelper = createColumnHelper<IPprData>();
@@ -42,11 +42,11 @@ export const createDefaultColumns = (
       });
     }),
     // Часть таблицы с данными объемов и чел.-ч по году и месяцами
-    ...months.map((month) => {
+    ...pprTimePeriods.map((month) => {
       return columnHelper.group({
         header: monthsIntlRu[month],
         columns: [
-          ...getPlanTimeColumnsNames(month).map<ColumnDef<IPprData, any>>((field) => {
+          ...getPlanFactColumns(month).map<ColumnDef<IPprData, any>>((field) => {
             return columnHelper.accessor(field, {
               header: (info) => <TableCell isVertical value={findPlanFactTitle(info.header.id)} />,
               cell: (info) => (
