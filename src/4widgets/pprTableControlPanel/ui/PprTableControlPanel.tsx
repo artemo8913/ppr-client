@@ -4,6 +4,7 @@ import { PprTableSaveButton } from "@/3features/pprTableSave";
 import { PprTableYearStatusUpdate } from "@/3features/pprTableStatusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSelectTimePeriod";
 import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettingsChange";
+import { PprTableMonthStatusUpdate } from "@/3features/pprTableStatusUpdate/ui/PprTableMonthStatusUpdate";
 
 interface IPprTableControlPanelProps {
   pprData: IPpr;
@@ -16,6 +17,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
       {pprData?.id_subdivision}-{pprData?.id_distance}-{pprData?.id_direction}
       <PprTableSaveButton />
       <PprTableYearStatusUpdate />
+      <PprTableMonthStatusUpdate />
       <PprTableSelectTimePeriod />
       <PprTableSelectFilterTimePeriod />
       <PprTableSelectFilterPlanFact />
