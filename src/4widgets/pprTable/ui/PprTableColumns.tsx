@@ -2,7 +2,7 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { usePprTableSettings } from "@/1shared/providers/pprTableProvider";
 import { monthsIntlRu } from "@/1shared/types/date";
 import { TableCell } from "@/1shared/ui/table";
-import { IPprData, TYearPprStatus } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses, TYearPprStatus } from "@/2entities/pprTable";
 import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 import {
   columnsDefault,
@@ -13,10 +13,14 @@ import {
   getTimePeriodsColumns,
 } from "../lib/pprTableHelpers";
 
-export const useCreateDefaultColumns = (status: TYearPprStatus): ColumnDef<IPprData, any>[] => {
+export const useCreateDefaultColumns = (
+  pprYearStatus: TYearPprStatus,
+  pprMonthsStatuses?: TAllMonthStatuses
+): ColumnDef<IPprData, any>[] => {
   const { filterColumns, currentTimePeriod } = usePprTableSettings();
 
   const columnHelper = createColumnHelper<IPprData>();
+
   return [
     // Часть таблицы до времени
     ...columnsDefault.map((column) => {
@@ -31,7 +35,7 @@ export const useCreateDefaultColumns = (status: TYearPprStatus): ColumnDef<IPprD
           const props = {
             value: info.getValue(),
             handleBlur: (value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value),
-            ...getColumnSettings(status, currentTimePeriod)[info.column.id as keyof IPprData],
+            ...getColumnSettings(info.column.id as keyof IPprData, pprYearStatus, currentTimePeriod, pprMonthsStatuses),
           };
           if (info.column.id === "name") {
             return <TableCellWithAdd {...props} />;
@@ -53,7 +57,12 @@ export const useCreateDefaultColumns = (status: TYearPprStatus): ColumnDef<IPprD
                   isVertical
                   value={info.getValue()}
                   handleBlur={(value) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-                  {...getColumnSettings(status, currentTimePeriod)[info.column.id as keyof IPprData]}
+                  {...getColumnSettings(
+                    info.column.id as keyof IPprData,
+                    pprYearStatus,
+                    currentTimePeriod,
+                    pprMonthsStatuses
+                  )}
                 />
               ),
             });
