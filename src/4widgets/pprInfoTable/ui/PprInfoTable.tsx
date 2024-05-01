@@ -1,11 +1,12 @@
 "use client";
 import { FC } from "react";
 import Link from "next/link";
-import { Badge, Table, TableProps } from "antd";
+import { Table, TableProps } from "antd";
 import { directions } from "@/1shared/types/transEnergoDivisions";
-import { months, monthsIntlRu } from "@/1shared/types/date";
+import { months } from "@/1shared/types/date";
 import { IPpr } from "@/2entities/pprTable";
 import { PprDeleteButton } from "@/3features/pprDeleteTable";
+import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 
 interface IPprInfoProps {
   data: IPpr[];
@@ -69,25 +70,7 @@ const columns: TableProps<IPpr>["columns"] = [
       return (
         <div className="flex flex-row">
           {months.map((month) => (
-            <div className="flex min-w-3 flex-col justify-center items-center" key={month}>
-              <span>{monthsIntlRu[month][0]}</span>
-              <Badge
-                key={month}
-                status={
-                  data.months_statuses[month] === "none"
-                    ? "default"
-                    : data.months_statuses[month] === "done"
-                    ? "success"
-                    : data.months_statuses[month] === "fact_filling"
-                    ? "processing"
-                    : data.months_statuses[month] === "plan_on_correction"
-                    ? "error"
-                    : data.months_statuses[month] === "plan_aproved"
-                    ? "processing"
-                    : "warning"
-                }
-              />
-            </div>
+            <PprMonthsInfoBadge key={month} month={month} monthStatus={data.months_statuses[month]} />
           ))}
         </div>
       );
@@ -96,7 +79,7 @@ const columns: TableProps<IPpr>["columns"] = [
   {
     title: "Действия",
     dataIndex: "id",
-    render: (id, row) => <PprDeleteButton ppr={row} />,
+    render: (_, row) => <PprDeleteButton ppr={row} />,
   },
 ];
 
