@@ -3,7 +3,7 @@ import { ITableCell } from "@/1shared/ui/table";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { TFilterMonthsOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
-import { IHandlePprData, IPprData, TYearPprStatus } from "@/2entities/pprTable";
+import { IHandlePprData, IPprData, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/pprTable";
 
 export const columnsDefault: Array<keyof IPprData> = [
   "name",
@@ -103,15 +103,20 @@ export function getThStyle(key: keyof IPprData): React.CSSProperties {
 }
 
 export function getTdStyle(key: keyof IPprData): React.CSSProperties {
+  if (key === "norm_of_time_document") {
+    return { fontSize: "0.7vw" };
+  }
   return { backgroundColor: setBgColor(key) };
 }
 
 export function getColumnSettings(
-  status: TYearPprStatus,
-  month?: TPprTimePeriod
-): { [name in keyof IPprData]?: ITableCell } {
-  if (status === "plan_creating") {
-    return {
+  fieldName: keyof Partial<IPprData>,
+  pprYearStatus: TYearPprStatus,
+  timePeriod: TPprTimePeriod,
+  pprMonthStatuses?: TAllMonthStatuses
+): ITableCell | undefined {
+  if (pprYearStatus === "plan_creating") {
+    const settings: { [key in keyof IPprData]?: ITableCell } = {
       name: { cellType: "textarea" },
       location: { cellType: "textarea" },
       line_class: { cellType: "input" },
@@ -136,19 +141,38 @@ export function getColumnSettings(
       oct_plan_work: { cellType: "input" },
       nov_plan_work: { cellType: "input" },
       dec_plan_work: { cellType: "input" },
+      jan_fact_work: { cellType: "input" },
+      feb_fact_work: { cellType: "input" },
+      mar_fact_work: { cellType: "input" },
+      apr_fact_work: { cellType: "input" },
+      may_fact_work: { cellType: "input" },
+      june_fact_work: { cellType: "input" },
+      july_fact_work: { cellType: "input" },
+      aug_fact_work: { cellType: "input" },
+      sept_fact_work: { cellType: "input" },
+      oct_fact_work: { cellType: "input" },
+      nov_fact_work: { cellType: "input" },
+      dec_fact_work: { cellType: "input" },
     };
-  } else if (status === "in_process" && month) {
-    return {
-      [`${month}_fact_work`]: { type: "input" },
-      [`${month}_fact_time`]: { type: "input" },
-    };
+    return settings[fieldName];
+  }
+  if (pprYearStatus !== "in_process" || timePeriod === "year" || !pprMonthStatuses) {
+    return {};
+  }
+  if (pprMonthStatuses[timePeriod] === "plan_creating" && fieldName === `${timePeriod}_plan_work`) {
+    return { cellType: "input" };
+  }
+  if (pprMonthStatuses[timePeriod] === "fact_filling" && fieldName === `${timePeriod}_fact_work`) {
+    return { cellType: "input" };
   }
   return {};
 }
 
 export function findPlanFactTitle(string: string) {
-  if (string.endsWith("work")) {
-    return "кол-во";
+  if (string.endsWith("plan_work")) {
+    return "план, кол-во";
+  } else if (string.endsWith("fact_work")) {
+    return "факт, кол-во";
   } else if (string.endsWith("plan_time")) {
     return "норм. время на плановый объем, чел.-ч";
   } else if (string.endsWith("fact_norm_time")) {

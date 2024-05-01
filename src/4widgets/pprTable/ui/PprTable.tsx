@@ -4,7 +4,7 @@ import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/rea
 import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
 import { useCreateDefaultColumns } from "./PprTableColumns";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
-import { IPprData } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses } from "@/2entities/pprTable";
 import { TYearPprStatus } from "@/2entities/pprTable";
 
 interface IPprTableProps {}
@@ -13,10 +13,11 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
 
   const status: TYearPprStatus = pprData?.status || "done";
+  const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
 
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
-    columns: useCreateDefaultColumns(status),
+    columns: useCreateDefaultColumns(status, pprMonthsStatuses),
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
