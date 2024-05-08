@@ -4,6 +4,7 @@ export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData =
   return {
     id: String(new Date().toString() + Math.random()),
     workId: null,
+    is_work_aproved: false,
     branch: "",
     subbranch: "",
     name: "",

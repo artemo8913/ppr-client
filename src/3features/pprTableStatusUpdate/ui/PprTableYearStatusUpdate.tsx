@@ -12,10 +12,16 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = ({})
   const { data } = useSession();
   const { pprData } = usePprTableData();
 
-  const setNextStatus = useCallback(
-    () => pprData?.id && updatePprTable(pprData.id, { status: getNextPprYearStatus(pprData?.status) }),
-    [pprData?.status, pprData?.id]
-  );
+  const setNextStatus = useCallback(() => {
+    if (!pprData) {
+      return;
+    }
+    const nextStatus = getNextPprYearStatus(pprData.status);
+    if (nextStatus === "plan_aproved") {
+      pprData?.data.forEach((datum) => (datum.is_work_aproved = true));
+    }
+    updatePprTable(pprData.id, { ...pprData, status: nextStatus });
+  }, [pprData]);
 
   const rejectPpr = useCallback(
     () => pprData?.id && updatePprTable(pprData.id, { status: "plan_on_correction" }),
