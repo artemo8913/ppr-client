@@ -46,12 +46,26 @@ export interface IPpr {
   id_subdivision: number | null;
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
+  corrections?: {
+    peoples?: TPprCorrection<IWorkingManYearPlan>;
+    works?: TPprCorrection<IPprData>;
+  };
 }
 
 export interface IHandlePprData extends IPprData {
   rowSpan?: number;
   isHandMade?: boolean;
 }
+
+export type TPprCorrection<T> = {
+  [id: string]: {
+    [field_name_from in keyof T]?: {
+      new_value: number;
+      diff: number;
+      fields_to: ({ [field_name_to in keyof T]: number } & { is_approved: boolean })[] | null;
+    };
+  };
+};
 
 export interface IWorkingManYearPlan {
   id: string;
