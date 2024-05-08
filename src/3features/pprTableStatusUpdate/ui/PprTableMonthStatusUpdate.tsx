@@ -14,17 +14,21 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   const { currentTimePeriod } = usePprTableSettings();
 
   const setNextStatus = useCallback(() => {
-    if (!pprData?.id || currentTimePeriod === "year") {
+    if (!pprData || currentTimePeriod === "year") {
       return;
     }
     const nextStatus = getNextPprMonthStatus(pprData.months_statuses[currentTimePeriod]);
+    if (nextStatus === "plan_aproved") {
+      pprData.data.forEach((datum) => (datum.is_work_aproved = true));
+    }
     updatePprTable(pprData.id, {
+      ...pprData,
       months_statuses: {
         ...pprData.months_statuses,
         [currentTimePeriod]: nextStatus,
       },
     });
-  }, [pprData?.months_statuses, pprData?.id, currentTimePeriod]);
+  }, [pprData, currentTimePeriod]);
 
   const rejectPpr = useCallback(() => {
     if (!pprData?.id || currentTimePeriod === "year") {

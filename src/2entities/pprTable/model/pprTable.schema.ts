@@ -89,6 +89,7 @@ export interface IWorkingManYearPlan {
 export interface IPprData {
   id: string;
   workId: string | null;
+  is_work_aproved: boolean;
   branch: string;
   subbranch: string;
   name: string;
