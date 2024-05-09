@@ -1,9 +1,8 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { usePprTableSettings } from "@/1shared/providers/pprTableProvider";
-import { monthsIntlRu } from "@/1shared/types/date";
 import { TableCell } from "@/1shared/ui/table";
-import { IPprData, TAllMonthStatuses, TYearPprStatus } from "@/2entities/pprTable";
-import { TableCellWithAdd } from "@/3features/pprTableAddWork";
+import { monthsIntlRu } from "@/1shared/types/date";
+import { usePprTableData, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, IPlanWork } from "@/2entities/pprTable";
 import {
   columnsDefault,
   columnsTitles,
@@ -12,15 +11,16 @@ import {
   getPlanFactColumns,
   getTimePeriodsColumns,
 } from "../lib/pprTableHelpers";
-import { IPlanWork } from "@/2entities/pprTable/model/pprTable.schema";
+import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 
-export const useCreateDefaultColumns = (
-  pprYearStatus: TYearPprStatus,
-  pprMonthsStatuses?: TAllMonthStatuses
-): ColumnDef<IPprData, any>[] => {
+export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
   const { filterColumns, currentTimePeriod } = usePprTableSettings();
+  const { pprData, workCorrections } = usePprTableData();
 
   const columnHelper = createColumnHelper<IPprData>();
+
+  const pprYearStatus: TYearPprStatus = pprData?.status || "done";
+  const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
 
   return [
     // Часть таблицы до времени
@@ -35,7 +35,8 @@ export const useCreateDefaultColumns = (
         cell: (info) => {
           const props = {
             value: info.getValue(),
-            handleBlur: (value: string) => info.table.options.meta?.updatePprData(info.row.index, info.column.id, value),
+            handleBlur: (value: string) =>
+              info.table.options.meta?.updatePprData(info.row.index, info.column.id, value),
             ...getColumnSettings(info.column.id as keyof IPprData, pprYearStatus, currentTimePeriod, pprMonthsStatuses),
           };
           if (info.column.id === "name") {
@@ -53,33 +54,41 @@ export const useCreateDefaultColumns = (
           ...getPlanFactColumns(month, filterColumns.planFact).map<ColumnDef<IPprData, any>>((field) => {
             return columnHelper.accessor(field, {
               header: (info) => <TableCell isVertical value={findPlanFactTitle(info.header.id)} />,
-              cell: (info) => (
-                <TableCell
-                  isVertical
-                  value={info.getValue()}
-                  handleBlur={(value: string) => {
-                    // Если изменяемая ячейка не план работ или же работа ещё не утверждена,
-                    // то просто изменяется содержимое ППРа
-                    if (!info.cell.column.id.endsWith("_plan_work") || !info.row.original.is_work_aproved) {
-                      info.table.options.meta?.updatePprData(info.row.index, info.column.id, value);
-                      // иначе создаётся корректировка
-                    } else {
-                      info.table.options.meta?.correctWorkPlan(
-                        info.column.id as keyof IPlanWork,
-                        info.row.original.id,
-                        Number(value),
-                        Number(info.row.original[info.column.id as keyof IPprData])
-                      );
+              cell: (info) => {
+                return (
+                  <TableCell
+                    isVertical
+                    value={
+                      Number(info.getValue()) +
+                      (info.row.original.id in workCorrections &&
+                      info.column.id in workCorrections[info.row.original.id]!
+                        ? Number(workCorrections[info.row.original.id]![info.column.id as keyof IPlanWork])
+                        : 0)
                     }
-                  }}
-                  {...getColumnSettings(
-                    info.column.id as keyof IPprData,
-                    pprYearStatus,
-                    currentTimePeriod,
-                    pprMonthsStatuses
-                  )}
-                />
-              ),
+                    handleBlur={(value: string) => {
+                      // Если изменяемая ячейка не план работ или же работа ещё не утверждена,
+                      // то просто изменяется содержимое ППРа
+                      if (!info.cell.column.id.endsWith("_plan_work") || !info.row.original.is_work_aproved) {
+                        info.table.options.meta?.updatePprData(info.row.index, info.column.id, value);
+                        // иначе создаётся корректировка
+                      } else {
+                        info.table.options.meta?.correctWorkPlan(
+                          info.column.id as keyof IPlanWork,
+                          info.row.original.id,
+                          Number(value),
+                          Number(info.row.original[info.column.id as keyof IPprData])
+                        );
+                      }
+                    }}
+                    {...getColumnSettings(
+                      info.column.id as keyof IPprData,
+                      pprYearStatus,
+                      currentTimePeriod,
+                      pprMonthsStatuses
+                    )}
+                  />
+                );
+              },
             });
           }),
         ],

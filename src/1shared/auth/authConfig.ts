@@ -27,7 +27,7 @@ export const authOptions: AuthOptions = {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         // Add logic here to look up the user from the credentials supplied
         const allLogins = await getAllLoginsData();
         const login = allLogins.find((login) => login.username === credentials?.username);

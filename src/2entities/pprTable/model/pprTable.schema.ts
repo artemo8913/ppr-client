@@ -47,8 +47,8 @@ export interface IPpr {
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
   corrections: {
-    peoples: { [id: string]: TPprCorrection<IWorkingManPlanTimeValues> };
-    works: { [id: string]: TPprCorrection<IPlanWork> };
+    peoples: { [id: string]: TPprDataCorrection<IWorkingManPlanTimeValues> | undefined };
+    works: { [id: string]: TPprDataCorrection<IPlanWork> | undefined };
   };
 }
 
@@ -57,11 +57,15 @@ export interface IHandlePprData extends IPprData {
   isHandMade?: boolean;
 }
 
-export type TPprCorrection<T> = {
-  [field_name_from in keyof T]?: {
-    new_value: number;
+export type TWorkPlanCorrection = {
+  [id: string]: { [planPeriod in keyof IPlanWork]?: number } | undefined;
+};
+
+export type TPprDataCorrection<T> = {
+  [fieldNameFrom in keyof T]?: {
+    newValue: number;
     diff: number;
-    fields_to: ({ [field_name_to in keyof T]: number } & { is_approved: boolean })[] | null | undefined;
+    fieldsTo: { fieldNameTo: keyof T; value: number; is_approved: boolean }[] | null | undefined;
   };
 };
 
@@ -72,12 +76,7 @@ export interface IWorkingManYearPlan extends IWorkingManPlanTimeValues, IWorking
   participation: number;
 }
 
-export interface IPprData
-  extends IPlanWork,
-    IPlanTime,
-    IFactWork,
-    IFactNormTime,
-    IFactTime {
+export interface IPprData extends IPlanWork, IPlanTime, IFactWork, IFactNormTime, IFactTime {
   id: string;
   workId: string | null;
   is_work_aproved: boolean;
@@ -143,6 +142,21 @@ export interface IPlanWork {
   nov_plan_work: number;
   dec_plan_work: number;
 }
+export const planWorkPeriods: (keyof IPlanWork)[] = [
+  "year_plan_work",
+  "jan_plan_work",
+  "feb_plan_work",
+  "mar_plan_work",
+  "apr_plan_work",
+  "may_plan_work",
+  "june_plan_work",
+  "july_plan_work",
+  "aug_plan_work",
+  "sept_plan_work",
+  "oct_plan_work",
+  "nov_plan_work",
+  "dec_plan_work",
+] as const;
 export interface IPlanTime {
   year_plan_time: number;
   jan_plan_time: number;
