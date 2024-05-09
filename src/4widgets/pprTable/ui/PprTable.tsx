@@ -6,6 +6,7 @@ import { useCreateDefaultColumns } from "./PprTableColumns";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import { IPprData, TAllMonthStatuses } from "@/2entities/pprTable";
 import { TYearPprStatus } from "@/2entities/pprTable";
+import { IPlanWork, TPprCorrection } from "@/2entities/pprTable/model/pprTable.schema";
 
 interface IPprTableProps {}
 
@@ -20,7 +21,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     columns: useCreateDefaultColumns(status, pprMonthsStatuses),
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      updateData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
+      updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
         // Skip page index reset until after next rerender
         setPprData((prev) => {
           if (!prev) {
@@ -37,6 +38,45 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
               }
               return row;
             }),
+          };
+        });
+      },
+      correctWorkPlan: (field_name, object_id, new_value, old_value) => {
+        setPprData((prev) => {
+          if (!prev) {
+            return prev;
+          }
+          const new_diff = new_value - old_value;
+          // Если разница в значениях равна нулю
+          if (new_diff === 0) {
+            // И при этом перенос человек не осуществлял (даже в черновом варианте), то удалить перенос по этому полю вовсе
+            if (
+              field_name in prev.corrections.works[object_id] &&
+              prev.corrections.works[object_id][field_name]?.fields_to === undefined
+            ) {
+              return { ...prev, corrections: { ...prev.corrections, works: { ...prev.corrections.works } } };
+            }
+            return prev;
+          }
+          const new_correction: TPprCorrection<IPlanWork> = {
+            ...prev.corrections.works[object_id],
+            [field_name]: {
+              new_value,
+              diff: new_value - old_value,
+              fields_to: undefined,
+            },
+          };
+          return {
+            ...prev,
+            corrections: {
+              ...prev.corrections,
+              works: {
+                ...prev.corrections.works,
+                [object_id]: {
+                  ...new_correction,
+                },
+              },
+            },
           };
         });
       },
