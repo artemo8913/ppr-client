@@ -46,9 +46,9 @@ export interface IPpr {
   id_subdivision: number | null;
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
-  corrections?: {
-    peoples?: TPprCorrection<IWorkingManYearPlan>;
-    works?: TPprCorrection<IPprData>;
+  corrections: {
+    peoples: { [id: string]: TPprCorrection<IWorkingManPlanTimeValues> };
+    works: { [id: string]: TPprCorrection<IPlanWork> };
   };
 }
 
@@ -58,49 +58,26 @@ export interface IHandlePprData extends IPprData {
 }
 
 export type TPprCorrection<T> = {
-  [id: string]: {
-    [field_name_from in keyof T]?: {
-      new_value: number;
-      diff: number;
-      fields_to: ({ [field_name_to in keyof T]: number } & { is_approved: boolean })[] | null;
-    };
+  [field_name_from in keyof T]?: {
+    new_value: number;
+    diff: number;
+    fields_to: ({ [field_name_to in keyof T]: number } & { is_approved: boolean })[] | null | undefined;
   };
 };
 
-export interface IWorkingManYearPlan {
+export interface IWorkingManYearPlan extends IWorkingManPlanTimeValues, IWorkingManFactTimeValues {
   id: string;
   full_name: string;
   work_position: string;
   participation: number;
-  year_plan_time?: number;
-  jan_plan_time?: number;
-  feb_plan_time?: number;
-  mar_plan_time?: number;
-  apr_plan_time?: number;
-  may_plan_time?: number;
-  june_plan_time?: number;
-  july_plan_time?: number;
-  aug_plan_time?: number;
-  sept_plan_time?: number;
-  oct_plan_time?: number;
-  nov_plan_time?: number;
-  dec_plan_time?: number;
-  year_fact_time?: number;
-  jan_fact_time?: number;
-  feb_fact_time?: number;
-  mar_fact_time?: number;
-  apr_fact_time?: number;
-  may_fact_time?: number;
-  june_fact_time?: number;
-  july_fact_time?: number;
-  aug_fact_time?: number;
-  sept_fact_time?: number;
-  oct_fact_time?: number;
-  nov_fact_time?: number;
-  dec_fact_time?: number;
 }
 
-export interface IPprData {
+export interface IPprData
+  extends IPlanWork,
+    IPlanTime,
+    IFactWork,
+    IFactNormTime,
+    IFactTime {
   id: string;
   workId: string | null;
   is_work_aproved: boolean;
@@ -118,69 +95,111 @@ export interface IPprData {
   norm_of_time: number;
   norm_of_time_document: string;
   unity: string;
+}
+
+export interface IWorkingManPlanTimeValues {
+  year_plan_time?: number;
+  jan_plan_time?: number;
+  feb_plan_time?: number;
+  mar_plan_time?: number;
+  apr_plan_time?: number;
+  may_plan_time?: number;
+  june_plan_time?: number;
+  july_plan_time?: number;
+  aug_plan_time?: number;
+  sept_plan_time?: number;
+  oct_plan_time?: number;
+  nov_plan_time?: number;
+  dec_plan_time?: number;
+}
+export interface IWorkingManFactTimeValues {
+  year_fact_time?: number;
+  jan_fact_time?: number;
+  feb_fact_time?: number;
+  mar_fact_time?: number;
+  apr_fact_time?: number;
+  may_fact_time?: number;
+  june_fact_time?: number;
+  july_fact_time?: number;
+  aug_fact_time?: number;
+  sept_fact_time?: number;
+  oct_fact_time?: number;
+  nov_fact_time?: number;
+  dec_fact_time?: number;
+}
+
+export interface IPlanWork {
   year_plan_work: number;
-  year_plan_time: number;
-  year_fact_work: number;
-  year_fact_norm_time: number;
-  year_fact_time: number;
   jan_plan_work: number;
-  jan_plan_time: number;
-  jan_fact_work: number;
-  jan_fact_norm_time: number;
-  jan_fact_time: number;
   feb_plan_work: number;
-  feb_plan_time: number;
-  feb_fact_work: number;
-  feb_fact_norm_time: number;
-  feb_fact_time: number;
   mar_plan_work: number;
-  mar_plan_time: number;
-  mar_fact_work: number;
-  mar_fact_norm_time: number;
-  mar_fact_time: number;
   apr_plan_work: number;
-  apr_plan_time: number;
-  apr_fact_work: number;
-  apr_fact_norm_time: number;
-  apr_fact_time: number;
   may_plan_work: number;
-  may_plan_time: number;
-  may_fact_work: number;
-  may_fact_norm_time: number;
-  may_fact_time: number;
   june_plan_work: number;
-  june_plan_time: number;
-  june_fact_work: number;
-  june_fact_norm_time: number;
-  june_fact_time: number;
   july_plan_work: number;
-  july_plan_time: number;
-  july_fact_work: number;
-  july_fact_norm_time: number;
-  july_fact_time: number;
   aug_plan_work: number;
-  aug_plan_time: number;
-  aug_fact_work: number;
-  aug_fact_norm_time: number;
-  aug_fact_time: number;
   sept_plan_work: number;
-  sept_plan_time: number;
-  sept_fact_work: number;
-  sept_fact_norm_time: number;
-  sept_fact_time: number;
   oct_plan_work: number;
-  oct_plan_time: number;
-  oct_fact_work: number;
-  oct_fact_norm_time: number;
-  oct_fact_time: number;
   nov_plan_work: number;
-  nov_plan_time: number;
-  nov_fact_work: number;
-  nov_fact_norm_time: number;
-  nov_fact_time: number;
   dec_plan_work: number;
+}
+export interface IPlanTime {
+  year_plan_time: number;
+  jan_plan_time: number;
+  feb_plan_time: number;
+  mar_plan_time: number;
+  apr_plan_time: number;
+  may_plan_time: number;
+  june_plan_time: number;
+  july_plan_time: number;
+  aug_plan_time: number;
+  sept_plan_time: number;
+  oct_plan_time: number;
+  nov_plan_time: number;
   dec_plan_time: number;
+}
+export interface IFactWork {
+  year_fact_work: number;
+  jan_fact_work: number;
+  feb_fact_work: number;
+  mar_fact_work: number;
+  apr_fact_work: number;
+  may_fact_work: number;
+  june_fact_work: number;
+  july_fact_work: number;
+  aug_fact_work: number;
+  sept_fact_work: number;
+  oct_fact_work: number;
+  nov_fact_work: number;
   dec_fact_work: number;
+}
+export interface IFactNormTime {
+  year_fact_norm_time: number;
+  jan_fact_norm_time: number;
+  feb_fact_norm_time: number;
+  mar_fact_norm_time: number;
+  apr_fact_norm_time: number;
+  may_fact_norm_time: number;
+  june_fact_norm_time: number;
+  july_fact_norm_time: number;
+  aug_fact_norm_time: number;
+  sept_fact_norm_time: number;
+  oct_fact_norm_time: number;
+  nov_fact_norm_time: number;
   dec_fact_norm_time: number;
+}
+export interface IFactTime {
+  year_fact_time: number;
+  jan_fact_time: number;
+  feb_fact_time: number;
+  mar_fact_time: number;
+  apr_fact_time: number;
+  may_fact_time: number;
+  june_fact_time: number;
+  july_fact_time: number;
+  aug_fact_time: number;
+  sept_fact_time: number;
+  oct_fact_time: number;
+  nov_fact_time: number;
   dec_fact_time: number;
 }

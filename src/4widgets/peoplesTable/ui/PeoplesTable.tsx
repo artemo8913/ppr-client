@@ -40,7 +40,7 @@ const columns = (status?: TYearPprStatus) => [
             <TableCell
               value={props.getValue()}
               handleBlur={(value: string) =>
-                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
+                props.table.options.meta?.updatePprData(props.row.index, props.column.id, value)
               }
               {...getColumnSettings(status)[`${time}_plan_time`]}
             />
@@ -56,7 +56,7 @@ const columns = (status?: TYearPprStatus) => [
             <TableCell
               value={props.getValue()}
               handleBlur={(value: string) =>
-                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
+                props.table.options.meta?.updatePprData(props.row.index, props.column.id, value)
               }
               {...getColumnSettings(status)[`${time}_fact_time`]}
             />
@@ -85,7 +85,7 @@ export const PeoplesTable: FC<IPeoplesTableProps> = () => {
       }),
     ],
     meta: {
-      updateData(rowIndex: number, columnId: keyof IWorkingManYearPlan | string, value: unknown) {
+      updatePprData(rowIndex: number, columnId: keyof IWorkingManYearPlan | string, value: unknown) {
         setPprData((prev) => {
           if (!prev) {
             return prev;
