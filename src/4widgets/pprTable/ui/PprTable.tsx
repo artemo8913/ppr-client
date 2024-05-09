@@ -4,21 +4,17 @@ import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/rea
 import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
 import { useCreateDefaultColumns } from "./PprTableColumns";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TAllMonthStatuses } from "@/2entities/pprTable";
-import { TYearPprStatus } from "@/2entities/pprTable";
-import { IPlanWork, TPprCorrection } from "@/2entities/pprTable/model/pprTable.schema";
+import { IPprData, TPprDataCorrection } from "@/2entities/pprTable";
+import { IPlanWork } from "@/2entities/pprTable";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
 
-  const status: TYearPprStatus = pprData?.status || "done";
-  const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
-
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
-    columns: useCreateDefaultColumns(status, pprMonthsStatuses),
+    columns: useCreateDefaultColumns(),
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
@@ -41,29 +37,33 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           };
         });
       },
-      correctWorkPlan: (field_name, object_id, new_value, old_value) => {
+      correctWorkPlan: (fieldName, objectId, newValue, oldValue) => {
         setPprData((prev) => {
           if (!prev) {
             return prev;
           }
-          const new_diff = new_value - old_value;
-          // Если разница в значениях равна нулю
-          if (new_diff === 0) {
-            // И при этом перенос человек не осуществлял (даже в черновом варианте), то удалить перенос по этому полю вовсе
-            if (
-              field_name in prev.corrections.works[object_id] &&
-              prev.corrections.works[object_id][field_name]?.fields_to === undefined
-            ) {
-              return { ...prev, corrections: { ...prev.corrections, works: { ...prev.corrections.works } } };
-            }
-            return prev;
-          }
-          const new_correction: TPprCorrection<IPlanWork> = {
-            ...prev.corrections.works[object_id],
-            [field_name]: {
-              new_value,
-              diff: new_value - old_value,
-              fields_to: undefined,
+          const newDiff = newValue - oldValue;
+          // // Если разница в значениях равна нулю
+          // if (newDiff === 0) {
+          //   // И при этом перенос человек не осуществлял (даже в черновом варианте), то удалить перенос по этому полю вовсе
+          //   if (
+          //     objectId in prev.corrections.works &&
+          //     fieldName in prev.corrections.works[objectId]! &&
+          //     prev.corrections.works[objectId]![fieldName]?.fieldsTo === undefined
+          //   ) {
+          //     return { ...prev, corrections: { ...prev.corrections, works: { ...prev.corrections.works } } };
+          //   }
+          //   return prev;
+          // }
+          const prevFieldsTo = prev.corrections.works[objectId]
+            ? prev.corrections.works[objectId]![fieldName]?.fieldsTo
+            : undefined;
+          const newCorrection: TPprDataCorrection<IPlanWork> = {
+            ...prev.corrections.works[objectId],
+            [fieldName]: {
+              newValue,
+              diff: newDiff,
+              fieldsTo: prevFieldsTo,
             },
           };
           return {
@@ -72,8 +72,8 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
               ...prev.corrections,
               works: {
                 ...prev.corrections.works,
-                [object_id]: {
-                  ...new_correction,
+                [objectId]: {
+                  ...newCorrection,
                 },
               },
             },
