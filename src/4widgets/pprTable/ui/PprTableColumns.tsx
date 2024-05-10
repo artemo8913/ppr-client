@@ -15,7 +15,7 @@ import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 
 export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
   const { filterColumns, currentTimePeriod } = usePprTableSettings();
-  const { pprData, workCorrections } = usePprTableData();
+  const { pprData, workPlanCorrections } = usePprTableData();
 
   const columnHelper = createColumnHelper<IPprData>();
 
@@ -60,9 +60,9 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
                     isVertical
                     value={
                       Number(info.getValue()) +
-                      (info.row.original.id in workCorrections &&
-                      info.column.id in workCorrections[info.row.original.id]!
-                        ? Number(workCorrections[info.row.original.id]![info.column.id as keyof IPlanWork])
+                      (info.row.original.id in workPlanCorrections &&
+                      info.column.id in workPlanCorrections[info.row.original.id]!
+                        ? Number(workPlanCorrections[info.row.original.id]![info.column.id as keyof IPlanWork])
                         : 0)
                     }
                     handleBlur={(value: string) => {

@@ -1,11 +1,11 @@
 import { FC } from "react";
 import Badge from "antd/es/badge";
 import Tooltip from "antd/es/tooltip";
-import { TMonths, monthsIntlRu } from "@/1shared/types/date";
+import { TMonth, monthsIntlRu } from "@/1shared/types/date";
 import { TMonthPprStatus } from "@/2entities/pprTable";
 
 interface IPprMonthsInfoBadgeProps {
-  month: TMonths;
+  month: TMonth;
   monthStatus: TMonthPprStatus;
 }
 
