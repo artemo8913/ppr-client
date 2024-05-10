@@ -54,7 +54,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               <span>{Number(correction.data?.newValue)}</span> <span>{worksDataInPpr[correction.id].measure}</span>
               {". "}
               <span>Разницу</span> <span>{Number(correction.data?.diff)}</span>{" "}
-              <span>{worksDataInPpr[correction.id].measure}</span> <span>перенести на/с</span>{" "}
+              <span>{worksDataInPpr[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
               {transfer.map((trans) => {
                 return (
                   <>
