@@ -10,16 +10,15 @@ import {
   useEffect,
   useState,
 } from "react";
-import { TMonths } from "@/1shared/types/date";
+import { IWork } from "@/2entities/work";
 import { IPpr, IPprData, TWorkPlanCorrection, planWorkPeriods } from "@/2entities/pprTable";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 
 interface IPprTableDataContextProps {
   pprData: IPpr | null;
-  currentMonth: TMonths | null;
-  workCorrections: TWorkPlanCorrection;
+  workPlanCorrections: TWorkPlanCorrection;
+  worksDataInPpr: TWorkData;
   setPprData: Dispatch<SetStateAction<IPpr | null>>;
-  setCurrentMonth: Dispatch<SetStateAction<TMonths | null>>;
   addWork: (newWork: Partial<IPprData>) => void;
   addWorkingMan: () => void;
   deleteWorkingMan: (id: string) => void;
@@ -27,10 +26,9 @@ interface IPprTableDataContextProps {
 
 const PprTableDataContext = createContext<IPprTableDataContextProps>({
   pprData: null,
-  currentMonth: null,
-  workCorrections: {},
+  workPlanCorrections: {},
+  worksDataInPpr: {},
   setPprData: () => {},
-  setCurrentMonth: () => {},
   addWork: () => {},
   addWorkingMan: () => {},
   deleteWorkingMan: () => {},
@@ -42,15 +40,17 @@ interface IPprTableDataProviderProps extends PropsWithChildren {
   ppr: IPpr;
 }
 
+type TWorkData = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
+
 export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, ppr }) => {
   //Данные ППРа
   const [pprData, setPprData] = useState<IPpr | null>(null);
-  //Выбранный месяц в качестве текущего
-  const [currentMonth, setCurrentMonth] = useState<TMonths | null>(null);
   //Изменения планов ППРа
-  const [workCorrections, setWorkCorrections] = useState<TWorkPlanCorrection>({});
+  const [workPlanCorrections, setWorkPlanCorrections] = useState<TWorkPlanCorrection>({});
+  //Данные о работах, применяемых в этом ППРе
+  const [worksDataInPpr, setWorksDataInPpr] = useState<TWorkData>({});
 
-  const handleWorkCorrections = useCallback(() => {
+  const handleWorkPlanCorrections = useCallback(() => {
     if (!pprData) {
       return;
     }
@@ -75,8 +75,17 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         }
       });
     }
-    setWorkCorrections(corrections);
-  }, [pprData, setWorkCorrections]);
+    setWorkPlanCorrections(corrections);
+  }, [pprData, setWorkPlanCorrections]);
+
+  const handleWorksDataInPpr = useCallback(() => {
+    if (!pprData) {
+      return;
+    }
+    const worksData: TWorkData = {};
+    pprData.data.forEach((work) => (worksData[work.id] = { ...work }));
+    setWorksDataInPpr(worksData);
+  }, [pprData]);
 
   /**Добавить работу в ППР */
   const addWork = useCallback((newWork: Partial<IPprData>) => {
@@ -131,17 +140,20 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
   }, [ppr]);
 
   useEffect(() => {
-    handleWorkCorrections();
-  }, [pprData?.corrections, handleWorkCorrections]);
+    handleWorkPlanCorrections();
+  }, [pprData?.corrections, handleWorkPlanCorrections]);
+
+  useEffect(() => {
+    handleWorksDataInPpr();
+  }, [pprData?.data, handleWorksDataInPpr]);
 
   return (
     <PprTableDataContext.Provider
       value={{
         pprData,
-        workCorrections,
-        currentMonth,
+        workPlanCorrections,
+        worksDataInPpr,
         setPprData,
-        setCurrentMonth,
         addWork,
         addWorkingMan,
         deleteWorkingMan,

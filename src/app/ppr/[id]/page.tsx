@@ -8,6 +8,7 @@ import { WorkModal } from "@/4widgets/workModal";
 import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { PeoplesTable } from "@/4widgets/peoplesTable";
+import { CorrectionRaport } from "@/4widgets/correctionRaport";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
@@ -39,6 +40,16 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
                     <PprTable />
                   </div>
                 ),
+              },
+              {
+                key: "3",
+                label: "Месячный план",
+                children: <div>Месячный план</div>,
+              },
+              {
+                key: "4",
+                label: "Рапорт на корректировку плана",
+                children: <CorrectionRaport />,
               },
             ]}
           />

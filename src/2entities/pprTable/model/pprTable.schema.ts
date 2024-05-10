@@ -1,5 +1,5 @@
 import { IUser } from "../../user";
-import { TMonths } from "@/1shared/types/date";
+import { TMonth } from "@/1shared/types/date";
 
 export type TYearPprStatus =
   | "template"
@@ -30,7 +30,7 @@ export type TMonthPprStatus =
   | "done";
 
 export type TAllMonthStatuses = {
-  [month in TMonths]: TMonthPprStatus;
+  [month in TMonth]: TMonthPprStatus;
 };
 
 export interface IPpr {
@@ -111,6 +111,7 @@ export interface IWorkingManPlanTimeValues {
   nov_plan_time?: number;
   dec_plan_time?: number;
 }
+
 export interface IWorkingManFactTimeValues {
   year_fact_time?: number;
   jan_fact_time?: number;
@@ -142,6 +143,7 @@ export interface IPlanWork {
   nov_plan_work: number;
   dec_plan_work: number;
 }
+
 export const planWorkPeriods: (keyof IPlanWork)[] = [
   "year_plan_work",
   "jan_plan_work",
@@ -157,6 +159,7 @@ export const planWorkPeriods: (keyof IPlanWork)[] = [
   "nov_plan_work",
   "dec_plan_work",
 ] as const;
+
 export interface IPlanTime {
   year_plan_time: number;
   jan_plan_time: number;
@@ -172,6 +175,7 @@ export interface IPlanTime {
   nov_plan_time: number;
   dec_plan_time: number;
 }
+
 export interface IFactWork {
   year_fact_work: number;
   jan_fact_work: number;
@@ -187,6 +191,7 @@ export interface IFactWork {
   nov_fact_work: number;
   dec_fact_work: number;
 }
+
 export interface IFactNormTime {
   year_fact_norm_time: number;
   jan_fact_norm_time: number;
@@ -202,6 +207,7 @@ export interface IFactNormTime {
   nov_fact_norm_time: number;
   dec_fact_norm_time: number;
 }
+
 export interface IFactTime {
   year_fact_time: number;
   jan_fact_time: number;
