@@ -1,14 +1,14 @@
 "use client";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC } from "react";
-import { TFilterMonthsOption, TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { TFilterTimePeriodOption, TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
 
 interface IPprTableSelectFilterTimePeriodProps {}
 
 export const PprTableSelectFilterTimePeriod: FC<IPprTableSelectFilterTimePeriodProps> = () => {
   const { filterColumns, setFilterMonths } = usePprTableSettings();
   return (
-    <Select<TFilterMonthsOption, { value: TFilterMonthsOption } & DefaultOptionType>
+    <Select<TFilterTimePeriodOption, { value: TFilterTimePeriodOption } & DefaultOptionType>
       className="min-w-24"
       options={[
         { value: "SHOW_ALL", label: "Все месяца" },
