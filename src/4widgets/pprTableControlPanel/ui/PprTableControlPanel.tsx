@@ -3,7 +3,7 @@ import { IPpr } from "@/2entities/pprTable";
 import { PprTableSaveButton } from "@/3features/pprTableSave";
 import { PprTableYearStatusUpdate } from "@/3features/pprTableStatusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSelectTimePeriod";
-import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettingsChange";
+import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettingsFilterColumns";
 import { PprTableMonthStatusUpdate } from "@/3features/pprTableStatusUpdate/ui/PprTableMonthStatusUpdate";
 
 interface IPprTableControlPanelProps {
