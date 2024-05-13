@@ -26,7 +26,7 @@ export const Arrow: FC<IArrowProps> = ({ pos = { x: 0, y: 0 }, direction = "posi
           style={{ rotate: isOnRight ? "" : "180deg", transformOrigin: "center" }}
           id="arrow-line"
           marker-end="url(#head)"
-          stroke-width="3"
+          stroke-width="2"
           stroke={color}
           d={`M0 ${12} H ${width - 10}`}
         />
