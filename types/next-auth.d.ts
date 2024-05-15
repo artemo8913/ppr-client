@@ -1,4 +1,4 @@
-import { IUser } from "@/1shared/api/user";
+import { IUser } from "@/2entities/user";
 import NextAuth from "next-auth";
 
 declare module "next-auth" {

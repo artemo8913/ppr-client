@@ -15,6 +15,8 @@ export interface IDivisionInfo extends basicInfo {
 
 export const directions: Record<number, IDivisionInfo> = {
   88: {
+    name: "Красноярская НТЭ",
+    short_name: "КрасНТЭ",
     distances: {
       1: {
         name: "ЭЧ Боготол",
@@ -45,7 +47,5 @@ export const directions: Record<number, IDivisionInfo> = {
       6: { name: "ЭЧ Абакан", short_name: "ЭЧ-6", subdivisions: {} },
       7: { name: "ЭЧ Саянская", short_name: "ЭЧ-7", subdivisions: {} },
     },
-    name: "Красноярская НТЭ",
-    short_name: "КрасНТЭ",
   },
 };

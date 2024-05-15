@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authConfig";
+import { authOptions } from "@/1shared/auth/authConfig";
 import { ServerSubmitButton } from "@/1shared/ui/button";
-import { IPpr, addPprTable } from "@/1shared/api/pprTable";
+import { IPpr, addPprTable } from "@/2entities/pprTable";
 
 export async function PprCreateNewButton() {
   const session = await getServerSession(authOptions);
@@ -15,6 +15,8 @@ export async function PprCreateNewButton() {
     year: new Date().getFullYear(),
     created_at: new Date().toString(),
     created_by: session?.user!,
+    peoples: [],
+    corrections: { peoples: {}, works: {} },
     months_statuses: {
       jan: "none",
       feb: "none",

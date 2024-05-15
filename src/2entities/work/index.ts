@@ -1,2 +1,2 @@
-export { WorkModal } from "./ui/WorkModal";
-export { useWorkModal, WorkModalProvider } from "./ui/WorkModalProvider";
+export type { IWork, TLineClassData } from "./model/work.schema";
+export { getWorkById, getAllWorks } from "./model/work.actions";
