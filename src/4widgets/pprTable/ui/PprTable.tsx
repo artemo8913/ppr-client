@@ -1,17 +1,22 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
 import { useCreateDefaultColumns } from "./PprTableColumns";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TPprDataCorrection } from "@/2entities/pprTable";
+import { usePprTableData, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { IPprData, TPprDataCorrection, planWorkPeriods } from "@/2entities/pprTable";
 import { IPlanWork } from "@/2entities/pprTable";
+import { Arrow } from "@/1shared/ui/arrow";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
+  const { filterColumns } = usePprTableSettings();
+  const planCellRef = useRef<HTMLTableCellElement | null>(null);
+  const [basicArrowWidth, setBasicArrowWidth] = useState(0);
 
+  console.log(planCellRef.current?.getBoundingClientRect().width);
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
     columns: useCreateDefaultColumns(),
@@ -82,37 +87,58 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       },
     },
   });
+  useEffect(() => {
+    const width = planCellRef.current?.getBoundingClientRect().width || 0;
+    setBasicArrowWidth(width * 6);
+  }, [filterColumns]);
 
   return (
     <table className="table-fixed w-[100%] [font-size:12px]">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th
-                className="border border-black max-h-[300px] relative"
-                style={getThStyle(header.column.id as keyof IPprData)}
-                key={header.id}
-                colSpan={header.colSpan}
-              >
-                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-              </th>
-            ))}
+            {headerGroup.headers.map((header) => {
+              return (
+                <th
+                  ref={header.column.id === "year_plan_work" ? planCellRef : null}
+                  className="border border-black max-h-[300px] relative"
+                  style={getThStyle(header.column.id as keyof IPprData)}
+                  key={header.id}
+                  colSpan={header.colSpan}
+                >
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              );
+            })}
           </tr>
         ))}
       </thead>
       <tbody>
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td
-                className="border border-black relative"
-                key={cell.id}
-                style={getTdStyle(cell.column.id as keyof IPprData)}
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
+            {row.getVisibleCells().map((cell) => {
+              return (
+                <td
+                  className="border border-black relative"
+                  key={cell.id}
+                  style={getTdStyle(cell.column.id as keyof IPprData)}
+                >
+                  {planWorkPeriods.includes(cell.column.id as keyof IPlanWork) &&
+                  pprData?.corrections.works &&
+                  cell.row.original.id in pprData?.corrections.works &&
+                  pprData?.corrections.works[cell.row.original.id] &&
+                  cell.column.id in pprData?.corrections.works[cell.row.original.id]! &&
+                  pprData?.corrections.works[cell.row.original.id]![cell.column.id as keyof IPlanWork]
+                    ? pprData.corrections.works[cell.row.original.id]![
+                        cell.column.id as keyof IPlanWork
+                      ]!.fieldsTo?.map((field, index) => (
+                        <Arrow key={cell.id + index} width={basicArrowWidth} value={String(field.value)} />
+                      ))
+                    : null}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>

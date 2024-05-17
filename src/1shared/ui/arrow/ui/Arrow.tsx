@@ -12,7 +12,7 @@ export const Arrow: FC<IArrowProps> = ({ pos = { x: 0, y: 0 }, direction = "posi
   const color = isOnRight ? "red" : "green";
   const text = value ? (isOnRight ? `+${value}` : `-${value}`) : "";
   return (
-    <div className="absolute" style={{ top: pos.y, left: pos.x }}>
+    <div className="absolute z-10" style={{ top: pos.y, left: pos.x }}>
       <svg width={width} height={24} color={color}>
         <defs>
           <marker id="head" orient="auto" markerWidth="3" markerHeight="4" refX="0.1" refY="2">
@@ -25,8 +25,8 @@ export const Arrow: FC<IArrowProps> = ({ pos = { x: 0, y: 0 }, direction = "posi
         <path
           style={{ rotate: isOnRight ? "" : "180deg", transformOrigin: "center" }}
           id="arrow-line"
-          marker-end="url(#head)"
-          stroke-width="2"
+          markerEnd="url(#head)"
+          strokeWidth="2"
           stroke={color}
           d={`M0 ${12} H ${width - 10}`}
         />
