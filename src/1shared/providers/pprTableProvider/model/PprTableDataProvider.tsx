@@ -50,7 +50,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
   //Данные о работах, применяемых в этом ППРе
   const [worksDataInPpr, setWorksDataInPpr] = useState<TWorkData>({});
 
-  const handleWorkPlanCorrections = useCallback(() => {
+  const handleCorrections = useCallback(() => {
     if (!pprData) {
       return;
     }
@@ -76,7 +76,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       });
     }
     setWorkPlanCorrections(corrections);
-  }, [pprData, setWorkPlanCorrections]);
+  }, [pprData]);
 
   const handleWorksDataInPpr = useCallback(() => {
     if (!pprData) {
@@ -140,8 +140,8 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
   }, [ppr]);
 
   useEffect(() => {
-    handleWorkPlanCorrections();
-  }, [pprData?.corrections, handleWorkPlanCorrections]);
+    handleCorrections();
+  }, [pprData?.corrections, handleCorrections]);
 
   useEffect(() => {
     handleWorksDataInPpr();

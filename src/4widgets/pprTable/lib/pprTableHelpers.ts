@@ -2,7 +2,7 @@ import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCell } from "@/1shared/ui/table";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
-import { TFilterMonthsOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
+import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
 import { IHandlePprData, IPprData, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/pprTable";
 
 export const columnsDefault: Array<keyof IPprData> = [
@@ -22,7 +22,7 @@ export const columnsDefault: Array<keyof IPprData> = [
 
 export function getTimePeriodsColumns(
   currentTimePeriod?: TPprTimePeriod,
-  option?: TFilterMonthsOption
+  option?: TFilterTimePeriodOption
 ): TPprTimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":

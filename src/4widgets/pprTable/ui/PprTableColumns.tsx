@@ -14,7 +14,7 @@ import {
 import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 
 export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
-  const { filterColumns, currentTimePeriod } = usePprTableSettings();
+  const { filterColumns, currentTimePeriod, correctionView } = usePprTableSettings();
   const { pprData, workPlanCorrections } = usePprTableData();
 
   const columnHelper = createColumnHelper<IPprData>();
@@ -55,16 +55,17 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
             return columnHelper.accessor(field, {
               header: (info) => <TableCell isVertical value={findPlanFactTitle(info.header.id)} />,
               cell: (info) => {
+                const value =
+                  Number(info.getValue()) +
+                  (info.row.original.id in workPlanCorrections &&
+                  (correctionView === "CORRECTED_PLAN" || correctionView === "CORRECTED_PLAN_WITH_ARROWS") &&
+                  info.column.id in workPlanCorrections[info.row.original.id]!
+                    ? Number(workPlanCorrections[info.row.original.id]![info.column.id as keyof IPlanWork])
+                    : 0);
                 return (
                   <TableCell
                     isVertical
-                    value={
-                      Number(info.getValue()) +
-                      (info.row.original.id in workPlanCorrections &&
-                      info.column.id in workPlanCorrections[info.row.original.id]!
-                        ? Number(workPlanCorrections[info.row.original.id]![info.column.id as keyof IPlanWork])
-                        : 0)
-                    }
+                    value={value}
                     handleBlur={(value: string) => {
                       // Если изменяемая ячейка не план работ или же работа ещё не утверждена,
                       // то просто изменяется содержимое ППРа

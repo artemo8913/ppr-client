@@ -3,8 +3,9 @@ import { IPpr } from "@/2entities/pprTable";
 import { PprTableSaveButton } from "@/3features/pprTableSave";
 import { PprTableYearStatusUpdate } from "@/3features/pprTableStatusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSelectTimePeriod";
-import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettingsChange";
+import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSelectColumnsFilter";
 import { PprTableMonthStatusUpdate } from "@/3features/pprTableStatusUpdate/ui/PprTableMonthStatusUpdate";
+import { PprTableSelectCorrectionView } from "@/3features/pprTableSelectCorrectionView";
 
 interface IPprTableControlPanelProps {
   pprData: IPpr;
@@ -21,6 +22,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
       <PprTableSelectTimePeriod />
       <PprTableSelectFilterTimePeriod />
       <PprTableSelectFilterPlanFact />
+      <PprTableSelectCorrectionView />
     </div>
   );
 };
