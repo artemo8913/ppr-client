@@ -12,7 +12,7 @@ interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
-  const { filterColumns } = usePprTableSettings();
+  const { filterColumns, correctionView } = usePprTableSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
 
@@ -124,6 +124,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                   style={getTdStyle(cell.column.id as keyof IPprData)}
                 >
                   {planWorkPeriods.includes(cell.column.id as keyof IPlanWork) &&
+                  (correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS") &&
                   pprData?.corrections.works &&
                   cell.row.original.id in pprData?.corrections.works &&
                   pprData?.corrections.works[cell.row.original.id] &&
