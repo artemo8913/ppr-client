@@ -14,7 +14,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
 
   const { filterColumns, correctionView } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
-  const [basicArrowWidth, setBasicArrowWidth] = useState(0);
+  const [basicArrowWidth, setBasicArrowWidth] = useState(100);
 
   const pprYearStatus: TYearPprStatus = pprData?.status || "done";
   const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
@@ -42,6 +42,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
             {headerGroup.headers.map((header) => {
               return (
                 <th
+                  ref={header.column.id === "year_plan_work" ? planCellRef : null}
                   key={header.id}
                   className="border border-black max-h-[300px] relative"
                   style={getThStyle(header.column.id)}
