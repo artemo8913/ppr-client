@@ -8,7 +8,7 @@ import { findMonthByStart, monthsIntlRu } from "@/1shared/types/date";
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { pprData, worksDataInPpr } = usePprTableData();
+  const { pprData, workBasicInfo } = usePprTableData();
   const { currentTimePeriod } = usePprTableViewSettings();
   const { data: userData } = useSession();
 
@@ -48,17 +48,17 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               : [];
           return (
             <li key={correction.id}>
-              <span>{worksDataInPpr[correction.id].name}:</span> <span>план</span>{" "}
+              <span>{workBasicInfo[correction.id].name}:</span> <span>план</span>{" "}
               <span>{Number(correction.data?.newValue) - Number(correction.data?.diff)}</span>{" "}
-              <span>{worksDataInPpr[correction.id].measure}</span> <span>изменить на</span>{" "}
-              <span>{Number(correction.data?.newValue)}</span> <span>{worksDataInPpr[correction.id].measure}</span>
+              <span>{workBasicInfo[correction.id].measure}</span> <span>изменить на</span>{" "}
+              <span>{Number(correction.data?.newValue)}</span> <span>{workBasicInfo[correction.id].measure}</span>
               {". "}
               <span>Разницу</span> <span>{Number(correction.data?.diff)}</span>{" "}
-              <span>{worksDataInPpr[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
+              <span>{workBasicInfo[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
               {transfer.map((trans) => {
                 return (
                   <>
-                    {findMonthByStart(trans.fieldNameTo)} ({trans.value} {worksDataInPpr[correction.id].measure})
+                    {findMonthByStart(trans.fieldNameTo)} ({trans.value} {workBasicInfo[correction.id].measure})
                   </>
                 );
               })}

@@ -14,10 +14,12 @@ import { IWork } from "@/2entities/work";
 import { IPpr, IPprData, TWorkPlanCorrection, planWorkPeriods } from "@/2entities/pprTable";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 
+type TWorkBasicInfo = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
+
 interface IPprTableDataContextProps {
   pprData: IPpr | null;
   workPlanCorrections: TWorkPlanCorrection;
-  worksDataInPpr: TWorkData;
+  workBasicInfo: TWorkBasicInfo;
   setPprData: Dispatch<SetStateAction<IPpr | null>>;
   addWork: (newWork: Partial<IPprData>) => void;
   addWorkingMan: () => void;
@@ -27,7 +29,7 @@ interface IPprTableDataContextProps {
 const PprTableDataContext = createContext<IPprTableDataContextProps>({
   pprData: null,
   workPlanCorrections: {},
-  worksDataInPpr: {},
+  workBasicInfo: {},
   setPprData: () => {},
   addWork: () => {},
   addWorkingMan: () => {},
@@ -40,15 +42,13 @@ interface IPprTableDataProviderProps extends PropsWithChildren {
   ppr: IPpr;
 }
 
-type TWorkData = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
-
 export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, ppr }) => {
   //Данные ППРа
   const [pprData, setPprData] = useState<IPpr | null>(null);
   //Изменения планов ППРа
   const [workPlanCorrections, setWorkPlanCorrections] = useState<TWorkPlanCorrection>({});
   //Данные о работах, применяемых в этом ППРе
-  const [worksDataInPpr, setWorksDataInPpr] = useState<TWorkData>({});
+  const [workBasicInfo, setWorksDataInPpr] = useState<TWorkBasicInfo>({});
 
   const handleCorrections = useCallback(() => {
     if (!pprData) {
@@ -82,7 +82,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     if (!pprData) {
       return;
     }
-    const worksData: TWorkData = {};
+    const worksData: TWorkBasicInfo = {};
     pprData.data.forEach((work) => (worksData[work.id] = { ...work }));
     setWorksDataInPpr(worksData);
   }, [pprData]);
@@ -152,7 +152,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       value={{
         pprData,
         workPlanCorrections,
-        worksDataInPpr,
+        workBasicInfo,
         setPprData,
         addWork,
         addWorkingMan,
