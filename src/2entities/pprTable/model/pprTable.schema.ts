@@ -33,7 +33,7 @@ export type TAllMonthStatuses = {
   [month in TMonth]: TMonthPprStatus;
 };
 
-export interface IPlanWork {
+export interface IPlanWorkPeriods {
   year_plan_work: number;
   jan_plan_work: number;
   feb_plan_work: number;
@@ -49,7 +49,7 @@ export interface IPlanWork {
   dec_plan_work: number;
 }
 
-export interface IPlanTime {
+export interface IPlanTimePeriods {
   year_plan_time: number;
   jan_plan_time: number;
   feb_plan_time: number;
@@ -65,7 +65,7 @@ export interface IPlanTime {
   dec_plan_time: number;
 }
 
-export interface IFactWork {
+export interface IFactWorkPeriods {
   year_fact_work: number;
   jan_fact_work: number;
   feb_fact_work: number;
@@ -81,7 +81,7 @@ export interface IFactWork {
   dec_fact_work: number;
 }
 
-export interface IFactNormTime {
+export interface IFactNormTimePeriods {
   year_fact_norm_time: number;
   jan_fact_norm_time: number;
   feb_fact_norm_time: number;
@@ -97,7 +97,7 @@ export interface IFactNormTime {
   dec_fact_norm_time: number;
 }
 
-export interface IFactTime {
+export interface IFactTimePeriods {
   year_fact_time: number;
   jan_fact_time: number;
   feb_fact_time: number;
@@ -127,8 +127,8 @@ export interface IPpr {
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
   corrections: {
-    peoples: { [id: string]: TPprDataCorrection<IPlanTime> | undefined };
-    works: { [id: string]: TPprDataCorrection<IPlanWork> | undefined };
+    peoples: { [id: string]: TPprDataCorrection<IPlanTimePeriods> | undefined };
+    works: { [id: string]: TPprDataCorrection<IPlanWorkPeriods> | undefined };
   };
 }
 
@@ -138,7 +138,7 @@ export interface IHandlePprData extends IPprData {
 }
 
 export type TWorkPlanCorrection = {
-  [id: string]: { [planPeriod in keyof IPlanWork]?: number } | undefined;
+  [id: string]: { [planPeriod in keyof IPlanWorkPeriods]?: number } | undefined;
 };
 
 export type TPprDataCorrection<T> = {
@@ -149,14 +149,19 @@ export type TPprDataCorrection<T> = {
   };
 };
 
-export interface IWorkingManYearPlan extends IPlanTime, IFactTime {
+export interface IWorkingManYearPlan extends IPlanTimePeriods, IFactTimePeriods {
   id: string;
   full_name: string;
   work_position: string;
   participation: number;
 }
 
-export interface IPprData extends IPlanWork, IPlanTime, IFactWork, IFactNormTime, IFactTime {
+export interface IPprData
+  extends IPlanWorkPeriods,
+    IPlanTimePeriods,
+    IFactWorkPeriods,
+    IFactNormTimePeriods,
+    IFactTimePeriods {
   id: string;
   workId: string | null;
   is_work_aproved: boolean;
@@ -176,7 +181,7 @@ export interface IPprData extends IPlanWork, IPlanTime, IFactWork, IFactNormTime
   unity: string;
 }
 
-export const planWorkPeriods: (keyof IPlanWork)[] = [
+export const planWorkPeriods: (keyof IPlanWorkPeriods)[] = [
   "year_plan_work",
   "jan_plan_work",
   "feb_plan_work",
@@ -192,7 +197,7 @@ export const planWorkPeriods: (keyof IPlanWork)[] = [
   "dec_plan_work",
 ] as const;
 
-export const planTimePeriods: (keyof IPlanTime)[] = [
+export const planTimePeriods: (keyof IPlanTimePeriods)[] = [
   "year_plan_time",
   "jan_plan_time",
   "feb_plan_time",
@@ -208,7 +213,7 @@ export const planTimePeriods: (keyof IPlanTime)[] = [
   "dec_plan_time",
 ] as const;
 
-export const factWorkPeriods: (keyof IFactWork)[] = [
+export const factWorkPeriods: (keyof IFactWorkPeriods)[] = [
   "year_fact_work",
   "jan_fact_work",
   "feb_fact_work",
@@ -224,7 +229,7 @@ export const factWorkPeriods: (keyof IFactWork)[] = [
   "dec_fact_work",
 ] as const;
 
-export const factTimePeriods: (keyof IFactTime)[] = [
+export const factTimePeriods: (keyof IFactTimePeriods)[] = [
   "year_fact_time",
   "jan_fact_time",
   "feb_fact_time",

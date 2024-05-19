@@ -2,7 +2,7 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { TableCell } from "@/1shared/ui/table";
 import { monthsIntlRu } from "@/1shared/types/date";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, IPlanWork } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, IPlanWorkPeriods } from "@/2entities/pprTable";
 import {
   columnsDefault,
   columnsTitles,
@@ -60,7 +60,7 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
                   (info.row.original.id in workPlanCorrections &&
                   (correctionView === "CORRECTED_PLAN" || correctionView === "CORRECTED_PLAN_WITH_ARROWS") &&
                   info.column.id in workPlanCorrections[info.row.original.id]!
-                    ? Number(workPlanCorrections[info.row.original.id]![info.column.id as keyof IPlanWork])
+                    ? Number(workPlanCorrections[info.row.original.id]![info.column.id as keyof IPlanWorkPeriods])
                     : 0);
                 return (
                   <TableCell
@@ -76,7 +76,7 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
                         info.table.options.meta?.correctPlan &&
                           info.table.options.meta?.correctPlan(
                             info.row.original.id,
-                            info.column.id as keyof IPlanWork,
+                            info.column.id as keyof IPlanWorkPeriods,
                             Number(value),
                             Number(info.row.original[info.column.id as keyof IPprData])
                           );

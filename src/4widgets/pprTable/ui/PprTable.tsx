@@ -5,7 +5,7 @@ import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
 import { useCreateDefaultColumns } from "./PprTableColumns";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { IPprData, TPprDataCorrection, planWorkPeriods } from "@/2entities/pprTable";
-import { IPlanWork } from "@/2entities/pprTable";
+import { IPlanWorkPeriods } from "@/2entities/pprTable";
 import { Arrow } from "@/1shared/ui/arrow";
 
 interface IPprTableProps {}
@@ -63,7 +63,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           const prevFieldsTo = prev.corrections.works[objectId]
             ? prev.corrections.works[objectId]![fieldName]?.fieldsTo
             : undefined;
-          const newCorrection: TPprDataCorrection<IPlanWork> = {
+          const newCorrection: TPprDataCorrection<IPlanWorkPeriods> = {
             ...prev.corrections.works[objectId],
             [fieldName]: {
               newValue,
@@ -123,15 +123,15 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                   key={cell.id}
                   style={getTdStyle(cell.column.id as keyof IPprData)}
                 >
-                  {planWorkPeriods.includes(cell.column.id as keyof IPlanWork) &&
+                  {planWorkPeriods.includes(cell.column.id as keyof IPlanWorkPeriods) &&
                   (correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS") &&
                   pprData?.corrections.works &&
                   cell.row.original.id in pprData?.corrections.works &&
                   pprData?.corrections.works[cell.row.original.id] &&
                   cell.column.id in pprData?.corrections.works[cell.row.original.id]! &&
-                  pprData?.corrections.works[cell.row.original.id]![cell.column.id as keyof IPlanWork]
+                  pprData?.corrections.works[cell.row.original.id]![cell.column.id as keyof IPlanWorkPeriods]
                     ? pprData.corrections.works[cell.row.original.id]![
-                        cell.column.id as keyof IPlanWork
+                        cell.column.id as keyof IPlanWorkPeriods
                       ]!.fieldsTo?.map((field, index) => (
                         <Arrow key={cell.id + index} width={basicArrowWidth} value={String(field.value)} />
                       ))
