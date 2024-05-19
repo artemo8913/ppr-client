@@ -26,6 +26,7 @@ interface IPprTableDataContextProps {
     newValue: number,
     oldValue: number
   ) => void;
+  getCorrectionValue: (workId: string, fieldName: keyof IPlanWorkPeriods | string) => number;
   addWorkingMan: () => void;
   updateWorkingMan: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   deleteWorkingMan: (id: string) => void;
@@ -38,6 +39,7 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   addWork: () => {},
   updatePprData: () => {},
   updatePprDataCorrections: () => {},
+  getCorrectionValue: () => 0,
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
@@ -106,6 +108,20 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       };
     });
   }, []);
+
+  const getCorrectionValue = useCallback(
+    (workId: string, fieldName: keyof IPlanWorkPeriods | string): number => {
+      if (
+        workId in workPlanCorrections &&
+        fieldName in workPlanCorrections[workId]! &&
+        Object.hasOwn(workPlanCorrections[workId]!, fieldName)
+      ) {
+        return Number(workPlanCorrections[workId]![fieldName as keyof IPlanWorkPeriods]);
+      }
+      return 0;
+    },
+    [workPlanCorrections]
+  );
 
   /**Обновить данные ППРа */
   const updatePprData = useCallback((rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
@@ -233,6 +249,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         addWork,
         updatePprData,
         updatePprDataCorrections,
+        getCorrectionValue,
         addWorkingMan,
         updateWorkingMan,
         deleteWorkingMan,

@@ -197,7 +197,7 @@ export const planWorkPeriods: (keyof IPlanWorkPeriods)[] = [
   "dec_plan_work",
 ] as const;
 
-export const planTimePeriods: (keyof IPlanTimePeriods)[] = [
+const planTimePeriods: (keyof IPlanTimePeriods)[] = [
   "year_plan_time",
   "jan_plan_time",
   "feb_plan_time",
@@ -213,7 +213,7 @@ export const planTimePeriods: (keyof IPlanTimePeriods)[] = [
   "dec_plan_time",
 ] as const;
 
-export const factWorkPeriods: (keyof IFactWorkPeriods)[] = [
+const factWorkPeriods: (keyof IFactWorkPeriods)[] = [
   "year_fact_work",
   "jan_fact_work",
   "feb_fact_work",
@@ -229,7 +229,7 @@ export const factWorkPeriods: (keyof IFactWorkPeriods)[] = [
   "dec_fact_work",
 ] as const;
 
-export const factTimePeriods: (keyof IFactTimePeriods)[] = [
+const factTimePeriods: (keyof IFactTimePeriods)[] = [
   "year_fact_time",
   "jan_fact_time",
   "feb_fact_time",
@@ -244,3 +244,46 @@ export const factTimePeriods: (keyof IFactTimePeriods)[] = [
   "nov_fact_time",
   "dec_fact_time",
 ] as const;
+
+const normTimePeriods: (keyof IFactNormTimePeriods)[] = [
+  "year_fact_norm_time",
+  "jan_fact_norm_time",
+  "feb_fact_norm_time",
+  "mar_fact_norm_time",
+  "apr_fact_norm_time",
+  "may_fact_norm_time",
+  "june_fact_norm_time",
+  "july_fact_norm_time",
+  "aug_fact_norm_time",
+  "sept_fact_norm_time",
+  "oct_fact_norm_time",
+  "nov_fact_norm_time",
+  "dec_fact_norm_time",
+] as const;
+
+const pprDataColumnsFields: (keyof IPprData)[] = [
+  "id",
+  "workId",
+  "is_work_aproved",
+  "branch",
+  "subbranch",
+  "name",
+  "location",
+  "line_class",
+  "measure",
+  "total_count",
+  "entry_year",
+  "periodicity_normal",
+  "periodicity_fact",
+  "last_maintenance_year",
+  "norm_of_time",
+  "norm_of_time_document",
+  "unity",
+  ...planWorkPeriods,
+  ...planTimePeriods,
+  ...factWorkPeriods,
+  ...normTimePeriods,
+  ...factTimePeriods,
+] as const;
+
+export const pprTableColumnsSet: Set<keyof IPprData | string> = new Set(pprDataColumnsFields);

@@ -3,28 +3,32 @@ import { FC, useEffect, useRef, useState } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Arrow } from "@/1shared/ui/arrow";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPprData, planWorkPeriods } from "@/2entities/pprTable";
-import { IPlanWorkPeriods } from "@/2entities/pprTable";
+import { IPlanWorkPeriods, IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriods } from "@/2entities/pprTable";
 import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
-import { useCreateDefaultColumns } from "./PprTableColumns";
+import { useCreateColumns } from "./PprTableColumns";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, updatePprData, updatePprDataCorrections } = usePprTableData();
+
   const { filterColumns, correctionView } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
 
+  const pprYearStatus: TYearPprStatus = pprData?.status || "done";
+  const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
+
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
-    columns: useCreateDefaultColumns(),
+    columns: useCreateColumns(pprYearStatus, pprMonthsStatuses),
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: updatePprData,
       correctPlan: updatePprDataCorrections,
     },
   });
+
   useEffect(() => {
     const width = planCellRef.current?.getBoundingClientRect().width || 0;
     setBasicArrowWidth(width * 6);
@@ -38,10 +42,9 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
             {headerGroup.headers.map((header) => {
               return (
                 <th
-                  ref={header.column.id === "year_plan_work" ? planCellRef : null}
-                  className="border border-black max-h-[300px] relative"
-                  style={getThStyle(header.column.id as keyof IPprData)}
                   key={header.id}
+                  className="border border-black max-h-[300px] relative"
+                  style={getThStyle(header.column.id)}
                   colSpan={header.colSpan}
                 >
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -56,11 +59,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => {
               return (
-                <td
-                  className="border border-black relative"
-                  key={cell.id}
-                  style={getTdStyle(cell.column.id as keyof IPprData)}
-                >
+                <td key={cell.id} className="border border-black relative" style={getTdStyle(cell.column.id)}>
                   {planWorkPeriods.includes(cell.column.id as keyof IPlanWorkPeriods) &&
                   (correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS") &&
                   pprData?.corrections.works &&

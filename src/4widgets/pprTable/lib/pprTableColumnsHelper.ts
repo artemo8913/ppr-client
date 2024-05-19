@@ -2,7 +2,7 @@ import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCell } from "@/1shared/ui/table";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TAllMonthStatuses, TYearPprStatus } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, pprTableColumnsSet } from "@/2entities/pprTable";
 
 export function findPlanFactTitle(string: string) {
   if (string.endsWith("plan_work")) {
@@ -70,7 +70,7 @@ export function getPlanFactColumns(
   }
 }
 
-export const columnsTitles: { [key in keyof IPprData]?: string } = {
+const columnsTitles: { [key in keyof IPprData]?: string } = {
   name: "Наименования и условия выполнения технологических операций, испытаний и измерений",
   location: "Наименование места проведения работ / тип оборудования",
   line_class: "Класс участка / вид технического обслуживания и ремонта",
@@ -85,12 +85,26 @@ export const columnsTitles: { [key in keyof IPprData]?: string } = {
   unity: "Подразделение / исполнитель",
 };
 
+function isColumnName(column: keyof IPprData | string): column is keyof IPprData {
+  return pprTableColumnsSet.has(column);
+}
+
+export function getColumnTitle(column: keyof IPprData | string): string {
+  if (isColumnName(column)) {
+    return columnsTitles[column] || "";
+  }
+  return "";
+}
+
 export function getColumnSettings(
-  fieldName: keyof Partial<IPprData>,
+  coulumnName: keyof Partial<IPprData> | string,
   pprYearStatus: TYearPprStatus,
   timePeriod: TPprTimePeriod,
   pprMonthStatuses?: TAllMonthStatuses
 ): ITableCell | undefined {
+  if (!isColumnName(coulumnName)) {
+    return;
+  }
   if (pprYearStatus === "plan_creating") {
     const settings: { [key in keyof IPprData]?: ITableCell } = {
       name: { cellType: "textarea" },
@@ -130,15 +144,15 @@ export function getColumnSettings(
       nov_fact_work: { cellType: "input" },
       dec_fact_work: { cellType: "input" },
     };
-    return settings[fieldName];
+    return settings[coulumnName];
   }
   if (pprYearStatus !== "in_process" || timePeriod === "year" || !pprMonthStatuses) {
     return {};
   }
-  if (pprMonthStatuses[timePeriod] === "plan_creating" && fieldName === `${timePeriod}_plan_work`) {
+  if (pprMonthStatuses[timePeriod] === "plan_creating" && coulumnName === `${timePeriod}_plan_work`) {
     return { cellType: "input" };
   }
-  if (pprMonthStatuses[timePeriod] === "fact_filling" && fieldName === `${timePeriod}_fact_work`) {
+  if (pprMonthStatuses[timePeriod] === "fact_filling" && coulumnName === `${timePeriod}_fact_work`) {
     return { cellType: "input" };
   }
   return {};

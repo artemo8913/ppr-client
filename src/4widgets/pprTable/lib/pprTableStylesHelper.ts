@@ -1,7 +1,7 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { IPprData } from "@/2entities/pprTable";
 
-export function getThStyle(key: keyof IPprData): React.CSSProperties {
+export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
   switch (key) {
     case "name":
       return { width: "10%" };
@@ -32,7 +32,7 @@ export function getThStyle(key: keyof IPprData): React.CSSProperties {
   }
 }
 
-export function getTdStyle(key: keyof IPprData): React.CSSProperties {
+export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
   if (key === "norm_of_time_document") {
     return { fontSize: "0.7vw" };
   }
