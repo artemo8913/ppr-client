@@ -13,6 +13,7 @@ import {
 import { IWork } from "@/2entities/work";
 import { IPpr, IPprData, TWorkPlanCorrection, planWorkPeriods } from "@/2entities/pprTable";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
+import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 
 type TWorkBasicInfo = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
 
@@ -108,15 +109,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       }
       return {
         ...prev,
-        peoples: [
-          ...prev.peoples,
-          {
-            id: String(new Date().toString() + Math.random()),
-            full_name: "Иванов И.И.",
-            work_position: "мкс",
-            participation: 1,
-          },
-        ],
+        peoples: prev.peoples.concat(createNewWorkingManInstance()),
       };
     });
   }, []);

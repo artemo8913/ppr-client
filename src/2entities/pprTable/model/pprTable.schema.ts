@@ -33,101 +33,6 @@ export type TAllMonthStatuses = {
   [month in TMonth]: TMonthPprStatus;
 };
 
-export interface IPpr {
-  id: string;
-  name: string;
-  year: number;
-  status: TYearPprStatus;
-  created_at: string;
-  created_by: IUser;
-  months_statuses: TAllMonthStatuses;
-  id_direction: number | null;
-  id_distance: number | null;
-  id_subdivision: number | null;
-  peoples: IWorkingManYearPlan[];
-  data: IPprData[];
-  corrections: {
-    peoples: { [id: string]: TPprDataCorrection<IWorkingManPlanTimeValues> | undefined };
-    works: { [id: string]: TPprDataCorrection<IPlanWork> | undefined };
-  };
-}
-
-export interface IHandlePprData extends IPprData {
-  rowSpan?: number;
-  isHandMade?: boolean;
-}
-
-export type TWorkPlanCorrection = {
-  [id: string]: { [planPeriod in keyof IPlanWork]?: number } | undefined;
-};
-
-export type TPprDataCorrection<T> = {
-  [fieldNameFrom in keyof T]?: {
-    newValue: number;
-    diff: number;
-    fieldsTo: { fieldNameTo: keyof T; value: number; is_approved: boolean }[] | null | undefined;
-  };
-};
-
-export interface IWorkingManYearPlan extends IWorkingManPlanTimeValues, IWorkingManFactTimeValues {
-  id: string;
-  full_name: string;
-  work_position: string;
-  participation: number;
-}
-
-export interface IPprData extends IPlanWork, IPlanTime, IFactWork, IFactNormTime, IFactTime {
-  id: string;
-  workId: string | null;
-  is_work_aproved: boolean;
-  branch: string;
-  subbranch: string;
-  name: string;
-  location: string;
-  line_class: number;
-  measure: string;
-  total_count: number;
-  entry_year: number;
-  periodicity_normal: number;
-  periodicity_fact: number;
-  last_maintenance_year: number;
-  norm_of_time: number;
-  norm_of_time_document: string;
-  unity: string;
-}
-
-export interface IWorkingManPlanTimeValues {
-  year_plan_time?: number;
-  jan_plan_time?: number;
-  feb_plan_time?: number;
-  mar_plan_time?: number;
-  apr_plan_time?: number;
-  may_plan_time?: number;
-  june_plan_time?: number;
-  july_plan_time?: number;
-  aug_plan_time?: number;
-  sept_plan_time?: number;
-  oct_plan_time?: number;
-  nov_plan_time?: number;
-  dec_plan_time?: number;
-}
-
-export interface IWorkingManFactTimeValues {
-  year_fact_time?: number;
-  jan_fact_time?: number;
-  feb_fact_time?: number;
-  mar_fact_time?: number;
-  apr_fact_time?: number;
-  may_fact_time?: number;
-  june_fact_time?: number;
-  july_fact_time?: number;
-  aug_fact_time?: number;
-  sept_fact_time?: number;
-  oct_fact_time?: number;
-  nov_fact_time?: number;
-  dec_fact_time?: number;
-}
-
 export interface IPlanWork {
   year_plan_work: number;
   jan_plan_work: number;
@@ -143,22 +48,6 @@ export interface IPlanWork {
   nov_plan_work: number;
   dec_plan_work: number;
 }
-
-export const planWorkPeriods: (keyof IPlanWork)[] = [
-  "year_plan_work",
-  "jan_plan_work",
-  "feb_plan_work",
-  "mar_plan_work",
-  "apr_plan_work",
-  "may_plan_work",
-  "june_plan_work",
-  "july_plan_work",
-  "aug_plan_work",
-  "sept_plan_work",
-  "oct_plan_work",
-  "nov_plan_work",
-  "dec_plan_work",
-] as const;
 
 export interface IPlanTime {
   year_plan_time: number;
@@ -223,3 +112,130 @@ export interface IFactTime {
   nov_fact_time: number;
   dec_fact_time: number;
 }
+
+export interface IPpr {
+  id: string;
+  name: string;
+  year: number;
+  status: TYearPprStatus;
+  created_at: string;
+  created_by: IUser;
+  months_statuses: TAllMonthStatuses;
+  id_direction: number | null;
+  id_distance: number | null;
+  id_subdivision: number | null;
+  peoples: IWorkingManYearPlan[];
+  data: IPprData[];
+  corrections: {
+    peoples: { [id: string]: TPprDataCorrection<IPlanTime> | undefined };
+    works: { [id: string]: TPprDataCorrection<IPlanWork> | undefined };
+  };
+}
+
+export interface IHandlePprData extends IPprData {
+  rowSpan?: number;
+  isHandMade?: boolean;
+}
+
+export type TWorkPlanCorrection = {
+  [id: string]: { [planPeriod in keyof IPlanWork]?: number } | undefined;
+};
+
+export type TPprDataCorrection<T> = {
+  [fieldNameFrom in keyof T]?: {
+    newValue: number;
+    diff: number;
+    fieldsTo: { fieldNameTo: keyof T; value: number; is_approved: boolean }[] | null | undefined;
+  };
+};
+
+export interface IWorkingManYearPlan extends IPlanTime, IFactTime {
+  id: string;
+  full_name: string;
+  work_position: string;
+  participation: number;
+}
+
+export interface IPprData extends IPlanWork, IPlanTime, IFactWork, IFactNormTime, IFactTime {
+  id: string;
+  workId: string | null;
+  is_work_aproved: boolean;
+  branch: string;
+  subbranch: string;
+  name: string;
+  location: string;
+  line_class: number;
+  measure: string;
+  total_count: number;
+  entry_year: number;
+  periodicity_normal: number;
+  periodicity_fact: number;
+  last_maintenance_year: number;
+  norm_of_time: number;
+  norm_of_time_document: string;
+  unity: string;
+}
+
+export const planWorkPeriods: (keyof IPlanWork)[] = [
+  "year_plan_work",
+  "jan_plan_work",
+  "feb_plan_work",
+  "mar_plan_work",
+  "apr_plan_work",
+  "may_plan_work",
+  "june_plan_work",
+  "july_plan_work",
+  "aug_plan_work",
+  "sept_plan_work",
+  "oct_plan_work",
+  "nov_plan_work",
+  "dec_plan_work",
+] as const;
+
+export const planTimePeriods: (keyof IPlanTime)[] = [
+  "year_plan_time",
+  "jan_plan_time",
+  "feb_plan_time",
+  "mar_plan_time",
+  "apr_plan_time",
+  "may_plan_time",
+  "june_plan_time",
+  "july_plan_time",
+  "aug_plan_time",
+  "sept_plan_time",
+  "oct_plan_time",
+  "nov_plan_time",
+  "dec_plan_time",
+] as const;
+
+export const factWorkPeriods: (keyof IFactWork)[] = [
+  "year_fact_work",
+  "jan_fact_work",
+  "feb_fact_work",
+  "mar_fact_work",
+  "apr_fact_work",
+  "may_fact_work",
+  "june_fact_work",
+  "july_fact_work",
+  "aug_fact_work",
+  "sept_fact_work",
+  "oct_fact_work",
+  "nov_fact_work",
+  "dec_fact_work",
+] as const;
+
+export const factTimePeriods: (keyof IFactTime)[] = [
+  "year_fact_time",
+  "jan_fact_time",
+  "feb_fact_time",
+  "mar_fact_time",
+  "apr_fact_time",
+  "may_fact_time",
+  "june_fact_time",
+  "july_fact_time",
+  "aug_fact_time",
+  "sept_fact_time",
+  "oct_fact_time",
+  "nov_fact_time",
+  "dec_fact_time",
+] as const;
