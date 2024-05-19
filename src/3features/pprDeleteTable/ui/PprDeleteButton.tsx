@@ -1,4 +1,5 @@
 "use client";
+import { isPprInUserControl } from "@/1shared/providers/pprTableProvider";
 import { IPpr, deletePprTable } from "@/2entities/pprTable";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { Tooltip } from "antd";
@@ -12,12 +13,13 @@ interface IPprDeleteButtonProps {
 
 export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ ppr }) => {
   const { data: userData } = useSession();
-  const isMyPpr =
-    userData?.user.id_subdivision === ppr.created_by.id_subdivision &&
-    userData.user.id_distance === ppr.created_by.id_distance &&
-    userData.user.id_direction === ppr.created_by.id_direction;
+
+  if (!userData) {
+    return null;
+  }
+  const { isForSubdivision } = isPprInUserControl(ppr, userData.user);
   const isStatusCanBeDeleted = ppr.status === "plan_creating" || ppr.status === "template";
-  const isPprCanBeDeleted = isMyPpr && isStatusCanBeDeleted;
+  const isPprCanBeDeleted = isForSubdivision && isStatusCanBeDeleted;
   return (
     <Tooltip title="Удалить">
       <Button

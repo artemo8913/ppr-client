@@ -1,36 +1,47 @@
 "use client";
-import {
-  Dispatch,
-  FC,
-  PropsWithChildren,
-  SetStateAction,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
 import { IWork } from "@/2entities/work";
-import { IPpr, IPprData, TWorkPlanCorrection, planWorkPeriods } from "@/2entities/pprTable";
+import {
+  IPlanWorkPeriods,
+  IPpr,
+  IPprData,
+  TPprDataCorrection,
+  TWorkPlanCorrection,
+  planWorkPeriods,
+} from "@/2entities/pprTable";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
+import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
+
+type TWorkBasicInfo = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
 
 interface IPprTableDataContextProps {
   pprData: IPpr | null;
   workPlanCorrections: TWorkPlanCorrection;
-  worksDataInPpr: TWorkData;
-  setPprData: Dispatch<SetStateAction<IPpr | null>>;
+  workBasicInfo: TWorkBasicInfo;
   addWork: (newWork: Partial<IPprData>) => void;
+  updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
+  updatePprDataCorrections: (
+    objectId: string,
+    fieldName: keyof IPlanWorkPeriods,
+    newValue: number,
+    oldValue: number
+  ) => void;
+  getCorrectionValue: (workId: string, fieldName: keyof IPlanWorkPeriods | string) => number;
   addWorkingMan: () => void;
+  updateWorkingMan: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   deleteWorkingMan: (id: string) => void;
 }
 
 const PprTableDataContext = createContext<IPprTableDataContextProps>({
   pprData: null,
   workPlanCorrections: {},
-  worksDataInPpr: {},
-  setPprData: () => {},
+  workBasicInfo: {},
   addWork: () => {},
+  updatePprData: () => {},
+  updatePprDataCorrections: () => {},
+  getCorrectionValue: () => 0,
   addWorkingMan: () => {},
+  updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
 });
 
@@ -40,15 +51,13 @@ interface IPprTableDataProviderProps extends PropsWithChildren {
   ppr: IPpr;
 }
 
-type TWorkData = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
-
 export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, ppr }) => {
   //Данные ППРа
   const [pprData, setPprData] = useState<IPpr | null>(null);
-  //Изменения планов ППРа
+  //Корректировки запланированных объемов работ ППРа в формате данных "объекта" (не в массиве)
   const [workPlanCorrections, setWorkPlanCorrections] = useState<TWorkPlanCorrection>({});
   //Данные о работах, применяемых в этом ППРе
-  const [worksDataInPpr, setWorksDataInPpr] = useState<TWorkData>({});
+  const [workBasicInfo, setWorksDataInPpr] = useState<TWorkBasicInfo>({});
 
   const handleCorrections = useCallback(() => {
     if (!pprData) {
@@ -82,7 +91,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     if (!pprData) {
       return;
     }
-    const worksData: TWorkData = {};
+    const worksData: TWorkBasicInfo = {};
     pprData.data.forEach((work) => (worksData[work.id] = { ...work }));
     setWorksDataInPpr(worksData);
   }, [pprData]);
@@ -100,6 +109,77 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
 
+  const getCorrectionValue = useCallback(
+    (workId: string, fieldName: keyof IPlanWorkPeriods | string): number => {
+      if (
+        workId in workPlanCorrections &&
+        fieldName in workPlanCorrections[workId]! &&
+        Object.hasOwn(workPlanCorrections[workId]!, fieldName)
+      ) {
+        return Number(workPlanCorrections[workId]![fieldName as keyof IPlanWorkPeriods]);
+      }
+      return 0;
+    },
+    [workPlanCorrections]
+  );
+
+  /**Обновить данные ППРа */
+  const updatePprData = useCallback((rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
+    setPprData((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        data: prev.data.map((row, index) => {
+          if (index === rowIndex) {
+            return {
+              ...prev.data[rowIndex]!,
+              [columnId]: value,
+            };
+          }
+          return row;
+        }),
+      };
+    });
+  }, []);
+
+  /**Обновить данные о корректировке ППРа */
+  const updatePprDataCorrections = useCallback(
+    (objectId: string, fieldName: keyof IPlanWorkPeriods, newValue: number, oldValue: number) => {
+      setPprData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const newDiff = newValue - oldValue;
+        const prevFieldsTo = prev.corrections.works[objectId]
+          ? prev.corrections.works[objectId]![fieldName]?.fieldsTo
+          : undefined;
+        const newCorrection: TPprDataCorrection<IPlanWorkPeriods> = {
+          ...prev.corrections.works[objectId],
+          [fieldName]: {
+            newValue,
+            diff: newDiff,
+            fieldsTo: prevFieldsTo,
+          },
+        };
+        return {
+          ...prev,
+          corrections: {
+            ...prev.corrections,
+            works: {
+              ...prev.corrections.works,
+              [objectId]: {
+                ...newCorrection,
+              },
+            },
+          },
+        };
+      });
+    },
+    []
+  );
+
   /**Добавить рабочего в список людей ППР */
   const addWorkingMan = useCallback(() => {
     setPprData((prev) => {
@@ -108,15 +188,28 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       }
       return {
         ...prev,
-        peoples: [
-          ...prev.peoples,
-          {
-            id: String(new Date().toString() + Math.random()),
-            full_name: "Иванов И.И.",
-            work_position: "мкс",
-            participation: 1,
-          },
-        ],
+        peoples: prev.peoples.concat(createNewWorkingManInstance()),
+      };
+    });
+  }, []);
+
+  /**Обновить данные рабочено из списка людей ППР */
+  const updateWorkingMan = useCallback((rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
+    setPprData((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        peoples: prev.peoples.map((man, arrayIndex) => {
+          if (arrayIndex === rowIndex) {
+            return {
+              ...man,
+              [columnId]: value,
+            };
+          }
+          return man;
+        }),
       };
     });
   }, []);
@@ -152,10 +245,13 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       value={{
         pprData,
         workPlanCorrections,
-        worksDataInPpr,
-        setPprData,
+        workBasicInfo,
         addWork,
+        updatePprData,
+        updatePprDataCorrections,
+        getCorrectionValue,
         addWorkingMan,
+        updateWorkingMan,
         deleteWorkingMan,
       }}
     >

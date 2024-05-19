@@ -6,15 +6,13 @@ export type {
   TMonthPprStatus,
   TYearPprStatus,
   IWorkingManYearPlan,
-  IFactNormTime,
-  IFactTime,
-  IFactWork,
-  IPlanTime,
-  IPlanWork,
-  IWorkingManFactTimeValues,
-  IWorkingManPlanTimeValues,
+  IFactNormTimePeriods,
+  IFactTimePeriods,
+  IFactWorkPeriods,
+  IPlanTimePeriods,
+  IPlanWorkPeriods,
   TPprDataCorrection,
   TWorkPlanCorrection,
 } from "./model/pprTable.schema";
-export { planWorkPeriods } from "./model/pprTable.schema";
+export { planWorkPeriods, pprTableColumnsSet } from "./model/pprTable.schema";
 export { getPprTable, addPprTable, deletePprTable } from "./model/pprTable.actions";

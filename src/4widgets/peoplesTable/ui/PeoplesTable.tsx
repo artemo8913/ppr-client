@@ -40,7 +40,7 @@ const columns = (status?: TYearPprStatus) => [
             <TableCell
               value={props.getValue()}
               handleBlur={(value: string) =>
-                props.table.options.meta?.updatePprData(props.row.index, props.column.id, value)
+                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
               }
               {...getColumnSettings(status)[`${time}_plan_time`]}
             />
@@ -56,7 +56,7 @@ const columns = (status?: TYearPprStatus) => [
             <TableCell
               value={props.getValue()}
               handleBlur={(value: string) =>
-                props.table.options.meta?.updatePprData(props.row.index, props.column.id, value)
+                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
               }
               {...getColumnSettings(status)[`${time}_fact_time`]}
             />
@@ -74,7 +74,7 @@ const columns = (status?: TYearPprStatus) => [
 interface IPeoplesTableProps {}
 
 export const PeoplesTable: FC<IPeoplesTableProps> = () => {
-  const { pprData, setPprData } = usePprTableData();
+  const { pprData, updateWorkingMan } = usePprTableData();
   const table = useReactTable({
     data: pprData?.peoples || [],
     columns: [
@@ -85,25 +85,7 @@ export const PeoplesTable: FC<IPeoplesTableProps> = () => {
       }),
     ],
     meta: {
-      updatePprData(rowIndex: number, columnId: keyof IWorkingManYearPlan | string, value: unknown) {
-        setPprData((prev) => {
-          if (!prev) {
-            return prev;
-          }
-          return {
-            ...prev,
-            peoples: prev.peoples.map((man, arrayIndex) => {
-              if (arrayIndex === rowIndex) {
-                return {
-                  ...man,
-                  [columnId]: value,
-                };
-              }
-              return man;
-            }),
-          };
-        });
-      },
+      updateData: updateWorkingMan,
     },
     getCoreRowModel: getCoreRowModel(),
   });

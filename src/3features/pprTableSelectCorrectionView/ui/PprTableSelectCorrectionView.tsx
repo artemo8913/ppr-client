@@ -1,12 +1,12 @@
 "use client";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC } from "react";
-import { TCorrectionView, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { TCorrectionView, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 
 interface IPprTableSelectCorrectionViewProps {}
 
 export const PprTableSelectCorrectionView: FC<IPprTableSelectCorrectionViewProps> = () => {
-  const { correctionView, setCorrectionView } = usePprTableSettings();
+  const { correctionView, setCorrectionView } = usePprTableViewSettings();
   return (
     <Select<TCorrectionView, { value: TCorrectionView } & DefaultOptionType>
       className="min-w-24"

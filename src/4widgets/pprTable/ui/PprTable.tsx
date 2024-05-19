@@ -1,92 +1,34 @@
 "use client";
 import { FC, useEffect, useRef, useState } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
-import { useCreateDefaultColumns } from "./PprTableColumns";
-import { usePprTableData, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TPprDataCorrection, planWorkPeriods } from "@/2entities/pprTable";
-import { IPlanWork } from "@/2entities/pprTable";
 import { Arrow } from "@/1shared/ui/arrow";
+import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import { IPlanWorkPeriods, IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriods } from "@/2entities/pprTable";
+import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
+import { useCreateColumns } from "./PprTableColumns";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { pprData, setPprData } = usePprTableData();
-  const { filterColumns, correctionView } = usePprTableSettings();
+  const { pprData, updatePprData, updatePprDataCorrections } = usePprTableData();
+
+  const { filterColumns, correctionView } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
 
-  console.log(planCellRef.current?.getBoundingClientRect().width);
+  const pprYearStatus: TYearPprStatus = pprData?.status || "done";
+  const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
+
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
-    columns: useCreateDefaultColumns(),
+    columns: useCreateColumns(pprYearStatus, pprMonthsStatuses),
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
-        // Skip page index reset until after next rerender
-        setPprData((prev) => {
-          if (!prev) {
-            return prev;
-          }
-          return {
-            ...prev,
-            data: prev.data.map((row, index) => {
-              if (index === rowIndex) {
-                return {
-                  ...prev.data[rowIndex]!,
-                  [columnId]: value,
-                };
-              }
-              return row;
-            }),
-          };
-        });
-      },
-      correctWorkPlan: (fieldName, objectId, newValue, oldValue) => {
-        setPprData((prev) => {
-          if (!prev) {
-            return prev;
-          }
-          const newDiff = newValue - oldValue;
-          // // Если разница в значениях равна нулю
-          // if (newDiff === 0) {
-          //   // И при этом перенос человек не осуществлял (даже в черновом варианте), то удалить перенос по этому полю вовсе
-          //   if (
-          //     objectId in prev.corrections.works &&
-          //     fieldName in prev.corrections.works[objectId]! &&
-          //     prev.corrections.works[objectId]![fieldName]?.fieldsTo === undefined
-          //   ) {
-          //     return { ...prev, corrections: { ...prev.corrections, works: { ...prev.corrections.works } } };
-          //   }
-          //   return prev;
-          // }
-          const prevFieldsTo = prev.corrections.works[objectId]
-            ? prev.corrections.works[objectId]![fieldName]?.fieldsTo
-            : undefined;
-          const newCorrection: TPprDataCorrection<IPlanWork> = {
-            ...prev.corrections.works[objectId],
-            [fieldName]: {
-              newValue,
-              diff: newDiff,
-              fieldsTo: prevFieldsTo,
-            },
-          };
-          return {
-            ...prev,
-            corrections: {
-              ...prev.corrections,
-              works: {
-                ...prev.corrections.works,
-                [objectId]: {
-                  ...newCorrection,
-                },
-              },
-            },
-          };
-        });
-      },
+      updateData: updatePprData,
+      correctPlan: updatePprDataCorrections,
     },
   });
+
   useEffect(() => {
     const width = planCellRef.current?.getBoundingClientRect().width || 0;
     setBasicArrowWidth(width * 6);
@@ -100,10 +42,9 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
             {headerGroup.headers.map((header) => {
               return (
                 <th
-                  ref={header.column.id === "year_plan_work" ? planCellRef : null}
-                  className="border border-black max-h-[300px] relative"
-                  style={getThStyle(header.column.id as keyof IPprData)}
                   key={header.id}
+                  className="border border-black max-h-[300px] relative"
+                  style={getThStyle(header.column.id)}
                   colSpan={header.colSpan}
                 >
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -118,20 +59,16 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => {
               return (
-                <td
-                  className="border border-black relative"
-                  key={cell.id}
-                  style={getTdStyle(cell.column.id as keyof IPprData)}
-                >
-                  {planWorkPeriods.includes(cell.column.id as keyof IPlanWork) &&
+                <td key={cell.id} className="border border-black relative" style={getTdStyle(cell.column.id)}>
+                  {planWorkPeriods.includes(cell.column.id as keyof IPlanWorkPeriods) &&
                   (correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS") &&
                   pprData?.corrections.works &&
                   cell.row.original.id in pprData?.corrections.works &&
                   pprData?.corrections.works[cell.row.original.id] &&
                   cell.column.id in pprData?.corrections.works[cell.row.original.id]! &&
-                  pprData?.corrections.works[cell.row.original.id]![cell.column.id as keyof IPlanWork]
+                  pprData?.corrections.works[cell.row.original.id]![cell.column.id as keyof IPlanWorkPeriods]
                     ? pprData.corrections.works[cell.row.original.id]![
-                        cell.column.id as keyof IPlanWork
+                        cell.column.id as keyof IPlanWorkPeriods
                       ]!.fieldsTo?.map((field, index) => (
                         <Arrow key={cell.id + index} width={basicArrowWidth} value={String(field.value)} />
                       ))

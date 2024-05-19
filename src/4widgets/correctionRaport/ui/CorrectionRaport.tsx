@@ -1,15 +1,15 @@
 "use client";
 import React, { FC } from "react";
-import { usePprTableData, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
-import { directions } from "@/1shared/types/transEnergoDivisions";
-import { findMonthByStart, monthsIntlRu } from "@/1shared/types/date";
+import { directionsMock } from "@/1shared/types/transEnergoDivisions";
+import { stringToMonthIntlRu, monthsIntlRu } from "@/1shared/types/date";
 
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { pprData, worksDataInPpr } = usePprTableData();
-  const { currentTimePeriod } = usePprTableSettings();
+  const { pprData, workBasicInfo } = usePprTableData();
+  const { currentTimePeriod } = usePprTableViewSettings();
   const { data: userData } = useSession();
 
   const { id, id_direction, id_distance, id_subdivision, role } = userData?.user!;
@@ -21,7 +21,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     <div>
       <p className="text-right">
         Начальнику{" "}
-        {Boolean(id_direction && id_distance) && directions[id_direction!].distances[id_distance!].short_name}
+        {Boolean(id_direction && id_distance) && directionsMock[id_direction!].distances[id_distance!].short_name}
         <br />
         XXX
         <br />
@@ -48,17 +48,17 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               : [];
           return (
             <li key={correction.id}>
-              <span>{worksDataInPpr[correction.id].name}:</span> <span>план</span>{" "}
+              <span>{workBasicInfo[correction.id].name}:</span> <span>план</span>{" "}
               <span>{Number(correction.data?.newValue) - Number(correction.data?.diff)}</span>{" "}
-              <span>{worksDataInPpr[correction.id].measure}</span> <span>изменить на</span>{" "}
-              <span>{Number(correction.data?.newValue)}</span> <span>{worksDataInPpr[correction.id].measure}</span>
+              <span>{workBasicInfo[correction.id].measure}</span> <span>изменить на</span>{" "}
+              <span>{Number(correction.data?.newValue)}</span> <span>{workBasicInfo[correction.id].measure}</span>
               {". "}
               <span>Разницу</span> <span>{Number(correction.data?.diff)}</span>{" "}
-              <span>{worksDataInPpr[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
+              <span>{workBasicInfo[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
               {transfer.map((trans) => {
                 return (
                   <>
-                    {findMonthByStart(trans.fieldNameTo)} ({trans.value} {worksDataInPpr[correction.id].measure})
+                    {stringToMonthIntlRu(trans.fieldNameTo)} ({trans.value} {workBasicInfo[correction.id].measure})
                   </>
                 );
               })}

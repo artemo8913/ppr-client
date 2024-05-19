@@ -1,7 +1,7 @@
-import { getUserData } from "@/2entities/user";
-import { getAllLoginsData } from "@/2entities/login";
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { getAllLoginsData } from "@/2entities/login";
+import { getUserData } from "@/2entities/user";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,

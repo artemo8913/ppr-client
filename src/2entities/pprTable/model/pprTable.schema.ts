@@ -33,6 +33,86 @@ export type TAllMonthStatuses = {
   [month in TMonth]: TMonthPprStatus;
 };
 
+export interface IPlanWorkPeriods {
+  year_plan_work: number;
+  jan_plan_work: number;
+  feb_plan_work: number;
+  mar_plan_work: number;
+  apr_plan_work: number;
+  may_plan_work: number;
+  june_plan_work: number;
+  july_plan_work: number;
+  aug_plan_work: number;
+  sept_plan_work: number;
+  oct_plan_work: number;
+  nov_plan_work: number;
+  dec_plan_work: number;
+}
+
+export interface IPlanTimePeriods {
+  year_plan_time: number;
+  jan_plan_time: number;
+  feb_plan_time: number;
+  mar_plan_time: number;
+  apr_plan_time: number;
+  may_plan_time: number;
+  june_plan_time: number;
+  july_plan_time: number;
+  aug_plan_time: number;
+  sept_plan_time: number;
+  oct_plan_time: number;
+  nov_plan_time: number;
+  dec_plan_time: number;
+}
+
+export interface IFactWorkPeriods {
+  year_fact_work: number;
+  jan_fact_work: number;
+  feb_fact_work: number;
+  mar_fact_work: number;
+  apr_fact_work: number;
+  may_fact_work: number;
+  june_fact_work: number;
+  july_fact_work: number;
+  aug_fact_work: number;
+  sept_fact_work: number;
+  oct_fact_work: number;
+  nov_fact_work: number;
+  dec_fact_work: number;
+}
+
+export interface IFactNormTimePeriods {
+  year_fact_norm_time: number;
+  jan_fact_norm_time: number;
+  feb_fact_norm_time: number;
+  mar_fact_norm_time: number;
+  apr_fact_norm_time: number;
+  may_fact_norm_time: number;
+  june_fact_norm_time: number;
+  july_fact_norm_time: number;
+  aug_fact_norm_time: number;
+  sept_fact_norm_time: number;
+  oct_fact_norm_time: number;
+  nov_fact_norm_time: number;
+  dec_fact_norm_time: number;
+}
+
+export interface IFactTimePeriods {
+  year_fact_time: number;
+  jan_fact_time: number;
+  feb_fact_time: number;
+  mar_fact_time: number;
+  apr_fact_time: number;
+  may_fact_time: number;
+  june_fact_time: number;
+  july_fact_time: number;
+  aug_fact_time: number;
+  sept_fact_time: number;
+  oct_fact_time: number;
+  nov_fact_time: number;
+  dec_fact_time: number;
+}
+
 export interface IPpr {
   id: string;
   name: string;
@@ -47,8 +127,8 @@ export interface IPpr {
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
   corrections: {
-    peoples: { [id: string]: TPprDataCorrection<IWorkingManPlanTimeValues> | undefined };
-    works: { [id: string]: TPprDataCorrection<IPlanWork> | undefined };
+    peoples: { [id: string]: TPprDataCorrection<IPlanTimePeriods> | undefined };
+    works: { [id: string]: TPprDataCorrection<IPlanWorkPeriods> | undefined };
   };
 }
 
@@ -58,7 +138,7 @@ export interface IHandlePprData extends IPprData {
 }
 
 export type TWorkPlanCorrection = {
-  [id: string]: { [planPeriod in keyof IPlanWork]?: number } | undefined;
+  [id: string]: { [planPeriod in keyof IPlanWorkPeriods]?: number } | undefined;
 };
 
 export type TPprDataCorrection<T> = {
@@ -69,14 +149,19 @@ export type TPprDataCorrection<T> = {
   };
 };
 
-export interface IWorkingManYearPlan extends IWorkingManPlanTimeValues, IWorkingManFactTimeValues {
+export interface IWorkingManYearPlan extends IPlanTimePeriods, IFactTimePeriods {
   id: string;
   full_name: string;
   work_position: string;
   participation: number;
 }
 
-export interface IPprData extends IPlanWork, IPlanTime, IFactWork, IFactNormTime, IFactTime {
+export interface IPprData
+  extends IPlanWorkPeriods,
+    IPlanTimePeriods,
+    IFactWorkPeriods,
+    IFactNormTimePeriods,
+    IFactTimePeriods {
   id: string;
   workId: string | null;
   is_work_aproved: boolean;
@@ -96,55 +181,7 @@ export interface IPprData extends IPlanWork, IPlanTime, IFactWork, IFactNormTime
   unity: string;
 }
 
-export interface IWorkingManPlanTimeValues {
-  year_plan_time?: number;
-  jan_plan_time?: number;
-  feb_plan_time?: number;
-  mar_plan_time?: number;
-  apr_plan_time?: number;
-  may_plan_time?: number;
-  june_plan_time?: number;
-  july_plan_time?: number;
-  aug_plan_time?: number;
-  sept_plan_time?: number;
-  oct_plan_time?: number;
-  nov_plan_time?: number;
-  dec_plan_time?: number;
-}
-
-export interface IWorkingManFactTimeValues {
-  year_fact_time?: number;
-  jan_fact_time?: number;
-  feb_fact_time?: number;
-  mar_fact_time?: number;
-  apr_fact_time?: number;
-  may_fact_time?: number;
-  june_fact_time?: number;
-  july_fact_time?: number;
-  aug_fact_time?: number;
-  sept_fact_time?: number;
-  oct_fact_time?: number;
-  nov_fact_time?: number;
-  dec_fact_time?: number;
-}
-
-export interface IPlanWork {
-  year_plan_work: number;
-  jan_plan_work: number;
-  feb_plan_work: number;
-  mar_plan_work: number;
-  apr_plan_work: number;
-  may_plan_work: number;
-  june_plan_work: number;
-  july_plan_work: number;
-  aug_plan_work: number;
-  sept_plan_work: number;
-  oct_plan_work: number;
-  nov_plan_work: number;
-  dec_plan_work: number;
-}
-
-export const planWorkPeriods: (keyof IPlanWork)[] = [
+export const planWorkPeriods: (keyof IPlanWorkPeriods)[] = [
   "year_plan_work",
   "jan_plan_work",
   "feb_plan_work",
@@ -160,66 +197,93 @@ export const planWorkPeriods: (keyof IPlanWork)[] = [
   "dec_plan_work",
 ] as const;
 
-export interface IPlanTime {
-  year_plan_time: number;
-  jan_plan_time: number;
-  feb_plan_time: number;
-  mar_plan_time: number;
-  apr_plan_time: number;
-  may_plan_time: number;
-  june_plan_time: number;
-  july_plan_time: number;
-  aug_plan_time: number;
-  sept_plan_time: number;
-  oct_plan_time: number;
-  nov_plan_time: number;
-  dec_plan_time: number;
-}
+const planTimePeriods: (keyof IPlanTimePeriods)[] = [
+  "year_plan_time",
+  "jan_plan_time",
+  "feb_plan_time",
+  "mar_plan_time",
+  "apr_plan_time",
+  "may_plan_time",
+  "june_plan_time",
+  "july_plan_time",
+  "aug_plan_time",
+  "sept_plan_time",
+  "oct_plan_time",
+  "nov_plan_time",
+  "dec_plan_time",
+] as const;
 
-export interface IFactWork {
-  year_fact_work: number;
-  jan_fact_work: number;
-  feb_fact_work: number;
-  mar_fact_work: number;
-  apr_fact_work: number;
-  may_fact_work: number;
-  june_fact_work: number;
-  july_fact_work: number;
-  aug_fact_work: number;
-  sept_fact_work: number;
-  oct_fact_work: number;
-  nov_fact_work: number;
-  dec_fact_work: number;
-}
+const factWorkPeriods: (keyof IFactWorkPeriods)[] = [
+  "year_fact_work",
+  "jan_fact_work",
+  "feb_fact_work",
+  "mar_fact_work",
+  "apr_fact_work",
+  "may_fact_work",
+  "june_fact_work",
+  "july_fact_work",
+  "aug_fact_work",
+  "sept_fact_work",
+  "oct_fact_work",
+  "nov_fact_work",
+  "dec_fact_work",
+] as const;
 
-export interface IFactNormTime {
-  year_fact_norm_time: number;
-  jan_fact_norm_time: number;
-  feb_fact_norm_time: number;
-  mar_fact_norm_time: number;
-  apr_fact_norm_time: number;
-  may_fact_norm_time: number;
-  june_fact_norm_time: number;
-  july_fact_norm_time: number;
-  aug_fact_norm_time: number;
-  sept_fact_norm_time: number;
-  oct_fact_norm_time: number;
-  nov_fact_norm_time: number;
-  dec_fact_norm_time: number;
-}
+const factTimePeriods: (keyof IFactTimePeriods)[] = [
+  "year_fact_time",
+  "jan_fact_time",
+  "feb_fact_time",
+  "mar_fact_time",
+  "apr_fact_time",
+  "may_fact_time",
+  "june_fact_time",
+  "july_fact_time",
+  "aug_fact_time",
+  "sept_fact_time",
+  "oct_fact_time",
+  "nov_fact_time",
+  "dec_fact_time",
+] as const;
 
-export interface IFactTime {
-  year_fact_time: number;
-  jan_fact_time: number;
-  feb_fact_time: number;
-  mar_fact_time: number;
-  apr_fact_time: number;
-  may_fact_time: number;
-  june_fact_time: number;
-  july_fact_time: number;
-  aug_fact_time: number;
-  sept_fact_time: number;
-  oct_fact_time: number;
-  nov_fact_time: number;
-  dec_fact_time: number;
-}
+const normTimePeriods: (keyof IFactNormTimePeriods)[] = [
+  "year_fact_norm_time",
+  "jan_fact_norm_time",
+  "feb_fact_norm_time",
+  "mar_fact_norm_time",
+  "apr_fact_norm_time",
+  "may_fact_norm_time",
+  "june_fact_norm_time",
+  "july_fact_norm_time",
+  "aug_fact_norm_time",
+  "sept_fact_norm_time",
+  "oct_fact_norm_time",
+  "nov_fact_norm_time",
+  "dec_fact_norm_time",
+] as const;
+
+const pprDataColumnsFields: (keyof IPprData)[] = [
+  "id",
+  "workId",
+  "is_work_aproved",
+  "branch",
+  "subbranch",
+  "name",
+  "location",
+  "line_class",
+  "measure",
+  "total_count",
+  "entry_year",
+  "periodicity_normal",
+  "periodicity_fact",
+  "last_maintenance_year",
+  "norm_of_time",
+  "norm_of_time_document",
+  "unity",
+  ...planWorkPeriods,
+  ...planTimePeriods,
+  ...factWorkPeriods,
+  ...normTimePeriods,
+  ...factTimePeriods,
+] as const;
+
+export const pprTableColumnsSet: Set<keyof IPprData | string> = new Set(pprDataColumnsFields);
