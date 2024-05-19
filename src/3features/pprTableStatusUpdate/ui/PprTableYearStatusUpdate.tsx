@@ -2,8 +2,8 @@
 import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import {
+  usePprTableData,
   getNextPprYearStatus,
   isAllMonthsPprStatusesIsDone,
   isPprInUserControl,
