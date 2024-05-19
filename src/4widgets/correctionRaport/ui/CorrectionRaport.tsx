@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
 import { directions } from "@/1shared/types/transEnergoDivisions";
-import { findMonthByStart, monthsIntlRu } from "@/1shared/types/date";
+import { stringToMonthIntlRu, monthsIntlRu } from "@/1shared/types/date";
 
 interface ICorrectionRaportProps {}
 
@@ -58,7 +58,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               {transfer.map((trans) => {
                 return (
                   <>
-                    {findMonthByStart(trans.fieldNameTo)} ({trans.value} {workBasicInfo[correction.id].measure})
+                    {stringToMonthIntlRu(trans.fieldNameTo)} ({trans.value} {workBasicInfo[correction.id].measure})
                   </>
                 );
               })}

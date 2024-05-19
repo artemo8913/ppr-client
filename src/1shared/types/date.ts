@@ -15,36 +15,9 @@ export const months: TMonth[] = [
   "dec",
 ] as const;
 
-export type TPprTimePeriod =
-  | "year"
-  | "jan"
-  | "feb"
-  | "mar"
-  | "apr"
-  | "may"
-  | "june"
-  | "july"
-  | "aug"
-  | "sept"
-  | "oct"
-  | "nov"
-  | "dec";
+export type TPprTimePeriod = "year" | TMonth;
 
-export const pprTimePeriods: TPprTimePeriod[] = [
-  "year",
-  "jan",
-  "feb",
-  "mar",
-  "apr",
-  "may",
-  "june",
-  "july",
-  "aug",
-  "sept",
-  "oct",
-  "nov",
-  "dec",
-] as const;
+export const pprTimePeriods: TPprTimePeriod[] = ["year", ...months] as const;
 
 export const monthsIntlRu = {
   year: "год",
@@ -62,7 +35,7 @@ export const monthsIntlRu = {
   dec: "декабрь",
 };
 
-export const findMonthByStart = (string: string): string => {
+export const stringToMonthIntlRu = (string: string): string => {
   if (string.startsWith("year")) {
     return monthsIntlRu["year"];
   } else if (string.startsWith("jan")) {
