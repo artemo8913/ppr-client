@@ -2,7 +2,7 @@
 import React, { FC } from "react";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
-import { directions } from "@/1shared/types/transEnergoDivisions";
+import { directionsMock } from "@/1shared/types/transEnergoDivisions";
 import { stringToMonthIntlRu, monthsIntlRu } from "@/1shared/types/date";
 
 interface ICorrectionRaportProps {}
@@ -21,7 +21,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     <div>
       <p className="text-right">
         Начальнику{" "}
-        {Boolean(id_direction && id_distance) && directions[id_direction!].distances[id_distance!].short_name}
+        {Boolean(id_direction && id_distance) && directionsMock[id_direction!].distances[id_distance!].short_name}
         <br />
         XXX
         <br />

@@ -13,7 +13,7 @@ export interface IDivisionInfo extends basicInfo {
   distances: Record<number, IDistancesInfo>;
 }
 
-export const directions: Record<number, IDivisionInfo> = {
+export const directionsMock: Record<number, IDivisionInfo> = {
   88: {
     name: "Красноярская НТЭ",
     short_name: "КрасНТЭ",

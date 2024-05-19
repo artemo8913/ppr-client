@@ -2,7 +2,7 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
-import { directions } from "@/1shared/types/transEnergoDivisions";
+import { directionsMock } from "@/1shared/types/transEnergoDivisions";
 import { months } from "@/1shared/types/date";
 import { IPpr } from "@/2entities/pprTable";
 import { PprDeleteButton } from "@/3features/pprDeleteTable";
@@ -32,7 +32,7 @@ const columns: TableProps<IPpr>["columns"] = [
       if (!data.id_direction || !data.id_distance || !data.id_subdivision) {
         return "-";
       }
-      return directions[data.id_direction].distances[data.id_distance].subdivisions[data.id_subdivision].short_name;
+      return directionsMock[data.id_direction].distances[data.id_distance].subdivisions[data.id_subdivision].short_name;
     },
   },
   {
@@ -43,7 +43,7 @@ const columns: TableProps<IPpr>["columns"] = [
       if (!data.id_direction || !data.id_distance) {
         return "-";
       }
-      return directions[data.id_direction].distances[data.id_distance].short_name;
+      return directionsMock[data.id_direction].distances[data.id_distance].short_name;
     },
   },
   {
@@ -54,7 +54,7 @@ const columns: TableProps<IPpr>["columns"] = [
       if (!data.id_direction) {
         return "-";
       }
-      return directions[data.id_direction].short_name;
+      return directionsMock[data.id_direction].short_name;
     },
   },
   {
