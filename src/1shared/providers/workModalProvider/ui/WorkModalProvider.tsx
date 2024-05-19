@@ -17,7 +17,7 @@ const WorkDataContext = createContext<IWorkModalControlProps>({
 interface IWorkModalProviderProps extends PropsWithChildren {}
 
 export const WorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => {
-  const [isOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsModalOpen] = useState(defaultValue);
   const openModal = useCallback(() => setIsModalOpen(true), []);
   const closeModal = useCallback(() => setIsModalOpen(false), []);
   return <WorkDataContext.Provider value={{ isOpen, closeModal, openModal }}>{children}</WorkDataContext.Provider>;
