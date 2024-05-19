@@ -1,9 +1,8 @@
 import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCell } from "@/1shared/ui/table";
-import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
-import { IHandlePprData, IPprData, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses, TYearPprStatus } from "@/2entities/pprTable";
 
 export function findPlanFactTitle(string: string) {
   if (string.endsWith("plan_work")) {
