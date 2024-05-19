@@ -5,6 +5,20 @@ import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
 import { IHandlePprData, IPprData, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/pprTable";
 
+export function findPlanFactTitle(string: string) {
+  if (string.endsWith("plan_work")) {
+    return "план, кол-во";
+  } else if (string.endsWith("fact_work")) {
+    return "факт, кол-во";
+  } else if (string.endsWith("plan_time")) {
+    return "норм. время на плановый объем, чел.-ч";
+  } else if (string.endsWith("fact_norm_time")) {
+    return "трудозатраты по норме времени, чел.-ч";
+  } else if (string.endsWith("fact_time")) {
+    return "фактические трудозатраты, чел.-ч";
+  }
+}
+
 export const columnsDefault: Array<keyof IPprData> = [
   "name",
   "location",
@@ -72,44 +86,6 @@ export const columnsTitles: { [key in keyof IPprData]?: string } = {
   unity: "Подразделение / исполнитель",
 };
 
-export function getThStyle(key: keyof IPprData): React.CSSProperties {
-  switch (key) {
-    case "name":
-      return { width: "10%" };
-    case "location":
-      return { width: "5%" };
-    case "line_class":
-      return { width: "2%" };
-    case "total_count":
-      return { width: "3%" };
-    case "entry_year":
-      return { width: "2%" };
-    case "periodicity_normal":
-      return { width: "2%" };
-    case "periodicity_fact":
-      return { width: "3%" };
-    case "last_maintenance_year":
-      return { width: "3%" };
-    case "norm_of_time":
-      return { width: "3%" };
-    case "norm_of_time_document":
-      return { width: "3%" };
-    case "measure":
-      return { width: "2%" };
-    case "unity":
-      return { width: "3%" };
-    default:
-      return {};
-  }
-}
-
-export function getTdStyle(key: keyof IPprData): React.CSSProperties {
-  if (key === "norm_of_time_document") {
-    return { fontSize: "0.7vw" };
-  }
-  return { backgroundColor: setBgColor(key) };
-}
-
 export function getColumnSettings(
   fieldName: keyof Partial<IPprData>,
   pprYearStatus: TYearPprStatus,
@@ -167,57 +143,4 @@ export function getColumnSettings(
     return { cellType: "input" };
   }
   return {};
-}
-
-export function findPlanFactTitle(string: string) {
-  if (string.endsWith("plan_work")) {
-    return "план, кол-во";
-  } else if (string.endsWith("fact_work")) {
-    return "факт, кол-во";
-  } else if (string.endsWith("plan_time")) {
-    return "норм. время на плановый объем, чел.-ч";
-  } else if (string.endsWith("fact_norm_time")) {
-    return "трудозатраты по норме времени, чел.-ч";
-  } else if (string.endsWith("fact_time")) {
-    return "фактические трудозатраты, чел.-ч";
-  }
-}
-
-export function handlePprData(data: IPprData[]): IHandlePprData[] {
-  let name: string;
-  let id: string;
-  let firstIndex: number;
-  let lastIndex: number;
-
-  function clearTempData(datum: IPprData, index: number) {
-    id = datum.id;
-    name = datum.name;
-    firstIndex = index;
-    lastIndex = index;
-  }
-
-  const rowSpanData: { [id: string]: number | undefined } = {};
-
-  data.forEach((datum, index, arr) => {
-    if (index === 0) {
-      clearTempData(datum, index);
-      return;
-    }
-    lastIndex = index;
-    const diff = lastIndex - firstIndex;
-    if (name !== datum.name) {
-      if (diff > 1) {
-        rowSpanData[id] = diff;
-      }
-      clearTempData(datum, index);
-      return;
-    }
-    if (arr.length - 1 === index && diff >= 1) {
-      rowSpanData[id] = diff + 1;
-    }
-  });
-
-  return data.map((datum) => {
-    return { ...datum, rowSpan: rowSpanData[datum.id] };
-  });
 }

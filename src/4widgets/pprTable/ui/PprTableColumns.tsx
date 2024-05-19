@@ -10,7 +10,7 @@ import {
   getColumnSettings,
   getPlanFactColumns,
   getTimePeriodsColumns,
-} from "../lib/pprTableHelpers";
+} from "../lib/pprTableColumnsHelper";
 import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 
 export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
@@ -35,8 +35,7 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
         cell: (info) => {
           const props = {
             value: info.getValue(),
-            handleBlur: (value: string) =>
-              info.table.options.meta?.updateData(info.row.index, info.column.id, value),
+            handleBlur: (value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value),
             ...getColumnSettings(info.column.id as keyof IPprData, pprYearStatus, currentTimePeriod, pprMonthsStatuses),
           };
           if (info.column.id === "name") {
