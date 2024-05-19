@@ -1,5 +1,6 @@
 import { QuarterColors } from "../../../tailwind.config";
 
+// TODO: мне не нравится, что к типам данная функция вообще не привязана (на входе используется просто строка)
 export function setBgColor(type: string): QuarterColors | undefined {
   // 1 квартал
   if (type.startsWith("jan_plan") || type.startsWith("feb_plan") || type.startsWith("mar_plan")) {
