@@ -14,7 +14,7 @@ export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () =
   useEffect(() => {
     setTimePeriod(findPossibleCurrentPprPeriod(pprData));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [Boolean(pprData?.months_statuses)]);
 
   return (
     <Select<TPprTimePeriod>
