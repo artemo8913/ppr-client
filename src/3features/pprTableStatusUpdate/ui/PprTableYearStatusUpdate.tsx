@@ -3,8 +3,12 @@ import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import {
+  getNextPprYearStatus,
+  isAllMonthsPprStatusesIsDone,
+  isPprInUserControl,
+} from "@/1shared/providers/pprTableProvider";
 import { updatePprTable } from "@/2entities/pprTable/model/pprTable.actions";
-import { getNextPprYearStatus, isAllMonthsPprStatusesIsDone, isPprInUserControl } from "../lib/pprStatusHelper";
 
 interface IPprTableYearStatusUpdateProps {}
 

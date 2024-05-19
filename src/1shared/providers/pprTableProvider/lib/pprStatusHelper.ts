@@ -42,8 +42,8 @@ const nextPprMonthStatus: { [key in TMonthPprStatus]?: TMonthPprStatus | undefin
   done: "plan_on_correction",
 };
 /**Подходит ли данный ППР для определенных ролей (начальника цеха, инженера, заместителя начальника дистанции, начальника дистанции и т.п.) */
-export function isPprInUserControl(pprData: IPpr, userData: IUser) {
-  const { created_by: ppr_created_by } = pprData;
+export function isPprInUserControl(ppr: IPpr, userData: IUser) {
+  const { created_by: ppr_created_by } = ppr;
   const {
     id_distance: user_id_distance,
     id_subdivision: user_id_subdivision,

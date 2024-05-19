@@ -4,7 +4,7 @@ import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { updatePprTable } from "@/2entities/pprTable/model/pprTable.actions";
-import { getNextPprMonthStatus, isPprInUserControl } from "../lib/pprStatusHelper";
+import { getNextPprMonthStatus, isPprInUserControl } from "../../../1shared/providers/pprTableProvider/lib/pprStatusHelper";
 
 interface IPprTableMonthStatusUpdateProps {}
 
