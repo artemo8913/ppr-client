@@ -1,6 +1,5 @@
 import { months } from "@/1shared/types/date";
-import { IPpr, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/pprTable";
-import { IUser } from "@/2entities/user";
+import { TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/pprTable";
 
 export function isAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {
   let result = true;
@@ -48,4 +47,24 @@ export function getNextPprYearStatus(currentStatus: TYearPprStatus): TYearPprSta
 
 export function getNextPprMonthStatus(currentStatus: TMonthPprStatus): TMonthPprStatus | undefined {
   return nextPprMonthStatus[currentStatus];
+}
+
+const monthStatusIntlRu: { [status in TMonthPprStatus]: string } = {
+  none: "не запланирован",
+  plan_creating: "план создаётся",
+  plan_on_agreement_engineer: "на согласовании инженера",
+  plan_on_agreement_time_norm: "на согласовании нормировщика труда",
+  plan_on_correction: "на исправлении",
+  plan_on_aprove: "на утверждении",
+  plan_aproved: "план утвержден",
+  in_process: "план в работе",
+  fact_filling: "заполнение выполненных работ",
+  fact_verification_engineer: "проверка объемов выполненных работ",
+  fact_verification_time_norm: "проверка соответствия нормам времени",
+  fact_on_agreement_sub_boss: "проверка выполненных работ",
+  done: "завершен",
+};
+
+export function stringToMonthStatusIntlRu(status: TMonthPprStatus): string {
+  return monthStatusIntlRu[status];
 }

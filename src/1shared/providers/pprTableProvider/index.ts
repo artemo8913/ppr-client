@@ -5,5 +5,10 @@ export type {
 } from "./model/PprTableViewSettingsProvider";
 export { PprTableDataProvider, usePprTableData } from "./model/PprTableDataProvider";
 export { PprTableViewSettingsProvider, usePprTableViewSettings } from "./model/PprTableViewSettingsProvider";
-export { getNextPprMonthStatus, getNextPprYearStatus, isAllMonthsPprStatusesIsDone } from "./lib/pprStatusHelper";
+export {
+  getNextPprMonthStatus,
+  getNextPprYearStatus,
+  isAllMonthsPprStatusesIsDone,
+  stringToMonthStatusIntlRu,
+} from "./lib/pprStatusHelper";
 export { isPprInUserControl } from "./lib/isPprInUserControl";
