@@ -1,4 +1,4 @@
-import { TPprTimePeriod } from "../types/date";
+import { TPprTimePeriod, TMonth } from "../types/date";
 
 export type TQuartalNumber = 1 | 2 | 3 | 4;
 
@@ -14,15 +14,15 @@ export function getCurrentQuartal(timePeriod?: TPprTimePeriod): TQuartalNumber |
   }
 }
 
-export function getQuartalMonths(quartal?: TQuartalNumber): TPprTimePeriod[] {
+export function getQuartalMonths(quartal?: TQuartalNumber): TMonth[] {
   if (quartal === 1) {
-    return ["year", "jan", "feb", "mar"];
+    return ["jan", "feb", "mar"];
   } else if (quartal === 2) {
-    return ["year", "apr", "may", "june"];
+    return ["apr", "may", "june"];
   } else if (quartal === 3) {
-    return ["year", "july", "aug", "sept"];
+    return ["july", "aug", "sept"];
   } else if (quartal === 4) {
-    return ["year", "oct", "nov", "dec"];
+    return ["oct", "nov", "dec"];
   }
   return [];
 }

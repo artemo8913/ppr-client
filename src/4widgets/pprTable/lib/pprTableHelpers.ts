@@ -28,7 +28,8 @@ export function getTimePeriodsColumns(
     case "SHOW_ONLY_CURRENT_MONTH":
       return pprTimePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
     case "SHOW_CURRENT_QUARTAL":
-      return getQuartalMonths(getCurrentQuartal(currentTimePeriod));
+      const result: TPprTimePeriod[] = ["year"];
+      return result.concat(getQuartalMonths(getCurrentQuartal(currentTimePeriod)));
     default:
       return pprTimePeriods;
   }
