@@ -5,7 +5,7 @@ import { Arrow } from "@/1shared/ui/arrow";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { IPprData, planWorkPeriods } from "@/2entities/pprTable";
 import { IPlanWorkPeriods } from "@/2entities/pprTable";
-import { getTdStyle, getThStyle } from "../lib/pprTableStylesHepler";
+import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { useCreateDefaultColumns } from "./PprTableColumns";
 
 interface IPprTableProps {}
