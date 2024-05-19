@@ -4,6 +4,6 @@ import "@tanstack/react-table";
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
     updatePprData: (rowIndex: number, columnId: string, value: unknown) => void;
-    correctWorkPlan: (fieldName: keyof IPlanWork, objectId: string, newValue: number, oldValue: number) => void;
+    correctPlan?: (objectId: string, fieldName: keyof IPlanWork, newValue: number, oldValue: number) => void;
   }
 }

@@ -73,12 +73,13 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
                         info.table.options.meta?.updatePprData(info.row.index, info.column.id, value);
                         // иначе создаётся корректировка
                       } else {
-                        info.table.options.meta?.correctWorkPlan(
-                          info.column.id as keyof IPlanWork,
-                          info.row.original.id,
-                          Number(value),
-                          Number(info.row.original[info.column.id as keyof IPprData])
-                        );
+                        info.table.options.meta?.correctPlan &&
+                          info.table.options.meta?.correctPlan(
+                            info.row.original.id,
+                            info.column.id as keyof IPlanWork,
+                            Number(value),
+                            Number(info.row.original[info.column.id as keyof IPprData])
+                          );
                       }
                     }}
                     {...getColumnSettings(

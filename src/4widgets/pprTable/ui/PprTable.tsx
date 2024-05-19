@@ -42,7 +42,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           };
         });
       },
-      correctWorkPlan: (fieldName, objectId, newValue, oldValue) => {
+      correctPlan: (objectId, fieldName, newValue, oldValue) => {
         setPprData((prev) => {
           if (!prev) {
             return prev;
