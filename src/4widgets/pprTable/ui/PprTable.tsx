@@ -3,7 +3,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
 import { useCreateDefaultColumns } from "./PprTableColumns";
-import { usePprTableData, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { IPprData, TPprDataCorrection, planWorkPeriods } from "@/2entities/pprTable";
 import { IPlanWork } from "@/2entities/pprTable";
 import { Arrow } from "@/1shared/ui/arrow";
@@ -12,7 +12,7 @@ interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, setPprData } = usePprTableData();
-  const { filterColumns, correctionView } = usePprTableSettings();
+  const { filterColumns, correctionView } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
 

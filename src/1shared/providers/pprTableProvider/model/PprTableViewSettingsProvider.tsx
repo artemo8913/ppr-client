@@ -1,8 +1,6 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
 import { TPprTimePeriod } from "@/1shared/types/date";
-import { usePprTableData } from "./PprTableDataProvider";
-import { findPossibleCurrentPprPeriod } from "../lib/findPossibleCurrentPprPeriod";
 
 export type TFilterTimePeriodOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
 export type TFilterPlanFactOption = "SHOW_ALL" | "SHOW_ONLY_PLAN" | "SHOW_ONLY_FACT" | "SHOW_ONLY_VALUES";
@@ -41,13 +39,12 @@ const initialContext: IPprTableSettingsContext = {
   setCorrectionView: () => {},
 };
 
-const PprTableSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
-export const usePprTableSettings = () => useContext(PprTableSettingsContext);
+const PprTableViewSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
 
-export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const usePprTableViewSettings = () => useContext(PprTableViewSettingsContext);
+
+export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }) => {
   const [pprTableSettings, setPprTableSettings] = useState<IPprTableSettings>(intitalSettings);
-
-  const { pprData } = usePprTableData();
 
   const setFilterMonths = useCallback(
     (state: TFilterTimePeriodOption) =>
@@ -91,15 +88,11 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     []
   );
 
-  useEffect(() => {
-    setTimePeriod(findPossibleCurrentPprPeriod(pprData));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pprData?.months_statuses]);
   return (
-    <PprTableSettingsContext.Provider
+    <PprTableViewSettingsContext.Provider
       value={{ ...pprTableSettings, setCorrectionView, setFilterMonths, setFilterPlanFact, setTimePeriod }}
     >
       {children}
-    </PprTableSettingsContext.Provider>
+    </PprTableViewSettingsContext.Provider>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 import React, { FC } from "react";
-import { usePprTableData, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
 import { directions } from "@/1shared/types/transEnergoDivisions";
 import { findMonthByStart, monthsIntlRu } from "@/1shared/types/date";
@@ -9,7 +9,7 @@ interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   const { pprData, worksDataInPpr } = usePprTableData();
-  const { currentTimePeriod } = usePprTableSettings();
+  const { currentTimePeriod } = usePprTableViewSettings();
   const { data: userData } = useSession();
 
   const { id, id_direction, id_distance, id_subdivision, role } = userData?.user!;

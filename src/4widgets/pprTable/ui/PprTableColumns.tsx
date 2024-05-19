@@ -1,7 +1,7 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { TableCell } from "@/1shared/ui/table";
 import { monthsIntlRu } from "@/1shared/types/date";
-import { usePprTableData, usePprTableSettings } from "@/1shared/providers/pprTableProvider";
+import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { IPprData, TAllMonthStatuses, TYearPprStatus, IPlanWork } from "@/2entities/pprTable";
 import {
   columnsDefault,
@@ -14,7 +14,7 @@ import {
 import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 
 export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
-  const { filterColumns, currentTimePeriod, correctionView } = usePprTableSettings();
+  const { filterColumns, currentTimePeriod, correctionView } = usePprTableViewSettings();
   const { pprData, workPlanCorrections } = usePprTableData();
 
   const columnHelper = createColumnHelper<IPprData>();
