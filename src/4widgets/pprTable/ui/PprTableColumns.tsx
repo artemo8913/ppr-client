@@ -3,6 +3,7 @@ import { TableCell } from "@/1shared/ui/table";
 import { monthsIntlRu } from "@/1shared/types/date";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { IPprData, TAllMonthStatuses, TYearPprStatus, IPlanWorkPeriods } from "@/2entities/pprTable";
+import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 import {
   columnsDefault,
   columnsTitles,
@@ -11,7 +12,6 @@ import {
   getPlanFactColumns,
   getTimePeriodsColumns,
 } from "../lib/pprTableColumnsHelper";
-import { TableCellWithAdd } from "@/3features/pprTableAddWork";
 
 export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
   const { filterColumns, currentTimePeriod, correctionView } = usePprTableViewSettings();
