@@ -1,90 +1,28 @@
 "use client";
 import { FC, useEffect, useRef, useState } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Arrow } from "@/1shared/ui/arrow";
+import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import { IPprData, planWorkPeriods } from "@/2entities/pprTable";
+import { IPlanWorkPeriods } from "@/2entities/pprTable";
 import { getTdStyle, getThStyle } from "../lib/pprTableHelpers";
 import { useCreateDefaultColumns } from "./PprTableColumns";
-import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TPprDataCorrection, planWorkPeriods } from "@/2entities/pprTable";
-import { IPlanWorkPeriods } from "@/2entities/pprTable";
-import { Arrow } from "@/1shared/ui/arrow";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { pprData, setPprData } = usePprTableData();
+  const { pprData, updatePprData, updatePprDataCorrections } = usePprTableData();
   const { filterColumns, correctionView } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
 
-  console.log(planCellRef.current?.getBoundingClientRect().width);
   const table: Table<IPprData> = useReactTable({
     data: pprData ? pprData.data : [],
     columns: useCreateDefaultColumns(),
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
-        // Skip page index reset until after next rerender
-        setPprData((prev) => {
-          if (!prev) {
-            return prev;
-          }
-          return {
-            ...prev,
-            data: prev.data.map((row, index) => {
-              if (index === rowIndex) {
-                return {
-                  ...prev.data[rowIndex]!,
-                  [columnId]: value,
-                };
-              }
-              return row;
-            }),
-          };
-        });
-      },
-      correctPlan: (objectId, fieldName, newValue, oldValue) => {
-        setPprData((prev) => {
-          if (!prev) {
-            return prev;
-          }
-          const newDiff = newValue - oldValue;
-          // // Если разница в значениях равна нулю
-          // if (newDiff === 0) {
-          //   // И при этом перенос человек не осуществлял (даже в черновом варианте), то удалить перенос по этому полю вовсе
-          //   if (
-          //     objectId in prev.corrections.works &&
-          //     fieldName in prev.corrections.works[objectId]! &&
-          //     prev.corrections.works[objectId]![fieldName]?.fieldsTo === undefined
-          //   ) {
-          //     return { ...prev, corrections: { ...prev.corrections, works: { ...prev.corrections.works } } };
-          //   }
-          //   return prev;
-          // }
-          const prevFieldsTo = prev.corrections.works[objectId]
-            ? prev.corrections.works[objectId]![fieldName]?.fieldsTo
-            : undefined;
-          const newCorrection: TPprDataCorrection<IPlanWorkPeriods> = {
-            ...prev.corrections.works[objectId],
-            [fieldName]: {
-              newValue,
-              diff: newDiff,
-              fieldsTo: prevFieldsTo,
-            },
-          };
-          return {
-            ...prev,
-            corrections: {
-              ...prev.corrections,
-              works: {
-                ...prev.corrections.works,
-                [objectId]: {
-                  ...newCorrection,
-                },
-              },
-            },
-          };
-        });
-      },
+      updateData: updatePprData,
+      correctPlan: updatePprDataCorrections,
     },
   });
   useEffect(() => {

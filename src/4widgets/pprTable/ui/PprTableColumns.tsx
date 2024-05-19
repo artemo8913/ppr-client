@@ -36,7 +36,7 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
           const props = {
             value: info.getValue(),
             handleBlur: (value: string) =>
-              info.table.options.meta?.updatePprData(info.row.index, info.column.id, value),
+              info.table.options.meta?.updateData(info.row.index, info.column.id, value),
             ...getColumnSettings(info.column.id as keyof IPprData, pprYearStatus, currentTimePeriod, pprMonthsStatuses),
           };
           if (info.column.id === "name") {
@@ -70,7 +70,7 @@ export const useCreateDefaultColumns = (): ColumnDef<IPprData, any>[] => {
                       // Если изменяемая ячейка не план работ или же работа ещё не утверждена,
                       // то просто изменяется содержимое ППРа
                       if (!info.cell.column.id.endsWith("_plan_work") || !info.row.original.is_work_aproved) {
-                        info.table.options.meta?.updatePprData(info.row.index, info.column.id, value);
+                        info.table.options.meta?.updateData(info.row.index, info.column.id, value);
                         // иначе создаётся корректировка
                       } else {
                         info.table.options.meta?.correctPlan &&
