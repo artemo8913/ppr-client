@@ -10,7 +10,7 @@ import { useCreateColumns } from "./PprTableColumns";
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { pprData, updatePprData, updatePprDataCorrections } = usePprTableData();
+  const { pprData, updatePprData, updatePprDataNewDiffCorrection } = usePprTableData();
 
   const { filterColumns, correctionView } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
@@ -25,7 +25,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: updatePprData,
-      correctPlan: updatePprDataCorrections,
+      correctPlan: updatePprDataNewDiffCorrection,
     },
   });
 

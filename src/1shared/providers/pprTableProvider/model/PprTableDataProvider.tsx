@@ -20,7 +20,7 @@ interface IPprTableDataContextProps {
   workBasicInfo: TWorkBasicInfo;
   addWork: (newWork: Partial<IPprData>) => void;
   updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
-  updatePprDataCorrections: (
+  updatePprDataNewDiffCorrection: (
     objectId: string,
     fieldName: keyof IPlanWorkPeriods,
     newValue: number,
@@ -38,7 +38,7 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   workBasicInfo: {},
   addWork: () => {},
   updatePprData: () => {},
-  updatePprDataCorrections: () => {},
+  updatePprDataNewDiffCorrection: () => {},
   getCorrectionValue: () => 0,
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
@@ -144,8 +144,8 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
 
-  /**Обновить данные о корректировке ППРа */
-  const updatePprDataCorrections = useCallback(
+  /**Обновить новое значение в корректировке ППРа (разницу между первоначальным состоянием и новым) */
+  const updatePprDataNewDiffCorrection = useCallback(
     (objectId: string, fieldName: keyof IPlanWorkPeriods, newValue: number, oldValue: number) => {
       setPprData((prev) => {
         if (!prev) {
@@ -248,7 +248,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         workBasicInfo,
         addWork,
         updatePprData,
-        updatePprDataCorrections,
+        updatePprDataNewDiffCorrection,
         getCorrectionValue,
         addWorkingMan,
         updateWorkingMan,
