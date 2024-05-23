@@ -3,7 +3,9 @@ import React, { FC } from "react";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
 import { directionsMock } from "@/1shared/types/transEnergoDivisions";
-import { stringToMonthIntlRu, monthsIntlRu } from "@/1shared/types/date";
+import { monthsIntlRu } from "@/1shared/types/date";
+import { IPlanWorkPeriods } from "@/2entities/pprTable";
+import { PprTableSelectTransfers } from "@/3features/pprTableSelectTransfers";
 
 interface ICorrectionRaportProps {}
 
@@ -12,11 +14,13 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   const { currentTimePeriod } = usePprTableViewSettings();
   const { data: userData } = useSession();
 
-  const { id, id_direction, id_distance, id_subdivision, role } = userData?.user!;
+  const { id_direction, id_distance, id_subdivision } = userData?.user!;
+
+  const fieldFrom: keyof IPlanWorkPeriods = `${currentTimePeriod}_plan_work`;
 
   const worksCorrections = Object.entries(pprData?.corrections.works || {})
     .filter(([id, value]) => value && `${currentTimePeriod}_plan_work` in value)
-    .map(([id, value]) => ({ id, data: value ? value![`${currentTimePeriod}_plan_work`] : undefined }));
+    .map(([id, value]) => ({ id, data: value ? value![fieldFrom] : undefined }));
   return (
     <div>
       <p className="text-right">
@@ -41,11 +45,6 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       <p className="indent-4 text-justify">Набора работ:</p>
       <ol className="list-decimal pl-[revert]">
         {worksCorrections.map((correction) => {
-          const notTransfer = correction.data?.fieldsTo === null ? correction.data?.fieldsTo : null;
-          const transfer =
-            correction.data?.fieldsTo !== null && correction.data?.fieldsTo !== undefined
-              ? correction.data?.fieldsTo!
-              : [];
           return (
             <li key={correction.id}>
               <span>{workBasicInfo[correction.id].name}:</span> <span>план</span>{" "}
@@ -55,13 +54,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               {". "}
               <span>Разницу</span> <span>{Number(correction.data?.diff)}</span>{" "}
               <span>{workBasicInfo[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
-              {transfer.map((trans) => {
-                return (
-                  <>
-                    {stringToMonthIntlRu(trans.fieldNameTo)} ({trans.value} {workBasicInfo[correction.id].measure})
-                  </>
-                );
-              })}
+              <PprTableSelectTransfers objectId={correction.id} fieldFrom={fieldFrom} />;
             </li>
           );
         })}
