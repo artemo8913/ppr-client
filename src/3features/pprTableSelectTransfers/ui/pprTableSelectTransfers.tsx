@@ -1,10 +1,10 @@
 "use client";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import Input from "antd/es/input/Input";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { stringToMonthIntlRu } from "@/1shared/types/date";
 import { IPlanWorkPeriods, planWorkPeriods } from "@/2entities/pprTable";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 
 interface IPprTableSelectTransfersProps<T> {
   objectId: string;
@@ -19,9 +19,15 @@ export const PprTableSelectTransfers: FC<IPprTableSelectTransfersProps<IPlanWork
   fieldFrom,
   objectId,
 }) => {
-  const { getTransfers, updateTransfers } = usePprTableData();
   const [value, setValue] = useState(0);
+  const { getTransfers, updateTransfers } = usePprTableData();
   const transfers = getTransfers(objectId, fieldFrom);
+  const { currentTimePeriod } = usePprTableViewSettings();
+
+  const monthIndex = useMemo(
+    () => optionsValueArray.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
+    [currentTimePeriod]
+  );
 
   if (transfers === null) {
   } else if (transfers?.length === 0) {
@@ -41,9 +47,12 @@ export const PprTableSelectTransfers: FC<IPprTableSelectTransfersProps<IPlanWork
       <Select<keyof IPlanWorkPeriods, { value: keyof IPlanWorkPeriods | null } & DefaultOptionType>
         className="min-w-24"
         defaultValue={undefined}
-        options={optionsValueArray.map((field) => {
+        options={optionsValueArray.map((field, index) => {
           if (field === null) {
             return { value: null, label: "Не переносить" };
+          }
+          if (index <= monthIndex) {
+            return { value: field, label: stringToMonthIntlRu(field || ""), disabled: true };
           }
           return { value: field, label: stringToMonthIntlRu(field || "") };
         })}
