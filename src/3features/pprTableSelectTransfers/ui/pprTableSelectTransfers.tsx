@@ -1,7 +1,7 @@
 "use client";
-import { ChangeEvent, FC, ReactElement, useCallback, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FC, useCallback, useMemo } from "react";
 import Input from "antd/es/input/Input";
-import Select, { BaseOptionType, DefaultOptionType, SelectProps } from "antd/es/select";
+import Select, { DefaultOptionType } from "antd/es/select";
 import { stringToMonthIntlRu } from "@/1shared/types/date";
 import { IPlanWorkPeriods, TCorrectionTransfer, planWorkPeriods } from "@/2entities/pprTable";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
@@ -27,7 +27,6 @@ export const PprTableTransfersControl: FC<IPprTableTransfersControlProps<IPlanWo
     [currentTimePeriod]
   );
   const nearestMonth = optionsValueArray[monthIndex + 1];
-
   const selectOptions: TOption[] = useMemo(
     () =>
       optionsValueArray.map((field, index) => {

@@ -98,7 +98,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       });
     }
     setWorkPlanCorrections(corrections);
-  }, [pprData?.corrections]);
+  }, [pprData]);
 
   const handleWorksDataInPpr = useCallback(() => {
     if (!pprData) {
@@ -107,7 +107,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     const worksData: TWorkBasicInfo = {};
     pprData.data.forEach((work) => (worksData[work.id] = { ...work }));
     setWorksDataInPpr(worksData);
-  }, [pprData?.data]);
+  }, [pprData]);
 
   /**Добавить работу в ППР */
   const addWork = useCallback((newWork: Partial<IPprData>) => {
@@ -168,15 +168,12 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
           return prev;
         }
         const newDiff = newValue - oldValue;
-        const prevTransfers = prev.corrections.works[objectId]
-          ? prev.corrections.works[objectId]![fieldName as keyof IPlanWorkPeriods]?.transfers
-          : [];
         const newCorrection: TPprDataCorrection<IPlanWorkPeriods> = {
           ...prev.corrections.works[objectId],
           [fieldName]: {
+            ...prev.corrections.works[objectId]![fieldName as keyof IPlanWorkPeriods],
             newValue,
             diff: newDiff,
-            fieldsTo: prevTransfers,
           },
         };
         return {
