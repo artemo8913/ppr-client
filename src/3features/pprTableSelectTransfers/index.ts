@@ -1,1 +1,1 @@
-export { PprTableSelectTransfers } from "./ui/pprTableSelectTransfers";
+export { PprTableTransfersControl as PprTableSelectTransfers } from "./ui/pprTableSelectTransfers";
