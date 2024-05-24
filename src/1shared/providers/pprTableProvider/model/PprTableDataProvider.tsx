@@ -207,7 +207,6 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         if (!prev || !planWorkPeriodsSet.has(fieldFrom)) {
           return prev;
         }
-
         return {
           ...prev,
           corrections: {
@@ -218,7 +217,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
                 ...prev.corrections.works[objectId],
                 [fieldFrom]: {
                   ...prev.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods],
-                  transfers: transfers?.filter((field) => field.value !== 0),
+                  transfers: transfers === null ? null : transfers.filter((field) => field.value !== 0),
                 },
               },
             },

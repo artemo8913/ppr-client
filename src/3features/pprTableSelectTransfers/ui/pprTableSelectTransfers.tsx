@@ -59,7 +59,16 @@ export const PprTableTransfersControl: FC<IPprTableTransfersControlProps<IPlanWo
     [objectId, fieldFrom, transfers, updateTransfers]
   );
 
-  if (Number(transfers?.length) > 0) {
+  if (transfers === null) {
+    return (
+      <PprTableSelectTransfer
+        value={0}
+        fieldTo={null}
+        options={selectOptions}
+        handleChange={(value, option) => handleChange(0, value, option)}
+      />
+    );
+  } else if (Number(transfers?.length) > 0) {
     return transfers?.map((oneTransfer, index) => (
       <PprTableSelectTransfer
         key={oneTransfer.fieldTo + index}

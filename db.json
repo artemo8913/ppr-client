@@ -348,13 +348,7 @@
             "jan_plan_work": {
               "newValue": 11,
               "diff": 10,
-              "transfers": [
-                {
-                  "fieldTo": "feb_plan_work",
-                  "is_approved": false,
-                  "value": 10
-                }
-              ]
+              "transfers": null
             }
           }
         }
