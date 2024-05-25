@@ -339,17 +339,7 @@
                 {
                   "fieldTo": "feb_plan_work",
                   "is_approved": false,
-                  "value": 0.4
-                },
-                {
-                  "fieldTo": "mar_plan_work",
-                  "is_approved": false,
-                  "value": 0.3
-                },
-                {
-                  "fieldTo": "apr_plan_work",
-                  "is_approved": false,
-                  "value": -0.3
+                  "value": 1
                 }
               ]
             }
