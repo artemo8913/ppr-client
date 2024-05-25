@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
 import { directionsMock } from "@/1shared/types/transEnergoDivisions";
-import { monthsIntlRu } from "@/1shared/types/date";
+import { tymePeriodIntlRu } from "@/1shared/types/date";
 import { IPlanWorkPeriods } from "@/2entities/pprTable";
 import { PprTableTransfersControl } from "@/3features/pprTableTransfersControl";
 
@@ -35,7 +35,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       </p>
       <h2 className="text-center font-bold">Рапорт</h2>
       <p className="indent-4 text-justify">
-        При планировании ведомости выполненных работ (форма ЭУ-99) на {monthsIntlRu[currentTimePeriod]} месяц возникла
+        При планировании ведомости выполненных работ (форма ЭУ-99) на {tymePeriodIntlRu[currentTimePeriod]} месяц возникла
         необходимости корректировки годового плана технического обслуживания ремонта в части:
       </p>
       <p className="indent-4 text-justify">Состава персонала чел.-ч:</p>
@@ -53,7 +53,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               <span>{Number(correction.data?.newValue)}</span> <span>{workBasicInfo[correction.id].measure}</span>
               {". "}
               <span>Разницу</span> <span>{Number(correction.data?.diff)}</span>{" "}
-              <span>{workBasicInfo[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
+              <span>{workBasicInfo[correction.id].measure}</span>{" "}
               <PprTableTransfersControl objectId={correction.id} fieldFrom={fieldFrom} />;
             </li>
           );

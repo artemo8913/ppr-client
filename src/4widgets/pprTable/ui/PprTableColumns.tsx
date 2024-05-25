@@ -1,5 +1,5 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { monthsIntlRu } from "@/1shared/types/date";
+import { tymePeriodIntlRu } from "@/1shared/types/date";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { IPprData, TAllMonthStatuses, TYearPprStatus, IPlanWorkPeriods } from "@/2entities/pprTable";
 import {
@@ -40,7 +40,7 @@ export const useCreateColumns = (
     // Часть таблицы с данными объемов и чел.-ч по году и месяцами
     ...getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) => {
       return columnHelper.group({
-        header: monthsIntlRu[month],
+        header: tymePeriodIntlRu[month],
         columns: [
           ...getPlanFactColumns(month, filterColumns.planFact).map<ColumnDef<IPprData, any>>((field) => {
             return columnHelper.accessor(field, {

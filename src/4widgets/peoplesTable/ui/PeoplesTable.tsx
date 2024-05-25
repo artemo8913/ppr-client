@@ -1,7 +1,7 @@
 "use client";
 import { FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { monthsIntlRu, pprTimePeriods } from "@/1shared/types/date";
+import { tymePeriodIntlRu, pprTimePeriods } from "@/1shared/types/date";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
@@ -32,7 +32,7 @@ const columns = (status?: TYearPprStatus) => [
   }),
   ...pprTimePeriods.map((time) =>
     columnHelper.group({
-      header: monthsIntlRu[time],
+      header: tymePeriodIntlRu[time],
       columns: [
         columnHelper.accessor(`${time}_plan_time`, {
           header: "план",
