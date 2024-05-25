@@ -168,14 +168,15 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
           return prev;
         }
         const newDiff = newValue - oldValue;
-        const newCorrection: TPprDataCorrection<IPlanWorkPeriods> = {
-          ...prev.corrections.works[objectId],
-          [fieldName]: {
-            ...prev.corrections.works[objectId]![fieldName as keyof IPlanWorkPeriods],
-            newValue,
-            diff: newDiff,
-          },
+        const newCorrection = {
+          ...prev.corrections.works[objectId]![fieldName as keyof IPlanWorkPeriods],
+          newValue,
+          diff: newDiff,
         };
+        const newCorrections = { ...prev.corrections.works[objectId], [fieldName]: { ...newCorrection } };
+        if (!newDiff) {
+          delete newCorrections[fieldName as keyof IPlanWorkPeriods];
+        }
         return {
           ...prev,
           corrections: {
@@ -183,7 +184,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
             works: {
               ...prev.corrections.works,
               [objectId]: {
-                ...newCorrection,
+                ...newCorrections,
               },
             },
           },
