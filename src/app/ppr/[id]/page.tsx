@@ -14,8 +14,8 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
   const ppr = await getPprTable(params.id);
   const works = await getAllWorks();
   return (
-    <PprTableDataProvider ppr={ppr}>
-      <PprTableViewSettingsProvider>
+    <PprTableViewSettingsProvider>
+      <PprTableDataProvider ppr={ppr}>
         <WorkModalProvider>
           <PprTableControlPanel pprData={ppr} />
           <Tabs
@@ -55,7 +55,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
           />
           <WorkModal data={works} />
         </WorkModalProvider>
-      </PprTableViewSettingsProvider>
-    </PprTableDataProvider>
+      </PprTableDataProvider>
+    </PprTableViewSettingsProvider>
   );
 }
