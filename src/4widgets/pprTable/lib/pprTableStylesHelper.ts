@@ -1,4 +1,5 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
+import { isStringStartsWithTimePeriodName } from "@/1shared/types/date";
 import { IPprData } from "@/2entities/pprTable";
 
 export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
@@ -36,5 +37,8 @@ export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
   if (key === "norm_of_time_document") {
     return { fontSize: "0.7vw" };
   }
-  return { backgroundColor: setBgColor(key) };
+  if (isStringStartsWithTimePeriodName(key)) {
+    return { backgroundColor: setBgColor(key), verticalAlign:'bottom' };
+  }
+  return {};
 }

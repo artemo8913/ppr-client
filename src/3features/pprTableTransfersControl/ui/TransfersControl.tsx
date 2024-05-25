@@ -6,6 +6,8 @@ import { IPlanWorkPeriods, TCorrectionTransfer, planWorkPeriods } from "@/2entit
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
+import { PlusOutlined } from "@ant-design/icons";
+import Button from "antd/es/button";
 
 interface ITransfersControlProps<T> {
   objectId: string;
@@ -83,7 +85,7 @@ export const TransfersControl: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({
   );
 
   return (
-    <div>
+    <div className="inline-flex flex-wrap gap-4">
       <SelectTransferStrategy defaultValue={!transfers ? "NULL" : "PERIOD"} handleChange={handleStratagy} />
       {transfers?.map((oneTransfer, transferIndex) => (
         <SelectTransferParams
@@ -96,6 +98,7 @@ export const TransfersControl: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({
           handleDeleteTransfer={transferIndex === 0 ? undefined : () => deleteTransfer(transferIndex)}
         />
       ))}
+      {transfers && <Button icon={<PlusOutlined />} onClick={addTransfer} />}
     </div>
   );
 };

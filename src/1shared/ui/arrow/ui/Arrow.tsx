@@ -2,34 +2,39 @@ import { FC } from "react";
 
 interface IArrowProps {
   pos?: { x: number; y: number };
-  direction?: "positive" | "negative";
   width?: number;
-  value?: string;
+  height?: number;
+  value?: number;
 }
 
-export const Arrow: FC<IArrowProps> = ({ pos = { x: 0, y: 0 }, direction = "positive", width = 100, value }) => {
-  const isOnRight = direction === "positive";
+const offset = 4;
+
+export const Arrow: FC<IArrowProps> = ({ pos = { x: 0, y: 0 }, width = 100, height = 18, value }) => {
+  const isOnRight = Number(value) >= 0;
   const color = isOnRight ? "red" : "green";
-  const text = value ? (isOnRight ? `+${value}` : `-${value}`) : "";
+  const text = value ? (isOnRight ? `+${value}` : value) : "";
+  const middleHeight = height / 2;
+  const middleHeightWithOffset = middleHeight + (isOnRight ? offset : -offset);
   return (
-    <div className="absolute z-10" style={{ top: pos.y, left: pos.x }}>
-      <svg width={width} height={24} color={color}>
+    <div className="relative z-10" style={{ top: pos.y, left: pos.x }}>
+      <svg width={width} height={height} color={color}>
         <defs>
-          <marker id="head" orient="auto" markerWidth="3" markerHeight="4" refX="0.1" refY="2">
-            <path d="M0,0 V4 L2,2 Z" stroke={color} fill={color} />
-          </marker>
+          <filter x="0" y="0" width="1" height="1" id="solid">
+            <feFlood floodColor="rgba(255,255,255,0.5)" result="bg" />
+            <feMerge>
+              <feMergeNode in="bg" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
-        <text x={width / 2} y={10}>
+        <text fontWeight={700} filter="url(#solid)" fill={color} x={width / 4} y={middleHeight}>
           {text}
         </text>
-        <path
-          style={{ rotate: isOnRight ? "" : "180deg", transformOrigin: "center" }}
-          id="arrow-line"
-          markerEnd="url(#head)"
-          strokeWidth="2"
-          stroke={color}
-          d={`M0 ${12} H ${width - 10}`}
-        />
+        <g strokeWidth={2} style={{ rotate: isOnRight ? "" : "180deg", transformOrigin: "center" }}>
+          <path stroke={color} d={`M0 ${middleHeightWithOffset} H ${width}`} />
+          <path d={`M${width - 8} ${middleHeightWithOffset - 4} L${width} ${middleHeightWithOffset}`} stroke={color} />
+          <path d={`M${width - 8} ${middleHeightWithOffset + 4} L${width} ${middleHeightWithOffset}`} stroke={color} />
+        </g>
       </svg>
     </div>
   );

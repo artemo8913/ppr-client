@@ -43,3 +43,12 @@ export const stringToTimePeriodIntlRu = (string: string): string => {
   }
   return "";
 };
+
+export const isStringStartsWithTimePeriodName = (string: string): boolean => {
+  for (const period of pprTimePeriods) {
+    if (string.startsWith(period)) {
+      return true;
+    }
+  }
+  return false;
+};

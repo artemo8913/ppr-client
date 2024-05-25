@@ -1,9 +1,13 @@
 "use client";
-import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
+import { FC, PropsWithChildren, createContext, useCallback, useContext, useState } from "react";
 import { TPprTimePeriod } from "@/1shared/types/date";
 
 export type TFilterTimePeriodOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
 export type TFilterPlanFactOption = "SHOW_ALL" | "SHOW_ONLY_PLAN" | "SHOW_ONLY_FACT" | "SHOW_ONLY_VALUES";
+export interface TFilterColumns {
+  months: TFilterTimePeriodOption;
+  planFact: TFilterPlanFactOption;
+}
 export type TCorrectionView =
   | "INITIAL_PLAN"
   | "INITIAL_PLAN_WITH_ARROWS"
@@ -11,7 +15,7 @@ export type TCorrectionView =
   | "CORRECTED_PLAN_WITH_ARROWS";
 
 interface IPprTableSettings {
-  filterColumns: { months: TFilterTimePeriodOption; planFact: TFilterPlanFactOption };
+  filterColumns: TFilterColumns;
   currentTimePeriod: TPprTimePeriod;
   correctionView: TCorrectionView;
 }
