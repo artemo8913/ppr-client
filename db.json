@@ -333,8 +333,8 @@
         "works": {
           "Thu May 09 2024 08:17:36 GMT+0700 (Красноярск, стандартное время)0.8330635629475722": {
             "jan_plan_work": {
-              "newValue": 1,
-              "diff": -2,
+              "newValue": 2,
+              "diff": -1,
               "transfers": null
             }
           },
