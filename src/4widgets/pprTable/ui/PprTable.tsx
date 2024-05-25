@@ -1,20 +1,19 @@
 "use client";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useMemo, useRef } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { Arrow } from "@/1shared/ui/arrow";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPlanWorkPeriods, IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriods } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/pprTable";
 import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { useCreateColumns } from "./PprTableColumns";
+import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { pprData, updatePprData, updatePprDataCorrections } = usePprTableData();
+  const { pprData, updatePprData, updateNewValueInCorrection } = usePprTableData();
 
-  const { filterColumns, correctionView } = usePprTableViewSettings();
+  const { correctionView } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
-  const [basicArrowWidth, setBasicArrowWidth] = useState(100);
 
   const pprYearStatus: TYearPprStatus = pprData?.status || "done";
   const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
@@ -25,14 +24,14 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateData: updatePprData,
-      correctPlan: updatePprDataCorrections,
+      correctPlan: updateNewValueInCorrection,
     },
   });
 
-  useEffect(() => {
-    const width = planCellRef.current?.getBoundingClientRect().width || 0;
-    setBasicArrowWidth(width * 6);
-  }, [filterColumns]);
+  const isArrowsShow = useMemo(
+    () => correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS",
+    [correctionView]
+  );
 
   return (
     <table className="table-fixed w-[100%] [font-size:12px]">
@@ -61,19 +60,13 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
             {row.getVisibleCells().map((cell) => {
               return (
                 <td key={cell.id} className="border border-black relative" style={getTdStyle(cell.column.id)}>
-                  {planWorkPeriods.includes(cell.column.id as keyof IPlanWorkPeriods) &&
-                  (correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS") &&
-                  pprData?.corrections.works &&
-                  cell.row.original.id in pprData?.corrections.works &&
-                  pprData?.corrections.works[cell.row.original.id] &&
-                  cell.column.id in pprData?.corrections.works[cell.row.original.id]! &&
-                  pprData?.corrections.works[cell.row.original.id]![cell.column.id as keyof IPlanWorkPeriods]
-                    ? pprData.corrections.works[cell.row.original.id]![
-                        cell.column.id as keyof IPlanWorkPeriods
-                      ]!.fieldsTo?.map((field, index) => (
-                        <Arrow key={cell.id + index} width={basicArrowWidth} value={String(field.value)} />
-                      ))
-                    : null}
+                  {planWorkPeriodsSet.has(cell.column.id) && isArrowsShow ? (
+                    <CorrectionArrowsConteiner
+                      fieldFrom={cell.column.id}
+                      objectId={cell.row.original.id}
+                      planCellRef={planCellRef}
+                    />
+                  ) : null}
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               );

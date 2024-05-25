@@ -5,9 +5,11 @@ import {
   IPlanWorkPeriods,
   IPpr,
   IPprData,
+  TCorrectionTransfer,
   TPprDataCorrection,
   TWorkPlanCorrection,
   planWorkPeriods,
+  planWorkPeriodsSet,
 } from "@/2entities/pprTable";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
@@ -20,13 +22,22 @@ interface IPprTableDataContextProps {
   workBasicInfo: TWorkBasicInfo;
   addWork: (newWork: Partial<IPprData>) => void;
   updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
-  updatePprDataCorrections: (
+  updateNewValueInCorrection: (
     objectId: string,
     fieldName: keyof IPlanWorkPeriods,
     newValue: number,
     oldValue: number
   ) => void;
+  updateTransfers: (
+    objectId: string,
+    fieldFrom: keyof IPlanWorkPeriods | string,
+    transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null
+  ) => void;
   getCorrectionValue: (workId: string, fieldName: keyof IPlanWorkPeriods | string) => number;
+  getTransfers: (
+    objectId: string,
+    fieldFrom: keyof IPlanWorkPeriods | string
+  ) => TCorrectionTransfer<IPlanWorkPeriods>[] | null;
   addWorkingMan: () => void;
   updateWorkingMan: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   deleteWorkingMan: (id: string) => void;
@@ -38,8 +49,10 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   workBasicInfo: {},
   addWork: () => {},
   updatePprData: () => {},
-  updatePprDataCorrections: () => {},
+  updateNewValueInCorrection: () => {},
+  updateTransfers: () => {},
   getCorrectionValue: () => 0,
+  getTransfers: () => null,
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
@@ -76,10 +89,10 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
 
           corrections[id] = { ...corrections[id], [planPeriod]: existValue + additionalValue };
 
-          workCorrection[planPeriod]?.fieldsTo?.forEach((field) => {
-            const existValue = id in corrections ? corrections[id]![field.fieldNameTo] || 0 : 0;
+          workCorrection[planPeriod]?.transfers?.forEach((field) => {
+            const existValue = id in corrections ? corrections[id]![field.fieldTo] || 0 : 0;
             const additionalValue = field.value;
-            corrections[id] = { ...corrections[id], [field.fieldNameTo]: existValue + additionalValue };
+            corrections[id] = { ...corrections[id], [field.fieldTo]: existValue + additionalValue };
           });
         }
       });
@@ -144,25 +157,26 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
 
-  /**Обновить данные о корректировке ППРа */
-  const updatePprDataCorrections = useCallback(
-    (objectId: string, fieldName: keyof IPlanWorkPeriods, newValue: number, oldValue: number) => {
+  /**Обновить новое значение в корректировке ППРа (разницу между первоначальным состоянием и новым) */
+  const updateNewValueInCorrection = useCallback(
+    (objectId: string, fieldName: keyof IPlanWorkPeriods | string, newValue: number, oldValue: number) => {
       setPprData((prev) => {
         if (!prev) {
           return prev;
         }
+        if (!planWorkPeriodsSet.has(fieldName)) {
+          return prev;
+        }
         const newDiff = newValue - oldValue;
-        const prevFieldsTo = prev.corrections.works[objectId]
-          ? prev.corrections.works[objectId]![fieldName]?.fieldsTo
-          : undefined;
-        const newCorrection: TPprDataCorrection<IPlanWorkPeriods> = {
-          ...prev.corrections.works[objectId],
-          [fieldName]: {
-            newValue,
-            diff: newDiff,
-            fieldsTo: prevFieldsTo,
-          },
+        const newCorrection = {
+          ...prev.corrections.works[objectId]![fieldName as keyof IPlanWorkPeriods],
+          newValue,
+          diff: newDiff,
         };
+        const newCorrections = { ...prev.corrections.works[objectId], [fieldName]: { ...newCorrection } };
+        if (!newDiff) {
+          delete newCorrections[fieldName as keyof IPlanWorkPeriods];
+        }
         return {
           ...prev,
           corrections: {
@@ -170,7 +184,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
             works: {
               ...prev.corrections.works,
               [objectId]: {
-                ...newCorrection,
+                ...newCorrections,
               },
             },
           },
@@ -178,6 +192,56 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       });
     },
     []
+  );
+
+  /**Обновить переносы*/
+  const updateTransfers = useCallback(
+    (
+      objectId: string,
+      fieldFrom: keyof IPlanWorkPeriods | string,
+      transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null
+    ) => {
+      setPprData((prev) => {
+        if (!prev || !planWorkPeriodsSet.has(fieldFrom)) {
+          return prev;
+        }
+        return {
+          ...prev,
+          corrections: {
+            ...prev.corrections,
+            works: {
+              ...prev.corrections.works,
+              [objectId]: {
+                ...prev.corrections.works[objectId],
+                [fieldFrom]: {
+                  ...prev.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods],
+                  transfers: transfers === null ? null : transfers,
+                },
+              },
+            },
+          },
+        };
+      });
+    },
+    []
+  );
+
+  /**Получить массив переносов*/
+  const getTransfers = useCallback(
+    (objectId: string, fieldFrom: keyof IPlanWorkPeriods | string) => {
+      const isHaveCorrection =
+        pprData?.corrections.works &&
+        objectId in pprData?.corrections.works &&
+        pprData?.corrections.works[objectId] &&
+        fieldFrom in pprData?.corrections.works[objectId]! &&
+        pprData?.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods];
+
+      if (!isHaveCorrection) {
+        return [];
+      }
+      return pprData?.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods]!.transfers;
+    },
+    [pprData?.corrections]
   );
 
   /**Добавить рабочего в список людей ППР */
@@ -248,7 +312,9 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         workBasicInfo,
         addWork,
         updatePprData,
-        updatePprDataCorrections,
+        updateNewValueInCorrection,
+        updateTransfers,
+        getTransfers,
         getCorrectionValue,
         addWorkingMan,
         updateWorkingMan,

@@ -13,6 +13,7 @@ export type {
   IPlanWorkPeriods,
   TPprDataCorrection,
   TWorkPlanCorrection,
+  TCorrectionTransfer,
 } from "./model/pprTable.schema";
-export { planWorkPeriods, pprTableColumnsSet } from "./model/pprTable.schema";
+export { planWorkPeriods, pprTableColumnsSet, planWorkPeriodsSet } from "./model/pprTable.schema";
 export { getPprTable, addPprTable, deletePprTable } from "./model/pprTable.actions";

@@ -19,7 +19,7 @@ export type TPprTimePeriod = "year" | TMonth;
 
 export const pprTimePeriods: TPprTimePeriod[] = ["year", ...months] as const;
 
-export const monthsIntlRu = {
+export const tymePeriodIntlRu = {
   year: "год",
   jan: "январь",
   feb: "февраль",
@@ -35,10 +35,10 @@ export const monthsIntlRu = {
   dec: "декабрь",
 };
 
-export const stringToMonthIntlRu = (string: string): string => {
-  for (const month of months) {
-    if (string.startsWith(month)) {
-      return monthsIntlRu[month];
+export const stringToTimePeriodIntlRu = (string: string): string => {
+  for (const period of pprTimePeriods) {
+    if (string.startsWith(period)) {
+      return tymePeriodIntlRu[period];
     }
   }
   return "";

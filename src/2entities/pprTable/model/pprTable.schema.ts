@@ -141,11 +141,13 @@ export type TWorkPlanCorrection = {
   [id: string]: { [planPeriod in keyof IPlanWorkPeriods]?: number } | undefined;
 };
 
+export type TCorrectionTransfer<T> = { fieldTo: keyof T; value: number; is_approved: boolean };
+
 export type TPprDataCorrection<T> = {
   [fieldNameFrom in keyof T]?: {
     newValue: number;
     diff: number;
-    fieldsTo: { fieldNameTo: keyof T; value: number; is_approved: boolean }[] | null | undefined;
+    transfers: TCorrectionTransfer<T>[] | null;
   };
 };
 
@@ -287,3 +289,5 @@ const pprDataColumnsFields: (keyof IPprData)[] = [
 ] as const;
 
 export const pprTableColumnsSet: Set<keyof IPprData | string> = new Set(pprDataColumnsFields);
+
+export const planWorkPeriodsSet: Set<keyof IPlanWorkPeriods | string> = new Set(planWorkPeriods);
