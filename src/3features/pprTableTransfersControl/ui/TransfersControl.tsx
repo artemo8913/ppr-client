@@ -41,11 +41,11 @@ export const TransfersControl: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({
         null;
       } else if (!transfers) {
         newTransfers = [createNewTransferInstance(fieldTo, value)];
-      } else {
+      } else if (transferIndex !== undefined) {
         newTransfers = [
           ...transfers.slice(0, transferIndex),
           createNewTransferInstance(fieldTo, value),
-          ...transfers.slice(transferIndex || 0 + 1),
+          ...transfers.slice(transferIndex + 1),
         ];
       }
       updateTransfers(objectId, fieldFrom, newTransfers);
