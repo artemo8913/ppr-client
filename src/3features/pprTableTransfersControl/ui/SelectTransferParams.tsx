@@ -20,11 +20,10 @@ export const SelectTransferParams: <T>(props: ISelectTransferParamsProps<T>) => 
   options,
   fieldTo,
   handleChange,
-  handleAddTransfer,
   handleDeleteTransfer,
 }) => {
   return (
-    <div>
+    <div className="flex border">
       <Input
         value={value}
         type="number"
@@ -35,7 +34,6 @@ export const SelectTransferParams: <T>(props: ISelectTransferParamsProps<T>) => 
       />
       <Select value={fieldTo} options={options} onChange={(fieldTo) => handleChange(fieldTo, value)} />
       {Boolean(handleDeleteTransfer) && <Button icon={<CloseCircleOutlined />} onClick={handleDeleteTransfer} />}
-      {Boolean(handleAddTransfer) && <Button icon={<PlusOutlined />} onClick={handleAddTransfer} />}
     </div>
   );
 };
