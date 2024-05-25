@@ -5,6 +5,7 @@ import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pp
 import { IPlanWorkPeriods, TCorrectionTransfer, planWorkPeriods } from "@/2entities/pprTable";
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
+import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
 interface ITransfersControlProps<T> {
   objectId: string;
@@ -37,18 +38,37 @@ export const TransfersControl: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({
     (fieldTo: keyof IPlanWorkPeriods | null, value?: number, transferIndex?: number) => {
       let newTransfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null = null;
       if (!fieldTo) {
+        null;
       } else if (!transfers) {
-        newTransfers = [{ fieldTo, is_approved: false, value: value || 0 }];
-      } else if (transfers.length >= 0) {
+        newTransfers = [createNewTransferInstance(fieldTo, value)];
+      } else {
         newTransfers = [
           ...transfers.slice(0, transferIndex),
-          { fieldTo, is_approved: false, value: value || 0 },
+          createNewTransferInstance(fieldTo, value),
           ...transfers.slice(transferIndex || 0 + 1),
         ];
       }
       updateTransfers(objectId, fieldFrom, newTransfers);
     },
     [objectId, fieldFrom, transfers, updateTransfers]
+  );
+
+  const addTransfer = useCallback(() => {
+    handleTransfersChange(nearestPlanPeriod, 0, transfers?.length || 0 + 1);
+  }, [transfers, nearestPlanPeriod, handleTransfersChange]);
+
+  const deleteTransfer = useCallback(
+    (index: number) => {
+      if (transfers === null) {
+        return;
+      }
+      updateTransfers(
+        objectId,
+        fieldFrom,
+        transfers?.filter((_, i) => i !== index)
+      );
+    },
+    [updateTransfers, transfers, fieldFrom, objectId]
   );
 
   const handleStratagy = useCallback(
@@ -65,24 +85,17 @@ export const TransfersControl: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({
   return (
     <div>
       <SelectTransferStrategy defaultValue={!transfers ? "NULL" : "PERIOD"} handleChange={handleStratagy} />
-      {Boolean(Number(transfers?.length) > 0)
-        ? transfers?.map((oneTransfer, index) => (
-            <SelectTransferParams
-              key={oneTransfer.fieldTo + index}
-              options={selectOptions}
-              value={oneTransfer.value}
-              fieldTo={oneTransfer.fieldTo}
-              handleChange={(fieldTo, value) => handleTransfersChange(fieldTo, value, index)}
-            />
-          ))
-        : transfers && (
-            <SelectTransferParams
-              value={0}
-              fieldTo={nearestPlanPeriod}
-              options={selectOptions}
-              handleChange={handleTransfersChange}
-            />
-          )}
+      {transfers?.map((oneTransfer, transferIndex) => (
+        <SelectTransferParams
+          key={oneTransfer.fieldTo + transferIndex}
+          options={selectOptions}
+          value={oneTransfer.value}
+          fieldTo={oneTransfer.fieldTo}
+          handleChange={(fieldTo, value) => handleTransfersChange(fieldTo, value, transferIndex)}
+          handleAddTransfer={addTransfer}
+          handleDeleteTransfer={transferIndex === 0 ? undefined : () => deleteTransfer(transferIndex)}
+        />
+      ))}
     </div>
   );
 };
