@@ -335,13 +335,7 @@
             "jan_plan_work": {
               "newValue": 1,
               "diff": -2,
-              "transfers": [
-                {
-                  "fieldTo": "feb_plan_work",
-                  "is_approved": false,
-                  "value": 2
-                }
-              ]
+              "transfers": null
             }
           },
           "Thu May 09 2024 08:17:18 GMT+0700 (Красноярск, стандартное время)0.5962722065971606": {
