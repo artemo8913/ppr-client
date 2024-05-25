@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { directionsMock } from "@/1shared/types/transEnergoDivisions";
 import { monthsIntlRu } from "@/1shared/types/date";
 import { IPlanWorkPeriods } from "@/2entities/pprTable";
-import { PprTableSelectTransfers } from "@/3features/pprTableSelectTransfers";
+import { PprTableTransfersControl } from "@/3features/pprTableTransfersControl";
 
 interface ICorrectionRaportProps {}
 
@@ -54,7 +54,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               {". "}
               <span>Разницу</span> <span>{Number(correction.data?.diff)}</span>{" "}
               <span>{workBasicInfo[correction.id].measure}</span> <span>перенести на/с:</span>{" "}
-              <PprTableSelectTransfers objectId={correction.id} fieldFrom={fieldFrom} />;
+              <PprTableTransfersControl objectId={correction.id} fieldFrom={fieldFrom} />;
             </li>
           );
         })}
