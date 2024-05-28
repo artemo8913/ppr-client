@@ -1,26 +1,26 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useState } from "react";
 
-interface IWorkModalControlProps {
+interface IModalProps {
   isOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
 }
 const defaultValue: boolean = false;
 
-const WorkDataContext = createContext<IWorkModalControlProps>({
+const ModalContext = createContext<IModalProps>({
   isOpen: defaultValue,
   openModal: () => {},
   closeModal: () => {},
 });
 
-interface IWorkModalProviderProps extends PropsWithChildren {}
+interface IModalProviderProps extends PropsWithChildren {}
 
-export const WorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => {
+export const ModalProvider: FC<IModalProviderProps> = ({ children }) => {
   const [isOpen, setIsModalOpen] = useState(defaultValue);
   const openModal = useCallback(() => setIsModalOpen(true), []);
   const closeModal = useCallback(() => setIsModalOpen(false), []);
-  return <WorkDataContext.Provider value={{ isOpen, closeModal, openModal }}>{children}</WorkDataContext.Provider>;
+  return <ModalContext.Provider value={{ isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>;
 };
 
-export const useWorkModal = () => useContext(WorkDataContext);
+export const useModal = () => useContext(ModalContext);
