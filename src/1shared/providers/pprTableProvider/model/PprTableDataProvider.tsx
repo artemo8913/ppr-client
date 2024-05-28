@@ -21,6 +21,7 @@ interface IPprTableDataContextProps {
   workPlanCorrections: TWorkPlanCorrection;
   workBasicInfo: TWorkBasicInfo;
   addWork: (newWork: Partial<IPprData>) => void;
+  deleteWork: (workId: string) => void;
   updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   updateNewValueInCorrection: (
     objectId: string,
@@ -48,6 +49,7 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   workPlanCorrections: {},
   workBasicInfo: {},
   addWork: () => {},
+  deleteWork: () => {},
   updatePprData: () => {},
   updateNewValueInCorrection: () => {},
   updateTransfers: () => {},
@@ -119,6 +121,16 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         ...prev,
         data: prev.data.concat(createNewPprWorkInstance(newWork)),
       };
+    });
+  }, []);
+
+  /**Убрать работу из ППР */
+  const deleteWork = useCallback((workId: string) => {
+    setPprData((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return { ...prev, data: prev.data.filter((work) => work.id !== workId) };
     });
   }, []);
 
@@ -310,6 +322,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         pprData,
         workPlanCorrections,
         workBasicInfo,
+        deleteWork,
         addWork,
         updatePprData,
         updateNewValueInCorrection,

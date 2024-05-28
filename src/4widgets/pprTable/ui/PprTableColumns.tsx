@@ -25,13 +25,18 @@ export const useCreateColumns = (
     ...columnsDefault.map((column) => {
       return columnHelper.accessor(column, {
         header: (info) => (
-          <PprTableCell isWithAddButton={info.column.id === "name"} isVertical value={getColumnTitle(info.header.id)} />
+          <PprTableCell
+            isWithWorkControl={info.column.id === "name"}
+            isVertical
+            value={getColumnTitle(info.header.id)}
+          />
         ),
         cell: (info) => (
           <PprTableCell
+            id={info.row.original.id}
             value={info.getValue()}
             handleBlur={(value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-            isWithAddButton={info.column.id === "name"}
+            isWithWorkControl={info.column.id === "name"}
             {...getColumnSettings(info.column.id, pprYearStatus, currentTimePeriod, pprMonthsStatuses)}
           />
         ),

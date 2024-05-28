@@ -16,7 +16,6 @@ export const AddWorkButton: FC<IAddWorkButtonProps> = ({ style }) => {
       style={style}
       size="small"
       shape="circle"
-      className="!absolute bottom-0 left-1/2 z-10"
       icon={<PlusOutlined />}
     />
   );
