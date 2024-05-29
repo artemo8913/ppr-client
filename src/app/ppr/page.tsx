@@ -1,13 +1,14 @@
 import { getPprsInfo } from "@/2entities/pprInfo";
 import { PprInfoTable } from "@/4widgets/pprInfoTable";
-import { PprCreateNewButton } from "@/3features/pprCreateNewTable";
+import { ModalProvider } from "@/1shared/providers/modalProvider";
+import { CreatePprModal } from "@/4widgets/createPprModal";
 
 export default async function PprPage() {
   const data = await getPprsInfo();
   return (
-    <div>
-      <PprCreateNewButton />
+    <ModalProvider>
+      <CreatePprModal />
       <PprInfoTable data={data} />
-    </div>
+    </ModalProvider>
   );
 }

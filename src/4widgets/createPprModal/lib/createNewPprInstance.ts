@@ -1,11 +1,8 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/1shared/auth/authConfig";
-import { ServerSubmitButton } from "@/1shared/ui/button";
-import { IPpr, addPprTable } from "@/2entities/pprTable";
+import { Session } from "next-auth";
+import { IPpr } from "@/2entities/pprTable";
 
-export async function PprCreateNewButton() {
-  const session = await getServerSession(authOptions);
-  const newPprData: Omit<IPpr, "id"> = {
+export function createNewPprInstance(session: Session | null, values?: Partial<IPpr>): Omit<IPpr, "id"> {
+  return {
     data: [],
     id_direction: session?.user.id_direction || null,
     id_distance: session?.user.id_distance || null,
@@ -31,16 +28,6 @@ export async function PprCreateNewButton() {
       nov: "none",
       dec: "none",
     },
+    ...values,
   };
-  return (
-    <ServerSubmitButton
-      type="primary"
-      action={async () => {
-        "use server";
-        await addPprTable(newPprData);
-      }}
-    >
-      Добавить
-    </ServerSubmitButton>
-  );
 }
