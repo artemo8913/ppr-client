@@ -1,6 +1,6 @@
 import Tabs from "antd/es/tabs";
 import { PprTableDataProvider, PprTableViewSettingsProvider } from "@/1shared/providers/pprTableProvider";
-import { ModalProvider } from "@/1shared/providers/modalProvider";
+import { WorkModalProvider } from "@/1shared/providers/workModalProvider";
 import { getPprTable } from "@/2entities/pprTable";
 import { getAllWorks } from "@/2entities/work";
 import { WorkingManAdd } from "@/3features/workingManAdd";
@@ -16,7 +16,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
   return (
     <PprTableViewSettingsProvider>
       <PprTableDataProvider ppr={ppr}>
-        <ModalProvider>
+        <WorkModalProvider>
           <PprTableControlPanel pprData={ppr} />
           <Tabs
             defaultActiveKey="2"
@@ -54,7 +54,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
             ]}
           />
           <WorkModal data={works} />
-        </ModalProvider>
+        </WorkModalProvider>
       </PprTableDataProvider>
     </PprTableViewSettingsProvider>
   );
