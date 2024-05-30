@@ -1,15 +1,15 @@
 "use client";
-import { FC } from "react";
-import Modal from "antd/es/modal/Modal";
-import { IWork } from "@/2entities/work";
-import { useModal } from "@/1shared/providers/modalProvider";
-import { CreatePprForm } from "./CreatePprForm";
+import { FC, useCallback, useState } from "react";
 import Button from "antd/es/button";
+import Modal from "antd/es/modal/Modal";
+import { CreatePprForm } from "./CreatePprForm";
 
 interface ICreatePprModalProps extends React.ComponentProps<typeof Modal> {}
 
 export const CreatePprModal: FC<ICreatePprModalProps> = () => {
-  const { openModal, closeModal, isOpen } = useModal();
+  const [isOpen, setIsModalOpen] = useState(false);
+  const openModal = useCallback(() => setIsModalOpen(true), []);
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   return (
     <>

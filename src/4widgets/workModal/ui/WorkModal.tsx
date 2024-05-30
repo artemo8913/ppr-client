@@ -5,7 +5,7 @@ import Modal from "antd/es/modal/Modal";
 import { IWork } from "@/2entities/work";
 import { WorkCreateForm } from "./WorkCreateForm";
 import { WorkSelectTable } from "./WorkSelectTable";
-import { useModal } from "@/1shared/providers/modalProvider";
+import { useModal } from "@/1shared/providers/workModalProvider";
 
 interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
   data: IWork[];

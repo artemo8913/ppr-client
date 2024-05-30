@@ -574,6 +574,43 @@
         "dec": "none"
       },
       "id": 2
+    },
+    {
+      "data": [],
+      "id_direction": 88,
+      "id_distance": 3,
+      "id_subdivision": 9,
+      "name": "Шаблон ЭЧК-9",
+      "status": "plan_creating",
+      "year": 2024,
+      "created_at": "Thu May 30 2024 07:42:32 GMT+0700 (Красноярск, стандартное время)",
+      "created_by": {
+        "id": "1",
+        "role": "subdivision",
+        "id_subdivision": 9,
+        "id_distance": 3,
+        "id_direction": 88
+      },
+      "peoples": [],
+      "corrections": {
+        "peoples": {},
+        "works": {}
+      },
+      "months_statuses": {
+        "jan": "none",
+        "feb": "none",
+        "mar": "none",
+        "apr": "none",
+        "may": "none",
+        "june": "none",
+        "july": "none",
+        "aug": "none",
+        "sept": "none",
+        "oct": "none",
+        "nov": "none",
+        "dec": "none"
+      },
+      "id": 3
     }
   ]
 }

@@ -2,7 +2,7 @@
 import { FC } from "react";
 import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
-import { useModal } from "@/1shared/providers/modalProvider";
+import { useModal } from "@/1shared/providers/workModalProvider";
 
 interface IAddWorkButtonProps extends React.ComponentProps<typeof Button> {}
 
