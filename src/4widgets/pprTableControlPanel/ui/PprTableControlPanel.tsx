@@ -1,4 +1,9 @@
-import { FC } from "react";
+"use client";
+import { FC, useCallback, useState } from "react";
+import Tooltip from "antd/es/tooltip";
+import Button from "antd/es/button";
+import Modal from "antd/es/modal";
+import { SettingOutlined } from "@ant-design/icons";
 import { IPpr } from "@/2entities/pprTable";
 import { PprTableSaveButton } from "@/3features/pprTableSave";
 import { PprTableYearStatusUpdate } from "@/3features/pprTableStatusUpdate";
@@ -12,6 +17,10 @@ interface IPprTableControlPanelProps {
 }
 
 export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }) => {
+  const [isOpen, setIsModalOpen] = useState(false);
+  const openModal = useCallback(() => setIsModalOpen(true), []);
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
+
   return (
     <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300">
       Статус: {pprData?.status} Создан: {new Date(pprData?.created_at!).toLocaleDateString()} Год: {pprData?.year}{" "}
@@ -20,9 +29,25 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
       <PprTableSelectTimePeriod />
-      <PprTableSelectFilterTimePeriod />
-      <PprTableSelectFilterPlanFact />
-      <PprTableSelectCorrectionView />
+      <>
+        <Tooltip className="cursor-default" title="Настройки ППР">
+          <Button icon={<SettingOutlined />} onClick={openModal} />
+        </Tooltip>
+        <Modal title="Настройки ППР" open={isOpen} onCancel={closeModal} footer={null}>
+          <div className="flex justify-between items-center mb-4">
+            <div>Отображаемый период времени: </div>
+            <PprTableSelectFilterTimePeriod />
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <div>Отображаемые столбцы планов и фактического выполнения работ: </div>
+            <PprTableSelectFilterPlanFact />
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <div>Общее отображение таблицы ППР: </div>
+            <PprTableSelectCorrectionView />
+          </div>
+        </Modal>
+      </>
     </div>
   );
 };
