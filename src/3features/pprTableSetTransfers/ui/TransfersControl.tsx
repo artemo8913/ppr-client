@@ -14,7 +14,7 @@ interface ITransfersControlProps<T> {
   fieldFrom: keyof T;
 }
 
-export const TransfersControl: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({ fieldFrom, objectId }) => {
+export const SetTransfer: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({ fieldFrom, objectId }) => {
   const { getTransfers, updateTransfers } = usePprTableData();
   const transfers = getTransfers(objectId, fieldFrom);
 

@@ -5,7 +5,7 @@ import Button from "antd/es/button";
 import Modal from "antd/es/modal";
 import { SettingOutlined } from "@ant-design/icons";
 import { IPpr } from "@/2entities/pprTable";
-import { PprTableSaveButton } from "@/3features/pprTableSave";
+import { PprTableSaveButton } from "@/3features/pprUpdate";
 import { PprTableYearStatusUpdate } from "@/3features/pprTableStatusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSelectTimePeriod";
 import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSelectColumnsFilter";

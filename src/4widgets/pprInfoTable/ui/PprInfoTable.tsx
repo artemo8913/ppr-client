@@ -5,7 +5,7 @@ import { Table, TableProps } from "antd";
 import { directionsMock } from "@/1shared/types/transEnergoDivisions";
 import { months } from "@/1shared/types/date";
 import { IPpr } from "@/2entities/pprTable";
-import { PprDeleteButton } from "@/3features/pprDeleteTable";
+import { PprDeleteButton } from "@/3features/pprDelete";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 
 interface IPprInfoProps {
