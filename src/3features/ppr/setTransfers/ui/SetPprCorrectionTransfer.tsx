@@ -9,12 +9,15 @@ import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 import { PlusOutlined } from "@ant-design/icons";
 import Button from "antd/es/button";
 
-interface ITransfersControlProps<T> {
+interface ISetPprCorrectionTransferProps<T> {
   objectId: string;
   fieldFrom: keyof T;
 }
 
-export const SetTransfer: FC<ITransfersControlProps<IPlanWorkPeriods>> = ({ fieldFrom, objectId }) => {
+export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWorkPeriods>> = ({
+  fieldFrom,
+  objectId,
+}) => {
   const { getTransfers, updateTransfers } = usePprTableData();
   const transfers = getTransfers(objectId, fieldFrom);
 

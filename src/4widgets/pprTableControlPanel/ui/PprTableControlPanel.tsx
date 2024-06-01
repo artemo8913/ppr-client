@@ -6,10 +6,12 @@ import Modal from "antd/es/modal";
 import { SettingOutlined } from "@ant-design/icons";
 import { IPpr } from "@/2entities/ppr";
 import { PprTableSaveButton } from "@/3features/ppr/update";
-import { PprTableYearStatusUpdate } from "@/3features/ppr/statusUpdate";
+import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTimePeriod";
-import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettings/selectColumnsFilter";
-import { PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate/ui/PprTableMonthStatusUpdate";
+import {
+  PprTableSelectFilterPlanFact,
+  PprTableSelectFilterTimePeriod,
+} from "@/3features/pprTableSettings/selectColumnsFilter";
 import { PprTableSelectCorrectionView } from "@/3features/pprTableSettings/selectCorrectionView";
 
 interface IPprTableControlPanelProps {

@@ -1,1 +1,1 @@
-export { SetTransfer } from "./ui/TransfersControl";
+export { SetPprCorrectionTransfer } from "./ui/SetPprCorrectionTransfer";
