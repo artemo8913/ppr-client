@@ -1,4 +1,4 @@
-import { IWorkingManYearPlan } from "@/2entities/pprTable";
+import { IWorkingManYearPlan } from "@/2entities/ppr";
 
 export function createNewWorkingManInstance(): IWorkingManYearPlan {
   return {

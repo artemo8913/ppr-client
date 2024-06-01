@@ -4,8 +4,8 @@ import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pp
 import { useSession } from "next-auth/react";
 import { directionsMock } from "@/1shared/types/transEnergoDivisions";
 import { tymePeriodIntlRu } from "@/1shared/types/date";
-import { IPlanWorkPeriods } from "@/2entities/pprTable";
-import { SetTransfer } from "@/3features/pprTableSetTransfers";
+import { IPlanWorkPeriods } from "@/2entities/ppr";
+import { SetTransfer } from "@/3features/ppr/setTransfers";
 
 interface ICorrectionRaportProps {}
 

@@ -4,7 +4,7 @@ import Input from "antd/es/input";
 import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import Button from "antd/es/button";
-import { IPpr, addPprTable } from "@/2entities/pprTable";
+import { IPpr, addPprTable } from "@/2entities/ppr";
 import { useSession } from "next-auth/react";
 import { createNewPprInstance } from "../lib/createNewPprInstance";
 import DatePicker, { DatePickerProps } from "antd/es/date-picker";

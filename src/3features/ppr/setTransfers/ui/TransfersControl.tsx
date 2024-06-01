@@ -2,7 +2,7 @@
 import { FC, useCallback, useMemo } from "react";
 import { stringToTimePeriodIntlRu } from "@/1shared/types/date";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPlanWorkPeriods, TCorrectionTransfer, planWorkPeriods } from "@/2entities/pprTable";
+import { IPlanWorkPeriods, TCorrectionTransfer, planWorkPeriods } from "@/2entities/ppr";
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";

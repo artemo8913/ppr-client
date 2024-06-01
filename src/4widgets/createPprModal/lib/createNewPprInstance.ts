@@ -1,5 +1,5 @@
 import { Session } from "next-auth";
-import { IPpr } from "@/2entities/pprTable";
+import { IPpr } from "@/2entities/ppr";
 
 export function createNewPprInstance(session: Session | null, values?: Partial<IPpr>): Omit<IPpr, "id"> {
   return {

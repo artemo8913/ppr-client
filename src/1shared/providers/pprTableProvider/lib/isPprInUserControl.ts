@@ -1,4 +1,4 @@
-import { IPpr } from "@/2entities/pprTable";
+import { IPpr } from "@/2entities/ppr";
 import { IUser } from "@/2entities/user";
 
 /**Подходит ли данный ППР для определенных ролей (начальника цеха, инженера, заместителя начальника дистанции, начальника дистанции и т.п.) */

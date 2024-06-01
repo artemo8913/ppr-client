@@ -1,6 +1,6 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { isStringStartsWithTimePeriodName } from "@/1shared/types/date";
-import { IPprData } from "@/2entities/pprTable";
+import { IPprData } from "@/2entities/ppr";
 
 export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
   switch (key) {

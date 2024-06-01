@@ -1,6 +1,6 @@
 "use client";
 import { isPprInUserControl } from "@/1shared/providers/pprTableProvider";
-import { IPpr, deletePprTable } from "@/2entities/pprTable";
+import { IPpr, deletePprTable } from "@/2entities/ppr";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";

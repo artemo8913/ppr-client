@@ -2,7 +2,7 @@
 import { FC, useMemo, useRef } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/ppr";
 import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { useCreateColumns } from "./PprTableColumns";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";

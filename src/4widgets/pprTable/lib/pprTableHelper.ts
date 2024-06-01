@@ -1,4 +1,4 @@
-import { IHandlePprData, IPprData } from "@/2entities/pprTable";
+import { IHandlePprData, IPprData } from "@/2entities/ppr";
 
 export function handlePprData(data: IPprData[]): IHandlePprData[] {
   let name: string;

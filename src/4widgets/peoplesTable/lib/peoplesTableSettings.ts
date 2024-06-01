@@ -1,5 +1,5 @@
 import { ITableCell } from "@/1shared/ui/table";
-import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/pprTable";
+import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/ppr";
 
 export function getColumnSettings(status?: TYearPprStatus): { [name in keyof IWorkingManYearPlan]?: ITableCell } {
   if (status === "plan_creating") {

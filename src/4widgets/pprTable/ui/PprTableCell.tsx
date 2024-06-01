@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { ITableCell, TableCell } from "@/1shared/ui/table";
-import { TableCellWithWorkControl } from "@/3features/pprTableWorksUpdate";
+import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
 
 interface IPprTableCellProps extends ITableCell {
   id?: string;

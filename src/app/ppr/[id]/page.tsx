@@ -1,9 +1,9 @@
 import Tabs from "antd/es/tabs";
 import { PprTableDataProvider, PprTableViewSettingsProvider } from "@/1shared/providers/pprTableProvider";
 import { WorkModalProvider } from "@/1shared/providers/workModalProvider";
-import { getPprTable } from "@/2entities/pprTable";
+import { getPprTable } from "@/2entities/ppr";
 import { getAllWorks } from "@/2entities/work";
-import { WorkingManAdd } from "@/3features/workingManAdd";
+import { WorkingManAdd } from "@/3features/pprWorkingMans/add";
 import { WorkModal } from "@/4widgets/workModal";
 import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";

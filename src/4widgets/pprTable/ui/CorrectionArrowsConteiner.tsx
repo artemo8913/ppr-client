@@ -2,7 +2,7 @@
 import { FC, MutableRefObject, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { Arrow } from "@/1shared/ui/arrow";
-import { IPlanWorkPeriods, planWorkPeriods, planWorkPeriodsSet } from "@/2entities/pprTable";
+import { IPlanWorkPeriods, planWorkPeriods, planWorkPeriodsSet } from "@/2entities/ppr";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;

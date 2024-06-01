@@ -8,7 +8,7 @@ import {
   usePprTableData,
   usePprTableViewSettings,
 } from "@/1shared/providers/pprTableProvider";
-import { updatePprTable } from "@/2entities/pprTable/model/pprTable.actions";
+import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
 
 interface IPprTableMonthStatusUpdateProps {}
 

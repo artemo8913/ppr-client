@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
-import { updatePprTable } from "@/2entities/pprTable/model/pprTable.actions";
+import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 interface IPprTableUpdateFormProps {}

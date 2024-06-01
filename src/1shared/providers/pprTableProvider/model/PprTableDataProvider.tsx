@@ -10,7 +10,7 @@ import {
   TWorkPlanCorrection,
   planWorkPeriods,
   planWorkPeriodsSet,
-} from "@/2entities/pprTable";
+} from "@/2entities/ppr";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 

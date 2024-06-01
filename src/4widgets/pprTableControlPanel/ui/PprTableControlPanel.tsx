@@ -4,13 +4,13 @@ import Tooltip from "antd/es/tooltip";
 import Button from "antd/es/button";
 import Modal from "antd/es/modal";
 import { SettingOutlined } from "@ant-design/icons";
-import { IPpr } from "@/2entities/pprTable";
-import { PprTableSaveButton } from "@/3features/pprUpdate";
-import { PprTableYearStatusUpdate } from "@/3features/pprTableStatusUpdate";
-import { PprTableSelectTimePeriod } from "@/3features/pprTableSelectTimePeriod";
-import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSelectColumnsFilter";
-import { PprTableMonthStatusUpdate } from "@/3features/pprTableStatusUpdate/ui/PprTableMonthStatusUpdate";
-import { PprTableSelectCorrectionView } from "@/3features/pprTableSelectCorrectionView";
+import { IPpr } from "@/2entities/ppr";
+import { PprTableSaveButton } from "@/3features/ppr/update";
+import { PprTableYearStatusUpdate } from "@/3features/ppr/statusUpdate";
+import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTimePeriod";
+import { PprTableSelectFilterPlanFact, PprTableSelectFilterTimePeriod } from "@/3features/pprTableSettings/selectColumnsFilter";
+import { PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate/ui/PprTableMonthStatusUpdate";
+import { PprTableSelectCorrectionView } from "@/3features/pprTableSettings/selectCorrectionView";
 
 interface IPprTableControlPanelProps {
   pprData: IPpr;

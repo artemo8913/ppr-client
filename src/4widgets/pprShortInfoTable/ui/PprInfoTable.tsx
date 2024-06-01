@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Table, TableProps } from "antd";
 import { directionsMock } from "@/1shared/types/transEnergoDivisions";
 import { months } from "@/1shared/types/date";
-import { IPpr } from "@/2entities/pprTable";
-import { PprDeleteButton } from "@/3features/pprDelete";
+import { IPpr } from "@/2entities/ppr";
+import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 
 interface IPprInfoProps {

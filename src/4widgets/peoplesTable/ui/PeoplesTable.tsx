@@ -5,8 +5,8 @@ import { tymePeriodIntlRu, pprTimePeriods } from "@/1shared/types/date";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
-import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/pprTable";
-import { WorkingManDelete } from "@/3features/workingManDelete";
+import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/ppr";
+import { WorkingManDelete } from "@/3features/pprWorkingMans/delete";
 import { getColumnSettings } from "../lib/peoplesTableSettings";
 
 const columnHelper = createColumnHelper<IWorkingManYearPlan>();

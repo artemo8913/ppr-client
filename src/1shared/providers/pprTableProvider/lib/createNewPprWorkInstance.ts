@@ -1,4 +1,4 @@
-import { IPprData } from "@/2entities/pprTable";
+import { IPprData } from "@/2entities/ppr";
 
 export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData => {
   return {

@@ -1,5 +1,5 @@
-import { getPprsInfo } from "@/2entities/pprInfo";
-import { PprInfoTable } from "@/4widgets/pprInfoTable";
+import { getPprsInfo } from "@/2entities/pprShortInfo";
+import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
 import { CreatePprModal } from "@/4widgets/createPprModal";
 
 export default async function PprPage() {

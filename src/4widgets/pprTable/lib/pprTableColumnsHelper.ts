@@ -2,7 +2,7 @@ import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCell } from "@/1shared/ui/table";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
 import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, pprTableColumnsSet } from "@/2entities/pprTable";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, pprTableColumnsSet } from "@/2entities/ppr";
 
 export function findPlanFactTitle(string: string) {
   if (string.endsWith("plan_work")) {

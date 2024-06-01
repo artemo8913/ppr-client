@@ -1,5 +1,5 @@
 import { TPprTimePeriod, months } from "@/1shared/types/date";
-import { IPpr } from "@/2entities/pprTable";
+import { IPpr } from "@/2entities/ppr";
 
 export function findPossibleCurrentPprPeriod(ppr: IPpr | null): TPprTimePeriod {
   if (!ppr) {
