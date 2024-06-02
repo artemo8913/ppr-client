@@ -12,7 +12,7 @@ interface IPprTableProps {}
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, updatePprData, updateNewValueInCorrection } = usePprTableData();
 
-  const { correctionView } = usePprTableViewSettings();
+  const { correctionView, tableWidthPercent } = usePprTableViewSettings();
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
 
   const pprYearStatus: TYearPprStatus = pprData?.status || "done";
@@ -34,7 +34,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   );
 
   return (
-    <table className="table-fixed w-[100%] [font-size:12px]">
+    <table style={{ tableLayout: "fixed", width: `${tableWidthPercent}%`, fontSize: "12px" }}>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>

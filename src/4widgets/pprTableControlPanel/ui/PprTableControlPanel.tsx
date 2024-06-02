@@ -13,6 +13,7 @@ import {
   PprTableSelectFilterTimePeriod,
 } from "@/3features/pprTableSettings/selectColumnsFilter";
 import { PprTableSelectCorrectionView } from "@/3features/pprTableSettings/selectCorrectionView";
+import { PprTableSelectWidth } from "@/3features/pprTableSettings/selectWidth";
 
 interface IPprTableControlPanelProps {
   pprData: IPpr;
@@ -47,6 +48,10 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
           <div className="flex justify-between items-center mb-4">
             <div>Общее отображение таблицы ППР: </div>
             <PprTableSelectCorrectionView />
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <div>Ширина таблицы: </div>
+            <PprTableSelectWidth />
           </div>
         </Modal>
       </>
