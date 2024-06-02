@@ -1,1 +1,1 @@
-export { useModal, WorkModalProvider } from "./ui/WorkModalProvider";
+export { useWorkModal, WorkModalProvider } from "./ui/WorkModalProvider";

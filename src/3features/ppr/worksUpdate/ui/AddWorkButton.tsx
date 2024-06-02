@@ -2,12 +2,12 @@
 import { FC } from "react";
 import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
-import { useModal } from "@/1shared/providers/workModalProvider";
+import { useWorkModal } from "@/1shared/providers/workModalProvider";
 
 interface IAddWorkButtonProps extends React.ComponentProps<typeof Button> {}
 
 export const AddWorkButton: FC<IAddWorkButtonProps> = ({ style }) => {
-  const { openModal } = useModal();
+  const { openModal } = useWorkModal();
   return (
     <Button
       onClick={() => {

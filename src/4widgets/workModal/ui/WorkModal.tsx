@@ -5,14 +5,14 @@ import Modal from "antd/es/modal/Modal";
 import { IWork } from "@/2entities/work";
 import { WorkCreateForm } from "./WorkCreateForm";
 import { WorkSelectTable } from "./WorkSelectTable";
-import { useModal } from "@/1shared/providers/workModalProvider";
+import { useWorkModal } from "@/1shared/providers/workModalProvider";
 
 interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
   data: IWork[];
 }
 
 export const WorkModal: FC<IWorkModalProps> = ({ data }) => {
-  const { closeModal, isOpen } = useModal();
+  const { closeModal, isOpen } = useWorkModal();
 
   return (
     <Modal title="Выберите работу" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
