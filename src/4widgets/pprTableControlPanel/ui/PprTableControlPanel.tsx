@@ -14,6 +14,8 @@ import {
 } from "@/3features/pprTableSettings/selectColumnsFilter";
 import { PprTableSelectCorrectionView } from "@/3features/pprTableSettings/selectCorrectionView";
 import { PprTableSelectWidth } from "@/3features/pprTableSettings/selectWidth";
+import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontSize";
+import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
 
 interface IPprTableControlPanelProps {
   pprData: IPpr;
@@ -50,8 +52,16 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
             <PprTableSelectCorrectionView />
           </div>
           <div className="flex justify-between items-center mb-4">
-            <div>Ширина таблицы: </div>
+            <div>Ширина таблицы, %: </div>
             <PprTableSelectWidth />
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <div>Высота заголовка, px: </div>
+            <PprTableSelectHeaderHeight />
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <div>Размер шрифта, px: </div>
+            <PprTableSelectFontSize />
           </div>
         </Modal>
       </>

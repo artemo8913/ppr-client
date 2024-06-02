@@ -9,11 +9,23 @@ export const PprTableSelectWidth: FC<IPprTableSelectWidthProps> = () => {
   const { tableWidthPercent, setTableWidthPercent } = usePprTableViewSettings();
   return (
     <Slider
-    className="w-52"
+      className="w-96"
       value={tableWidthPercent}
-      marks={{ 100: 100, 110: 110, 120: 120, 130: 130, 140: 140 }}
+      marks={{
+        100: 100,
+        110: 110,
+        120: 120,
+        130: 130,
+        140: 140,
+        150: 150,
+        160: 160,
+        170: 170,
+        180: 180,
+        190: 190,
+        200: 200,
+      }}
       min={100}
-      max={140}
+      max={200}
       onChange={setTableWidthPercent}
       step={5}
     />

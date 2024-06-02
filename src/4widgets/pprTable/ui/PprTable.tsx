@@ -12,7 +12,8 @@ interface IPprTableProps {}
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const { pprData, updatePprData, updateNewValueInCorrection } = usePprTableData();
 
-  const { correctionView, tableWidthPercent } = usePprTableViewSettings();
+  const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx } = usePprTableViewSettings();
+
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
 
   const pprYearStatus: TYearPprStatus = pprData?.status || "done";
@@ -34,7 +35,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   );
 
   return (
-    <table style={{ tableLayout: "fixed", width: `${tableWidthPercent}%`, fontSize: "12px" }}>
+    <table style={{ tableLayout: "fixed", width: `${tableWidthPercent}%`, fontSize: `${fontSizePx}px` }}>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
@@ -43,11 +44,13 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                 <th
                   ref={header.column.id === "year_plan_work" ? planCellRef : null}
                   key={header.id}
-                  className="border border-black max-h-[300px] relative"
+                  className="border border-black relative"
                   style={getThStyle(header.column.id)}
                   colSpan={header.colSpan}
                 >
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  <div style={{ maxHeight: `${headerHeightPx}px` }}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </div>
                 </th>
               );
             })}

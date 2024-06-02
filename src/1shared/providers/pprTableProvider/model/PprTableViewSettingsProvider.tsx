@@ -19,6 +19,8 @@ interface IPprTableSettings {
   currentTimePeriod: TPprTimePeriod;
   correctionView: TCorrectionView;
   tableWidthPercent: number;
+  fontSizePx: number;
+  headerHeightPx: number;
 }
 interface IPprTableSettingsContext extends IPprTableSettings {
   setFilterMonths: (state: TFilterTimePeriodOption) => void;
@@ -26,6 +28,8 @@ interface IPprTableSettingsContext extends IPprTableSettings {
   setTimePeriod: (timePeriod: TPprTimePeriod) => void;
   setCorrectionView: (correctionView: TCorrectionView) => void;
   setTableWidthPercent: (tableWidthPercent: number) => void;
+  setFontSizePx: (fontSize: number) => void;
+  setHeaderHeightPx: (headerHeightPx: number) => void;
 }
 
 const intitalSettings: IPprTableSettings = {
@@ -36,6 +40,8 @@ const intitalSettings: IPprTableSettings = {
   currentTimePeriod: "year",
   correctionView: "CORRECTED_PLAN",
   tableWidthPercent: 100,
+  fontSizePx: 12,
+  headerHeightPx: 250,
 };
 
 const initialContext: IPprTableSettingsContext = {
@@ -45,6 +51,8 @@ const initialContext: IPprTableSettingsContext = {
   setTimePeriod: () => {},
   setCorrectionView: () => {},
   setTableWidthPercent: () => {},
+  setFontSizePx: () => {},
+  setHeaderHeightPx: () => {},
 };
 
 const PprTableViewSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
@@ -100,6 +108,14 @@ export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }
     setPprTableSettings((prev) => ({ ...prev, tableWidthPercent }));
   }, []);
 
+  const setFontSizePx = useCallback((fontSizePx: number) => {
+    setPprTableSettings((prev) => ({ ...prev, fontSizePx }));
+  }, []);
+
+  const setHeaderHeightPx = useCallback((headerHeightPx: number) => {
+    setPprTableSettings((prev) => ({ ...prev, headerHeightPx }));
+  }, []);
+
   return (
     <PprTableViewSettingsContext.Provider
       value={{
@@ -109,6 +125,8 @@ export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }
         setFilterPlanFact,
         setTimePeriod,
         setTableWidthPercent,
+        setFontSizePx,
+        setHeaderHeightPx,
       }}
     >
       {children}
