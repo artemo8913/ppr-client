@@ -23,4 +23,4 @@ export const WorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => 
   return <ModalContext.Provider value={{ isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>;
 };
 
-export const useModal = () => useContext(ModalContext);
+export const useWorkModal = () => useContext(ModalContext);
