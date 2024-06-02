@@ -35,10 +35,10 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
       <PprTableMonthStatusUpdate />
       <PprTableSelectTimePeriod />
       <>
-        <Tooltip className="cursor-default" title="Настройки ППР">
+        <Tooltip className="cursor-default" title="Настройки отображения ППР">
           <Button icon={<SettingOutlined />} onClick={openModal} />
         </Tooltip>
-        <Modal title="Настройки ППР" open={isOpen} onCancel={closeModal} footer={null}>
+        <Modal title="Настройки отображения ППР" open={isOpen} onCancel={closeModal} footer={null}>
           <div className="flex justify-between items-center mb-4">
             <div>Отображаемый период времени: </div>
             <PprTableSelectFilterTimePeriod />
