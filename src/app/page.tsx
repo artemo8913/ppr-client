@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../1shared/auth/authConfig";
 import { IUser, getUserData } from "@/2entities/user";
-import { directionsMock } from "@/1shared/types/transEnergoDivisions";
+import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
 
 export default async function Home() {
   const user = await getServerSession(authOptions);

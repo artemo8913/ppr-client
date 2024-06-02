@@ -1,4 +1,4 @@
-import { months } from "@/1shared/types/date";
+import { months } from "@/1shared/lib/date";
 import { TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
 
 export function isAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {

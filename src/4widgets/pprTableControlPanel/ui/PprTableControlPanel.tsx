@@ -16,6 +16,7 @@ import { PprTableSelectCorrectionView } from "@/3features/pprTableSettings/selec
 import { PprTableSelectWidth } from "@/3features/pprTableSettings/selectWidth";
 import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontSize";
 import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
+import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
 
 interface IPprTableControlPanelProps {
   pprData: IPpr;
@@ -34,9 +35,10 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
       <PprTableSelectTimePeriod />
+      <PprTableSetOneUnityButton />
       <>
         <Tooltip className="cursor-default" title="Настройки отображения ППР">
-          <Button icon={<SettingOutlined />} onClick={openModal} />
+          <Button icon={<SettingOutlined />} type="text" shape="circle" onClick={openModal} />
         </Tooltip>
         <Modal title="Настройки отображения ППР" open={isOpen} onCancel={closeModal} footer={null}>
           <div className="flex justify-between items-center mb-4">

@@ -2,8 +2,8 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
-import { directionsMock } from "@/1shared/types/transEnergoDivisions";
-import { months } from "@/1shared/types/date";
+import { directionsMock, getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
+import { months } from "@/1shared/lib/date";
 import { IPpr } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
@@ -28,34 +28,19 @@ const columns: TableProps<IPpr>["columns"] = [
     title: "Подразделение",
     dataIndex: "id_subdivision",
     key: "id_subdivision",
-    render: (_, data) => {
-      if (!data.id_direction || !data.id_distance || !data.id_subdivision) {
-        return "-";
-      }
-      return directionsMock[data.id_direction].distances[data.id_distance].subdivisions[data.id_subdivision].short_name;
-    },
+    render: (_, data) => getShortNamesForAllHierarchy(data).subdivisionShortName || "-",
   },
   {
     title: "Дистанция",
     dataIndex: "id_distance",
     key: "id_distance",
-    render: (_, data) => {
-      if (!data.id_direction || !data.id_distance) {
-        return "-";
-      }
-      return directionsMock[data.id_direction].distances[data.id_distance].short_name;
-    },
+    render: (_, data) => getShortNamesForAllHierarchy(data).distanceShortName || "-",
   },
   {
     title: "Дирекция",
     dataIndex: "id_direction",
     key: "id_direction",
-    render: (_, data) => {
-      if (!data.id_direction) {
-        return "-";
-      }
-      return directionsMock[data.id_direction].short_name;
-    },
+    render: (_, data) => getShortNamesForAllHierarchy(data).directionShortName || "-",
   },
   {
     title: "Статус",

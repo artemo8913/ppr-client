@@ -6,7 +6,6 @@ import {
   IPpr,
   IPprData,
   TCorrectionTransfer,
-  TPprDataCorrection,
   TWorkPlanCorrection,
   planWorkPeriods,
   planWorkPeriodsSet,
@@ -42,6 +41,7 @@ interface IPprTableDataContextProps {
   addWorkingMan: () => void;
   updateWorkingMan: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   deleteWorkingMan: (id: string) => void;
+  setOneUnityInAllWorks: (unity: string) => void;
 }
 
 const PprTableDataContext = createContext<IPprTableDataContextProps>({
@@ -58,6 +58,7 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
+  setOneUnityInAllWorks: () => {},
 });
 
 export const usePprTableData = () => useContext(PprTableDataContext);
@@ -303,6 +304,15 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
 
+  const setOneUnityInAllWorks = useCallback((unity: string) => {
+    setPprData((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return { ...prev, data: prev.data.map((work) => ({ ...work, unity })) };
+    });
+  }, []);
+
   // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
     setPprData({ ...ppr });
@@ -332,6 +342,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         addWorkingMan,
         updateWorkingMan,
         deleteWorkingMan,
+        setOneUnityInAllWorks,
       }}
     >
       {children}

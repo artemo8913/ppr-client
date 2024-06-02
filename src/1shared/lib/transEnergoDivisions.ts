@@ -13,6 +13,33 @@ export interface IDivisionInfo extends basicInfo {
   distances: Record<number, IDistancesInfo>;
 }
 
+export function getShortNamesForAllHierarchy({
+  id_direction,
+  id_distance,
+  id_subdivision,
+}: {
+  id_direction?: number | null;
+  id_distance?: number | null;
+  id_subdivision?: number | null;
+}): { directionShortName?: string; distanceShortName?: string; subdivisionShortName?: string } {
+  if (id_direction && id_distance && id_subdivision) {
+    return {
+      directionShortName: directionsMock[id_direction].short_name,
+      distanceShortName: directionsMock[id_direction].distances[id_distance].short_name,
+      subdivisionShortName:
+        directionsMock[id_direction].distances[id_distance].subdivisions[id_subdivision].short_name,
+    };
+  } else if (id_direction && id_distance) {
+    return {
+      directionShortName: directionsMock[id_direction].short_name,
+      distanceShortName: directionsMock[id_direction].distances[id_distance].short_name,
+    };
+  } else if (id_direction) {
+    return { directionShortName: directionsMock[id_direction].short_name };
+  }
+  return {};
+}
+
 export const directionsMock: Record<number, IDivisionInfo> = {
   88: {
     name: "Красноярская НТЭ",

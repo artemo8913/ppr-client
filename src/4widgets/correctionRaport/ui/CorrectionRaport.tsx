@@ -2,8 +2,8 @@
 import React, { FC } from "react";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
-import { directionsMock } from "@/1shared/types/transEnergoDivisions";
-import { tymePeriodIntlRu } from "@/1shared/types/date";
+import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
+import { tymePeriodIntlRu } from "@/1shared/lib/date";
 import { IPlanWorkPeriods } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 
