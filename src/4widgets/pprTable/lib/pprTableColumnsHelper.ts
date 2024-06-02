@@ -1,6 +1,6 @@
 import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCell } from "@/1shared/ui/table";
-import { TPprTimePeriod, pprTimePeriods } from "@/1shared/types/date";
+import { TPprTimePeriod, pprTimePeriods } from "@/1shared/lib/date";
 import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
 import { IPprData, TAllMonthStatuses, TYearPprStatus, pprTableColumnsSet } from "@/2entities/ppr";
 

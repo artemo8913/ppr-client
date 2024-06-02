@@ -17,8 +17,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
         icon={<SaveOutlined />}
         loading={isLoading}
         disabled={isLoading}
-        type="primary"
-        ghost
+        type="text"
         shape="circle"
         onClick={async () => {
           setIsLoading(true);

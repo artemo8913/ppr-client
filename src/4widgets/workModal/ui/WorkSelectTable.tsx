@@ -5,6 +5,8 @@ import { IWork, TLineClassData, getWorkById } from "@/2entities/work";
 
 import Button from "antd/es/button";
 import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import { useSession } from "next-auth/react";
+import { getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
 
 interface IWorkTableProps {
   data: IWork[];
@@ -51,6 +53,9 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish }) => {
 
   const { addWork } = usePprTableData();
 
+  const { data: sessionData } = useSession();
+  const userData = sessionData?.user;
+
   const handleFinish = async () => {
     setIsLoading(true);
     if (!workId) {
@@ -63,6 +68,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish }) => {
       measure: work.measure,
       norm_of_time: work.norm_of_time,
       norm_of_time_document: work.norm_of_time_document,
+      unity: (userData && getShortNamesForAllHierarchy(userData).subdivisionShortName) || undefined,
     });
     setSelectedRowKeys([]);
     setWorkId(undefined);

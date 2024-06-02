@@ -1,7 +1,7 @@
 "use client";
 import Select from "antd/es/select";
 import { FC, useEffect } from "react";
-import { TPprTimePeriod, tymePeriodIntlRu, pprTimePeriods } from "@/1shared/types/date";
+import { TPprTimePeriod, tymePeriodIntlRu, pprTimePeriods } from "@/1shared/lib/date";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { findPossibleCurrentPprPeriod } from "@/1shared/providers/pprTableProvider/lib/findPossibleCurrentPprPeriod";
 
