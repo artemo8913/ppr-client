@@ -10,7 +10,6 @@ interface IAddWorkButtonProps extends React.ComponentProps<typeof Button> {
 
 export const AddWorkButton: FC<IAddWorkButtonProps> = ({ style, indexToPlace }) => {
   const { openModal } = useWorkModal();
-  console.log(indexToPlace)
   return (
     <Button
       onClick={() => {

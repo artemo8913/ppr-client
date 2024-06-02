@@ -6,6 +6,9 @@ import { IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from 
 import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { useCreateColumns } from "./PprTableColumns";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
+import clsx from "clsx";
+
+const STICKY_COLUMN_INDEX_FROM = 11;
 
 interface IPprTableProps {}
 
@@ -35,16 +38,24 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   );
 
   return (
-    <table style={{ tableLayout: "fixed", width: `${tableWidthPercent}%`, fontSize: `${fontSizePx}px` }}>
+    <table
+      style={{
+        tableLayout: "fixed",
+        width: `${tableWidthPercent}%`,
+        fontSize: `${fontSizePx}px`,
+        position: "relative",
+      }}
+    >
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
+              const isRowWithMonths = Number(headerGroup.id) === 0 && header.index > STICKY_COLUMN_INDEX_FROM;
               return (
                 <th
                   ref={header.column.id === "year_plan_work" ? planCellRef : null}
                   key={header.id}
-                  className="border border-black relative"
+                  className={clsx("border border-black relative", isRowWithMonths && "sticky top-0 z-20 bg-[#f5f5f5]")}
                   style={getThStyle(header.column.id)}
                   colSpan={header.colSpan}
                 >
