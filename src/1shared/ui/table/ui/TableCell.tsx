@@ -11,7 +11,7 @@ export const TableCell: FC<ITableCell> = (props) => {
     <div
       style={{ backgroundColor: bgColor }}
       className={clsx(
-        "w-full flex justify-center items-center bg-transparent",
+        "w-full flex justify-center items-center bg-transparent [overflow-wrap:anywhere]",
         "border-none focus-within:relative focus-within:z-10",
         isVertical && "[writing-mode:vertical-rl] rotate-180",
         className

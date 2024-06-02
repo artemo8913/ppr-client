@@ -34,6 +34,7 @@ export const useCreateColumns = (
         cell: (info) => (
           <PprTableCell
             id={info.row.original.id}
+            indexToPlace={info.row.index}
             value={info.getValue()}
             handleBlur={(value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
             isWithWorkControl={info.column.id === "name"}

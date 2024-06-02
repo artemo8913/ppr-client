@@ -10,19 +10,21 @@ import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
+  indexToPlace?: number;
 }
 
 type TAddWorkForm = Omit<IWork, "periodicity_normal_data">;
 
-export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish }) => {
+export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, indexToPlace }) => {
   const [form] = Form.useForm<TAddWorkForm>();
   const { addWork } = usePprTableData();
   const handleFinish = (values: TAddWorkForm) => {
-    console.log("Success:", values);
-
-    addWork({
-      ...values,
-    });
+    addWork(
+      {
+        ...values,
+      },
+      indexToPlace
+    );
     form.resetFields();
     onFinish && onFinish();
   };

@@ -7,9 +7,10 @@ import { usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 
 interface ITableCellWithWorkControlProps extends ITableCell {
   id?: string;
+  indexToPlace?: number;
 }
 
-export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ id, ...otherProps }) => {
+export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ id, indexToPlace, ...otherProps }) => {
   const [isHide, setIsHide] = useState<boolean>(true);
 
   const { headerHeightPx } = usePprTableViewSettings();
@@ -22,7 +23,7 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ i
     >
       <div className="!absolute bottom-0 left-1/2 z-10" style={{ display: isHide ? "none" : "flex" }}>
         <DeleteWorkButton workId={id} />
-        <AddWorkButton />
+        <AddWorkButton indexToPlace={indexToPlace} />
       </div>
       <TableCell {...otherProps} />
     </div>

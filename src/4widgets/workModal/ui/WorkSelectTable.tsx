@@ -11,6 +11,7 @@ import { getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions
 interface IWorkTableProps {
   data: IWork[];
   onFinish?: () => void;
+  indexToPlace?: number;
 }
 
 const columns: TableProps<IWork>["columns"] = [
@@ -46,7 +47,7 @@ const columns: TableProps<IWork>["columns"] = [
   },
 ];
 
-export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish }) => {
+export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, indexToPlace }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [workId, setWorkId] = useState<string>();
@@ -62,14 +63,17 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish }) => {
       return;
     }
     const work = await getWorkById(workId);
-    addWork({
-      workId: work.id,
-      name: work.name,
-      measure: work.measure,
-      norm_of_time: work.norm_of_time,
-      norm_of_time_document: work.norm_of_time_document,
-      unity: (userData && getShortNamesForAllHierarchy(userData).subdivisionShortName) || undefined,
-    });
+    addWork(
+      {
+        workId: work.id,
+        name: work.name,
+        measure: work.measure,
+        norm_of_time: work.norm_of_time,
+        norm_of_time_document: work.norm_of_time_document,
+        unity: (userData && getShortNamesForAllHierarchy(userData).subdivisionShortName) || undefined,
+      },
+      indexToPlace
+    );
     setSelectedRowKeys([]);
     setWorkId(undefined);
     setIsLoading(false);
