@@ -18,12 +18,14 @@ interface IPprTableSettings {
   filterColumns: TFilterColumns;
   currentTimePeriod: TPprTimePeriod;
   correctionView: TCorrectionView;
+  tableWidthPercent: number;
 }
 interface IPprTableSettingsContext extends IPprTableSettings {
   setFilterMonths: (state: TFilterTimePeriodOption) => void;
   setFilterPlanFact: (state: TFilterPlanFactOption) => void;
   setTimePeriod: (timePeriod: TPprTimePeriod) => void;
   setCorrectionView: (correctionView: TCorrectionView) => void;
+  setTableWidthPercent: (tableWidthPercent: number) => void;
 }
 
 const intitalSettings: IPprTableSettings = {
@@ -33,6 +35,7 @@ const intitalSettings: IPprTableSettings = {
   },
   currentTimePeriod: "year",
   correctionView: "CORRECTED_PLAN",
+  tableWidthPercent: 100,
 };
 
 const initialContext: IPprTableSettingsContext = {
@@ -41,6 +44,7 @@ const initialContext: IPprTableSettingsContext = {
   setFilterPlanFact: () => {},
   setTimePeriod: () => {},
   setCorrectionView: () => {},
+  setTableWidthPercent: () => {},
 };
 
 const PprTableViewSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
@@ -87,14 +91,25 @@ export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }
     (correctionView: TCorrectionView) =>
       setPprTableSettings((prev) => ({
         ...prev,
-        correctionView: correctionView,
+        correctionView,
       })),
     []
   );
 
+  const setTableWidthPercent = useCallback((tableWidthPercent: number) => {
+    setPprTableSettings((prev) => ({ ...prev, tableWidthPercent }));
+  }, []);
+
   return (
     <PprTableViewSettingsContext.Provider
-      value={{ ...pprTableSettings, setCorrectionView, setFilterMonths, setFilterPlanFact, setTimePeriod }}
+      value={{
+        ...pprTableSettings,
+        setCorrectionView,
+        setFilterMonths,
+        setFilterPlanFact,
+        setTimePeriod,
+        setTableWidthPercent,
+      }}
     >
       {children}
     </PprTableViewSettingsContext.Provider>
