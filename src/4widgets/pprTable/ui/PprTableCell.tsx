@@ -4,12 +4,13 @@ import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
 
 interface IPprTableCellProps extends ITableCell {
   id?: string;
+  indexToPlace?: number;
   isWithWorkControl?: boolean;
 }
 
-export const PprTableCell: FC<IPprTableCellProps> = ({ id: workId, isWithWorkControl, ...otherProps }) => {
+export const PprTableCell: FC<IPprTableCellProps> = ({ id, indexToPlace, isWithWorkControl, ...otherProps }) => {
   if (isWithWorkControl) {
-    return <TableCellWithWorkControl id={workId} {...otherProps} />;
+    return <TableCellWithWorkControl id={id} indexToPlace={indexToPlace} {...otherProps} />;
   }
   return <TableCell {...otherProps} />;
 };
