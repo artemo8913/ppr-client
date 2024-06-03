@@ -126,15 +126,16 @@ export interface IPpr {
   id_subdivision: number | null;
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
-  corrections: {
-    peoples: { [id: string]: TPprDataCorrection<IPlanTimePeriods> | undefined };
-    works: { [id: string]: TPprDataCorrection<IPlanWorkPeriods> | undefined };
-  };
+  corrections: TPprCorrections;
 }
 
-export interface IHandlePprData extends IPprData {
+export type TPprCorrections = {
+  peoples: { [id: string]: TCorrection<IPlanTimePeriods> | undefined };
+  works: { [id: string]: TCorrection<IPlanWorkPeriods> | undefined };
+};
+
+export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;
-  isHandMade?: boolean;
 }
 
 export type TWorkPlanCorrection = {
@@ -143,7 +144,7 @@ export type TWorkPlanCorrection = {
 
 export type TCorrectionTransfer<T> = { fieldTo: keyof T; value: number; is_approved: boolean };
 
-export type TPprDataCorrection<T> = {
+export type TCorrection<T> = {
   [fieldNameFrom in keyof T]?: {
     newValue: number;
     diff: number;

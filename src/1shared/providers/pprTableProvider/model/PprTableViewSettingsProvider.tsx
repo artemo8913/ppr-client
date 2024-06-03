@@ -21,6 +21,7 @@ interface IPprTableSettings {
   tableWidthPercent: number;
   fontSizePx: number;
   headerHeightPx: number;
+  isCombineSameWorks: boolean;
 }
 interface IPprTableSettingsContext extends IPprTableSettings {
   setFilterMonths: (state: TFilterTimePeriodOption) => void;
@@ -30,6 +31,7 @@ interface IPprTableSettingsContext extends IPprTableSettings {
   setTableWidthPercent: (tableWidthPercent: number) => void;
   setFontSizePx: (fontSize: number) => void;
   setHeaderHeightPx: (headerHeightPx: number) => void;
+  setIsCombineSameWorks: (isUniteSameWorks: boolean) => void;
 }
 
 const intitalSettings: IPprTableSettings = {
@@ -41,7 +43,8 @@ const intitalSettings: IPprTableSettings = {
   correctionView: "CORRECTED_PLAN",
   tableWidthPercent: 100,
   fontSizePx: 12,
-  headerHeightPx: 250,
+  headerHeightPx: 300,
+  isCombineSameWorks: false,
 };
 
 const initialContext: IPprTableSettingsContext = {
@@ -53,6 +56,7 @@ const initialContext: IPprTableSettingsContext = {
   setTableWidthPercent: () => {},
   setFontSizePx: () => {},
   setHeaderHeightPx: () => {},
+  setIsCombineSameWorks: () => {},
 };
 
 const PprTableViewSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
@@ -116,6 +120,10 @@ export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }
     setPprTableSettings((prev) => ({ ...prev, headerHeightPx }));
   }, []);
 
+  const setIsCombineSameWorks = useCallback((isUniteSameWorks: boolean) => {
+    setPprTableSettings((prev) => ({ ...prev, isCombineSameWorks: isUniteSameWorks }));
+  }, []);
+
   return (
     <PprTableViewSettingsContext.Provider
       value={{
@@ -127,6 +135,7 @@ export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }
         setTableWidthPercent,
         setFontSizePx,
         setHeaderHeightPx,
+        setIsCombineSameWorks,
       }}
     >
       {children}

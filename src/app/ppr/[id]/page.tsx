@@ -13,11 +13,14 @@ import { CorrectionRaport } from "@/4widgets/correctionRaport";
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
   const works = await getAllWorks();
+  if(!ppr.id){
+    throw new Error('ППР не найден')
+  }
   return (
     <PprTableViewSettingsProvider>
-      <PprTableDataProvider ppr={ppr}>
+      <PprTableDataProvider pprFromResponce={ppr}>
         <WorkModalProvider>
-          <PprTableControlPanel pprData={ppr} />
+          <PprTableControlPanel ppr={ppr} />
           <Tabs
             defaultActiveKey="2"
             items={[

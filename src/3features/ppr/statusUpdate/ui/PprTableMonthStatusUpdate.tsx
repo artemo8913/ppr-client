@@ -14,42 +14,42 @@ interface IPprTableMonthStatusUpdateProps {}
 
 export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({}) => {
   const { data } = useSession();
-  const { pprData } = usePprTableData();
+  const { ppr } = usePprTableData();
   const { currentTimePeriod } = usePprTableViewSettings();
 
   const setNextStatus = useCallback(() => {
-    if (!pprData || currentTimePeriod === "year") {
+    if (!ppr || currentTimePeriod === "year") {
       return;
     }
-    const nextStatus = getNextPprMonthStatus(pprData.months_statuses[currentTimePeriod]);
+    const nextStatus = getNextPprMonthStatus(ppr.months_statuses[currentTimePeriod]);
     if (nextStatus === "plan_aproved") {
-      pprData.data.forEach((datum) => (datum.is_work_aproved = true));
+      ppr.data.forEach((datum) => (datum.is_work_aproved = true));
     }
-    updatePprTable(pprData.id, {
-      ...pprData,
+    updatePprTable(ppr.id, {
+      ...ppr,
       months_statuses: {
-        ...pprData.months_statuses,
+        ...ppr.months_statuses,
         [currentTimePeriod]: nextStatus,
       },
     });
-  }, [pprData, currentTimePeriod]);
+  }, [ppr, currentTimePeriod]);
 
   const rejectPpr = useCallback(() => {
-    if (!pprData?.id || currentTimePeriod === "year") {
+    if (!ppr?.id || currentTimePeriod === "year") {
       return;
     }
-    updatePprTable(pprData.id, {
-      months_statuses: { ...pprData.months_statuses, [currentTimePeriod]: "plan_on_correction" },
+    updatePprTable(ppr.id, {
+      months_statuses: { ...ppr.months_statuses, [currentTimePeriod]: "plan_on_correction" },
     }),
-      [pprData?.id];
-  }, [pprData?.id, pprData?.months_statuses, currentTimePeriod]);
+      [ppr?.id];
+  }, [ppr?.id, ppr?.months_statuses, currentTimePeriod]);
 
-  if (!data || !pprData || currentTimePeriod === "year") {
+  if (!data || !ppr || currentTimePeriod === "year") {
     return null;
   }
-  const currentMonthStatus = pprData.months_statuses[currentTimePeriod];
+  const currentMonthStatus = ppr.months_statuses[currentTimePeriod];
 
-  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = isPprInUserControl(pprData, data.user);
+  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = isPprInUserControl(ppr, data.user);
 
   // Состояния для начальника цеха
   if (isForSubdivision) {

@@ -5,7 +5,9 @@ import {
   IPlanWorkPeriods,
   IPpr,
   IPprData,
+  IPprDataWithRowSpan,
   TCorrectionTransfer,
+  TPprCorrections,
   TWorkPlanCorrection,
   planWorkPeriods,
   planWorkPeriodsSet,
@@ -16,7 +18,7 @@ import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance"
 type TWorkBasicInfo = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
 
 interface IPprTableDataContextProps {
-  pprData: IPpr | null;
+  ppr: IPpr | null;
   workPlanCorrections: TWorkPlanCorrection;
   workBasicInfo: TWorkBasicInfo;
   addWork: (newWork: Partial<IPprData>, indexToPlace?: number) => void;
@@ -42,10 +44,11 @@ interface IPprTableDataContextProps {
   updateWorkingMan: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   deleteWorkingMan: (id: string) => void;
   setOneUnityInAllWorks: (unity: string) => void;
+  getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
 }
 
 const PprTableDataContext = createContext<IPprTableDataContextProps>({
-  pprData: null,
+  ppr: null,
   workPlanCorrections: {},
   workBasicInfo: {},
   addWork: () => {},
@@ -59,62 +62,56 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
   setOneUnityInAllWorks: () => {},
+  getPprDataWithRowSpan: () => [],
 });
 
 export const usePprTableData = () => useContext(PprTableDataContext);
 
 interface IPprTableDataProviderProps extends PropsWithChildren {
-  ppr: IPpr;
+  pprFromResponce: IPpr;
 }
 
-export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, ppr }) => {
+export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, pprFromResponce }) => {
   //Данные ППРа
-  const [pprData, setPprData] = useState<IPpr | null>(null);
+  const [ppr, setPpr] = useState<IPpr | null>(null);
   //Корректировки запланированных объемов работ ППРа в формате данных "объекта" (не в массиве)
   const [workPlanCorrections, setWorkPlanCorrections] = useState<TWorkPlanCorrection>({});
   //Данные о работах, применяемых в этом ППРе
   const [workBasicInfo, setWorksDataInPpr] = useState<TWorkBasicInfo>({});
 
-  const handleCorrections = useCallback(() => {
-    if (!pprData) {
-      return;
-    }
+  const handleCorrections = useCallback((corrections: TPprCorrections) => {
+    const workPlanCorrections: TWorkPlanCorrection = {};
 
-    const corrections: TWorkPlanCorrection = {};
-
-    for (const id in pprData.corrections.works) {
-      const workCorrection = pprData.corrections.works[id];
+    for (const id in corrections.works) {
+      const workCorrection = corrections.works[id];
 
       planWorkPeriods.forEach((planPeriod) => {
         if (workCorrection && planPeriod in workCorrection) {
-          const existValue = id in corrections ? corrections[id]![planPeriod] || 0 : 0;
+          const existValue = id in workPlanCorrections ? workPlanCorrections[id]![planPeriod] || 0 : 0;
           const additionalValue = workCorrection[planPeriod]?.diff || 0;
 
-          corrections[id] = { ...corrections[id], [planPeriod]: existValue + additionalValue };
+          workPlanCorrections[id] = { ...workPlanCorrections[id], [planPeriod]: existValue + additionalValue };
 
           workCorrection[planPeriod]?.transfers?.forEach((field) => {
-            const existValue = id in corrections ? corrections[id]![field.fieldTo] || 0 : 0;
+            const existValue = id in workPlanCorrections ? workPlanCorrections[id]![field.fieldTo] || 0 : 0;
             const additionalValue = field.value;
-            corrections[id] = { ...corrections[id], [field.fieldTo]: existValue + additionalValue };
+            workPlanCorrections[id] = { ...workPlanCorrections[id], [field.fieldTo]: existValue + additionalValue };
           });
         }
       });
     }
-    setWorkPlanCorrections(corrections);
-  }, [pprData]);
+    setWorkPlanCorrections(workPlanCorrections);
+  }, []);
 
-  const handleWorksDataInPpr = useCallback(() => {
-    if (!pprData) {
-      return;
-    }
+  const handleWorksDataInPpr = useCallback((pprData: IPprData[]) => {
     const worksData: TWorkBasicInfo = {};
-    pprData.data.forEach((work) => (worksData[work.id] = { ...work }));
+    pprData.forEach((work) => (worksData[work.id] = { ...work }));
     setWorksDataInPpr(worksData);
-  }, [pprData]);
+  }, []);
 
   /**Добавить работу в ППР */
   const addWork = useCallback((newWork: Partial<IPprData>, indexToPlace?: number) => {
-    setPprData((prev) => {
+    setPpr((prev) => {
       if (!prev) {
         return prev;
       }
@@ -133,7 +130,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
 
   /**Убрать работу из ППР */
   const deleteWork = useCallback((workId: string) => {
-    setPprData((prev) => {
+    setPpr((prev) => {
       if (!prev) {
         return prev;
       }
@@ -157,7 +154,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
 
   /**Обновить данные ППРа */
   const updatePprData = useCallback((rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
-    setPprData((prev) => {
+    setPpr((prev) => {
       if (!prev) {
         return prev;
       }
@@ -179,7 +176,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
   /**Обновить новое значение в корректировке ППРа (разницу между первоначальным состоянием и новым) */
   const updateNewValueInCorrection = useCallback(
     (objectId: string, fieldName: keyof IPlanWorkPeriods | string, newValue: number, oldValue: number) => {
-      setPprData((prev) => {
+      setPpr((prev) => {
         if (!prev) {
           return prev;
         }
@@ -220,7 +217,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       fieldFrom: keyof IPlanWorkPeriods | string,
       transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null
     ) => {
-      setPprData((prev) => {
+      setPpr((prev) => {
         if (!prev || !planWorkPeriodsSet.has(fieldFrom)) {
           return prev;
         }
@@ -249,23 +246,23 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
   const getTransfers = useCallback(
     (objectId: string, fieldFrom: keyof IPlanWorkPeriods | string) => {
       const isHaveCorrection =
-        pprData?.corrections.works &&
-        objectId in pprData?.corrections.works &&
-        pprData?.corrections.works[objectId] &&
-        fieldFrom in pprData?.corrections.works[objectId]! &&
-        pprData?.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods];
+        ppr?.corrections.works &&
+        objectId in ppr?.corrections.works &&
+        ppr?.corrections.works[objectId] &&
+        fieldFrom in ppr?.corrections.works[objectId]! &&
+        ppr?.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods];
 
       if (!isHaveCorrection) {
         return [];
       }
-      return pprData?.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods]!.transfers;
+      return ppr?.corrections.works[objectId]![fieldFrom as keyof IPlanWorkPeriods]!.transfers;
     },
-    [pprData?.corrections]
+    [ppr?.corrections]
   );
 
   /**Добавить рабочего в список людей ППР */
   const addWorkingMan = useCallback(() => {
-    setPprData((prev) => {
+    setPpr((prev) => {
       if (!prev) {
         return prev;
       }
@@ -278,7 +275,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
 
   /**Обновить данные рабочено из списка людей ППР */
   const updateWorkingMan = useCallback((rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
-    setPprData((prev) => {
+    setPpr((prev) => {
       if (!prev) {
         return prev;
       }
@@ -299,7 +296,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
 
   /**Убрать рабочего из списка людей ППР */
   const deleteWorkingMan = useCallback((id: string) => {
-    setPprData((prev) => {
+    setPpr((prev) => {
       if (!prev) {
         return prev;
       }
@@ -310,8 +307,43 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
     });
   }, []);
 
+  const getPprDataWithRowSpan = useCallback((data: IPprData[]): IPprDataWithRowSpan[] => {
+    let prevWorkId: string = "";
+    let prevWorkName: string = "";
+    let prevWorkIndex: number = 0;
+
+    const rowSpanData: { [id: string]: number } = {};
+
+    for (let i = 0; i < data.length; i++) {
+      const work = data[i];
+      if (i === 0) {
+        prevWorkId = work.id;
+        prevWorkName = work.name;
+      }
+      const diff = i - prevWorkIndex;
+      if (prevWorkName === work.name && diff >= 1) {
+        rowSpanData[work.id] = 0;
+        if (i === data.length - 1) {
+          rowSpanData[prevWorkId] = diff + 1;
+        }
+        continue;
+      } else if (prevWorkName !== work.name) {
+        rowSpanData[prevWorkId] = diff;
+        prevWorkId = work.id;
+        prevWorkName = work.name;
+        prevWorkIndex = i;
+        continue;
+      }
+    }
+
+    return data.map((datum) => {
+      return { ...datum, rowSpan: rowSpanData[datum.id] };
+    });
+  }, []);
+
+  /**Массово заполнить одно подразделение в перечне работ */
   const setOneUnityInAllWorks = useCallback((unity: string) => {
-    setPprData((prev) => {
+    setPpr((prev) => {
       if (!prev) {
         return prev;
       }
@@ -321,21 +353,25 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
 
   // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
-    setPprData({ ...ppr });
-  }, [ppr]);
+    setPpr({ ...pprFromResponce });
+  }, [pprFromResponce]);
 
   useEffect(() => {
-    handleCorrections();
-  }, [pprData?.corrections, handleCorrections]);
+    if (ppr?.corrections) {
+      handleCorrections(ppr.corrections);
+    }
+  }, [ppr?.corrections, handleCorrections]);
 
   useEffect(() => {
-    handleWorksDataInPpr();
-  }, [pprData?.data, handleWorksDataInPpr]);
+    if (ppr?.data) {
+      handleWorksDataInPpr(ppr.data);
+    }
+  }, [ppr?.data, handleWorksDataInPpr]);
 
   return (
     <PprTableDataContext.Provider
       value={{
-        pprData,
+        ppr,
         workPlanCorrections,
         workBasicInfo,
         deleteWork,
@@ -349,6 +385,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
         updateWorkingMan,
         deleteWorkingMan,
         setOneUnityInAllWorks,
+        getPprDataWithRowSpan,
       }}
     >
       {children}

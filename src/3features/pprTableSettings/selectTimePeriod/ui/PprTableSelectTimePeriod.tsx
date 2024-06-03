@@ -9,12 +9,12 @@ interface IPprTableSelectTimePeriodProps {}
 
 export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () => {
   const { currentTimePeriod, setTimePeriod } = usePprTableViewSettings();
-  const { pprData } = usePprTableData();
+  const { ppr } = usePprTableData();
 
   useEffect(() => {
-    setTimePeriod(findPossibleCurrentPprPeriod(pprData));
+    setTimePeriod(findPossibleCurrentPprPeriod(ppr));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Boolean(pprData?.months_statuses)]);
+  }, [Boolean(ppr?.months_statuses)]);
 
   return (
     <Select<TPprTimePeriod>

@@ -1,6 +1,6 @@
 export type {
   IPprData,
-  IHandlePprData,
+  IPprDataWithRowSpan,
   IPpr,
   TAllMonthStatuses,
   TMonthPprStatus,
@@ -11,7 +11,8 @@ export type {
   IFactWorkPeriods,
   IPlanTimePeriods,
   IPlanWorkPeriods,
-  TPprDataCorrection,
+  TPprCorrections,
+  TCorrection,
   TWorkPlanCorrection,
   TCorrectionTransfer,
 } from "./model/ppr.schema";

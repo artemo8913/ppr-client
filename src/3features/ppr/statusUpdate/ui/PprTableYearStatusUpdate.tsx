@@ -14,31 +14,28 @@ interface IPprTableYearStatusUpdateProps {}
 
 export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = ({}) => {
   const { data } = useSession();
-  const { pprData } = usePprTableData();
+  const { ppr } = usePprTableData();
 
   const setNextStatus = useCallback(() => {
-    if (!pprData) {
+    if (!ppr) {
       return;
     }
-    const nextStatus = getNextPprYearStatus(pprData.status);
+    const nextStatus = getNextPprYearStatus(ppr.status);
     if (nextStatus === "plan_aproved") {
-      pprData?.data.forEach((datum) => (datum.is_work_aproved = true));
+      ppr?.data.forEach((datum) => (datum.is_work_aproved = true));
     }
-    updatePprTable(pprData.id, { ...pprData, status: nextStatus });
-  }, [pprData]);
+    updatePprTable(ppr.id, { ...ppr, status: nextStatus });
+  }, [ppr]);
 
-  const rejectPpr = useCallback(
-    () => pprData?.id && updatePprTable(pprData.id, { status: "plan_on_correction" }),
-    [pprData?.id]
-  );
+  const rejectPpr = useCallback(() => ppr?.id && updatePprTable(ppr.id, { status: "plan_on_correction" }), [ppr?.id]);
 
-  if (!data || !pprData) {
+  if (!data || !ppr) {
     return null;
   }
-  const { months_statuses: ppr_months_statuses, status: ppr_status } = pprData;
+  const { months_statuses: ppr_months_statuses, status: ppr_status } = ppr;
 
   const { isForBoss, isForEngineer, isForSecurityEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } =
-    isPprInUserControl(pprData, data.user);
+    isPprInUserControl(ppr, data.user);
 
   // Состояния для начальника цеха
   if (isForSubdivision) {
