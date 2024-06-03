@@ -68,10 +68,10 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
 export const usePprTableData = () => useContext(PprTableDataContext);
 
 interface IPprTableDataProviderProps extends PropsWithChildren {
-  pprFromProps: IPpr;
+  pprFromResponce: IPpr;
 }
 
-export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, pprFromProps }) => {
+export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, pprFromResponce }) => {
   //Данные ППРа
   const [ppr, setPpr] = useState<IPpr | null>(null);
   //Корректировки запланированных объемов работ ППРа в формате данных "объекта" (не в массиве)
@@ -353,8 +353,8 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
 
   // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
-    setPpr({ ...pprFromProps });
-  }, [pprFromProps]);
+    setPpr({ ...pprFromResponce });
+  }, [pprFromResponce]);
 
   useEffect(() => {
     if (ppr?.corrections) {
