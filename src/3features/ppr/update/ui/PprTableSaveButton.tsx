@@ -9,7 +9,7 @@ import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 interface IPprTableUpdateFormProps {}
 
 export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
-  const { pprData } = usePprTableData();
+  const { ppr } = usePprTableData();
   const [isLoading, setIsLoading] = useState(false);
   return (
     <Tooltip title="сохранить">
@@ -21,7 +21,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
         shape="circle"
         onClick={async () => {
           setIsLoading(true);
-          pprData && (await updatePprTable(pprData.id, pprData));
+          ppr && (await updatePprTable(ppr.id, ppr));
           setIsLoading(false);
         }}
       />

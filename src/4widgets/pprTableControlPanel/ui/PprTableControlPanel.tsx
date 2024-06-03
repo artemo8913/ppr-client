@@ -17,20 +17,21 @@ import { PprTableSelectWidth } from "@/3features/pprTableSettings/selectWidth";
 import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontSize";
 import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
+import { PprTableCombineSameWork } from "@/3features/pprTableSettings/combineWorkWithSameName";
 
 interface IPprTableControlPanelProps {
-  pprData: IPpr;
+  ppr: IPpr;
 }
 
-export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }) => {
+export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ ppr }) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const openModal = useCallback(() => setIsModalOpen(true), []);
   const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   return (
     <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300">
-      Статус: {pprData?.status} Создан: {new Date(pprData?.created_at!).toLocaleDateString()} Год: {pprData?.year}{" "}
-      {pprData?.id_subdivision}-{pprData?.id_distance}-{pprData?.id_direction}
+      Статус: {ppr?.status} Создан: {new Date(ppr?.created_at!).toLocaleDateString()} Год: {ppr?.year}{" "}
+      {ppr?.id_subdivision}-{ppr?.id_distance}-{ppr?.id_direction}
       <PprTableSaveButton />
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
@@ -64,6 +65,10 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ pprData }
           <div className="flex justify-between items-center mb-4">
             <div>Размер шрифта, px: </div>
             <PprTableSelectFontSize />
+          </div>
+          <div className="flex justify-start gap-2">
+            <div>Объединять работы с одинаковым наименованием </div>
+            <PprTableCombineSameWork />
           </div>
         </Modal>
       </>

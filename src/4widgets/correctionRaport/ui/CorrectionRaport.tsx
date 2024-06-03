@@ -10,7 +10,7 @@ import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { pprData, workBasicInfo } = usePprTableData();
+  const { ppr, workBasicInfo } = usePprTableData();
   const { currentTimePeriod } = usePprTableViewSettings();
   const { data: userData } = useSession();
 
@@ -18,7 +18,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
 
   const fieldFrom: keyof IPlanWorkPeriods = `${currentTimePeriod}_plan_work`;
 
-  const worksCorrections = Object.entries(pprData?.corrections.works || {})
+  const worksCorrections = Object.entries(ppr?.corrections.works || {})
     .filter(([id, value]) => value && `${currentTimePeriod}_plan_work` in value)
     .map(([id, value]) => ({ id, data: value ? value![fieldFrom] : undefined }));
   return (
@@ -35,8 +35,8 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       </p>
       <h2 className="text-center font-bold">Рапорт</h2>
       <p className="indent-4 text-justify">
-        При планировании ведомости выполненных работ (форма ЭУ-99) на {tymePeriodIntlRu[currentTimePeriod]} месяц возникла
-        необходимости корректировки годового плана технического обслуживания ремонта в части:
+        При планировании ведомости выполненных работ (форма ЭУ-99) на {tymePeriodIntlRu[currentTimePeriod]} месяц
+        возникла необходимости корректировки годового плана технического обслуживания ремонта в части:
       </p>
       <p className="indent-4 text-justify">Состава персонала чел.-ч:</p>
       <ol className="list-decimal pl-[revert]">

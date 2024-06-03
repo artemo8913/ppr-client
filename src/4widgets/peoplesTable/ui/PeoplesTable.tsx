@@ -74,11 +74,11 @@ const columns = (status?: TYearPprStatus) => [
 interface IPeoplesTableProps {}
 
 export const PeoplesTable: FC<IPeoplesTableProps> = () => {
-  const { pprData, updateWorkingMan } = usePprTableData();
+  const { ppr, updateWorkingMan } = usePprTableData();
   const table = useReactTable({
-    data: pprData?.peoples || [],
+    data: ppr?.peoples || [],
     columns: [
-      ...columns(pprData?.status),
+      ...columns(ppr?.status),
       columnHelper.display({
         header: "Опер-ии",
         cell: (props) => <WorkingManDelete id={props.row.original.id} />,

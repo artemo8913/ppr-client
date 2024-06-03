@@ -2,7 +2,7 @@
 import { FC, useMemo, useRef } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/ppr";
+import { IPprDataWithRowSpan, IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/ppr";
 import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { useCreateColumns } from "./PprTableColumns";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
@@ -13,17 +13,26 @@ const STICKY_COLUMN_INDEX_FROM = 11;
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { pprData, updatePprData, updateNewValueInCorrection } = usePprTableData();
+  const { ppr, updatePprData, updateNewValueInCorrection, getPprDataWithRowSpan } = usePprTableData();
 
-  const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx } = usePprTableViewSettings();
+  const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, isCombineSameWorks } =
+    usePprTableViewSettings();
 
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
 
-  const pprYearStatus: TYearPprStatus = pprData?.status || "done";
-  const pprMonthsStatuses: TAllMonthStatuses | undefined = pprData?.months_statuses || undefined;
+  const pprYearStatus: TYearPprStatus = ppr?.status || "done";
+  const pprMonthsStatuses: TAllMonthStatuses | undefined = ppr?.months_statuses || undefined;
 
-  const table: Table<IPprData> = useReactTable({
-    data: pprData ? pprData.data : [],
+  const pprData = useMemo(() => {
+    if (isCombineSameWorks) {
+      return getPprDataWithRowSpan(ppr?.data || []);
+    } else {
+      return ppr?.data;
+    }
+  }, [ppr?.data, getPprDataWithRowSpan, isCombineSameWorks]);
+
+  const table: Table<IPprDataWithRowSpan> = useReactTable({
+    data: pprData ? pprData : [],
     columns: useCreateColumns(pprYearStatus, pprMonthsStatuses),
     getCoreRowModel: getCoreRowModel(),
     meta: {
@@ -73,7 +82,19 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => {
               return (
-                <td key={cell.id} className="border border-black relative" style={getTdStyle(cell.column.id)}>
+                <td
+                  rowSpan={
+                    cell.column.id === "name" && (cell.row.original.rowSpan || 0) > 0
+                      ? cell.row.original.rowSpan
+                      : undefined
+                  }
+                  key={cell.id}
+                  className="border border-black relative"
+                  style={{
+                    ...getTdStyle(cell.column.id),
+                    display: cell.row.original.rowSpan === 0 && cell.column.id === "name" ? "none" : "table-cell",
+                  }}
+                >
                   {planWorkPeriodsSet.has(cell.column.id) && isArrowsShow ? (
                     <CorrectionArrowsConteiner
                       fieldFrom={cell.column.id}
