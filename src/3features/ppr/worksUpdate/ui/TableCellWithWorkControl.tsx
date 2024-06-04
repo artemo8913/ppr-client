@@ -1,11 +1,11 @@
 "use client";
 import { FC, useState } from "react";
-import { ITableCell, TableCell } from "@/1shared/ui/table";
+import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
-interface ITableCellWithWorkControlProps extends ITableCell {
+interface ITableCellWithWorkControlProps extends ITableCellProps {
   id?: string;
   indexToPlace?: number;
 }

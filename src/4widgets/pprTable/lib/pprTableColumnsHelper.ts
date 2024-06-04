@@ -1,5 +1,5 @@
 import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
-import { ITableCell } from "@/1shared/ui/table";
+import { ITableCellProps } from "@/1shared/ui/table";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/lib/date";
 import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData, TAllMonthStatuses, TYearPprStatus, pprTableColumnsSet } from "@/2entities/ppr";
@@ -101,12 +101,12 @@ export function getColumnSettings(
   pprYearStatus: TYearPprStatus,
   timePeriod: TPprTimePeriod,
   pprMonthStatuses?: TAllMonthStatuses
-): ITableCell | undefined {
+): ITableCellProps | undefined {
   if (!isColumnName(coulumnName)) {
     return;
   }
   if (pprYearStatus === "plan_creating") {
-    const settings: { [key in keyof IPprData]?: ITableCell } = {
+    const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       name: { cellType: "textarea" },
       location: { cellType: "textarea" },
       line_class: { cellType: "input" },

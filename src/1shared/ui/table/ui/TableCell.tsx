@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 type TCell = "none" | "input" | "textarea";
 
-interface ITableCellProps {
+export interface ITableCellProps {
   value?: string | number | boolean | null;
   cellType?: TCell;
   isVertical?: boolean;

@@ -1,7 +1,7 @@
-import { ITableCell } from "@/1shared/ui/table";
+import { ITableCellProps } from "@/1shared/ui/table";
 import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/ppr";
 
-export function getColumnSettings(status?: TYearPprStatus): { [name in keyof IWorkingManYearPlan]?: ITableCell } {
+export function getColumnSettings(status?: TYearPprStatus): { [name in keyof IWorkingManYearPlan]?: ITableCellProps } {
   if (status === "plan_creating") {
     return {
       full_name: { cellType: "textarea" },
