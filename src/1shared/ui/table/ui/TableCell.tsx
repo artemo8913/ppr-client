@@ -1,9 +1,19 @@
 "use client";
 import { FC, useState } from "react";
 import clsx from "clsx";
-import { ITableCell } from "../model/table.schema";
 
-export const TableCell: FC<ITableCell> = (props) => {
+type TCell = "none" | "input" | "textarea";
+
+interface ITableCellProps {
+  value?: string | number | boolean | null;
+  cellType?: TCell;
+  isVertical?: boolean;
+  className?: string;
+  bgColor?: string;
+  handleBlur?: (value: string) => void;
+}
+
+export const TableCell: FC<ITableCellProps> = (props) => {
   const { cellType = "none", value, isVertical = false, bgColor, className, handleBlur } = props;
   const [currentValue, setCurrentValue] = useState(value);
   return (
