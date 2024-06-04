@@ -45,7 +45,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   }
   const currentMonthStatus = ppr.months_statuses[currentTimePeriod];
 
-  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = isPprInUserControl(ppr, data.user);
+  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = isPprInUserControl(ppr.created_by, data.user);
 
   // Состояния для начальника цеха
   if (isForSubdivision) {

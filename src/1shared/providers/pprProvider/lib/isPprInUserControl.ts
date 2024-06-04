@@ -1,9 +1,7 @@
-import { IPpr } from "@/2entities/ppr";
 import { IUser } from "@/2entities/user";
 
 /**Подходит ли данный ППР для определенных ролей (начальника цеха, инженера, заместителя начальника дистанции, начальника дистанции и т.п.) */
-export function isPprInUserControl(ppr: IPpr, userData: IUser) {
-  const { created_by: ppr_created_by } = ppr;
+export function isPprInUserControl(ppr_created_by: IUser, userData: IUser) {
   const {
     id_distance: user_id_distance,
     id_subdivision: user_id_subdivision,

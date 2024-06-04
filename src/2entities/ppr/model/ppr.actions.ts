@@ -3,6 +3,7 @@ import { revalidateTag } from "next/cache";
 import { IPpr } from "..";
 
 const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/ppr";
+const PPR_SHORT_INFO_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/all_pprs";
 
 export async function getPprTable(id: string) {
   const query = await fetch(`${PPR_API_URL}/${id}`, { next: { tags: [`ppr-${id}`] } });
@@ -37,4 +38,10 @@ export async function deletePprTable(id: string) {
   revalidateTag(`ppr-${id}`);
   revalidateTag(`pprs_info`);
   return JSON.parse(JSON.stringify(query));
+}
+
+export async function getManyPprsShortInfo() {
+  const query = await fetch(`${PPR_API_URL}`, { next: { tags: ["pprs_info"] } });
+  const responce: Promise<Omit<IPpr, "data">[]> = query.json();
+  return responce;
 }

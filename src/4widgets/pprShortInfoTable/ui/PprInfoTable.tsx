@@ -2,17 +2,17 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
-import { directionsMock, getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
+import { getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
 import { months } from "@/1shared/lib/date";
 import { IPpr } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 
 interface IPprInfoProps {
-  data: IPpr[];
+  data: Omit<IPpr, "data">[];
 }
 
-const columns: TableProps<IPpr>["columns"] = [
+const columns: TableProps<Omit<IPpr, "data">>["columns"] = [
   {
     title: "Наименование",
     dataIndex: "name",
@@ -64,7 +64,7 @@ const columns: TableProps<IPpr>["columns"] = [
   {
     title: "Действия",
     dataIndex: "id",
-    render: (_, row) => <PprDeleteButton ppr={row} />,
+    render: (_, row) => <PprDeleteButton created_by={row.created_by} pprId={row.id} pprStatus={row.status} />,
   },
 ];
 
