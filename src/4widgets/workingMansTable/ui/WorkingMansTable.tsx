@@ -7,7 +7,7 @@ import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
 import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/ppr";
 import { WorkingManDelete } from "@/3features/pprWorkingMans/delete";
-import { getColumnSettings } from "../lib/peoplesTableSettings";
+import { getColumnSettings } from "../lib/workingMansTableSettings";
 
 const columnHelper = createColumnHelper<IWorkingManYearPlan>();
 
@@ -71,9 +71,9 @@ const columns = (status?: TYearPprStatus) => [
   ),
 ];
 
-interface IPeoplesTableProps {}
+interface IWorkingMansTableProps {}
 
-export const PeoplesTable: FC<IPeoplesTableProps> = () => {
+export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
   const { ppr, updateWorkingMan } = usePpr();
   const table = useReactTable({
     data: ppr?.peoples || [],

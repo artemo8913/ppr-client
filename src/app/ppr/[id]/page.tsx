@@ -8,7 +8,7 @@ import { WorkingManAdd } from "@/3features/pprWorkingMans/add";
 import { WorkModal } from "@/4widgets/workModal";
 import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
-import { PeoplesTable } from "@/4widgets/peoplesTable";
+import { WorkingMansTable } from "@/4widgets/workingMansTable";
 import { CorrectionRaport } from "@/4widgets/correctionRaport";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
@@ -31,7 +31,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
                 children: (
                   <div className="h-[80vh] overflow-auto">
                     <WorkingManAdd className="mb-2" />
-                    <PeoplesTable />
+                    <WorkingMansTable />
                   </div>
                 ),
               },
