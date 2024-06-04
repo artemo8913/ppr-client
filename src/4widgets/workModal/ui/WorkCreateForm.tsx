@@ -5,8 +5,8 @@ import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import Button from "antd/es/button";
+import { usePpr } from "@/1shared/providers/pprProvider";
 import { IWork } from "@/2entities/work";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
@@ -17,7 +17,7 @@ type TAddWorkForm = Omit<IWork, "periodicity_normal_data">;
 
 export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, indexToPlace }) => {
   const [form] = Form.useForm<TAddWorkForm>();
-  const { addWork } = usePprTableData();
+  const { addWork } = usePpr();
   const handleFinish = (values: TAddWorkForm) => {
     addWork(
       {

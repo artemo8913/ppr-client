@@ -1,6 +1,7 @@
 "use client";
 import { FC, MutableRefObject, useEffect, useState } from "react";
-import { TFilterPlanFactOption, usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 import { Arrow } from "@/1shared/ui/arrow";
 import { IPlanWorkPeriods, planWorkPeriods, planWorkPeriodsSet } from "@/2entities/ppr";
 
@@ -31,8 +32,8 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   fieldFrom,
 }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
-  const { filterColumns } = usePprTableViewSettings();
-  const { getTransfers } = usePprTableData();
+  const { filterColumns } = usePprTableSettings();
+  const { getTransfers } = usePpr();
 
   const fieldFromIndex = planWorkPeriodsSet.has(fieldFrom)
     ? planWorkPeriods.indexOf(fieldFrom as keyof IPlanWorkPeriods)

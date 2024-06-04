@@ -1,7 +1,8 @@
 "use client";
 import { FC, useCallback, useMemo } from "react";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
-import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPlanWorkPeriods, TCorrectionTransfer, planWorkPeriods } from "@/2entities/ppr";
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
@@ -18,10 +19,10 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
   fieldFrom,
   objectId,
 }) => {
-  const { getTransfers, updateTransfers } = usePprTableData();
+  const { getTransfers, updateTransfers } = usePpr();
   const transfers = getTransfers(objectId, fieldFrom);
 
-  const { currentTimePeriod } = usePprTableViewSettings();
+  const { currentTimePeriod } = usePprTableSettings();
   const monthIndex = useMemo(
     () => planWorkPeriods.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
     [currentTimePeriod]

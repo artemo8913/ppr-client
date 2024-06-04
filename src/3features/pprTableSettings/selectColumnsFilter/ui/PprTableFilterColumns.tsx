@@ -1,12 +1,16 @@
 "use client";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC } from "react";
-import { TFilterTimePeriodOption, TFilterPlanFactOption, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import {
+  TFilterPlanFactOption,
+  TFilterTimePeriodOption,
+  usePprTableSettings,
+} from "@/1shared/providers/pprTableSettingsProvider";
 
 interface IPprTableSelectFilterTimePeriodProps {}
 
 export const PprTableSelectFilterTimePeriod: FC<IPprTableSelectFilterTimePeriodProps> = () => {
-  const { filterColumns, setFilterMonths } = usePprTableViewSettings();
+  const { filterColumns, setFilterMonths } = usePprTableSettings();
   return (
     <Select<TFilterTimePeriodOption, { value: TFilterTimePeriodOption } & DefaultOptionType>
       className="min-w-24"
@@ -24,7 +28,7 @@ export const PprTableSelectFilterTimePeriod: FC<IPprTableSelectFilterTimePeriodP
 interface IPprTableSelectFilterPlanFactProps {}
 
 export const PprTableSelectFilterPlanFact: FC<IPprTableSelectFilterPlanFactProps> = () => {
-  const { filterColumns, setFilterPlanFact } = usePprTableViewSettings();
+  const { filterColumns, setFilterPlanFact } = usePprTableSettings();
   return (
     <Select<TFilterPlanFactOption, { value: TFilterPlanFactOption } & DefaultOptionType>
       className="min-w-24"

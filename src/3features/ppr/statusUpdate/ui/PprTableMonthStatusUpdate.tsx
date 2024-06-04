@@ -2,20 +2,16 @@
 import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
-import {
-  getNextPprMonthStatus,
-  isPprInUserControl,
-  usePprTableData,
-  usePprTableViewSettings,
-} from "@/1shared/providers/pprTableProvider";
+import { getNextPprMonthStatus, isPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
 
 interface IPprTableMonthStatusUpdateProps {}
 
 export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({}) => {
   const { data } = useSession();
-  const { ppr } = usePprTableData();
-  const { currentTimePeriod } = usePprTableViewSettings();
+  const { ppr } = usePpr();
+  const { currentTimePeriod } = usePprTableSettings();
 
   const setNextStatus = useCallback(() => {
     if (!ppr || currentTimePeriod === "year") {

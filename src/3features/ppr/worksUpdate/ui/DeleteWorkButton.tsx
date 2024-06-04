@@ -2,14 +2,14 @@
 import { FC } from "react";
 import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IDeleteWorkButtonProps extends React.ComponentProps<typeof Button> {
   workId?: string;
 }
 
 export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId, style }) => {
-  const { deleteWork } = usePprTableData();
+  const { deleteWork } = usePpr();
   return (
     <Button
       onClick={() => {

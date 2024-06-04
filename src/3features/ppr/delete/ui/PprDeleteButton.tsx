@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useSession } from "next-auth/react";
 import Button from "antd/es/button";
 import Tooltip from "antd/es/tooltip";
-import { isPprInUserControl } from "@/1shared/providers/pprTableProvider";
+import { isPprInUserControl } from "@/1shared/providers/pprProvider";
 import { IPpr, deletePprTable } from "@/2entities/ppr";
 import { DeleteTwoTone } from "@ant-design/icons";
 import Popconfirm from "antd/es/popconfirm";

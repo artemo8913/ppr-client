@@ -1,12 +1,12 @@
 "use client";
 import { FC } from "react";
-import { usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import Checkbox, { CheckboxProps } from "antd/es/checkbox/Checkbox";
 
 interface IPprTableCombineSameWorkProps {}
 
 export const PprTableCombineSameWork: FC<IPprTableCombineSameWorkProps> = () => {
-  const { isCombineSameWorks, setIsCombineSameWorks } = usePprTableViewSettings();
+  const { isCombineSameWorks, setIsCombineSameWorks } = usePprTableSettings();
 
   const handleChange: CheckboxProps["onChange"] = (e) => {
     setIsCombineSameWorks(e.target.checked);

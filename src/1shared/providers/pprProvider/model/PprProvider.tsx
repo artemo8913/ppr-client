@@ -17,7 +17,7 @@ import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance"
 
 type TWorkBasicInfo = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
 
-interface IPprTableDataContextProps {
+interface IPprContextProps {
   ppr: IPpr | null;
   workPlanCorrections: TWorkPlanCorrection;
   workBasicInfo: TWorkBasicInfo;
@@ -47,7 +47,7 @@ interface IPprTableDataContextProps {
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
 }
 
-const PprTableDataContext = createContext<IPprTableDataContextProps>({
+const PprContext = createContext<IPprContextProps>({
   ppr: null,
   workPlanCorrections: {},
   workBasicInfo: {},
@@ -65,13 +65,13 @@ const PprTableDataContext = createContext<IPprTableDataContextProps>({
   getPprDataWithRowSpan: () => [],
 });
 
-export const usePprTableData = () => useContext(PprTableDataContext);
+export const usePpr = () => useContext(PprContext);
 
-interface IPprTableDataProviderProps extends PropsWithChildren {
+interface IPprProviderProps extends PropsWithChildren {
   pprFromResponce: IPpr;
 }
 
-export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children, pprFromResponce }) => {
+export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }) => {
   //Данные ППРа
   const [ppr, setPpr] = useState<IPpr | null>(null);
   //Корректировки запланированных объемов работ ППРа в формате данных "объекта" (не в массиве)
@@ -369,7 +369,7 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
   }, [ppr?.data, handleWorksDataInPpr]);
 
   return (
-    <PprTableDataContext.Provider
+    <PprContext.Provider
       value={{
         ppr,
         workPlanCorrections,
@@ -389,6 +389,6 @@ export const PprTableDataProvider: FC<IPprTableDataProviderProps> = ({ children,
       }}
     >
       {children}
-    </PprTableDataContext.Provider>
+    </PprContext.Provider>
   );
 };

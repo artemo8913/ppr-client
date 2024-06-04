@@ -1,8 +1,9 @@
 "use client";
 import { FC, useMemo, useRef } from "react";
 import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { IPprDataWithRowSpan, IPprData, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/ppr";
+import { usePpr } from "@/1shared/providers/pprProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { IPprDataWithRowSpan, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/ppr";
 import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { useCreateColumns } from "./PprTableColumns";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
@@ -13,10 +14,10 @@ const STICKY_COLUMN_INDEX_FROM = 11;
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { ppr, updatePprData, updateNewValueInCorrection, getPprDataWithRowSpan } = usePprTableData();
+  const { ppr, updatePprData, updateNewValueInCorrection, getPprDataWithRowSpan } = usePpr();
 
   const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, isCombineSameWorks } =
-    usePprTableViewSettings();
+    usePprTableSettings();
 
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
 

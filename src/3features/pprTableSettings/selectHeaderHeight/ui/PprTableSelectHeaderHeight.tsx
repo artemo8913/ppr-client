@@ -1,12 +1,12 @@
 "use client";
 import { FC } from "react";
-import { usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import Slider from "antd/es/slider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 interface IPprTableSelectHeaderHeightProps {}
 
 export const PprTableSelectHeaderHeight: FC<IPprTableSelectHeaderHeightProps> = () => {
-  const { headerHeightPx, setHeaderHeightPx } = usePprTableViewSettings();
+  const { headerHeightPx, setHeaderHeightPx } = usePprTableSettings();
   return (
     <Slider
       className="w-52"

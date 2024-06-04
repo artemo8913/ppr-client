@@ -2,7 +2,7 @@
 import { FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { tymePeriodIntlRu, pprTimePeriods } from "@/1shared/lib/date";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
 import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/ppr";
@@ -74,7 +74,7 @@ const columns = (status?: TYearPprStatus) => [
 interface IPeoplesTableProps {}
 
 export const PeoplesTable: FC<IPeoplesTableProps> = () => {
-  const { ppr, updateWorkingMan } = usePprTableData();
+  const { ppr, updateWorkingMan } = usePpr();
   const table = useReactTable({
     data: ppr?.peoples || [],
     columns: [

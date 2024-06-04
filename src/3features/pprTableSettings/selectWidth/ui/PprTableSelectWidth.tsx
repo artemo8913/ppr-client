@@ -1,12 +1,12 @@
 "use client";
 import { FC } from "react";
-import { usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import Slider from "antd/es/slider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 interface IPprTableSelectWidthProps {}
 
 export const PprTableSelectWidth: FC<IPprTableSelectWidthProps> = () => {
-  const { tableWidthPercent, setTableWidthPercent } = usePprTableViewSettings();
+  const { tableWidthPercent, setTableWidthPercent } = usePprTableSettings();
   return (
     <Slider
       className="w-96"

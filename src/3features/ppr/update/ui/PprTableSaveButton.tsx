@@ -4,12 +4,12 @@ import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
 import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IPprTableUpdateFormProps {}
 
 export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
-  const { ppr } = usePprTableData();
+  const { ppr } = usePpr();
   const [isLoading, setIsLoading] = useState(false);
   return (
     <Tooltip title="сохранить">

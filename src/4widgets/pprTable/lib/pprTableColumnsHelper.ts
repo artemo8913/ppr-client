@@ -1,7 +1,7 @@
 import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCell } from "@/1shared/ui/table";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/lib/date";
-import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableProvider";
+import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData, TAllMonthStatuses, TYearPprStatus, pprTableColumnsSet } from "@/2entities/ppr";
 
 export function findPlanFactTitle(string: string) {

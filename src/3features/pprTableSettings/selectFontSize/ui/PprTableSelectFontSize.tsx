@@ -1,12 +1,12 @@
 "use client";
 import { FC } from "react";
-import { usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import Slider from "antd/es/slider";
 
 interface IPprTableSelectFontSizeProps {}
 
 export const PprTableSelectFontSize: FC<IPprTableSelectFontSizeProps> = () => {
-  const { fontSizePx, setFontSizePx } = usePprTableViewSettings();
+  const { fontSizePx, setFontSizePx } = usePprTableSettings();
   return (
     <Slider
       className="w-52"

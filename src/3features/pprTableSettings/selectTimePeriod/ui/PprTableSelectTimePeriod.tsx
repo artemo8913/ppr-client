@@ -2,14 +2,15 @@
 import Select from "antd/es/select";
 import { FC, useEffect } from "react";
 import { TPprTimePeriod, tymePeriodIntlRu, pprTimePeriods } from "@/1shared/lib/date";
-import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
-import { findPossibleCurrentPprPeriod } from "@/1shared/providers/pprTableProvider/lib/findPossibleCurrentPprPeriod";
+import { findPossibleCurrentPprPeriod } from "@/1shared/providers/pprProvider/lib/findPossibleCurrentPprPeriod";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IPprTableSelectTimePeriodProps {}
 
 export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () => {
-  const { currentTimePeriod, setTimePeriod } = usePprTableViewSettings();
-  const { ppr } = usePprTableData();
+  const { currentTimePeriod, setTimePeriod } = usePprTableSettings();
+  const { ppr } = usePpr();
 
   useEffect(() => {
     setTimePeriod(findPossibleCurrentPprPeriod(ppr));

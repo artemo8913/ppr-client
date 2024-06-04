@@ -1,7 +1,8 @@
 "use client";
 import React, { FC } from "react";
-import { usePprTableData, usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
 import { useSession } from "next-auth/react";
+import { usePpr } from "@/1shared/providers/pprProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
 import { tymePeriodIntlRu } from "@/1shared/lib/date";
 import { IPlanWorkPeriods } from "@/2entities/ppr";
@@ -10,8 +11,8 @@ import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { ppr, workBasicInfo } = usePprTableData();
-  const { currentTimePeriod } = usePprTableViewSettings();
+  const { ppr, workBasicInfo } = usePpr();
+  const { currentTimePeriod } = usePprTableSettings();
   const { data: userData } = useSession();
 
   const { id_direction, id_distance, id_subdivision } = userData?.user!;

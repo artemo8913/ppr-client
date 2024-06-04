@@ -3,14 +3,14 @@ import { FC } from "react";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IWorkingManDeleteProps {
   id: string;
 }
 
 export const WorkingManDelete: FC<IWorkingManDeleteProps> = ({ id }) => {
-  const { deleteWorkingMan } = usePprTableData();
+  const { deleteWorkingMan } = usePpr();
   const isManCanBeDeleted = true;
   return (
     <Tooltip title="Удалить">

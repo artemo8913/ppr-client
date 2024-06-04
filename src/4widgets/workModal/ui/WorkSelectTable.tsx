@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { IWork, TLineClassData, getWorkById } from "@/2entities/work";
 
 import Button from "antd/es/button";
-import { usePprTableData } from "@/1shared/providers/pprTableProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 import { useSession } from "next-auth/react";
 import { getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
 
@@ -52,7 +52,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, indexToPl
   const [isLoading, setIsLoading] = useState(false);
   const [workId, setWorkId] = useState<string>();
 
-  const { addWork } = usePprTableData();
+  const { addWork } = usePpr();
 
   const { data: sessionData } = useSession();
   const userData = sessionData?.user;

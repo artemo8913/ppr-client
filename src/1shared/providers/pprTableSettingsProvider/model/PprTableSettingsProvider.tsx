@@ -59,11 +59,11 @@ const initialContext: IPprTableSettingsContext = {
   setIsCombineSameWorks: () => {},
 };
 
-const PprTableViewSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
+const PprTableSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
 
-export const usePprTableViewSettings = () => useContext(PprTableViewSettingsContext);
+export const usePprTableSettings = () => useContext(PprTableSettingsContext);
 
-export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) => {
   const [pprTableSettings, setPprTableSettings] = useState<IPprTableSettings>(intitalSettings);
 
   const setFilterMonths = useCallback(
@@ -125,7 +125,7 @@ export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }
   }, []);
 
   return (
-    <PprTableViewSettingsContext.Provider
+    <PprTableSettingsContext.Provider
       value={{
         ...pprTableSettings,
         setCorrectionView,
@@ -139,6 +139,6 @@ export const PprTableViewSettingsProvider: FC<PropsWithChildren> = ({ children }
       }}
     >
       {children}
-    </PprTableViewSettingsContext.Provider>
+    </PprTableSettingsContext.Provider>
   );
 };

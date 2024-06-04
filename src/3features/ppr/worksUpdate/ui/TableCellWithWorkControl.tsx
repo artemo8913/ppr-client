@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import { ITableCell, TableCell } from "@/1shared/ui/table";
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
-import { usePprTableViewSettings } from "@/1shared/providers/pprTableProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 interface ITableCellWithWorkControlProps extends ITableCell {
   id?: string;
@@ -13,7 +13,7 @@ interface ITableCellWithWorkControlProps extends ITableCell {
 export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ id, indexToPlace, ...otherProps }) => {
   const [isHide, setIsHide] = useState<boolean>(true);
 
-  const { headerHeightPx } = usePprTableViewSettings();
+  const { headerHeightPx } = usePprTableSettings();
 
   return (
     <div
