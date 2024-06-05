@@ -8,14 +8,13 @@ interface IAddWorkButtonProps extends React.ComponentProps<typeof Button> {
   indexToPlace?: number;
 }
 
-export const AddWorkButton: FC<IAddWorkButtonProps> = ({ style, indexToPlace }) => {
+export const AddWorkButton: FC<IAddWorkButtonProps> = ({ indexToPlace }) => {
   const { openModal } = useWorkModal();
   return (
     <Button
       onClick={() => {
         openModal(indexToPlace);
       }}
-      style={style}
       size="small"
       shape="circle"
       icon={<PlusOutlined />}
