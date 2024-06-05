@@ -17,7 +17,7 @@ export const useCreateColumns = (
   pprYearStatus: TYearPprStatus,
   pprMonthsStatuses?: TAllMonthStatuses
 ): ColumnDef<IPprData, any>[] => {
-  const { filterColumns, currentTimePeriod, correctionView } = usePprTableSettings();
+  const { filterColumns, currentTimePeriod, correctionView, isCombineSameWorks } = usePprTableSettings();
   const { getCorrectionValue } = usePpr();
   const columnHelper = createColumnHelper<IPprData>();
 
@@ -27,18 +27,18 @@ export const useCreateColumns = (
       return columnHelper.accessor(column, {
         header: (info) => (
           <PprTableCell
-            isWithWorkControl={info.column.id === "name"}
+            isWithWorkControl={info.column.id === "name" && !isCombineSameWorks}
             isVertical
             value={getColumnTitle(info.header.id)}
           />
         ),
         cell: (info) => (
           <PprTableCell
-            id={info.row.original.id}
+            isWithWorkControl={info.column.id === "name" && !isCombineSameWorks}
+            pprData={info.row.original}
             indexToPlace={info.row.index}
             value={info.getValue()}
             handleBlur={(value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-            isWithWorkControl={info.column.id === "name"}
             {...getColumnSettings(info.column.id, pprYearStatus, currentTimePeriod, pprMonthsStatuses)}
           />
         ),

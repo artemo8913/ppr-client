@@ -67,7 +67,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ ppr }) =>
             <PprTableSelectFontSize />
           </div>
           <div className="flex justify-start gap-2">
-            <div>Объединять работы с одинаковым наименованием </div>
+            <div>Объединять работы с одинаковым наименованием (без возможности добавлять/удалять работы) </div>
             <PprTableCombineSameWork />
           </div>
         </Modal>

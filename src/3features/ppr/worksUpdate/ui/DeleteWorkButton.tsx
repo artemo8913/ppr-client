@@ -8,14 +8,13 @@ interface IDeleteWorkButtonProps extends React.ComponentProps<typeof Button> {
   workId?: string;
 }
 
-export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId, style }) => {
+export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
   const { deleteWork } = usePpr();
   return (
     <Button
       onClick={() => {
         workId && deleteWork(workId);
       }}
-      style={style}
       size="small"
       shape="circle"
       icon={<MinusOutlined />}
