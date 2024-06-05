@@ -1,12 +1,6 @@
 "use client";
 import { FC } from "react";
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { TPprTimePeriod } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { IPprData } from "@/2entities/ppr";
@@ -70,7 +64,6 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
     data: ppr?.data || [],
     columns: columns(currentTimePeriod),
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   });
   return (
     <div className="overflow-auto">
