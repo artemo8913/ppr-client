@@ -10,6 +10,7 @@ import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { WorkingMansTable } from "@/4widgets/workingMansTable";
 import { CorrectionRaport } from "@/4widgets/correctionRaport";
+import { MonthPlanTable } from "@/4widgets/monthPlanTable";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
@@ -48,7 +49,11 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
               {
                 key: "3",
                 label: "Месячный план",
-                children: <div>Месячный план</div>,
+                children: (
+                  <div className="h-[89vh] overflow-auto">
+                    <MonthPlanTable />
+                  </div>
+                ),
               },
               {
                 key: "4",
