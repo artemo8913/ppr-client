@@ -20,7 +20,7 @@ const columns = (status?: TYearPprStatus) => [
         cell: (props) => <TableCell {...getColumnSettings(status)[`full_name`]} value={props.getValue()} />,
       }),
       columnHelper.accessor("work_position", {
-        header: "должность",
+        header: "должность, профессия, разряд рабочих, совмещаемые профессии",
         cell: (props) => <TableCell {...getColumnSettings(status)[`work_position`]} value={props.getValue()} />,
       }),
       columnHelper.accessor("participation", {
@@ -34,17 +34,41 @@ const columns = (status?: TYearPprStatus) => [
     columnHelper.group({
       header: tymePeriodIntlRu[time],
       columns: [
-        columnHelper.accessor(`${time}_plan_time`, {
-          header: "план",
+        columnHelper.accessor(`${time}_plan_norm_time`, {
+          header: "по норме, чел.-ч",
           cell: (props) => (
             <TableCell
               value={props.getValue()}
               handleBlur={(value: string) =>
                 props.table.options.meta?.updateData(props.row.index, props.column.id, value)
               }
-              {...getColumnSettings(status)[`${time}_plan_time`]}
+              {...getColumnSettings(status)[`${time}_plan_norm_time`]}
             />
           ),
+          footer: (props) =>
+            props.table
+              .getRowModel()
+              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_plan_norm_time`] || 0), 0),
+        }),
+        columnHelper.accessor(`${time}_plan_tabel_time`, {
+          header: "по табелю, чел.-ч",
+          cell: (props) => (
+            <TableCell
+              value={props.getValue()}
+              handleBlur={(value: string) =>
+                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
+              }
+              {...getColumnSettings(status)[`${time}_plan_tabel_time`]}
+            />
+          ),
+          footer: (props) =>
+            props.table
+              .getRowModel()
+              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_plan_tabel_time`] || 0), 0),
+        }),
+        columnHelper.accessor(`${time}_plan_time`, {
+          header: "план",
+          cell: (props) => <TableCell value={props.getValue()} />,
           footer: (props) =>
             props.table
               .getRowModel()

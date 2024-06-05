@@ -49,6 +49,38 @@ export interface IPlanWorkPeriods {
   dec_plan_work: number;
 }
 
+export interface IPlanNormTime {
+  year_plan_norm_time: number;
+  jan_plan_norm_time: number;
+  feb_plan_norm_time: number;
+  mar_plan_norm_time: number;
+  apr_plan_norm_time: number;
+  may_plan_norm_time: number;
+  june_plan_norm_time: number;
+  july_plan_norm_time: number;
+  aug_plan_norm_time: number;
+  sept_plan_norm_time: number;
+  oct_plan_norm_time: number;
+  nov_plan_norm_time: number;
+  dec_plan_norm_time: number;
+}
+
+export interface IPlanTabelTime {
+  year_plan_tabel_time: number;
+  jan_plan_tabel_time: number;
+  feb_plan_tabel_time: number;
+  mar_plan_tabel_time: number;
+  apr_plan_tabel_time: number;
+  may_plan_tabel_time: number;
+  june_plan_tabel_time: number;
+  july_plan_tabel_time: number;
+  aug_plan_tabel_time: number;
+  sept_plan_tabel_time: number;
+  oct_plan_tabel_time: number;
+  nov_plan_tabel_time: number;
+  dec_plan_tabel_time: number;
+}
+
 export interface IPlanTimePeriods {
   year_plan_time: number;
   jan_plan_time: number;
@@ -152,7 +184,7 @@ export type TCorrection<T> = {
   };
 };
 
-export interface IWorkingManYearPlan extends IPlanTimePeriods, IFactTimePeriods {
+export interface IWorkingManYearPlan extends IPlanNormTime, IPlanTabelTime, IPlanTimePeriods, IFactTimePeriods {
   id: string;
   full_name: string;
   work_position: string;

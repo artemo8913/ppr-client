@@ -10,6 +10,7 @@ import { PprTable } from "@/4widgets/pprTable";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { WorkingMansTable } from "@/4widgets/workingMansTable";
 import { CorrectionRaport } from "@/4widgets/correctionRaport";
+import { MonthPlan } from "@/4widgets/monthPlan";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
@@ -40,7 +41,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
                 label: "План ТОиР",
                 children: (
                   // TODO #16 Переписать на свой компонент табы. Здесь костыль с высотой
-                  <div className="h-[89vh] overflow-auto">
+                  <div className="h-[80vh] overflow-auto">
                     <PprTable />
                   </div>
                 ),
@@ -48,7 +49,11 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
               {
                 key: "3",
                 label: "Месячный план",
-                children: <div>Месячный план</div>,
+                children: (
+                  <div className="h-[80vh] overflow-auto">
+                    <MonthPlan />
+                  </div>
+                ),
               },
               {
                 key: "4",
