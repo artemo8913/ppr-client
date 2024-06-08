@@ -40,7 +40,7 @@ const intitalSettings: IPprTableSettings = {
     planFact: "SHOW_ALL",
   },
   currentTimePeriod: "year",
-  correctionView: "CORRECTED_PLAN",
+  correctionView: "CORRECTED_PLAN_WITH_ARROWS",
   tableWidthPercent: 100,
   fontSizePx: 12,
   headerHeightPx: 300,

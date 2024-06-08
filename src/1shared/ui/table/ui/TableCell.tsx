@@ -5,16 +5,16 @@ import clsx from "clsx";
 type TCell = "none" | "input" | "textarea";
 
 export interface ITableCellProps {
-  value?: string | number | boolean | null;
   cellType?: TCell;
-  isVertical?: boolean;
-  className?: string;
   bgColor?: string;
+  className?: string;
+  isVertical?: boolean;
+  value?: string | number | boolean | null;
   handleBlur?: (value: string) => void;
 }
 
 export const TableCell: FC<ITableCellProps> = (props) => {
-  const { cellType = "none", value, isVertical = false, bgColor, className, handleBlur } = props;
+  const { cellType = "none", value, isVertical = false, bgColor, className, handleBlur: handleBlur } = props;
   const [currentValue, setCurrentValue] = useState(value);
   return (
     /* Контейнер содержимого ячейки */

@@ -1,47 +1,25 @@
 "use client";
 import { FC, useMemo, useRef } from "react";
-import { Table, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPprDataWithRowSpan, TAllMonthStatuses, TYearPprStatus, planWorkPeriodsSet } from "@/2entities/ppr";
-import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
-import { useCreateColumns } from "./PprTableColumns";
+import { TAllMonthStatuses, TYearPprStatus, checkIsPlanWorkPeriodField } from "@/2entities/ppr";
+import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
-import clsx from "clsx";
-
-const STICKY_COLUMN_INDEX_FROM = 11;
+import { getColumnTitle } from "../lib/pprTableColumnsHelper";
+import { PprTableCellMemo } from "./PprTableCell";
+import { useCreateColumns } from "./PprTableColumns";
+import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { ppr, updatePprData, updateNewValueInCorrection, getPprDataWithRowSpan } = usePpr();
-
-  const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, isCombineSameWorks } =
-    usePprTableSettings();
-
-  const planCellRef = useRef<HTMLTableCellElement | null>(null);
-
-  const pprYearStatus: TYearPprStatus = ppr?.status || "done";
+  const { ppr, getCorrectionValue, updatePprData, updateNewValueInCorrection } = usePpr();
+  const { columnsDefault, timePeriods, timePeriodsColums } = useCreateColumns();
+  const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, currentTimePeriod } = usePprTableSettings();
+  const pprYearStatus: TYearPprStatus = ppr?.status || "template";
   const pprMonthsStatuses: TAllMonthStatuses | undefined = ppr?.months_statuses || undefined;
 
-  const pprData = useMemo(() => {
-    if (isCombineSameWorks) {
-      return getPprDataWithRowSpan(ppr?.data || []);
-    } else {
-      return ppr?.data;
-    }
-  }, [ppr?.data, getPprDataWithRowSpan, isCombineSameWorks]);
-
-  const table: Table<IPprDataWithRowSpan> = useReactTable({
-    data: pprData ? pprData : [],
-    columns: useCreateColumns(pprYearStatus, pprMonthsStatuses),
-    getCoreRowModel: getCoreRowModel(),
-    meta: {
-      updateData: updatePprData,
-      correctPlan: updateNewValueInCorrection,
-    },
-  });
-
+  const planCellRef = useRef<HTMLTableCellElement | null>(null);
   const isArrowsShow = useMemo(
     () => correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS",
     [correctionView]
@@ -57,53 +35,70 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       }}
     >
       <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              const isRowWithMonths = Number(headerGroup.id) === 0 && header.index > STICKY_COLUMN_INDEX_FROM;
-              return (
-                <th
-                  ref={header.column.id === "year_plan_work" ? planCellRef : null}
-                  key={header.id}
-                  className={clsx("border border-black relative", isRowWithMonths && "sticky top-0 z-20 bg-[#f5f5f5]")}
-                  style={getThStyle(header.column.id)}
-                  colSpan={header.colSpan}
-                >
-                  <div style={{ maxHeight: `${headerHeightPx}px` }}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </div>
-                </th>
-              );
-            })}
-          </tr>
-        ))}
+        <tr>
+          {columnsDefault.map((field) => (
+            <th
+              key={field}
+              className="border border-black relative"
+              rowSpan={2}
+              style={{ ...getThStyle(field), height: `${headerHeightPx}px` }}
+            >
+              <PprTableCellMemo isVertical field={field} value={getColumnTitle(field)} />
+            </th>
+          ))}
+          {timePeriods.map((month) => (
+            <th key={month} colSpan={timePeriodsColums[0].length} className="border border-black sticky top-0 z-20">
+              <PprTableCellMemo value={stringToTimePeriodIntlRu(month)} />
+            </th>
+          ))}
+        </tr>
+        <tr>
+          {timePeriodsColums.flat().map((periodField) => (
+            <th
+              key={periodField}
+              ref={periodField === "year_plan_work" ? planCellRef : null}
+              className="border border-black relative"
+            >
+              <PprTableCellMemo isVertical value={getColumnTitle(periodField)} />
+            </th>
+          ))}
+        </tr>
       </thead>
       <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => {
+        {ppr?.data.map((pprData, rowIndex) => (
+          <tr key={pprData.id + rowIndex}>
+            {columnsDefault.concat(timePeriodsColums.flat()).map((columnName) => {
               return (
                 <td
-                  rowSpan={
-                    cell.column.id === "name" && (cell.row.original.rowSpan || 0) > 0
-                      ? cell.row.original.rowSpan
-                      : undefined
-                  }
-                  key={cell.id}
+                  key={columnName + rowIndex}
                   className="border border-black relative"
                   style={{
-                    ...getTdStyle(cell.column.id),
-                    display: cell.row.original.rowSpan === 0 && cell.column.id === "name" ? "none" : "table-cell",
+                    ...getTdStyle(columnName),
                   }}
                 >
-                  {planWorkPeriodsSet.has(cell.column.id) && isArrowsShow ? (
-                    <CorrectionArrowsConteiner
-                      fieldFrom={cell.column.id}
-                      objectId={cell.row.original.id}
-                      planCellRef={planCellRef}
-                    />
+                  {isArrowsShow && checkIsPlanWorkPeriodField(columnName) ? (
+                    <CorrectionArrowsConteiner fieldFrom={columnName} objectId={pprData.id} planCellRef={planCellRef} />
                   ) : null}
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  <PprTableCellMemo
+                    {...getColumnSettings(
+                      columnName,
+                      pprYearStatus,
+                      currentTimePeriod,
+                      pprMonthsStatuses,
+                      correctionView
+                    )}
+                    isVertical={checkIsPlanWorkPeriodField(columnName)}
+                    pprData={pprData}
+                    indexData={rowIndex}
+                    field={columnName}
+                    updatePprData={updatePprData}
+                    updateNewValueInCorrection={updateNewValueInCorrection}
+                    value={
+                      checkIsPlanWorkPeriodField(columnName)
+                        ? Number(pprData[columnName]) + getCorrectionValue(pprData.id, columnName)
+                        : pprData[columnName]
+                    }
+                  />
                 </td>
               );
             })}

@@ -29,7 +29,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ ppr }) =>
   const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   return (
-    <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300">
+    <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300 overflow-hidden">
       Статус: {ppr?.status} Создан: {new Date(ppr?.created_at!).toLocaleDateString()} Год: {ppr?.year}{" "}
       {ppr?.id_subdivision}-{ppr?.id_distance}-{ppr?.id_direction}
       <PprTableSaveButton />

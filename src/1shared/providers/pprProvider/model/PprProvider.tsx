@@ -9,8 +9,8 @@ import {
   TCorrectionTransfer,
   TPprCorrections,
   TWorkPlanCorrection,
+  checkIsPlanFactWorkPeriodField,
   planWorkPeriods,
-  planWorkPeriodsSet,
 } from "@/2entities/ppr";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
@@ -26,7 +26,7 @@ interface IPprContextProps {
   updatePprData: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   updateNewValueInCorrection: (
     objectId: string,
-    fieldName: keyof IPlanWorkPeriods,
+    fieldName: keyof IPlanWorkPeriods | string,
     newValue: number,
     oldValue: number
   ) => void;
@@ -180,7 +180,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         if (!prev) {
           return prev;
         }
-        if (!planWorkPeriodsSet.has(fieldName)) {
+        if (!checkIsPlanFactWorkPeriodField(fieldName)) {
           return prev;
         }
         const newDiff = newValue - oldValue;
@@ -218,7 +218,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null
     ) => {
       setPpr((prev) => {
-        if (!prev || !planWorkPeriodsSet.has(fieldFrom)) {
+        if (!prev || !checkIsPlanFactWorkPeriodField(fieldFrom)) {
           return prev;
         }
         return {

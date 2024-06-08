@@ -1,92 +1,68 @@
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { tymePeriodIntlRu } from "@/1shared/lib/date";
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, IPlanWorkPeriods } from "@/2entities/ppr";
 import {
-  columnsDefault,
-  getColumnTitle,
-  findPlanFactTitle,
-  getColumnSettings,
-  getPlanFactColumns,
-  getTimePeriodsColumns,
-} from "../lib/pprTableColumnsHelper";
-import { PprTableCell } from "./PprTableCell";
+  TFilterPlanFactOption,
+  TFilterTimePeriodOption,
+  usePprTableSettings,
+} from "@/1shared/providers/pprTableSettingsProvider";
+import { IPprData } from "@/2entities/ppr";
+import { TPprTimePeriod, getCurrentQuartal, getQuartalMonths, pprTimePeriods } from "@/1shared/lib/date";
 
-export const useCreateColumns = (
-  pprYearStatus: TYearPprStatus,
-  pprMonthsStatuses?: TAllMonthStatuses
-): ColumnDef<IPprData, any>[] => {
-  const { filterColumns, currentTimePeriod, correctionView, isCombineSameWorks } = usePprTableSettings();
-  const { getCorrectionValue } = usePpr();
-  const columnHelper = createColumnHelper<IPprData>();
+const columnsDefault: Array<keyof IPprData> = [
+  "name",
+  "location",
+  "line_class",
+  "total_count",
+  "entry_year",
+  "periodicity_normal",
+  "periodicity_fact",
+  "last_maintenance_year",
+  "norm_of_time",
+  "norm_of_time_document",
+  "measure",
+  "unity",
+] as const;
 
-  return [
-    // Часть таблицы до времени
-    ...columnsDefault.map((column) => {
-      return columnHelper.accessor(column, {
-        header: (info) => (
-          <PprTableCell
-            isWithWorkControl={info.column.id === "name" && !isCombineSameWorks}
-            isVertical
-            value={getColumnTitle(info.header.id)}
-          />
-        ),
-        cell: (info) => (
-          <PprTableCell
-            isWithWorkControl={info.column.id === "name" && !isCombineSameWorks}
-            pprData={info.row.original}
-            indexToPlace={info.row.index}
-            value={info.getValue()}
-            handleBlur={(value: string) => info.table.options.meta?.updateData(info.row.index, info.column.id, value)}
-            {...getColumnSettings(info.column.id, pprYearStatus, currentTimePeriod, pprMonthsStatuses)}
-          />
-        ),
-      });
-    }),
-    // Часть таблицы с данными объемов и чел.-ч по году и месяцами
-    ...getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) => {
-      return columnHelper.group({
-        header: tymePeriodIntlRu[month],
-        columns: [
-          ...getPlanFactColumns(month, filterColumns.planFact).map<ColumnDef<IPprData, any>>((field) => {
-            return columnHelper.accessor(field, {
-              header: (info) => <PprTableCell isVertical value={findPlanFactTitle(info.header.id)} />,
-              cell: (info) => {
-                const value =
-                  Number(info.getValue()) +
-                  (correctionView === "CORRECTED_PLAN" || correctionView === "CORRECTED_PLAN_WITH_ARROWS"
-                    ? getCorrectionValue(info.row.original.id, info.column.id)
-                    : 0);
+function getTimePeriodsColumns(currentTimePeriod?: TPprTimePeriod, option?: TFilterTimePeriodOption): TPprTimePeriod[] {
+  switch (option) {
+    case "SHOW_ONLY_CURRENT_MONTH":
+      return pprTimePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
+    case "SHOW_CURRENT_QUARTAL":
+      const result: TPprTimePeriod[] = ["year"];
+      return result.concat(getQuartalMonths(getCurrentQuartal(currentTimePeriod)));
+    default:
+      return pprTimePeriods;
+  }
+}
 
-                return (
-                  <PprTableCell
-                    isVertical
-                    value={value}
-                    handleBlur={(value: string) => {
-                      // Если изменяемая ячейка не план работ или же работа ещё не утверждена,
-                      // то просто изменяется содержимое ППРа
-                      if (!info.cell.column.id.endsWith("_plan_work") || !info.row.original.is_work_aproved) {
-                        info.table.options.meta?.updateData(info.row.index, info.column.id, value);
-                        // иначе создаётся корректировка
-                      } else {
-                        info.table.options.meta?.correctPlan &&
-                          info.table.options.meta?.correctPlan(
-                            info.row.original.id,
-                            info.column.id as keyof IPlanWorkPeriods,
-                            Number(value),
-                            Number(info.row.original[info.column.id as keyof IPprData])
-                          );
-                      }
-                    }}
-                    {...getColumnSettings(info.column.id, pprYearStatus, currentTimePeriod, pprMonthsStatuses)}
-                  />
-                );
-              },
-            });
-          }),
-        ],
-      });
-    }),
-  ];
+function getPlanFactColumns(pprTimePeriod: TPprTimePeriod, option?: TFilterPlanFactOption): Array<keyof IPprData> {
+  switch (option) {
+    case "SHOW_ONLY_PLAN":
+      return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_plan_time`];
+    case "SHOW_ONLY_FACT":
+      return [`${pprTimePeriod}_fact_work`, `${pprTimePeriod}_fact_norm_time`, `${pprTimePeriod}_fact_time`];
+    case "SHOW_ONLY_VALUES":
+      return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_fact_work`];
+    default:
+      return [
+        `${pprTimePeriod}_plan_work`,
+        `${pprTimePeriod}_plan_time`,
+        `${pprTimePeriod}_fact_work`,
+        `${pprTimePeriod}_fact_norm_time`,
+        `${pprTimePeriod}_fact_time`,
+      ];
+  }
+}
+
+export const useCreateColumns = (): {
+  columnsDefault: (keyof IPprData)[];
+  timePeriods: TPprTimePeriod[];
+  timePeriodsColums: (keyof IPprData)[][];
+} => {
+  const { filterColumns, currentTimePeriod } = usePprTableSettings();
+  return {
+    columnsDefault,
+    timePeriods: getTimePeriodsColumns(currentTimePeriod, filterColumns.months),
+    timePeriodsColums: getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) =>
+      getPlanFactColumns(month, filterColumns.planFact)
+    ),
+  };
 };

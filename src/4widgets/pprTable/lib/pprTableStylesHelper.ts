@@ -1,6 +1,8 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
-import { isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
-import { IPprData } from "@/2entities/ppr";
+import { TPprTimePeriod, isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, checkIsColumnField } from "@/2entities/ppr";
+import { ITableCellProps } from "@/1shared/ui/table";
+import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 
 export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
   switch (key) {
@@ -38,7 +40,73 @@ export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
     return { fontSize: "0.7vw" };
   }
   if (isStringStartsWithTimePeriodName(key)) {
-    return { backgroundColor: setBgColor(key), verticalAlign:'bottom' };
+    return { backgroundColor: setBgColor(key), verticalAlign: "bottom" };
+  }
+  return {};
+}
+
+export function getColumnSettings(
+  coulumnName: keyof Partial<IPprData> | string,
+  pprYearStatus: TYearPprStatus,
+  timePeriod: TPprTimePeriod,
+  pprMonthStatuses?: TAllMonthStatuses,
+  pprView?: TCorrectionView
+): ITableCellProps | undefined {
+  if (!checkIsColumnField(coulumnName)) {
+    return;
+  }
+  if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {
+    return {};
+  }
+  if (pprYearStatus === "plan_creating") {
+    const settings: { [key in keyof IPprData]?: ITableCellProps } = {
+      name: { cellType: "textarea" },
+      location: { cellType: "textarea" },
+      line_class: { cellType: "input" },
+      measure: { cellType: "input" },
+      total_count: { cellType: "input" },
+      entry_year: { cellType: "input" },
+      periodicity_normal: { cellType: "input" },
+      periodicity_fact: { cellType: "input" },
+      last_maintenance_year: { cellType: "input" },
+      norm_of_time: { cellType: "input" },
+      norm_of_time_document: { cellType: "textarea" },
+      unity: { cellType: "input" },
+      jan_plan_work: { cellType: "input" },
+      feb_plan_work: { cellType: "input" },
+      mar_plan_work: { cellType: "input" },
+      apr_plan_work: { cellType: "input" },
+      may_plan_work: { cellType: "input" },
+      june_plan_work: { cellType: "input" },
+      july_plan_work: { cellType: "input" },
+      aug_plan_work: { cellType: "input" },
+      sept_plan_work: { cellType: "input" },
+      oct_plan_work: { cellType: "input" },
+      nov_plan_work: { cellType: "input" },
+      dec_plan_work: { cellType: "input" },
+      jan_fact_work: { cellType: "input" },
+      feb_fact_work: { cellType: "input" },
+      mar_fact_work: { cellType: "input" },
+      apr_fact_work: { cellType: "input" },
+      may_fact_work: { cellType: "input" },
+      june_fact_work: { cellType: "input" },
+      july_fact_work: { cellType: "input" },
+      aug_fact_work: { cellType: "input" },
+      sept_fact_work: { cellType: "input" },
+      oct_fact_work: { cellType: "input" },
+      nov_fact_work: { cellType: "input" },
+      dec_fact_work: { cellType: "input" },
+    };
+    return settings[coulumnName];
+  }
+  if (pprYearStatus !== "in_process" || timePeriod === "year" || !pprMonthStatuses) {
+    return {};
+  }
+  if (pprMonthStatuses[timePeriod] === "plan_creating" && coulumnName === `${timePeriod}_plan_work`) {
+    return { cellType: "input" };
+  }
+  if (pprMonthStatuses[timePeriod] === "fact_filling" && coulumnName === `${timePeriod}_fact_work`) {
+    return { cellType: "input" };
   }
   return {};
 }
