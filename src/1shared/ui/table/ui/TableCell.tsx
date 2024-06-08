@@ -10,8 +10,8 @@ export interface ITableCellProps {
   isVertical?: boolean;
   className?: string;
   bgColor?: string;
-  index: number;
-  field: string;
+  index?: number;
+  field?: string;
   handleBlur?: (index: number, field: string, value: string) => void;
 }
 
@@ -34,7 +34,7 @@ export const TableCell: FC<ITableCellProps> = (props) => {
         <textarea
           value={String(currentValue)}
           onChange={(e) => setCurrentValue(e.target.value)}
-          onBlur={() => handleBlur && handleBlur(index, field, String(currentValue))}
+          onBlur={() => handleBlur && index && field && handleBlur(index, field, String(currentValue))}
           className={clsx(
             "cursor-pointer focus:cursor-text resize-none border-none bg-inherit transition-transform",
             !isVertical && "w-full",
@@ -48,7 +48,7 @@ export const TableCell: FC<ITableCellProps> = (props) => {
         <input
           value={String(currentValue || "")}
           onChange={(e) => setCurrentValue(e.target.value)}
-          onBlur={() => handleBlur && handleBlur(index, field, String(currentValue || ""))}
+          onBlur={() => handleBlur && index && field && handleBlur(index, field, String(currentValue || ""))}
           className={clsx(
             "w-full cursor-pointer focus:cursor-text border-none bg-transparent transition-transform",
             isVertical && "h-[80px] focus:rotate-90 focus-within:bg-white"

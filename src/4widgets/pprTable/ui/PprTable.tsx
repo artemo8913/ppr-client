@@ -3,11 +3,12 @@ import { FC, useCallback, useMemo, useRef } from "react";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
-import { getTdStyle } from "../lib/pprTableStylesHelper";
+import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
 import { pprDataColumnsFields } from "@/2entities/ppr/model/ppr.schema";
-import { getColumnSettings } from "../lib/pprTableColumnsHelper";
+import { getColumnSettings, getColumnTitle } from "../lib/pprTableColumnsHelper";
 import { PprTableCellMemo } from "./PprTableCell";
+import { useCreateColumns } from "./PprTableColumns";
 
 const STICKY_COLUMN_INDEX_FROM = 11;
 
@@ -34,6 +35,8 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     [updatePprData]
   );
 
+  const columns = useCreateColumns();
+  
   return (
     <table
       style={{
@@ -43,10 +46,21 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         position: "relative",
       }}
     >
+      <thead>
+        {columns.map((field, index) => (
+          <th key={field + index} className="border border-black relative" style={{ ...getThStyle(field) }}>
+            <PprTableCellMemo
+              isWithWorkControl={field === "name" && !isCombineSameWorks}
+              isVertical
+              value={getColumnTitle(field)}
+            />
+          </th>
+        ))}
+      </thead>
       <tbody>
         {ppr?.data.map((row) => (
           <tr key={row.id}>
-            {pprDataColumnsFields.map((field, index) => {
+            {columns.map((field, index) => {
               return (
                 <td
                   key={field + index}

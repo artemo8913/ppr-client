@@ -90,10 +90,10 @@ function isColumnName(column: keyof IPprData | string): column is keyof IPprData
 }
 
 export function getColumnTitle(column: keyof IPprData | string): string {
-  if (isColumnName(column)) {
-    return columnsTitles[column] || "";
+  if (!isColumnName(column)) {
+    return "";
   }
-  return "";
+  return columnsTitles[column] || findPlanFactTitle(column) || "";
 }
 
 export function getColumnSettings(
@@ -119,30 +119,30 @@ export function getColumnSettings(
       norm_of_time: { cellType: "input" },
       norm_of_time_document: { cellType: "textarea" },
       unity: { cellType: "input" },
-      jan_plan_work: { cellType: "input" },
-      feb_plan_work: { cellType: "input" },
-      mar_plan_work: { cellType: "input" },
-      apr_plan_work: { cellType: "input" },
-      may_plan_work: { cellType: "input" },
-      june_plan_work: { cellType: "input" },
-      july_plan_work: { cellType: "input" },
-      aug_plan_work: { cellType: "input" },
-      sept_plan_work: { cellType: "input" },
-      oct_plan_work: { cellType: "input" },
-      nov_plan_work: { cellType: "input" },
-      dec_plan_work: { cellType: "input" },
-      jan_fact_work: { cellType: "input" },
-      feb_fact_work: { cellType: "input" },
-      mar_fact_work: { cellType: "input" },
-      apr_fact_work: { cellType: "input" },
-      may_fact_work: { cellType: "input" },
-      june_fact_work: { cellType: "input" },
-      july_fact_work: { cellType: "input" },
-      aug_fact_work: { cellType: "input" },
-      sept_fact_work: { cellType: "input" },
-      oct_fact_work: { cellType: "input" },
-      nov_fact_work: { cellType: "input" },
-      dec_fact_work: { cellType: "input" },
+      jan_plan_work: { cellType: "input", isVertical: true },
+      feb_plan_work: { cellType: "input", isVertical: true },
+      mar_plan_work: { cellType: "input", isVertical: true },
+      apr_plan_work: { cellType: "input", isVertical: true },
+      may_plan_work: { cellType: "input", isVertical: true },
+      june_plan_work: { cellType: "input", isVertical: true },
+      july_plan_work: { cellType: "input", isVertical: true },
+      aug_plan_work: { cellType: "input", isVertical: true },
+      sept_plan_work: { cellType: "input", isVertical: true },
+      oct_plan_work: { cellType: "input", isVertical: true },
+      nov_plan_work: { cellType: "input", isVertical: true },
+      dec_plan_work: { cellType: "input", isVertical: true },
+      jan_fact_work: { cellType: "input", isVertical: true },
+      feb_fact_work: { cellType: "input", isVertical: true },
+      mar_fact_work: { cellType: "input", isVertical: true },
+      apr_fact_work: { cellType: "input", isVertical: true },
+      may_fact_work: { cellType: "input", isVertical: true },
+      june_fact_work: { cellType: "input", isVertical: true },
+      july_fact_work: { cellType: "input", isVertical: true },
+      aug_fact_work: { cellType: "input", isVertical: true },
+      sept_fact_work: { cellType: "input", isVertical: true },
+      oct_fact_work: { cellType: "input", isVertical: true },
+      nov_fact_work: { cellType: "input", isVertical: true },
+      dec_fact_work: { cellType: "input", isVertical: true },
     };
     return settings[coulumnName];
   }
