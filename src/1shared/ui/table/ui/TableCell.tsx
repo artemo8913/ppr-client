@@ -10,11 +10,13 @@ export interface ITableCellProps {
   isVertical?: boolean;
   className?: string;
   bgColor?: string;
-  handleBlur?: (value: string) => void;
+  index: number;
+  field: string;
+  handleBlur?: (index: number, field: string, value: string) => void;
 }
 
 export const TableCell: FC<ITableCellProps> = (props) => {
-  const { cellType = "none", value, isVertical = false, bgColor, className, handleBlur } = props;
+  const { cellType = "none", value, isVertical = false, bgColor, className, handleBlur, index, field } = props;
   const [currentValue, setCurrentValue] = useState(value);
   return (
     /* Контейнер содержимого ячейки */
@@ -32,7 +34,7 @@ export const TableCell: FC<ITableCellProps> = (props) => {
         <textarea
           value={String(currentValue)}
           onChange={(e) => setCurrentValue(e.target.value)}
-          onBlur={() => handleBlur && handleBlur(String(currentValue))}
+          onBlur={() => handleBlur && handleBlur(index, field, String(currentValue))}
           className={clsx(
             "cursor-pointer focus:cursor-text resize-none border-none bg-inherit transition-transform",
             !isVertical && "w-full",
@@ -46,7 +48,7 @@ export const TableCell: FC<ITableCellProps> = (props) => {
         <input
           value={String(currentValue || "")}
           onChange={(e) => setCurrentValue(e.target.value)}
-          onBlur={() => handleBlur && handleBlur(String(currentValue || ""))}
+          onBlur={() => handleBlur && handleBlur(index, field, String(currentValue || ""))}
           className={clsx(
             "w-full cursor-pointer focus:cursor-text border-none bg-transparent transition-transform",
             isVertical && "h-[80px] focus:rotate-90 focus-within:bg-white"

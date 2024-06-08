@@ -20,8 +20,8 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
   }
   return (
     <PprTableSettingsProvider>
-      <PprProvider pprFromResponce={ppr}>
-        <WorkModalProvider>
+      <WorkModalProvider>
+        <PprProvider pprFromResponce={ppr}>
           <PprTableControlPanel ppr={ppr} />
           <Tabs
             defaultActiveKey="2"
@@ -63,8 +63,8 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
             ]}
           />
           <WorkModal data={works} />
-        </WorkModalProvider>
-      </PprProvider>
+        </PprProvider>
+      </WorkModalProvider>
     </PprTableSettingsProvider>
   );
 }

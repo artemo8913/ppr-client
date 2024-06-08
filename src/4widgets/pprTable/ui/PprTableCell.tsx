@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
 import { IPprData } from "@/2entities/ppr";
@@ -15,3 +15,5 @@ export const PprTableCell: FC<IPprTableCellProps> = ({ pprData, indexToPlace, is
   }
   return <TableCell {...otherProps} />;
 };
+
+export const PprTableCellMemo = memo(PprTableCell);

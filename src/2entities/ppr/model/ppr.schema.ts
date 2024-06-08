@@ -296,7 +296,7 @@ const normTimePeriods: (keyof IFactNormTimePeriods)[] = [
   "dec_fact_norm_time",
 ] as const;
 
-const pprDataColumnsFields: (keyof IPprData)[] = [
+export const pprDataColumnsFields: (keyof IPprData)[] = [
   "id",
   "workId",
   "is_work_aproved",
