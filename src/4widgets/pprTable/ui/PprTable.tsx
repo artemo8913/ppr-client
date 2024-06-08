@@ -2,7 +2,7 @@
 import { FC, useMemo, useRef } from "react";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
+import { TAllMonthStatuses, TYearPprStatus, checkIsPlanWorkPeriodField } from "@/2entities/ppr";
 import { getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
 import { getColumnSettings, getColumnTitle } from "../lib/pprTableColumnsHelper";
@@ -70,24 +70,24 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         </tr>
       </thead>
       <tbody>
-        {ppr?.data.map((pprData) => (
-          <tr key={pprData.id}>
-            {columnsDefault.concat(timePeriodsColums.flat(1)).map((field, index) => {
+        {ppr?.data.map((pprData, rowIndex) => (
+          <tr key={pprData.id + rowIndex}>
+            {columnsDefault.concat(timePeriodsColums.flat(1)).map((field, colIndex) => {
               return (
                 <td
-                  key={field + index}
+                  key={field + colIndex}
                   className="border border-black relative"
                   style={{
                     ...getTdStyle(field),
                   }}
                 >
-                  {isArrowsShow ? (
+                  {isArrowsShow && checkIsPlanWorkPeriodField(field) ? (
                     <CorrectionArrowsConteiner fieldFrom={field} objectId={pprData.id} planCellRef={planCellRef} />
                   ) : null}
                   <PprTableCellMemo
                     {...getColumnSettings(field, pprYearStatus, currentTimePeriod, pprMonthsStatuses)}
                     pprData={pprData}
-                    indexData={index}
+                    indexData={rowIndex}
                     field={field}
                     updatePprData={updatePprData}
                     updateNewValueInCorrection={updateNewValueInCorrection}

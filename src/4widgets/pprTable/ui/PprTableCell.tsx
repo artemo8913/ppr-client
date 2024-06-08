@@ -22,13 +22,13 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 }) => {
   const handleChange = useCallback(
     (newValue: string) => {
-      if (!pprData || !indexData || !field || !pprData[field] || !checkIsPlanFactWorkPeriodField(field)) {
+      if (!pprData || indexData === undefined || !field || !pprData[field]) {
         return;
       }
-      if (pprData?.is_work_aproved) {
-        updateNewValueInCorrection && updateNewValueInCorrection(pprData.id, field, Number(newValue), pprData[field]);
-      } else {
-        updatePprData && updatePprData(indexData, field, newValue);
+      if (pprData?.is_work_aproved && checkIsPlanFactWorkPeriodField(field) && updateNewValueInCorrection) {
+        updateNewValueInCorrection(pprData.id, field, Number(newValue), pprData[field]);
+      } else if (updatePprData) {
+        updatePprData(indexData, field, newValue);
       }
     },
     [updatePprData, updateNewValueInCorrection, pprData, field, indexData]
