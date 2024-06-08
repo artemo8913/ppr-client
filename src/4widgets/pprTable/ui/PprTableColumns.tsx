@@ -1,15 +1,34 @@
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData } from "@/2entities/ppr";
-import { columnsDefault, getPlanFactColumns, getTimePeriodsColumns } from "../lib/pprTableColumnsHelper";
+import { getPlanFactColumns, getTimePeriodsColumns } from "../lib/pprTableColumnsHelper";
+import { TPprTimePeriod } from "@/1shared/lib/date";
 
-export const useCreateColumns = (): (keyof IPprData)[] => {
+const columnsDefault: Array<keyof IPprData> = [
+  "name",
+  "location",
+  "line_class",
+  "total_count",
+  "entry_year",
+  "periodicity_normal",
+  "periodicity_fact",
+  "last_maintenance_year",
+  "norm_of_time",
+  "norm_of_time_document",
+  "measure",
+  "unity",
+] as const;
+
+export const useCreateColumns = (): {
+  columnsDefault: (keyof IPprData)[];
+  timePeriods: TPprTimePeriod[];
+  timePeriodsColums: (keyof IPprData)[][];
+} => {
   const { filterColumns, currentTimePeriod } = usePprTableSettings();
-  return [
-    // Часть таблицы до времени
-    ...columnsDefault,
-    // Часть таблицы с данными объемов и чел.-ч по году и месяцами
-    ...getTimePeriodsColumns(currentTimePeriod, filterColumns.months)
-      .map((month) => getPlanFactColumns(month, filterColumns.planFact))
-      .flat(1),
-  ];
+  return {
+    columnsDefault,
+    timePeriods: getTimePeriodsColumns(currentTimePeriod, filterColumns.months),
+    timePeriodsColums: getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) =>
+      getPlanFactColumns(month, filterColumns.planFact)
+    ),
+  };
 };

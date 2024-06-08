@@ -2,36 +2,7 @@ import { getCurrentQuartal, getQuartalMonths } from "@/1shared/lib/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import { TPprTimePeriod, pprTimePeriods } from "@/1shared/lib/date";
 import { TFilterTimePeriodOption, TFilterPlanFactOption } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, pprTableColumnsSet } from "@/2entities/ppr";
-
-export function findPlanFactTitle(string: string) {
-  if (string.endsWith("plan_work")) {
-    return "план, кол-во";
-  } else if (string.endsWith("fact_work")) {
-    return "факт, кол-во";
-  } else if (string.endsWith("plan_time")) {
-    return "норм. время на плановый объем, чел.-ч";
-  } else if (string.endsWith("fact_norm_time")) {
-    return "трудозатраты по норме времени, чел.-ч";
-  } else if (string.endsWith("fact_time")) {
-    return "фактические трудозатраты, чел.-ч";
-  }
-}
-
-export const columnsDefault: Array<keyof IPprData> = [
-  "name",
-  "location",
-  "line_class",
-  "total_count",
-  "entry_year",
-  "periodicity_normal",
-  "periodicity_fact",
-  "last_maintenance_year",
-  "norm_of_time",
-  "norm_of_time_document",
-  "measure",
-  "unity",
-] as const;
+import { IPprData, TAllMonthStatuses, TYearPprStatus, checkIsColumnField } from "@/2entities/ppr";
 
 export function getTimePeriodsColumns(
   currentTimePeriod?: TPprTimePeriod,
@@ -85,12 +56,22 @@ const columnsTitles: { [key in keyof IPprData]?: string } = {
   unity: "Подразделение / исполнитель",
 };
 
-function isColumnName(column: keyof IPprData | string): column is keyof IPprData {
-  return pprTableColumnsSet.has(column);
+function findPlanFactTitle(string: string) {
+  if (string.endsWith("plan_work")) {
+    return "план, кол-во";
+  } else if (string.endsWith("fact_work")) {
+    return "факт, кол-во";
+  } else if (string.endsWith("plan_time")) {
+    return "норм. время на плановый объем, чел.-ч";
+  } else if (string.endsWith("fact_norm_time")) {
+    return "трудозатраты по норме времени, чел.-ч";
+  } else if (string.endsWith("fact_time")) {
+    return "фактические трудозатраты, чел.-ч";
+  }
 }
 
 export function getColumnTitle(column: keyof IPprData | string): string {
-  if (!isColumnName(column)) {
+  if (!checkIsColumnField(column)) {
     return "";
   }
   return columnsTitles[column] || findPlanFactTitle(column) || "";
@@ -102,7 +83,7 @@ export function getColumnSettings(
   timePeriod: TPprTimePeriod,
   pprMonthStatuses?: TAllMonthStatuses
 ): ITableCellProps | undefined {
-  if (!isColumnName(coulumnName)) {
+  if (!checkIsColumnField(coulumnName)) {
     return;
   }
   if (pprYearStatus === "plan_creating") {
@@ -119,30 +100,30 @@ export function getColumnSettings(
       norm_of_time: { cellType: "input" },
       norm_of_time_document: { cellType: "textarea" },
       unity: { cellType: "input" },
-      jan_plan_work: { cellType: "input", isVertical: true },
-      feb_plan_work: { cellType: "input", isVertical: true },
-      mar_plan_work: { cellType: "input", isVertical: true },
-      apr_plan_work: { cellType: "input", isVertical: true },
-      may_plan_work: { cellType: "input", isVertical: true },
-      june_plan_work: { cellType: "input", isVertical: true },
-      july_plan_work: { cellType: "input", isVertical: true },
-      aug_plan_work: { cellType: "input", isVertical: true },
-      sept_plan_work: { cellType: "input", isVertical: true },
-      oct_plan_work: { cellType: "input", isVertical: true },
-      nov_plan_work: { cellType: "input", isVertical: true },
-      dec_plan_work: { cellType: "input", isVertical: true },
-      jan_fact_work: { cellType: "input", isVertical: true },
-      feb_fact_work: { cellType: "input", isVertical: true },
-      mar_fact_work: { cellType: "input", isVertical: true },
-      apr_fact_work: { cellType: "input", isVertical: true },
-      may_fact_work: { cellType: "input", isVertical: true },
-      june_fact_work: { cellType: "input", isVertical: true },
-      july_fact_work: { cellType: "input", isVertical: true },
-      aug_fact_work: { cellType: "input", isVertical: true },
-      sept_fact_work: { cellType: "input", isVertical: true },
-      oct_fact_work: { cellType: "input", isVertical: true },
-      nov_fact_work: { cellType: "input", isVertical: true },
-      dec_fact_work: { cellType: "input", isVertical: true },
+      jan_plan_work: { cellType: "input" },
+      feb_plan_work: { cellType: "input" },
+      mar_plan_work: { cellType: "input" },
+      apr_plan_work: { cellType: "input" },
+      may_plan_work: { cellType: "input" },
+      june_plan_work: { cellType: "input" },
+      july_plan_work: { cellType: "input" },
+      aug_plan_work: { cellType: "input" },
+      sept_plan_work: { cellType: "input" },
+      oct_plan_work: { cellType: "input" },
+      nov_plan_work: { cellType: "input" },
+      dec_plan_work: { cellType: "input" },
+      jan_fact_work: { cellType: "input" },
+      feb_fact_work: { cellType: "input" },
+      mar_fact_work: { cellType: "input" },
+      apr_fact_work: { cellType: "input" },
+      may_fact_work: { cellType: "input" },
+      june_fact_work: { cellType: "input" },
+      july_fact_work: { cellType: "input" },
+      aug_fact_work: { cellType: "input" },
+      sept_fact_work: { cellType: "input" },
+      oct_fact_work: { cellType: "input" },
+      nov_fact_work: { cellType: "input" },
+      dec_fact_work: { cellType: "input" },
     };
     return settings[coulumnName];
   }

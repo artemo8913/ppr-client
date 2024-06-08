@@ -321,6 +321,25 @@ export const pprDataColumnsFields: (keyof IPprData)[] = [
   ...factTimePeriods,
 ] as const;
 
-export const pprTableColumnsSet: Set<keyof IPprData | string> = new Set(pprDataColumnsFields);
+const pprTableColumnsSet: Set<keyof IPprData | string> = new Set(pprDataColumnsFields);
 
-export const planWorkPeriodsSet: Set<keyof IPlanWorkPeriods | string> = new Set(planWorkPeriods);
+const planWorkPeriodsSet: Set<keyof IPlanWorkPeriods | string> = new Set([...planWorkPeriods]);
+
+const planFactWorkPeriodsSet: Set<keyof IPlanWorkPeriods | keyof IFactWorkPeriods | string> = new Set([
+  ...planWorkPeriods,
+  ...factWorkPeriods,
+]);
+
+export function checkIsColumnField(column: keyof IPprData | string): column is keyof IPprData {
+  return pprTableColumnsSet.has(column);
+}
+
+export function checkIsPlanWorkPeriodField(column: keyof IPprData | string): column is keyof IPlanWorkPeriods {
+  return planWorkPeriodsSet.has(column);
+}
+
+export function checkIsPlanFactWorkPeriodField(
+  column: keyof IPprData | string
+): column is keyof IPlanWorkPeriods | keyof IFactWorkPeriods {
+  return planFactWorkPeriodsSet.has(column);
+}
