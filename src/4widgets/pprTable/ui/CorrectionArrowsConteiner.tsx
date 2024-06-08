@@ -44,7 +44,6 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
     setBasicArrowWidth(width * widthFactor);
   }, [filterColumns, planCellRef]);
 
-  console.log(getTransfers(objectId, fieldFrom));
   return (
     <div>
       {getTransfers(objectId, fieldFrom)?.map((field, index) => {
