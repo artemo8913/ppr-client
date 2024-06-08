@@ -19,6 +19,7 @@ export type {
 export {
   pprDataColumnsFields,
   planWorkPeriods,
+  getPlanFieldPair,
   checkIsColumnField,
   checkIsPlanFactWorkPeriodField,
   checkIsPlanWorkPeriodField,

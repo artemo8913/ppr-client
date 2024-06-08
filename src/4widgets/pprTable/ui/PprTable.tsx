@@ -9,6 +9,7 @@ import { getColumnTitle } from "../lib/pprTableColumnsHelper";
 import { PprTableCellMemo } from "./PprTableCell";
 import { useCreateColumns } from "./PprTableColumns";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import { checkIsWorkAndTimeColumnsFieldsSet } from "@/2entities/ppr/model/ppr.schema";
 
 interface IPprTableProps {}
 
@@ -87,7 +88,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                       pprMonthsStatuses,
                       correctionView
                     )}
-                    isVertical={checkIsPlanWorkPeriodField(columnName)}
+                    isVertical={checkIsWorkAndTimeColumnsFieldsSet(columnName)}
                     pprData={pprData}
                     indexData={rowIndex}
                     field={columnName}

@@ -2,7 +2,7 @@
 import { FC, memo, useCallback } from "react";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
-import { IPprData, checkIsPlanFactWorkPeriodField } from "@/2entities/ppr";
+import { IPprData, checkIsPlanWorkPeriodField } from "@/2entities/ppr";
 
 interface IPprTableCellProps extends ITableCellProps {
   pprData?: IPprData;
@@ -22,10 +22,10 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 }) => {
   const handleChange = useCallback(
     (newValue: string) => {
-      if (!pprData || indexData === undefined || !field || !pprData[field]) {
+      if (!pprData || indexData === undefined || !field) {
         return;
       }
-      if (pprData?.is_work_aproved && checkIsPlanFactWorkPeriodField(field) && updateNewValueInCorrection) {
+      if (pprData?.is_work_aproved && checkIsPlanWorkPeriodField(field) && updateNewValueInCorrection) {
         updateNewValueInCorrection(pprData.id, field, Number(newValue), pprData[field]);
       } else if (updatePprData) {
         updatePprData(indexData, field, newValue);
