@@ -115,12 +115,12 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
   });
   return (
     <div className="overflow-auto">
-      <table className="shadow-lg">
+      <table className="text-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th className="border" key={header.id} colSpan={header.colSpan}>
+                <th className="border border-black" key={header.id} colSpan={header.colSpan}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
@@ -131,7 +131,11 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td className="border" key={cell.id} style={{ backgroundColor: setBgColor(cell.column.id) }}>
+                <td
+                  className="border border-black"
+                  key={cell.id}
+                  style={{ backgroundColor: setBgColor(cell.column.id) }}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
@@ -142,12 +146,7 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
           {table.getFooterGroups().map((footerGroup) => (
             <tr key={footerGroup.id}>
               {footerGroup.headers.map((header) => (
-                <td
-                  className="font-bold "
-                  key={header.id}
-                  colSpan={header.colSpan}
-                  style={{ backgroundColor: setBgColor(header.column.id) }}
-                >
+                <td className="font-bold text-center border" key={header.id} colSpan={header.colSpan}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
                 </td>
               ))}
