@@ -13,7 +13,7 @@ import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { ppr, updatePprData, updateNewValueInCorrection } = usePpr();
+  const { ppr, getCorrectionValue, updatePprData, updateNewValueInCorrection } = usePpr();
   const { columnsDefault, timePeriods, timePeriodsColums } = useCreateColumns();
   const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, currentTimePeriod } = usePprTableSettings();
   const pprYearStatus: TYearPprStatus = ppr?.status || "template";
@@ -43,7 +43,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
               rowSpan={2}
               style={{ ...getThStyle(field), height: `${headerHeightPx}px` }}
             >
-              <PprTableCellMemo isVertical value={getColumnTitle(field)} />
+              <PprTableCellMemo isVertical field={field} value={getColumnTitle(field)} />
             </th>
           ))}
           {timePeriods.map((month) => (
@@ -81,12 +81,17 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                   ) : null}
                   <PprTableCellMemo
                     {...getColumnSettings(columnName, pprYearStatus, currentTimePeriod, pprMonthsStatuses)}
+                    isVertical={checkIsPlanWorkPeriodField(columnName)}
                     pprData={pprData}
                     indexData={rowIndex}
                     field={columnName}
                     updatePprData={updatePprData}
                     updateNewValueInCorrection={updateNewValueInCorrection}
-                    value={pprData[columnName]}
+                    value={
+                      checkIsPlanWorkPeriodField(columnName)
+                        ? Number(pprData[columnName]) + getCorrectionValue(pprData.id, columnName)
+                        : pprData[columnName]
+                    }
                   />
                 </td>
               );
