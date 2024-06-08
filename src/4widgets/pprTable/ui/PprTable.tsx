@@ -80,7 +80,13 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                     <CorrectionArrowsConteiner fieldFrom={columnName} objectId={pprData.id} planCellRef={planCellRef} />
                   ) : null}
                   <PprTableCellMemo
-                    {...getColumnSettings(columnName, pprYearStatus, currentTimePeriod, pprMonthsStatuses)}
+                    {...getColumnSettings(
+                      columnName,
+                      pprYearStatus,
+                      currentTimePeriod,
+                      pprMonthsStatuses,
+                      correctionView
+                    )}
                     isVertical={checkIsPlanWorkPeriodField(columnName)}
                     pprData={pprData}
                     indexData={rowIndex}

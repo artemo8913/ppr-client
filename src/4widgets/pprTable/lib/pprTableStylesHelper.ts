@@ -2,6 +2,7 @@ import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TPprTimePeriod, isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
 import { IPprData, TAllMonthStatuses, TYearPprStatus, checkIsColumnField } from "@/2entities/ppr";
 import { ITableCellProps } from "@/1shared/ui/table";
+import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 
 export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
   switch (key) {
@@ -48,10 +49,14 @@ export function getColumnSettings(
   coulumnName: keyof Partial<IPprData> | string,
   pprYearStatus: TYearPprStatus,
   timePeriod: TPprTimePeriod,
-  pprMonthStatuses?: TAllMonthStatuses
+  pprMonthStatuses?: TAllMonthStatuses,
+  pprView?: TCorrectionView
 ): ITableCellProps | undefined {
   if (!checkIsColumnField(coulumnName)) {
     return;
+  }
+  if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {
+    return {};
   }
   if (pprYearStatus === "plan_creating") {
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
