@@ -1,7 +1,10 @@
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import {
+  TFilterPlanFactOption,
+  TFilterTimePeriodOption,
+  usePprTableSettings,
+} from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData } from "@/2entities/ppr";
-import { getPlanFactColumns, getTimePeriodsColumns } from "../lib/pprTableColumnsHelper";
-import { TPprTimePeriod } from "@/1shared/lib/date";
+import { TPprTimePeriod, getCurrentQuartal, getQuartalMonths, pprTimePeriods } from "@/1shared/lib/date";
 
 const columnsDefault: Array<keyof IPprData> = [
   "name",
@@ -17,6 +20,37 @@ const columnsDefault: Array<keyof IPprData> = [
   "measure",
   "unity",
 ] as const;
+
+function getTimePeriodsColumns(currentTimePeriod?: TPprTimePeriod, option?: TFilterTimePeriodOption): TPprTimePeriod[] {
+  switch (option) {
+    case "SHOW_ONLY_CURRENT_MONTH":
+      return pprTimePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
+    case "SHOW_CURRENT_QUARTAL":
+      const result: TPprTimePeriod[] = ["year"];
+      return result.concat(getQuartalMonths(getCurrentQuartal(currentTimePeriod)));
+    default:
+      return pprTimePeriods;
+  }
+}
+
+function getPlanFactColumns(pprTimePeriod: TPprTimePeriod, option?: TFilterPlanFactOption): Array<keyof IPprData> {
+  switch (option) {
+    case "SHOW_ONLY_PLAN":
+      return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_plan_time`];
+    case "SHOW_ONLY_FACT":
+      return [`${pprTimePeriod}_fact_work`, `${pprTimePeriod}_fact_norm_time`, `${pprTimePeriod}_fact_time`];
+    case "SHOW_ONLY_VALUES":
+      return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_fact_work`];
+    default:
+      return [
+        `${pprTimePeriod}_plan_work`,
+        `${pprTimePeriod}_plan_time`,
+        `${pprTimePeriod}_fact_work`,
+        `${pprTimePeriod}_fact_norm_time`,
+        `${pprTimePeriod}_fact_time`,
+      ];
+  }
+}
 
 export const useCreateColumns = (): {
   columnsDefault: (keyof IPprData)[];
