@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
-import { tymePeriodIntlRu } from "@/1shared/lib/date";
+import { timePeriodIntlRu } from "@/1shared/lib/date";
 import { IPlanWorkPeriods } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 
@@ -36,7 +36,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       </p>
       <h2 className="text-center font-bold">Рапорт</h2>
       <p className="indent-4 text-justify">
-        При планировании ведомости выполненных работ (форма ЭУ-99) на {tymePeriodIntlRu[currentTimePeriod]} месяц
+        При планировании ведомости выполненных работ (форма ЭУ-99) на {timePeriodIntlRu[currentTimePeriod]} месяц
         возникла необходимости корректировки годового плана технического обслуживания ремонта в части:
       </p>
       <p className="indent-4 text-justify">Состава персонала чел.-ч:</p>

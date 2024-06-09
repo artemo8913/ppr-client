@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Badge from "antd/es/badge";
 import Tooltip from "antd/es/tooltip";
-import { TMonth, tymePeriodIntlRu } from "@/1shared/lib/date";
+import { TMonth, timePeriodIntlRu } from "@/1shared/lib/date";
 import { TMonthPprStatus } from "@/2entities/ppr";
 import { stringToMonthStatusIntlRu } from "@/1shared/providers/pprProvider";
 
@@ -30,7 +30,7 @@ export const PprMonthsInfoBadge: FC<IPprMonthsInfoBadgeProps> = ({ month, monthS
   return (
     <Tooltip className="cursor-default" key={month} title={stringToMonthStatusIntlRu(monthStatus)}>
       <div className="flex min-w-3 flex-col justify-center items-center">
-        <span>{tymePeriodIntlRu[month][0]}</span>
+        <span>{timePeriodIntlRu[month][0]}</span>
         <Badge key={month} color={badgeColorByStatus[monthStatus]} />
       </div>
     </Tooltip>
