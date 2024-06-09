@@ -23,7 +23,8 @@ export const TableCell: FC<ITableCellProps> = (props) => {
       className={clsx(
         "w-full flex justify-center items-center bg-transparent [overflow-wrap:anywhere]",
         "border-none focus-within:relative focus-within:z-10",
-        isVertical && "[writing-mode:vertical-rl] rotate-180",
+        isVertical &&
+          "[writing-mode:vertical-rl] focus-within:[writing-mode:horizontal-tb] rotate-180 focus-within:rotate-0",
         className
       )}
     >
@@ -34,9 +35,8 @@ export const TableCell: FC<ITableCellProps> = (props) => {
           onChange={(e) => setCurrentValue(e.target.value)}
           onBlur={() => handleBlur && handleBlur(String(currentValue))}
           className={clsx(
-            "cursor-pointer focus:cursor-text resize-none border-none bg-inherit transition-transform",
-            !isVertical && "w-full",
-            isVertical && "focus:rotate-90 "
+            "cursor-pointer focus:cursor-text resize-none border-none bg-inherit",
+            !isVertical && "w-full"
           )}
           rows={4}
         />
@@ -48,8 +48,8 @@ export const TableCell: FC<ITableCellProps> = (props) => {
           onChange={(e) => setCurrentValue(e.target.value)}
           onBlur={() => handleBlur && handleBlur(String(currentValue || ""))}
           className={clsx(
-            "w-full cursor-pointer focus:cursor-text border-none bg-transparent transition-transform",
-            isVertical && "h-[80px] focus:rotate-90 focus-within:bg-white"
+            "w-full h-[80px] cursor-pointer focus:cursor-text border-none bg-transparent",
+            isVertical && "focus-within:bg-white focus:w-[80px] focus:h-auto"
           )}
           maxLength={8}
         />
