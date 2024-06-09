@@ -13,6 +13,7 @@ export const PprPage = () => {
   return (
     <Tabs
       defaultActiveKey="2"
+      destroyInactiveTabPane
       items={[
         {
           key: "1",
