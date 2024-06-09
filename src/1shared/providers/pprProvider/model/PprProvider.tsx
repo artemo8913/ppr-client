@@ -84,15 +84,15 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     const workPlanCorrections: TWorkPlanCorrection = {};
 
     for (const id in corrections.works) {
+      let yearCorrection = 0;
       const workCorrection = corrections.works[id];
-
       planWorkPeriods.forEach((planPeriod) => {
         if (workCorrection && planPeriod in workCorrection) {
           const existValue = id in workPlanCorrections ? workPlanCorrections[id]![planPeriod] || 0 : 0;
           const additionalValue = workCorrection[planPeriod]?.diff || 0;
-
-          workPlanCorrections[id] = { ...workPlanCorrections[id], [planPeriod]: existValue + additionalValue };
-
+          const newValue = existValue + additionalValue;
+          workPlanCorrections[id] = { ...workPlanCorrections[id], [planPeriod]: newValue };
+          yearCorrection += additionalValue;
           workCorrection[planPeriod]?.transfers?.forEach((field) => {
             const existValue = id in workPlanCorrections ? workPlanCorrections[id]![field.fieldTo] || 0 : 0;
             const additionalValue = field.value;
@@ -100,6 +100,9 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           });
         }
       });
+      if (yearCorrection !== 0 && id in workPlanCorrections) {
+        workPlanCorrections[id]!.year_plan_work = yearCorrection;
+      }
     }
     setWorkPlanCorrections(workPlanCorrections);
   }, []);
@@ -138,15 +141,13 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       return { ...prev, data: prev.data.filter((work) => work.id !== workId) };
     });
   }, []);
-
+  /**Получить значение корректировки по значению поля и объекта */
   const getCorrectionValue = useCallback(
     (workId: string, fieldName: keyof IPlanWorkPeriods | string): number => {
-      if (
-        workId in workPlanCorrections &&
-        fieldName in workPlanCorrections[workId]! &&
-        Object.hasOwn(workPlanCorrections[workId]!, fieldName)
-      ) {
-        return Number(workPlanCorrections[workId]![fieldName as keyof IPlanWorkPeriods]);
+      if (!(workId in workPlanCorrections)) {
+        return 0;
+      } else if (checkIsPlanWorkPeriodField(fieldName)) {
+        return workPlanCorrections[workId]![fieldName] || 0;
       }
       return 0;
     },
@@ -386,7 +387,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
     setPpr({ ...pprFromResponce });
-  }, [pprFromResponce]);
+    handleCorrections(pprFromResponce.corrections);
+  }, [pprFromResponce, handleCorrections]);
 
   useEffect(() => {
     if (ppr?.corrections) {
