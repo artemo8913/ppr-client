@@ -9,8 +9,13 @@ import {
   TCorrectionTransfer,
   TPprCorrections,
   TWorkPlanCorrection,
+  checkIsFactTimePeriodField,
+  checkIsFactWorkPeriodField,
   checkIsPlanWorkPeriodField,
-  getPlanFieldPair,
+  factTimePeriods,
+  factWorkPeriods,
+  getWorkToTimeFactFieldPair,
+  getWorkToTimePlanFieldPair,
   planWorkPeriods,
 } from "@/2entities/ppr";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -96,6 +101,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           workCorrection[planPeriod]?.transfers?.forEach((field) => {
             const existValue = id in workPlanCorrections ? workPlanCorrections[id]![field.fieldTo] || 0 : 0;
             const additionalValue = field.value;
+            yearCorrection += additionalValue;
             workPlanCorrections[id] = { ...workPlanCorrections[id], [field.fieldTo]: existValue + additionalValue };
           });
         }
@@ -168,7 +174,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       if (columnName === "norm_of_time") {
         pprData.norm_of_time = Number(value);
         for (const planWorkPeriodField of planWorkPeriods) {
-          const planTimeField = getPlanFieldPair(planWorkPeriodField);
+          const planTimeField = getWorkToTimePlanFieldPair(planWorkPeriodField);
           if (!planTimeField) {
             continue;
           }
@@ -176,20 +182,31 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         }
       } else if (checkIsPlanWorkPeriodField(columnName)) {
         pprData[columnName] = Number(value || 0);
-        const planTimeField = getPlanFieldPair(columnName);
+        const planTimeField = getWorkToTimePlanFieldPair(columnName);
         pprData.year_plan_work = 0;
         for (const periodField of planWorkPeriods) {
-          if (periodField === "year_plan_work") {
-            continue;
-          } else if (periodField === columnName) {
-            pprData.year_plan_work += Number(value || 0);
-            continue;
-          }
           pprData.year_plan_work += Number(pprData[periodField]);
         }
         pprData.year_plan_time = Number((pprData.year_plan_work * pprData.norm_of_time).toFixed(2));
         if (planTimeField) {
           pprData[planTimeField] = Number((pprData.norm_of_time * pprData[columnName]).toFixed(2));
+        }
+      } else if (checkIsFactWorkPeriodField(columnName)) {
+        pprData[columnName] = Number(value || 0);
+        const factNormTimeField = getWorkToTimeFactFieldPair(columnName);
+        pprData.year_fact_work = 0;
+        for (const periodField of factWorkPeriods) {
+          pprData.year_fact_work += Number(pprData[periodField]);
+        }
+        pprData.year_fact_norm_time = Number((pprData.year_fact_work * pprData.norm_of_time).toFixed(2));
+        if (factNormTimeField) {
+          pprData[factNormTimeField] = Number((pprData.norm_of_time * pprData[columnName]).toFixed(2));
+        }
+      } else if (checkIsFactTimePeriodField(columnName)) {
+        pprData[columnName] = Number(value || 0);
+        pprData.year_fact_time = 0;
+        for (const periodField of factTimePeriods) {
+          pprData.year_fact_time += Number(pprData[periodField]);
         }
       }
       return {
@@ -218,13 +235,13 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         }
         const newDiff = newValue - oldValue;
         const newCorrection = {
-          ...prev.corrections.works[objectId]![fieldName as keyof IPlanWorkPeriods],
+          ...(prev.corrections.works[objectId] && prev.corrections.works[objectId]![fieldName]),
           newValue,
           diff: newDiff,
         };
         const newCorrections = { ...prev.corrections.works[objectId], [fieldName]: { ...newCorrection } };
         if (!newDiff) {
-          delete newCorrections[fieldName as keyof IPlanWorkPeriods];
+          delete newCorrections[fieldName];
         }
         return {
           ...prev,
