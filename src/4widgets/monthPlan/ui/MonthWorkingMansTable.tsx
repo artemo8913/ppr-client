@@ -6,7 +6,9 @@ import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvide
 import { IWorkingManYearPlan } from "@/2entities/ppr";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-const columnHelper = createColumnHelper<IWorkingManYearPlan>();
+const columnHelper = createColumnHelper<
+  IWorkingManYearPlan & { expl_plan?: string; expl_fact?: string; expl_per?: string; all_per?: string }
+>();
 
 const columns = (timePeriod: TPprTimePeriod) => [
   columnHelper.group({
@@ -37,18 +39,18 @@ const columns = (timePeriod: TPprTimePeriod) => [
       }),
     ],
   }),
-  columnHelper.accessor("123", {
+  columnHelper.accessor("expl_plan", {
     header: "Заданно по эксплуатационному плану, чел.-ч",
     footer: "Итого - ",
   }),
   columnHelper.group({
     header: "Выполнение эксплуатационного плана",
     columns: [
-      columnHelper.accessor("1234", {
+      columnHelper.accessor("expl_fact", {
         header: "чел.-ч",
         footer: "Итого - ",
       }),
-      columnHelper.accessor("12345", {
+      columnHelper.accessor("expl_per", {
         header: "%",
         footer: "5%",
       }),
@@ -61,7 +63,7 @@ const columns = (timePeriod: TPprTimePeriod) => [
         header: "факт, чел.-ч",
         footer: "Итого - ",
       }),
-      columnHelper.accessor("123456", {
+      columnHelper.accessor("all_per", {
         header: "%",
         footer: "100%",
       }),
