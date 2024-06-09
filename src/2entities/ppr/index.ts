@@ -19,10 +19,19 @@ export type {
 export {
   pprDataColumnsFields,
   planWorkPeriods,
-  getPlanFieldPair,
+  factWorkPeriods,
+  factTimePeriods,
+  getWorkToTimePlanFieldPair,
+  getTimeToWorkPlanFieldPair,
+  getWorkToTimeFactFieldPair,
+} from "./lib/constFields";
+export {
   checkIsColumnField,
   checkIsPlanFactWorkPeriodField,
   checkIsPlanWorkPeriodField,
+  checkIsPlanTimePeriodField,
   checkIsWorkAndTimeColumnsFieldsSet,
-} from "./model/ppr.schema";
-export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo } from "./model/ppr.actions";
+  checkIsFactWorkPeriodField,
+  checkIsFactTimePeriodField,
+} from "./lib/validateTypes";
+export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";

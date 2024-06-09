@@ -6,7 +6,7 @@ const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/ppr";
 const PPR_SHORT_INFO_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/all_pprs";
 
 export async function getPprTable(id: string) {
-  const query = await fetch(`${PPR_API_URL}/${id}`, { next: { tags: [`ppr-${id}`] } });
+  const query = await fetch(`${PPR_API_URL}/${id}`, { next: { tags: [`ppr-${id}`] }, cache: "no-cache" });
   const responce: Promise<IPpr> = query.json();
   return responce;
 }
