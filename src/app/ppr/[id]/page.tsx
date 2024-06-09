@@ -17,7 +17,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
     <PprTableSettingsProvider>
       <WorkModalProvider>
         <PprProvider pprFromResponce={ppr}>
-          <PprTableControlPanel ppr={ppr} />
+          <PprTableControlPanel />
           <PprPage />
           <WorkModal data={works} />
         </PprProvider>

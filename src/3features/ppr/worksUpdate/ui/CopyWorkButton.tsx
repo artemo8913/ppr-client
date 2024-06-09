@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, memo, useCallback } from "react";
 import Button from "antd/es/button";
 import { CopyOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
@@ -10,9 +10,9 @@ interface ICopyWorkButtonProps extends React.ComponentProps<typeof Button> {
   indexToPlace?: number;
 }
 
-export const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ pprData, indexToPlace }) => {
+const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ pprData, indexToPlace }) => {
   const { addWork } = usePpr();
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     addWork(
       {
         name: pprData?.name,
@@ -28,6 +28,10 @@ export const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ pprData, indexToPlace
       },
       indexToPlace
     );
-  };
+  }, [addWork, indexToPlace, pprData]);
   return <Button onClick={handleClick} size="small" shape="circle" icon={<CopyOutlined />} />;
 };
+
+const CopyWorkButtonMemo = memo(CopyWorkButton);
+
+export { CopyWorkButtonMemo as CopyWorkButton };

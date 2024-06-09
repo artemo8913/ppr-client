@@ -1,14 +1,14 @@
 "use client";
 import { FC, MutableRefObject, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { usePpr } from "@/1shared/providers/pprProvider";
 import { Arrow } from "@/1shared/ui/arrow";
-import { IPlanWorkPeriods, checkIsPlanWorkPeriodField, planWorkPeriods } from "@/2entities/ppr";
+import { IPlanWorkPeriods, TCorrectionTransfer, checkIsPlanWorkPeriodField, planWorkPeriods } from "@/2entities/ppr";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
   objectId: string;
   fieldFrom: keyof IPlanWorkPeriods | string;
+  transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null;
 }
 
 function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
@@ -28,12 +28,11 @@ function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
 
 export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   planCellRef,
-  objectId,
   fieldFrom,
+  transfers,
 }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
   const { filterColumns } = usePprTableSettings();
-  const { getTransfers } = usePpr();
   const fieldFromIndex = checkIsPlanWorkPeriodField(fieldFrom)
     ? planWorkPeriods.indexOf(fieldFrom as keyof IPlanWorkPeriods)
     : undefined;
@@ -44,13 +43,15 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
     setBasicArrowWidth(width * widthFactor);
   }, [filterColumns, planCellRef]);
 
-  const transfers = getTransfers(objectId, fieldFrom)?.map((field, index) => {
+  const arrows = transfers?.map((field, index) => {
     const fieldToIndex = checkIsPlanWorkPeriodField(field.fieldTo) ? planWorkPeriods.indexOf(field.fieldTo) : undefined;
     const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
     return <Arrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
   });
-  if (!transfers || transfers.length === 0) {
+  if (!arrows || arrows.length === 0) {
     return null;
   }
-  return <div>{transfers}</div>;
+  return <div>{arrows}</div>;
 };
+
+// getTransfers(objectId, fieldFrom)
