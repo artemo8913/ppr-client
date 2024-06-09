@@ -70,26 +70,24 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
       <table className="shadow-lg">
         <thead>
           {table.getHeaderGroups().map((headerGroup, rowIndex) => (
-            <tr key={headerGroup.id}>
+            <tr key={headerGroup.id + rowIndex}>
               {rowIndex === 0 && (
                 <th className="border border-black" rowSpan={2}>
                   № п.п.
                 </th>
               )}
-              {headerGroup.headers.map((header) => {
-                return (
-                  <>
-                    <th
-                      className="border border-black"
-                      key={header.id}
-                      style={{ width: header.getSize() }}
-                      colSpan={header.colSpan}
-                    >
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </th>
-                  </>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <>
+                  <th
+                    className="border border-black"
+                    key={header.id}
+                    style={{ width: header.getSize() }}
+                    colSpan={header.colSpan}
+                  >
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                </>
+              ))}
               {rowIndex === 0 && (
                 <th className="border border-black" rowSpan={2}>
                   Примечание
