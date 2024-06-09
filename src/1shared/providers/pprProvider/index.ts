@@ -6,3 +6,4 @@ export {
   stringToMonthStatusIntlRu,
 } from "./lib/pprStatusHelper";
 export { isPprInUserControl } from "./lib/isPprInUserControl";
+export { findPossibleCurrentPprPeriod } from "./lib/findPossibleCurrentPprPeriod";
