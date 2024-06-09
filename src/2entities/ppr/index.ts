@@ -23,5 +23,6 @@ export {
   checkIsColumnField,
   checkIsPlanFactWorkPeriodField,
   checkIsPlanWorkPeriodField,
+  checkIsWorkAndTimeColumnsFieldsSet,
 } from "./model/ppr.schema";
 export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo } from "./model/ppr.actions";
