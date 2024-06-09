@@ -1,159 +1,66 @@
 "use client";
 import { FC } from "react";
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { tymePeriodIntlRu, pprTimePeriods } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCell } from "@/1shared/ui/table";
-import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/ppr";
-import { WorkingManDelete } from "@/3features/pprWorkingMans/delete";
-import { getColumnSettings } from "../lib/workingMansTableSettings";
-
-const columnHelper = createColumnHelper<IWorkingManYearPlan>();
-
-const columns = (status?: TYearPprStatus) => [
-  columnHelper.group({
-    header: "Данные о работнике",
-    columns: [
-      columnHelper.accessor("full_name", {
-        header: "фамилия, имя, отчество",
-        cell: (props) => <TableCell {...getColumnSettings(status)[`full_name`]} value={props.getValue()} />,
-      }),
-      columnHelper.accessor("work_position", {
-        header: "должность, профессия, разряд рабочих, совмещаемые профессии",
-        cell: (props) => <TableCell {...getColumnSettings(status)[`work_position`]} value={props.getValue()} />,
-      }),
-      columnHelper.accessor("participation", {
-        header: "доля участия",
-        footer: "Итого",
-        cell: (props) => <TableCell {...getColumnSettings(status)[`participation`]} value={props.getValue()} />,
-      }),
-    ],
-  }),
-  ...pprTimePeriods.map((time) =>
-    columnHelper.group({
-      header: tymePeriodIntlRu[time],
-      columns: [
-        columnHelper.accessor(`${time}_plan_norm_time`, {
-          header: "по норме, чел.-ч",
-          cell: (props) => (
-            <TableCell
-              value={props.getValue()}
-              handleBlur={(value: string) =>
-                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
-              }
-              {...getColumnSettings(status)[`${time}_plan_norm_time`]}
-            />
-          ),
-          footer: (props) =>
-            props.table
-              .getRowModel()
-              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_plan_norm_time`] || 0), 0),
-        }),
-        columnHelper.accessor(`${time}_plan_tabel_time`, {
-          header: "по табелю, чел.-ч",
-          cell: (props) => (
-            <TableCell
-              value={props.getValue()}
-              handleBlur={(value: string) =>
-                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
-              }
-              {...getColumnSettings(status)[`${time}_plan_tabel_time`]}
-            />
-          ),
-          footer: (props) =>
-            props.table
-              .getRowModel()
-              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_plan_tabel_time`] || 0), 0),
-        }),
-        columnHelper.accessor(`${time}_plan_time`, {
-          header: "план",
-          cell: (props) => <TableCell value={props.getValue()} />,
-          footer: (props) =>
-            props.table
-              .getRowModel()
-              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_plan_time`] || 0), 0),
-        }),
-        columnHelper.accessor(`${time}_fact_time`, {
-          header: "факт",
-          cell: (props) => (
-            <TableCell
-              value={props.getValue()}
-              handleBlur={(value: string) =>
-                props.table.options.meta?.updateData(props.row.index, props.column.id, value)
-              }
-              {...getColumnSettings(status)[`${time}_fact_time`]}
-            />
-          ),
-          footer: (props) =>
-            props.table
-              .getRowModel()
-              .rows.reduce((acc, val) => acc + Number(val.original[`${time}_fact_time`] || 0), 0),
-        }),
-      ],
-    })
-  ),
-];
+import { useCreateColumns } from "../lib/useCreateColumns";
+import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
+import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 interface IWorkingMansTableProps {}
 
 export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
   const { ppr, updateWorkingMan } = usePpr();
-  const table = useReactTable({
-    data: ppr?.peoples || [],
-    columns: [
-      ...columns(ppr?.status),
-      columnHelper.display({
-        header: "Опер-ии",
-        cell: (props) => <WorkingManDelete id={props.row.original.id} />,
-      }),
-    ],
-    meta: {
-      updateData: updateWorkingMan,
-    },
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
+
   return (
-    <div className="overflow-auto">
-      <table className="text-sm">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th className="border border-black" key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
+    <table
+      style={{
+        tableLayout: "fixed",
+        width: "100%",
+      }}
+    >
+      <thead>
+        <tr>
+          {columnsDefault.map((column) => (
+            <th style={getThStyle(column)} className="border border-black" key={column} rowSpan={2}>
+              <TableCell value={getColumnTitle(column)} />
+            </th>
           ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  className="border border-black"
-                  key={cell.id}
-                  style={{ backgroundColor: setBgColor(cell.column.id) }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
+          {timePeriods.map((period) => (
+            <th key={period} colSpan={4} className="border border-black">
+              <TableCell value={stringToTimePeriodIntlRu(period)} />
+            </th>
           ))}
-        </tbody>
-        <tfoot>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <td className="font-bold text-center border" key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
-                </td>
-              ))}
-            </tr>
+        </tr>
+        <tr>
+          {timePeriodsColumns.flat().map((column) => (
+            <th key={column} className="border border-black">
+              <TableCell isVertical value={getColumnTitle(column)} />
+            </th>
           ))}
-        </tfoot>
-      </table>
-    </div>
+        </tr>
+      </thead>
+      <tbody>
+        {ppr?.peoples.map((workingMan) => (
+          <tr key={workingMan.id}>
+            {columnsDefault.concat(timePeriodsColumns.flat()).map((column) => (
+              <td
+                className="border border-black"
+                key={workingMan.id + column}
+                style={{ backgroundColor: setBgColor(column) }}
+              >
+                <TableCell
+                  {...getColumnSettings(column, ppr.status)}
+                  isVertical={column.endsWith("_time")}
+                  value={workingMan[column]}
+                />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };

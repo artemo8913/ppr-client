@@ -1,9 +1,40 @@
 import { ITableCellProps } from "@/1shared/ui/table";
 import { IWorkingManYearPlan, TYearPprStatus } from "@/2entities/ppr";
 
-export function getColumnSettings(status?: TYearPprStatus): { [name in keyof IWorkingManYearPlan]?: ITableCellProps } {
+export const columnsTitles: { [key in keyof IWorkingManYearPlan | string]?: string } = {
+  full_name: "Фамилия, имя, отчество",
+  work_position: "Должность, профессия, разряд рабочих, совмещаемые профессии",
+  participation: "Доля участия",
+};
+
+function findPlanFactTitle(string: string) {
+  if (string.endsWith("plan_norm_time")) {
+    return "по норме, чел.-ч";
+  } else if (string.endsWith("plan_tabel_time")) {
+    return "по табелю, чел.-ч";
+  } else if (string.endsWith("plan_time")) {
+    return "план, чел.-ч";
+  } else if (string.endsWith("fact_time")) {
+    return "факт, чел.-ч";
+  }
+}
+
+export function getColumnTitle(field: string) {
+  return columnsTitles[field] || findPlanFactTitle(field) || "";
+}
+
+export function getThStyle(column: keyof IWorkingManYearPlan): React.CSSProperties {
+  if (column === "full_name") {
+    return { width: "15%" };
+  } else if (column === "work_position") {
+    return { width: "15%" };
+  }
+  return {};
+}
+
+export function getColumnSettings(column: keyof IWorkingManYearPlan, status?: TYearPprStatus): ITableCellProps {
   if (status === "plan_creating") {
-    return {
+    const settings: { [column in keyof IWorkingManYearPlan]?: ITableCellProps } = {
       full_name: { cellType: "textarea" },
       work_position: { cellType: "textarea" },
       participation: { cellType: "input" },
@@ -32,6 +63,7 @@ export function getColumnSettings(status?: TYearPprStatus): { [name in keyof IWo
       nov_plan_tabel_time: { cellType: "input" },
       dec_plan_tabel_time: { cellType: "input" },
     };
+    return settings[column] || {};
   } else if (status === "in_process") {
     return {};
   }
