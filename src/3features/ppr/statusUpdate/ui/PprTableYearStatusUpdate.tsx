@@ -8,7 +8,7 @@ import {
   isAllMonthsPprStatusesIsDone,
   isPprInUserControl,
 } from "@/1shared/providers/pprProvider";
-import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
+import { updatePprTable } from "@/2entities/ppr";
 
 interface IPprTableYearStatusUpdateProps {}
 

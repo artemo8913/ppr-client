@@ -96,6 +96,18 @@ export function getColumnSettings(
       oct_fact_work: { cellType: "input" },
       nov_fact_work: { cellType: "input" },
       dec_fact_work: { cellType: "input" },
+      jan_fact_time: { cellType: "input" },
+      feb_fact_time: { cellType: "input" },
+      mar_fact_time: { cellType: "input" },
+      apr_fact_time: { cellType: "input" },
+      may_fact_time: { cellType: "input" },
+      june_fact_time: { cellType: "input" },
+      july_fact_time: { cellType: "input" },
+      aug_fact_time: { cellType: "input" },
+      sept_fact_time: { cellType: "input" },
+      oct_fact_time: { cellType: "input" },
+      nov_fact_time: { cellType: "input" },
+      dec_fact_time: { cellType: "input" },
     };
     return settings[coulumnName];
   }
@@ -105,7 +117,10 @@ export function getColumnSettings(
   if (pprMonthStatuses[timePeriod] === "plan_creating" && coulumnName === `${timePeriod}_plan_work`) {
     return { cellType: "input" };
   }
-  if (pprMonthStatuses[timePeriod] === "fact_filling" && coulumnName === `${timePeriod}_fact_work`) {
+  if (
+    pprMonthStatuses[timePeriod] === "fact_filling" &&
+    (coulumnName === `${timePeriod}_fact_work` || coulumnName === `${timePeriod}_fact_time`)
+  ) {
     return { cellType: "input" };
   }
   return {};

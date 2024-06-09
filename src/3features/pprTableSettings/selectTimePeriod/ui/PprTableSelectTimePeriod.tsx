@@ -2,9 +2,8 @@
 import Select from "antd/es/select";
 import { FC, useEffect, useMemo } from "react";
 import { TPprTimePeriod, timePeriodIntlRu, pprTimePeriods } from "@/1shared/lib/date";
-import { findPossibleCurrentPprPeriod } from "@/1shared/providers/pprProvider/lib/findPossibleCurrentPprPeriod";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { usePpr } from "@/1shared/providers/pprProvider";
+import { usePpr, findPossibleCurrentPprPeriod } from "@/1shared/providers/pprProvider";
 
 interface IPprTableSelectTimePeriodProps {}
 

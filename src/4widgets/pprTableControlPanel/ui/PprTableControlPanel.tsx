@@ -4,7 +4,6 @@ import Tooltip from "antd/es/tooltip";
 import Button from "antd/es/button";
 import Modal from "antd/es/modal";
 import { SettingOutlined } from "@ant-design/icons";
-import { IPpr } from "@/2entities/ppr";
 import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTimePeriod";

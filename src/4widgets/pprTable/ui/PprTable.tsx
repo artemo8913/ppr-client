@@ -5,8 +5,10 @@ import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvide
 import {
   TAllMonthStatuses,
   TYearPprStatus,
+  checkIsPlanTimePeriodField,
   checkIsPlanWorkPeriodField,
   checkIsWorkAndTimeColumnsFieldsSet,
+  getTimeToWorkPlanFieldPair,
 } from "@/2entities/ppr";
 import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
@@ -73,6 +75,24 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         {ppr?.data.map((pprData, rowIndex) => (
           <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColums.flat()).map((columnName) => {
+              const value = checkIsPlanWorkPeriodField(columnName)
+                ? Number(pprData[columnName]) + getCorrectionValue(pprData.id, columnName)
+                : checkIsPlanTimePeriodField(columnName) && getTimeToWorkPlanFieldPair(columnName)
+                ? Number(pprData[columnName]) +
+                  Number(
+                    (
+                      getCorrectionValue(pprData.id, getTimeToWorkPlanFieldPair(columnName)!) * pprData.norm_of_time
+                    ).toFixed(2)
+                  )
+                : pprData[columnName];
+              const columnSettings = getColumnSettings(
+                columnName,
+                pprYearStatus,
+                currentTimePeriod,
+                pprMonthsStatuses,
+                correctionView
+              );
+              const transfers = getTransfers(pprData.id, columnName);
               return (
                 <td
                   key={pprData.id + columnName}
@@ -81,33 +101,23 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                     ...getTdStyle(columnName),
                   }}
                 >
-                  {isArrowsShow && checkIsPlanWorkPeriodField(columnName) ? (
+                  {isArrowsShow && transfers && checkIsPlanWorkPeriodField(columnName) ? (
                     <CorrectionArrowsConteiner
-                      transfers={getTransfers(pprData.id, columnName)}
+                      transfers={transfers}
                       fieldFrom={columnName}
                       objectId={pprData.id}
                       planCellRef={planCellRef}
                     />
                   ) : null}
                   <PprTableCellMemo
-                    {...getColumnSettings(
-                      columnName,
-                      pprYearStatus,
-                      currentTimePeriod,
-                      pprMonthsStatuses,
-                      correctionView
-                    )}
+                    {...columnSettings}
                     isVertical={checkIsWorkAndTimeColumnsFieldsSet(columnName)}
                     pprData={pprData}
                     indexData={rowIndex}
                     field={columnName}
                     updatePprData={updatePprData}
                     updateNewValueInCorrection={updateNewValueInCorrection}
-                    value={
-                      checkIsPlanWorkPeriodField(columnName)
-                        ? Number(pprData[columnName]) + getCorrectionValue(pprData.id, columnName)
-                        : pprData[columnName]
-                    }
+                    value={value}
                   />
                 </td>
               );
