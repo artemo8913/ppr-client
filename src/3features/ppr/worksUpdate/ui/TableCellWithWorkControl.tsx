@@ -28,11 +28,13 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({
       onMouseEnter={() => setIsHide(false)}
       onMouseLeave={() => setIsHide(true)}
     >
-      <div className="!absolute -bottom-6 left-0 z-10" style={{ display: isHide ? "none" : "flex" }}>
-        <DeleteWorkButton workId={pprData?.id} />
-        <AddWorkButton indexToPlace={indexToPlace} />
-        <CopyWorkButton indexToPlace={indexToPlace} pprData={pprData} />
-      </div>
+      {!isHide && (
+        <div className="!absolute -bottom-6 left-0 z-10 flex">
+          <DeleteWorkButton workId={pprData?.id} />
+          <AddWorkButton indexToPlace={indexToPlace} />
+          <CopyWorkButton indexToPlace={indexToPlace} pprData={pprData} />
+        </div>
+      )}
       <TableCell {...otherProps} />
     </div>
   );

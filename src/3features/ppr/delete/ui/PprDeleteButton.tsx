@@ -6,7 +6,7 @@ import Tooltip from "antd/es/tooltip";
 import { DeleteTwoTone } from "@ant-design/icons";
 import Popconfirm from "antd/es/popconfirm";
 import { isPprInUserControl } from "@/1shared/providers/pprProvider";
-import { IPpr, TYearPprStatus, deletePprTable } from "@/2entities/ppr";
+import { TYearPprStatus, deletePprTable } from "@/2entities/ppr";
 import { IUser } from "@/2entities/user";
 
 interface IPprDeleteButtonProps {
@@ -26,19 +26,17 @@ export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ pprId, created_by, 
   const isPprCanBeDeleted = isForSubdivision && isStatusCanBeDeleted;
   return (
     <Tooltip title="Удалить ППР">
-      <Popconfirm
-        title="Удалить ППР"
-        description="Уверенны, что хотите удалить ППР?"
-        onConfirm={() => deletePprTable(pprId)}
-        okText="Да"
-        cancelText="Нет"
-      >
-        <Button
-          danger
-          disabled={!isPprCanBeDeleted}
-          icon={<DeleteTwoTone twoToneColor="red" className="cursor-pointer" />}
-        />
-      </Popconfirm>
+      <Button
+        danger
+        disabled={!isPprCanBeDeleted}
+        icon={<DeleteTwoTone twoToneColor="red" className="cursor-pointer" />}
+        onClick={() => {
+          const answer = confirm("Уверены, что хотите удалить ППР");
+          if (answer) {
+            deletePprTable(pprId);
+          }
+        }}
+      />
     </Tooltip>
   );
 };

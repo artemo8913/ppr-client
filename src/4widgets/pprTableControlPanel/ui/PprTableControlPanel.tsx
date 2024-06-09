@@ -18,12 +18,12 @@ import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontS
 import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
 import { PprTableCombineSameWork } from "@/3features/pprTableSettings/combineWorkWithSameName";
+import { usePpr } from "@/1shared/providers/pprProvider";
 
-interface IPprTableControlPanelProps {
-  ppr: IPpr;
-}
+interface IPprTableControlPanelProps {}
 
-export const PprTableControlPanel: FC<IPprTableControlPanelProps> = ({ ppr }) => {
+export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
+  const { ppr } = usePpr();
   const [isOpen, setIsModalOpen] = useState(false);
   const openModal = useCallback(() => setIsModalOpen(true), []);
   const closeModal = useCallback(() => setIsModalOpen(false), []);

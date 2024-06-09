@@ -14,7 +14,7 @@ import { checkIsWorkAndTimeColumnsFieldsSet } from "@/2entities/ppr/model/ppr.sc
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { ppr, getCorrectionValue, updatePprData, updateNewValueInCorrection } = usePpr();
+  const { ppr, getCorrectionValue, updatePprData, updateNewValueInCorrection, getTransfers } = usePpr();
   const { columnsDefault, timePeriods, timePeriodsColums } = useCreateColumns();
   const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, currentTimePeriod } = usePprTableSettings();
   const pprYearStatus: TYearPprStatus = ppr?.status || "template";
@@ -67,18 +67,23 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       </thead>
       <tbody>
         {ppr?.data.map((pprData, rowIndex) => (
-          <tr key={pprData.id + rowIndex}>
+          <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColums.flat()).map((columnName) => {
               return (
                 <td
-                  key={columnName + rowIndex}
+                  key={pprData.id + columnName}
                   className="border border-black relative"
                   style={{
                     ...getTdStyle(columnName),
                   }}
                 >
                   {isArrowsShow && checkIsPlanWorkPeriodField(columnName) ? (
-                    <CorrectionArrowsConteiner fieldFrom={columnName} objectId={pprData.id} planCellRef={planCellRef} />
+                    <CorrectionArrowsConteiner
+                      transfers={getTransfers(pprData.id, columnName)}
+                      fieldFrom={columnName}
+                      objectId={pprData.id}
+                      planCellRef={planCellRef}
+                    />
                   ) : null}
                   <PprTableCellMemo
                     {...getColumnSettings(
