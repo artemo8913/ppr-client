@@ -296,6 +296,14 @@ const normTimePeriods: (keyof IFactNormTimePeriods)[] = [
   "dec_fact_norm_time",
 ] as const;
 
+const workAndTimeColumnsFields = [
+  ...planWorkPeriods,
+  ...planTimePeriods,
+  ...factWorkPeriods,
+  ...normTimePeriods,
+  ...factTimePeriods,
+];
+
 export const pprDataColumnsFields: (keyof IPprData)[] = [
   "id",
   "workId",
@@ -323,12 +331,41 @@ export const pprDataColumnsFields: (keyof IPprData)[] = [
 
 const pprTableColumnsSet: Set<keyof IPprData | string> = new Set(pprDataColumnsFields);
 
-const planWorkPeriodsSet: Set<keyof IPlanWorkPeriods | string> = new Set([...planWorkPeriods]);
+const planWorkPeriodsSet: Set<keyof IPlanWorkPeriods | string> = new Set(planWorkPeriods);
 
 const planFactWorkPeriodsSet: Set<keyof IPlanWorkPeriods | keyof IFactWorkPeriods | string> = new Set([
   ...planWorkPeriods,
   ...factWorkPeriods,
 ]);
+
+const workAndTimeColumnsFieldsSet: Set<
+  | keyof IFactNormTimePeriods
+  | keyof IPlanWorkPeriods
+  | keyof IPlanTimePeriods
+  | keyof IFactWorkPeriods
+  | keyof IFactTimePeriods
+  | string
+> = new Set(workAndTimeColumnsFields);
+
+const planFieldPair: { [field in keyof IPlanWorkPeriods | string]?: keyof IPlanTimePeriods } = {
+  year_plan_work: "year_plan_time",
+  jan_plan_work: "jan_plan_time",
+  feb_plan_work: "feb_plan_time",
+  mar_plan_work: "mar_plan_time",
+  apr_plan_work: "apr_plan_time",
+  may_plan_work: "may_plan_time",
+  june_plan_work: "june_plan_time",
+  july_plan_work: "july_plan_time",
+  aug_plan_work: "aug_plan_time",
+  sept_plan_work: "sept_plan_time",
+  oct_plan_work: "oct_plan_time",
+  nov_plan_work: "nov_plan_time",
+  dec_plan_work: "dec_plan_time",
+};
+
+export function getPlanFieldPair(field: keyof IPlanWorkPeriods | string): keyof IPlanTimePeriods | undefined {
+  return planFieldPair[field];
+}
 
 export function checkIsColumnField(column: keyof IPprData | string): column is keyof IPprData {
   return pprTableColumnsSet.has(column);
@@ -342,4 +379,9 @@ export function checkIsPlanFactWorkPeriodField(
   column: keyof IPprData | string
 ): column is keyof IPlanWorkPeriods | keyof IFactWorkPeriods {
   return planFactWorkPeriodsSet.has(column);
+}
+export function checkIsWorkAndTimeColumnsFieldsSet(
+  column: keyof IPprData | string
+): column is keyof IPlanWorkPeriods | keyof IFactWorkPeriods {
+  return workAndTimeColumnsFieldsSet.has(column);
 }

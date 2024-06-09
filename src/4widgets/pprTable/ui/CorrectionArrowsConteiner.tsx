@@ -44,15 +44,13 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
     setBasicArrowWidth(width * widthFactor);
   }, [filterColumns, planCellRef]);
 
-  return (
-    <div>
-      {getTransfers(objectId, fieldFrom)?.map((field, index) => {
-        const fieldToIndex = checkIsPlanWorkPeriodField(field.fieldTo)
-          ? planWorkPeriods.indexOf(field.fieldTo)
-          : undefined;
-        const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
-        return <Arrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
-      })}
-    </div>
-  );
+  const transfers = getTransfers(objectId, fieldFrom)?.map((field, index) => {
+    const fieldToIndex = checkIsPlanWorkPeriodField(field.fieldTo) ? planWorkPeriods.indexOf(field.fieldTo) : undefined;
+    const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
+    return <Arrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
+  });
+  if (!transfers || transfers.length === 0) {
+    return null;
+  }
+  return <div>{transfers}</div>;
 };

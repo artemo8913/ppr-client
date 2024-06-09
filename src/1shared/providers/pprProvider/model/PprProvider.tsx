@@ -9,7 +9,8 @@ import {
   TCorrectionTransfer,
   TPprCorrections,
   TWorkPlanCorrection,
-  checkIsPlanFactWorkPeriodField,
+  checkIsPlanWorkPeriodField,
+  getPlanFieldPair,
   planWorkPeriods,
 } from "@/2entities/ppr";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -153,18 +154,49 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   );
 
   /**Обновить данные ППРа */
-  const updatePprData = useCallback((rowIndex: number, columnId: keyof IPprData | string, value: unknown) => {
+  const updatePprData = useCallback((rowIndex: number, columnName: keyof IPprData | string, value: unknown) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
+      }
+
+      const pprData: IPprData = {
+        ...prev.data[rowIndex],
+      };
+
+      if (columnName === "norm_of_time") {
+        pprData.norm_of_time = Number(value);
+        for (const planWorkPeriodField of planWorkPeriods) {
+          const planTimeField = getPlanFieldPair(planWorkPeriodField);
+          if (!planTimeField) {
+            continue;
+          }
+          pprData[planTimeField] = pprData.norm_of_time * pprData[planWorkPeriodField];
+        }
+      } else if (checkIsPlanWorkPeriodField(columnName)) {
+        pprData[columnName] = Number(value || 0);
+        const planTimeField = getPlanFieldPair(columnName);
+        pprData.year_plan_work = 0;
+        for (const periodField of planWorkPeriods) {
+          if (periodField === "year_plan_work") {
+            continue;
+          } else if (periodField === columnName) {
+            pprData.year_plan_work += Number(value || 0);
+            continue;
+          }
+          pprData.year_plan_work += Number(pprData[periodField]);
+        }
+        pprData.year_plan_time = Number((pprData.year_plan_work * pprData.norm_of_time).toFixed(2));
+        if (planTimeField) {
+          pprData[planTimeField] = Number((pprData.norm_of_time * pprData[columnName]).toFixed(2));
+        }
       }
       return {
         ...prev,
         data: prev.data.map((row, index) => {
           if (index === rowIndex) {
             return {
-              ...prev.data[rowIndex]!,
-              [columnId]: value,
+              ...pprData,
             };
           }
           return row;
@@ -180,7 +212,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         if (!prev) {
           return prev;
         }
-        if (!checkIsPlanFactWorkPeriodField(fieldName)) {
+        if (!checkIsPlanWorkPeriodField(fieldName)) {
           return prev;
         }
         const newDiff = newValue - oldValue;
@@ -218,7 +250,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null
     ) => {
       setPpr((prev) => {
-        if (!prev || !checkIsPlanFactWorkPeriodField(fieldFrom)) {
+        if (!prev || !checkIsPlanWorkPeriodField(fieldFrom)) {
           return prev;
         }
         return {
