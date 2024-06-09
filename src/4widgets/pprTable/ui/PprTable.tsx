@@ -2,14 +2,18 @@
 import { FC, useMemo, useRef } from "react";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TAllMonthStatuses, TYearPprStatus, checkIsPlanWorkPeriodField } from "@/2entities/ppr";
+import {
+  TAllMonthStatuses,
+  TYearPprStatus,
+  checkIsPlanWorkPeriodField,
+  checkIsWorkAndTimeColumnsFieldsSet,
+} from "@/2entities/ppr";
 import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
 import { getColumnTitle } from "../lib/pprTableColumnsHelper";
 import { PprTableCellMemo } from "./PprTableCell";
 import { useCreateColumns } from "./PprTableColumns";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
-import { checkIsWorkAndTimeColumnsFieldsSet } from "@/2entities/ppr/model/ppr.schema";
 
 interface IPprTableProps {}
 
