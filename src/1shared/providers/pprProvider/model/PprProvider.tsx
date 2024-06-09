@@ -171,7 +171,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           if (!planTimeField) {
             continue;
           }
-          pprData[planTimeField] = pprData.norm_of_time * pprData[planWorkPeriodField];
+          pprData[planTimeField] = Number((pprData.norm_of_time * pprData[planWorkPeriodField]).toFixed(2));
         }
       } else if (checkIsPlanWorkPeriodField(columnName)) {
         pprData[columnName] = Number(value || 0);
