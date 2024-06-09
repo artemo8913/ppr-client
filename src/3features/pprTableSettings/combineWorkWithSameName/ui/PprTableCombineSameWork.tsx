@@ -11,5 +11,5 @@ export const PprTableCombineSameWork: FC<IPprTableCombineSameWorkProps> = () => 
   const handleChange: CheckboxProps["onChange"] = (e) => {
     setIsCombineSameWorks(e.target.checked);
   };
-  return <Checkbox value={isCombineSameWorks} onChange={handleChange} />;
+  return <Checkbox checked={isCombineSameWorks} onChange={handleChange} />;
 };
