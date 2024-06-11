@@ -3,7 +3,7 @@ import { FC, useCallback, useMemo } from "react";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPlanWorkPeriods, TCorrectionTransfer, planWorkPeriods } from "@/2entities/ppr";
+import { IPlanWorkPeriods, TTransfer, planWorkPeriods } from "@/2entities/ppr";
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
@@ -42,7 +42,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
 
   const handleTransfersChange = useCallback(
     (fieldTo: keyof IPlanWorkPeriods | null, value?: number, transferIndex?: number) => {
-      let newTransfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null = null;
+      let newTransfers: TTransfer<IPlanWorkPeriods>[] | null = null;
       if (!fieldTo) {
         null;
       } else if (!transfers) {

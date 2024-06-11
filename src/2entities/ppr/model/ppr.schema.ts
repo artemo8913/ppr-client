@@ -174,13 +174,13 @@ export type TWorkPlanCorrection = {
   [id: string]: { [planPeriod in keyof IPlanWorkPeriods]?: number } | undefined;
 };
 
-export type TCorrectionTransfer<T> = { fieldTo: keyof T; value: number; is_approved: boolean };
+export type TTransfer<T> = { fieldTo: keyof T; value: number; is_approved: boolean };
 
 export type TCorrection<T> = {
   [fieldNameFrom in keyof T]?: {
     newValue: number;
     diff: number;
-    transfers: TCorrectionTransfer<T>[] | null;
+    transfers: TTransfer<T>[] | null;
   };
 };
 

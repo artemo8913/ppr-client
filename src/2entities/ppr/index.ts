@@ -14,7 +14,7 @@ export type {
   TPprCorrections,
   TCorrection,
   TWorkPlanCorrection,
-  TCorrectionTransfer,
+  TTransfer,
 } from "./model/ppr.schema";
 export {
   pprDataColumnsFields,

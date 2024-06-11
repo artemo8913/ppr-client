@@ -6,7 +6,7 @@ import {
   IPpr,
   IPprData,
   IPprDataWithRowSpan,
-  TCorrectionTransfer,
+  TTransfer,
   TPprCorrections,
   TWorkPlanCorrection,
   checkIsFactTimePeriodField,
@@ -39,13 +39,13 @@ interface IPprContextProps {
   updateTransfers: (
     objectId: string,
     fieldFrom: keyof IPlanWorkPeriods | string,
-    transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null
+    transfers: TTransfer<IPlanWorkPeriods>[] | null
   ) => void;
   getCorrectionValue: (workId: string, fieldName: keyof IPlanWorkPeriods | string) => number;
   getTransfers: (
     objectId: string,
     fieldFrom: keyof IPlanWorkPeriods | string
-  ) => TCorrectionTransfer<IPlanWorkPeriods>[] | null;
+  ) => TTransfer<IPlanWorkPeriods>[] | null;
   addWorkingMan: () => void;
   updateWorkingMan: (rowIndex: number, columnId: keyof IPprData | string, value: unknown) => void;
   deleteWorkingMan: (id: string) => void;
@@ -265,7 +265,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     (
       objectId: string,
       fieldFrom: keyof IPlanWorkPeriods | string,
-      transfers: TCorrectionTransfer<IPlanWorkPeriods>[] | null
+      transfers: TTransfer<IPlanWorkPeriods>[] | null
     ) => {
       setPpr((prev) => {
         if (!prev || !checkIsPlanWorkPeriodField(fieldFrom)) {
