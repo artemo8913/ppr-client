@@ -8,7 +8,7 @@ interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
   objectId: string;
   fieldFrom: keyof IPlanWorkPeriods | string;
-  transfers: TTransfer<IPlanWorkPeriods>[] | null;
+  transfers: TTransfer<IPlanWorkPeriods>[];
 }
 
 function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
@@ -53,5 +53,3 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   }
   return <div>{arrows}</div>;
 };
-
-// getTransfers(objectId, fieldFrom)
