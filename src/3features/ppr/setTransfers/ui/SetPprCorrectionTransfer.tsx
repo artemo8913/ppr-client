@@ -1,4 +1,6 @@
 "use client";
+import Button from "antd/es/button";
+import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
@@ -7,8 +9,6 @@ import { IPlanWorkPeriods, TTransfer, planWorkFields } from "@/2entities/ppr";
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
-import { PlusOutlined } from "@ant-design/icons";
-import Button from "antd/es/button";
 
 interface ISetPprCorrectionTransferProps<T> {
   objectId: string;
