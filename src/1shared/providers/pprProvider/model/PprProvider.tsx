@@ -8,7 +8,7 @@ import {
   IPprDataWithRowSpan,
   TTransfer,
   TPprCorrections,
-  TWorkPlanCorrection,
+  TWorkPlanCorrectionsResult,
   checkIsPlanWorkField,
   factWorkFields,
   getFactTimeFieldPair,
@@ -24,7 +24,7 @@ type TWorkBasicInfo = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
 
 export interface IPprContextProps {
   ppr: IPpr | null;
-  workPlanCorrections: TWorkPlanCorrection;
+  workPlanCorrections: TWorkPlanCorrectionsResult;
   workBasicInfo: TWorkBasicInfo;
   addWork: (newWork: Partial<IPprData>, indexToPlace?: number) => void;
   deleteWork: (workId: string) => void;
@@ -80,12 +80,12 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   //Данные ППРа
   const [ppr, setPpr] = useState<IPpr | null>(null);
   //Корректировки запланированных объемов работ ППРа в формате данных "объекта" (не в массиве)
-  const [workPlanCorrections, setWorkPlanCorrections] = useState<TWorkPlanCorrection>({});
+  const [workPlanCorrections, setWorkPlanCorrections] = useState<TWorkPlanCorrectionsResult>({});
   //Данные о работах, применяемых в этом ППРе
   const [workBasicInfo, setWorksDataInPpr] = useState<TWorkBasicInfo>({});
 
   const handleCorrections = useCallback((corrections: TPprCorrections) => {
-    const workPlanCorrections: TWorkPlanCorrection = {};
+    const workPlanCorrections: TWorkPlanCorrectionsResult = {};
 
     for (const id in corrections.works) {
       let yearCorrection = 0;
