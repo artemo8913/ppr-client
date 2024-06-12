@@ -1,6 +1,6 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
-import { TPprTimePeriod, isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, checkIsColumnField } from "@/2entities/ppr";
+import { TTimePeriod, isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
+import { IPprData, TAllMonthStatuses, TYearPprStatus, checkIsPprDataField } from "@/2entities/ppr";
 import { ITableCellProps } from "@/1shared/ui/table";
 import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 
@@ -48,11 +48,11 @@ export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
 export function getColumnSettings(
   coulumnName: keyof Partial<IPprData> | string,
   pprYearStatus: TYearPprStatus,
-  timePeriod: TPprTimePeriod,
+  timePeriod: TTimePeriod,
   pprMonthStatuses?: TAllMonthStatuses,
   pprView?: TCorrectionView
 ): ITableCellProps | undefined {
-  if (!checkIsColumnField(coulumnName)) {
+  if (!checkIsPprDataField(coulumnName)) {
     return;
   }
   if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {

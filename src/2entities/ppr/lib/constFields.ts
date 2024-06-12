@@ -1,3 +1,4 @@
+import { TTimePeriod } from "@/1shared/lib/date";
 import {
   IFactNormTimePeriods,
   IFactTimePeriods,
@@ -7,7 +8,7 @@ import {
   IPprData,
 } from "../model/ppr.schema";
 
-export const planWorkPeriods: (keyof IPlanWorkPeriods)[] = [
+export const planWorkFields: (keyof IPlanWorkPeriods)[] = [
   "year_plan_work",
   "jan_plan_work",
   "feb_plan_work",
@@ -23,7 +24,7 @@ export const planWorkPeriods: (keyof IPlanWorkPeriods)[] = [
   "dec_plan_work",
 ] as const;
 
-export const planTimePeriods: (keyof IPlanTimePeriods)[] = [
+export const planTimeFields: (keyof IPlanTimePeriods)[] = [
   "year_plan_time",
   "jan_plan_time",
   "feb_plan_time",
@@ -39,7 +40,7 @@ export const planTimePeriods: (keyof IPlanTimePeriods)[] = [
   "dec_plan_time",
 ] as const;
 
-export const factWorkPeriods: (keyof IFactWorkPeriods)[] = [
+export const factWorkFields: (keyof IFactWorkPeriods)[] = [
   "year_fact_work",
   "jan_fact_work",
   "feb_fact_work",
@@ -55,7 +56,7 @@ export const factWorkPeriods: (keyof IFactWorkPeriods)[] = [
   "dec_fact_work",
 ] as const;
 
-export const factTimePeriods: (keyof IFactTimePeriods)[] = [
+export const factTimeFields: (keyof IFactTimePeriods)[] = [
   "year_fact_time",
   "jan_fact_time",
   "feb_fact_time",
@@ -71,7 +72,7 @@ export const factTimePeriods: (keyof IFactTimePeriods)[] = [
   "dec_fact_time",
 ] as const;
 
-export const normTimePeriods: (keyof IFactNormTimePeriods)[] = [
+export const normTimeFields: (keyof IFactNormTimePeriods)[] = [
   "year_fact_norm_time",
   "jan_fact_norm_time",
   "feb_fact_norm_time",
@@ -87,15 +88,15 @@ export const normTimePeriods: (keyof IFactNormTimePeriods)[] = [
   "dec_fact_norm_time",
 ] as const;
 
-export const workAndTimeColumnsFields = [
-  ...planWorkPeriods,
-  ...planTimePeriods,
-  ...factWorkPeriods,
-  ...normTimePeriods,
-  ...factTimePeriods,
+export const workAndTimeFields = [
+  ...planWorkFields,
+  ...planTimeFields,
+  ...factWorkFields,
+  ...normTimeFields,
+  ...factTimeFields,
 ];
 
-export const pprDataColumnsFields: (keyof IPprData)[] = [
+export const pprDataFields: (keyof IPprData)[] = [
   "id",
   "workId",
   "is_work_aproved",
@@ -113,32 +114,32 @@ export const pprDataColumnsFields: (keyof IPprData)[] = [
   "norm_of_time",
   "norm_of_time_document",
   "unity",
-  ...planWorkPeriods,
-  ...planTimePeriods,
-  ...factWorkPeriods,
-  ...normTimePeriods,
-  ...factTimePeriods,
+  ...planWorkFields,
+  ...planTimeFields,
+  ...factWorkFields,
+  ...normTimeFields,
+  ...factTimeFields,
 ] as const;
 
-export const pprTableColumnsSet: Set<keyof IPprData | string> = new Set(pprDataColumnsFields);
-export const planWorkPeriodsSet: Set<keyof IPlanWorkPeriods | string> = new Set(planWorkPeriods);
-export const factWorkPeriodsSet: Set<keyof IFactWorkPeriods | string> = new Set(factWorkPeriods);
-export const planTimePeriodsSet: Set<keyof IPlanTimePeriods | string> = new Set(planTimePeriods);
-export const factTimePeriodsSet: Set<keyof IFactTimePeriods | string> = new Set(factTimePeriods);
-export const planFactWorkPeriodsSet: Set<keyof IPlanWorkPeriods | keyof IFactWorkPeriods | string> = new Set([
-  ...planWorkPeriods,
-  ...factWorkPeriods,
+export const pprTableFieldsSet: Set<keyof IPprData | string> = new Set(pprDataFields);
+export const planWorkFieldsSet: Set<keyof IPlanWorkPeriods | string> = new Set(planWorkFields);
+export const factWorkFieldsSet: Set<keyof IFactWorkPeriods | string> = new Set(factWorkFields);
+export const planTimeFieldsSet: Set<keyof IPlanTimePeriods | string> = new Set(planTimeFields);
+export const factTimeFieldsSet: Set<keyof IFactTimePeriods | string> = new Set(factTimeFields);
+export const planFactWorkFieldsSet: Set<keyof IPlanWorkPeriods | keyof IFactWorkPeriods | string> = new Set([
+  ...planWorkFields,
+  ...factWorkFields,
 ]);
-export const workAndTimeColumnsFieldsSet: Set<
+export const workAndTimeFieldsSet: Set<
   | keyof IFactNormTimePeriods
   | keyof IPlanWorkPeriods
   | keyof IPlanTimePeriods
   | keyof IFactWorkPeriods
   | keyof IFactTimePeriods
   | string
-> = new Set(workAndTimeColumnsFields);
+> = new Set(workAndTimeFields);
 
-export const workToTimePlanFieldsPair: { [field in keyof IPlanWorkPeriods | string]?: keyof IPlanTimePeriods } = {
+export const workToTimePlanFieldsPair: { [field in keyof IPlanWorkPeriods]: keyof IPlanTimePeriods } = {
   year_plan_work: "year_plan_time",
   jan_plan_work: "jan_plan_time",
   feb_plan_work: "feb_plan_time",
@@ -154,24 +155,23 @@ export const workToTimePlanFieldsPair: { [field in keyof IPlanWorkPeriods | stri
   dec_plan_work: "dec_plan_time",
 };
 
-export const workToNormTimeFactFieldsPair: { [field in keyof IFactWorkPeriods | string]?: keyof IFactNormTimePeriods } =
-  {
-    year_fact_work: "year_fact_norm_time",
-    jan_fact_work: "jan_fact_norm_time",
-    feb_fact_work: "feb_fact_norm_time",
-    mar_fact_work: "mar_fact_norm_time",
-    apr_fact_work: "apr_fact_norm_time",
-    may_fact_work: "may_fact_norm_time",
-    june_fact_work: "june_fact_norm_time",
-    july_fact_work: "july_fact_norm_time",
-    aug_fact_work: "aug_fact_norm_time",
-    sept_fact_work: "sept_fact_norm_time",
-    oct_fact_work: "oct_fact_norm_time",
-    nov_fact_work: "nov_fact_norm_time",
-    dec_fact_work: "dec_fact_norm_time",
-  };
+export const workToNormTimeFactFieldsPair: { [field in keyof IFactWorkPeriods]: keyof IFactNormTimePeriods } = {
+  year_fact_work: "year_fact_norm_time",
+  jan_fact_work: "jan_fact_norm_time",
+  feb_fact_work: "feb_fact_norm_time",
+  mar_fact_work: "mar_fact_norm_time",
+  apr_fact_work: "apr_fact_norm_time",
+  may_fact_work: "may_fact_norm_time",
+  june_fact_work: "june_fact_norm_time",
+  july_fact_work: "july_fact_norm_time",
+  aug_fact_work: "aug_fact_norm_time",
+  sept_fact_work: "sept_fact_norm_time",
+  oct_fact_work: "oct_fact_norm_time",
+  nov_fact_work: "nov_fact_norm_time",
+  dec_fact_work: "dec_fact_norm_time",
+};
 
-export const timeToWorkPlanFieldsPair: { [field in keyof IPlanTimePeriods | string]?: keyof IPlanWorkPeriods } = {
+export const timeToWorkPlanFieldsPair: { [field in keyof IPlanTimePeriods]: keyof IPlanWorkPeriods } = {
   year_plan_time: "year_plan_work",
   jan_plan_time: "jan_plan_work",
   feb_plan_time: "feb_plan_work",
@@ -187,16 +187,34 @@ export const timeToWorkPlanFieldsPair: { [field in keyof IPlanTimePeriods | stri
   dec_plan_time: "dec_plan_work",
 };
 
-export function getWorkToTimePlanFieldPair(field: keyof IPlanWorkPeriods | string): keyof IPlanTimePeriods | undefined {
+export function getPlanWorkFieldByTimePeriod(timePeriod: TTimePeriod): keyof IPlanWorkPeriods {
+  return `${timePeriod}_plan_work`;
+}
+
+export function getFactWorkFieldByTimePeriod(timePeriod: TTimePeriod): keyof IFactWorkPeriods {
+  return `${timePeriod}_fact_work`;
+}
+
+export function getPlanTimeFieldByTimePeriod(timePeriod: TTimePeriod): keyof IPlanTimePeriods {
+  return `${timePeriod}_plan_time`;
+}
+
+export function getFactTimeFieldByTimePeriod(timePeriod: TTimePeriod): keyof IFactTimePeriods {
+  return `${timePeriod}_fact_time`;
+}
+
+export function getFactNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): keyof IFactNormTimePeriods {
+  return `${timePeriod}_fact_norm_time`;
+}
+
+export function getPlanTimeFieldPair(field: keyof IPlanWorkPeriods): keyof IPlanTimePeriods {
   return workToTimePlanFieldsPair[field];
 }
 
-export function getWorkToTimeFactFieldPair(
-  field: keyof IFactWorkPeriods | string
-): keyof IFactNormTimePeriods | undefined {
+export function getFactTimeFieldPair(field: keyof IFactWorkPeriods): keyof IFactNormTimePeriods {
   return workToNormTimeFactFieldsPair[field];
 }
 
-export function getTimeToWorkPlanFieldPair(field: keyof IPlanTimePeriods | string): keyof IPlanWorkPeriods | undefined {
+export function getPlanWorkFieldPair(field: keyof IPlanTimePeriods): keyof IPlanWorkPeriods {
   return timeToWorkPlanFieldsPair[field];
 }

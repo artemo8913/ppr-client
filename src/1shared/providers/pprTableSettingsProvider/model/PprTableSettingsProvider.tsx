@@ -1,6 +1,6 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useState } from "react";
-import { TPprTimePeriod } from "@/1shared/lib/date";
+import { TTimePeriod } from "@/1shared/lib/date";
 
 export type TFilterTimePeriodOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
 export type TFilterPlanFactOption = "SHOW_ALL" | "SHOW_ONLY_PLAN" | "SHOW_ONLY_FACT" | "SHOW_ONLY_VALUES";
@@ -16,7 +16,7 @@ export type TCorrectionView =
 
 interface IPprTableSettings {
   filterColumns: TFilterColumns;
-  currentTimePeriod: TPprTimePeriod;
+  currentTimePeriod: TTimePeriod;
   correctionView: TCorrectionView;
   tableWidthPercent: number;
   fontSizePx: number;
@@ -26,7 +26,7 @@ interface IPprTableSettings {
 interface IPprTableSettingsContext extends IPprTableSettings {
   setFilterMonths: (state: TFilterTimePeriodOption) => void;
   setFilterPlanFact: (state: TFilterPlanFactOption) => void;
-  setTimePeriod: (timePeriod: TPprTimePeriod) => void;
+  setTimePeriod: (timePeriod: TTimePeriod) => void;
   setCorrectionView: (correctionView: TCorrectionView) => void;
   setTableWidthPercent: (tableWidthPercent: number) => void;
   setFontSizePx: (fontSize: number) => void;
@@ -91,7 +91,7 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
   );
 
   const setTimePeriod = useCallback(
-    (timePeriod: TPprTimePeriod) =>
+    (timePeriod: TTimePeriod) =>
       setPprTableSettings((prev) => ({
         ...prev,
         currentTimePeriod: timePeriod,

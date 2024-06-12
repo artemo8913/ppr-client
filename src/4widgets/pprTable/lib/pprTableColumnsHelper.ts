@@ -1,4 +1,4 @@
-import { IPprData, checkIsColumnField } from "@/2entities/ppr";
+import { IPprData, checkIsPprDataField } from "@/2entities/ppr";
 
 export const columnsTitles: { [key in keyof IPprData]?: string } = {
   name: "Наименования и условия выполнения технологических операций, испытаний и измерений",
@@ -30,7 +30,7 @@ function findPlanFactTitle(string: string) {
 }
 
 export function getColumnTitle(column: keyof IPprData | string): string {
-  if (!checkIsColumnField(column)) {
+  if (!checkIsPprDataField(column)) {
     return "";
   }
   return columnsTitles[column] || findPlanFactTitle(column) || "";

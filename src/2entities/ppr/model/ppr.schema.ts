@@ -1,5 +1,5 @@
 import { IUser } from "../../user";
-import { TMonth } from "@/1shared/lib/date";
+import { TMonth, TTimePeriod } from "@/1shared/lib/date";
 
 export type TYearPprStatus =
   | "template"
@@ -33,117 +33,33 @@ export type TAllMonthStatuses = {
   [month in TMonth]: TMonthPprStatus;
 };
 
-export interface IPlanWorkPeriods {
-  year_plan_work: number;
-  jan_plan_work: number;
-  feb_plan_work: number;
-  mar_plan_work: number;
-  apr_plan_work: number;
-  may_plan_work: number;
-  june_plan_work: number;
-  july_plan_work: number;
-  aug_plan_work: number;
-  sept_plan_work: number;
-  oct_plan_work: number;
-  nov_plan_work: number;
-  dec_plan_work: number;
-}
+export type IPlanWorkPeriods = {
+  [key in `${TTimePeriod}_plan_work`]: number;
+};
 
-export interface IPlanNormTime {
-  year_plan_norm_time: number;
-  jan_plan_norm_time: number;
-  feb_plan_norm_time: number;
-  mar_plan_norm_time: number;
-  apr_plan_norm_time: number;
-  may_plan_norm_time: number;
-  june_plan_norm_time: number;
-  july_plan_norm_time: number;
-  aug_plan_norm_time: number;
-  sept_plan_norm_time: number;
-  oct_plan_norm_time: number;
-  nov_plan_norm_time: number;
-  dec_plan_norm_time: number;
-}
+export type IPlanNormTimePeriods = {
+  [key in `${TTimePeriod}_plan_norm_time`]: number;
+};
 
-export interface IPlanTabelTime {
-  year_plan_tabel_time: number;
-  jan_plan_tabel_time: number;
-  feb_plan_tabel_time: number;
-  mar_plan_tabel_time: number;
-  apr_plan_tabel_time: number;
-  may_plan_tabel_time: number;
-  june_plan_tabel_time: number;
-  july_plan_tabel_time: number;
-  aug_plan_tabel_time: number;
-  sept_plan_tabel_time: number;
-  oct_plan_tabel_time: number;
-  nov_plan_tabel_time: number;
-  dec_plan_tabel_time: number;
-}
+export type IPlanTabelTimePeriods = {
+  [key in `${TTimePeriod}_plan_tabel_time`]: number;
+};
 
-export interface IPlanTimePeriods {
-  year_plan_time: number;
-  jan_plan_time: number;
-  feb_plan_time: number;
-  mar_plan_time: number;
-  apr_plan_time: number;
-  may_plan_time: number;
-  june_plan_time: number;
-  july_plan_time: number;
-  aug_plan_time: number;
-  sept_plan_time: number;
-  oct_plan_time: number;
-  nov_plan_time: number;
-  dec_plan_time: number;
-}
+export type IPlanTimePeriods = {
+  [key in `${TTimePeriod}_plan_time`]: number;
+};
 
-export interface IFactWorkPeriods {
-  year_fact_work: number;
-  jan_fact_work: number;
-  feb_fact_work: number;
-  mar_fact_work: number;
-  apr_fact_work: number;
-  may_fact_work: number;
-  june_fact_work: number;
-  july_fact_work: number;
-  aug_fact_work: number;
-  sept_fact_work: number;
-  oct_fact_work: number;
-  nov_fact_work: number;
-  dec_fact_work: number;
-}
+export type IFactWorkPeriods = {
+  [key in `${TTimePeriod}_fact_work`]: number;
+};
 
-export interface IFactNormTimePeriods {
-  year_fact_norm_time: number;
-  jan_fact_norm_time: number;
-  feb_fact_norm_time: number;
-  mar_fact_norm_time: number;
-  apr_fact_norm_time: number;
-  may_fact_norm_time: number;
-  june_fact_norm_time: number;
-  july_fact_norm_time: number;
-  aug_fact_norm_time: number;
-  sept_fact_norm_time: number;
-  oct_fact_norm_time: number;
-  nov_fact_norm_time: number;
-  dec_fact_norm_time: number;
-}
+export type IFactNormTimePeriods = {
+  [key in `${TTimePeriod}_fact_norm_time`]: number;
+};
 
-export interface IFactTimePeriods {
-  year_fact_time: number;
-  jan_fact_time: number;
-  feb_fact_time: number;
-  mar_fact_time: number;
-  apr_fact_time: number;
-  may_fact_time: number;
-  june_fact_time: number;
-  july_fact_time: number;
-  aug_fact_time: number;
-  sept_fact_time: number;
-  oct_fact_time: number;
-  nov_fact_time: number;
-  dec_fact_time: number;
-}
+export type IFactTimePeriods = {
+  [key in `${TTimePeriod}_fact_time`]: number;
+};
 
 export interface IPpr {
   id: string;
@@ -184,7 +100,11 @@ export type TCorrection<T> = {
   };
 };
 
-export interface IWorkingManYearPlan extends IPlanNormTime, IPlanTabelTime, IPlanTimePeriods, IFactTimePeriods {
+export interface IWorkingManYearPlan
+  extends IPlanNormTimePeriods,
+    IPlanTabelTimePeriods,
+    IPlanTimePeriods,
+    IFactTimePeriods {
   id: string;
   full_name: string;
   work_position: string;

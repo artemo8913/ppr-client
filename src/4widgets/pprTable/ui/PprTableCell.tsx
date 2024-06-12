@@ -1,38 +1,29 @@
 "use client";
-import { FC, memo, useCallback } from "react";
+import { FC, memo } from "react";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
+import { IPprData, checkIsFactTimeField, checkIsFactWorkField, checkIsPlanWorkField } from "@/2entities/ppr";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
-import { IPprData, checkIsPlanWorkPeriodField } from "@/2entities/ppr";
 
 interface IPprTableCellProps extends ITableCellProps {
   pprData?: IPprData;
   indexData?: number;
   field?: keyof IPprData;
-  updatePprData?: (rowIndex: number, columnId: string, value: unknown) => void;
-  updateNewValueInCorrection?: (objectId: string, fieldName: string, newValue: number, oldValue: number) => void;
+  updatePprTableCell?: (newValue: string, isWorkApproved: boolean, indexData: number, field: keyof IPprData) => void;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
   pprData,
   indexData,
   field,
-  updateNewValueInCorrection,
-  updatePprData,
+  updatePprTableCell,
   ...otherProps
 }) => {
-  const handleChange = useCallback(
-    (newValue: string) => {
-      if (!pprData || indexData === undefined || !field) {
-        return;
-      }
-      if (pprData?.is_work_aproved && checkIsPlanWorkPeriodField(field) && updateNewValueInCorrection) {
-        updateNewValueInCorrection(pprData.id, field, Number(newValue), pprData[field]);
-      } else if (updatePprData) {
-        updatePprData(indexData, field, newValue);
-      }
-    },
-    [updatePprData, updateNewValueInCorrection, pprData, field, indexData]
-  );
+  const handleChange = (newValue: string) => {
+    if (!pprData || indexData === undefined || !field || !updatePprTableCell) {
+      return;
+    }
+    updatePprTableCell(newValue, pprData.is_work_aproved, indexData, field);
+  };
   if (field === "name") {
     return (
       <TableCellWithWorkControl handleBlur={handleChange} pprData={pprData} indexToPlace={indexData} {...otherProps} />

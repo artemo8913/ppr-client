@@ -1,9 +1,9 @@
-import { TPprTimePeriod, pprTimePeriods } from "@/1shared/lib/date";
+import { TTimePeriod, timePeriods } from "@/1shared/lib/date";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
 
 const columnsDefault: (keyof IWorkingManYearPlan)[] = ["full_name", "work_position", "participation"];
 
-function getPlanFactColumns(pprTimePeriod: TPprTimePeriod): Array<keyof IWorkingManYearPlan> {
+function getPlanFactColumns(pprTimePeriod: TTimePeriod): Array<keyof IWorkingManYearPlan> {
   return [
     `${pprTimePeriod}_plan_norm_time`,
     `${pprTimePeriod}_plan_tabel_time`,
@@ -14,12 +14,12 @@ function getPlanFactColumns(pprTimePeriod: TPprTimePeriod): Array<keyof IWorking
 
 export const useCreateColumns = (): {
   columnsDefault: (keyof IWorkingManYearPlan)[];
-  timePeriods: TPprTimePeriod[];
+  timePeriods: TTimePeriod[];
   timePeriodsColumns: (keyof IWorkingManYearPlan)[][];
 } => {
   return {
     columnsDefault,
-    timePeriods: pprTimePeriods,
-    timePeriodsColumns: pprTimePeriods.map((period) => getPlanFactColumns(period)),
+    timePeriods: timePeriods,
+    timePeriodsColumns: timePeriods.map((period) => getPlanFactColumns(period)),
   };
 };

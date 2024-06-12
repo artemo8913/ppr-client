@@ -1,42 +1,42 @@
 import { IFactTimePeriods, IFactWorkPeriods, IPlanTimePeriods, IPlanWorkPeriods, IPprData } from "../model/ppr.schema";
 import {
-  factTimePeriodsSet,
-  factWorkPeriodsSet,
-  planFactWorkPeriodsSet,
-  planTimePeriodsSet,
-  planWorkPeriodsSet,
-  pprTableColumnsSet,
-  workAndTimeColumnsFieldsSet,
+  factTimeFieldsSet,
+  factWorkFieldsSet,
+  planFactWorkFieldsSet,
+  planTimeFieldsSet,
+  planWorkFieldsSet,
+  pprTableFieldsSet,
+  workAndTimeFieldsSet,
 } from "./constFields";
 
-export function checkIsColumnField(column: keyof IPprData | string): column is keyof IPprData {
-  return pprTableColumnsSet.has(column);
+export function checkIsPprDataField(column: keyof IPprData | string): column is keyof IPprData {
+  return pprTableFieldsSet.has(column);
 }
 
-export function checkIsPlanWorkPeriodField(column: keyof IPprData | string): column is keyof IPlanWorkPeriods {
-  return planWorkPeriodsSet.has(column);
+export function checkIsPlanWorkField(column: keyof IPprData | string): column is keyof IPlanWorkPeriods {
+  return planWorkFieldsSet.has(column);
 }
 
-export function checkIsFactWorkPeriodField(column: keyof IPprData | string): column is keyof IFactWorkPeriods {
-  return factWorkPeriodsSet.has(column);
+export function checkIsFactWorkField(column: keyof IPprData | string): column is keyof IFactWorkPeriods {
+  return factWorkFieldsSet.has(column);
 }
 
-export function checkIsPlanTimePeriodField(column: keyof IPprData | string): column is keyof IPlanTimePeriods {
-  return planTimePeriodsSet.has(column);
+export function checkIsPlanTimeField(column: keyof IPprData | string): column is keyof IPlanTimePeriods {
+  return planTimeFieldsSet.has(column);
 }
 
-export function checkIsFactTimePeriodField(column: keyof IPprData | string): column is keyof IFactTimePeriods {
-  return factTimePeriodsSet.has(column);
+export function checkIsFactTimeField(column: keyof IPprData | string): column is keyof IFactTimePeriods {
+  return factTimeFieldsSet.has(column);
 }
 
-export function checkIsPlanFactWorkPeriodField(
+export function checkIsPlanOrFactWorkField(
   column: keyof IPprData | string
 ): column is keyof IPlanWorkPeriods | keyof IFactWorkPeriods {
-  return planFactWorkPeriodsSet.has(column);
+  return planFactWorkFieldsSet.has(column);
 }
 
-export function checkIsWorkAndTimeColumnsFieldsSet(
+export function checkIsWorkOrTimeField(
   column: keyof IPprData | string
 ): column is keyof IPlanWorkPeriods | keyof IFactWorkPeriods {
-  return workAndTimeColumnsFieldsSet.has(column);
+  return workAndTimeFieldsSet.has(column);
 }

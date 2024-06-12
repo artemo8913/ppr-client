@@ -2,7 +2,7 @@
 import { FC, MutableRefObject, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { Arrow } from "@/1shared/ui/arrow";
-import { IPlanWorkPeriods, TTransfer, checkIsPlanWorkPeriodField, planWorkPeriods } from "@/2entities/ppr";
+import { IPlanWorkPeriods, TTransfer, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
@@ -33,8 +33,8 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
 }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
   const { filterColumns } = usePprTableSettings();
-  const fieldFromIndex = checkIsPlanWorkPeriodField(fieldFrom)
-    ? planWorkPeriods.indexOf(fieldFrom as keyof IPlanWorkPeriods)
+  const fieldFromIndex = checkIsPlanWorkField(fieldFrom)
+    ? planWorkFields.indexOf(fieldFrom as keyof IPlanWorkPeriods)
     : undefined;
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   }, [filterColumns, planCellRef]);
 
   const arrows = transfers?.map((field, index) => {
-    const fieldToIndex = checkIsPlanWorkPeriodField(field.fieldTo) ? planWorkPeriods.indexOf(field.fieldTo) : undefined;
+    const fieldToIndex = checkIsPlanWorkField(field.fieldTo) ? planWorkFields.indexOf(field.fieldTo) : undefined;
     const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
     return <Arrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
   });

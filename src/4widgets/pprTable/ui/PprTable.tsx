@@ -1,14 +1,17 @@
 "use client";
-import { FC, useMemo, useRef } from "react";
+import { FC, useCallback, useMemo, useRef } from "react";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {
+  IPprData,
   TAllMonthStatuses,
   TYearPprStatus,
-  checkIsPlanTimePeriodField,
-  checkIsPlanWorkPeriodField,
-  checkIsWorkAndTimeColumnsFieldsSet,
-  getTimeToWorkPlanFieldPair,
+  checkIsFactTimeField,
+  checkIsFactWorkField,
+  checkIsPlanTimeField,
+  checkIsPlanWorkField,
+  checkIsWorkOrTimeField,
+  getPlanWorkFieldPair,
 } from "@/2entities/ppr";
 import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
@@ -20,7 +23,17 @@ import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { ppr, getCorrectionValue, updatePprData, updateNewValueInCorrection, getTransfers } = usePpr();
+  const {
+    ppr,
+    getCorrectionValue,
+    getTransfers,
+    updateFactTime,
+    updateFactWork,
+    updateNewValueInCorrection,
+    updateNormOfTime,
+    updatePlanWork,
+    updatePprData,
+  } = usePpr();
   const { columnsDefault, timePeriods, timePeriodsColums } = useCreateColumns();
   const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, currentTimePeriod } = usePprTableSettings();
   const pprYearStatus: TYearPprStatus = ppr?.status || "template";
@@ -30,6 +43,25 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   const isArrowsShow = useMemo(
     () => correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS",
     [correctionView]
+  );
+
+  const updatePprTableCell = useCallback(
+    (newValue: string, isWorkApproved: boolean, indexData: number, field: keyof IPprData) => {
+      if (field === "norm_of_time") {
+        updateNormOfTime(indexData, newValue);
+      } else if (checkIsFactWorkField(field)) {
+        updateFactWork(indexData, field, Number(newValue));
+      } else if (checkIsFactTimeField(field)) {
+        updateFactTime(indexData, field, Number(newValue));
+      } else if (!isWorkApproved && checkIsPlanWorkField(field)) {
+        updatePlanWork(indexData, field, Number(newValue));
+      } else if (isWorkApproved && checkIsPlanWorkField(field)) {
+        updateNewValueInCorrection(indexData, field, Number(newValue));
+      } else {
+        updatePprData(indexData, field, newValue);
+      }
+    },
+    [updateNormOfTime, updateFactWork, updateFactTime, updatePlanWork, updateNewValueInCorrection, updatePprData]
   );
 
   return (
@@ -74,49 +106,47 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       <tbody>
         {ppr?.data.map((pprData, rowIndex) => (
           <tr key={pprData.id}>
-            {columnsDefault.concat(timePeriodsColums.flat()).map((columnName) => {
-              const value = checkIsPlanWorkPeriodField(columnName)
-                ? Number(pprData[columnName]) + getCorrectionValue(pprData.id, columnName)
-                : checkIsPlanTimePeriodField(columnName) && getTimeToWorkPlanFieldPair(columnName)
-                ? Number(pprData[columnName]) +
+            {columnsDefault.concat(timePeriodsColums.flat()).map((field) => {
+              const isPlanWorkPeriodField = checkIsPlanWorkField(field);
+              const value = isPlanWorkPeriodField
+                ? Number(pprData[field]) + getCorrectionValue(pprData.id, field)
+                : checkIsPlanTimeField(field) && getPlanWorkFieldPair(field)
+                ? Number(pprData[field]) +
                   Number(
-                    (
-                      getCorrectionValue(pprData.id, getTimeToWorkPlanFieldPair(columnName)!) * pprData.norm_of_time
-                    ).toFixed(2)
+                    (getCorrectionValue(pprData.id, getPlanWorkFieldPair(field)!) * pprData.norm_of_time).toFixed(2)
                   )
-                : pprData[columnName];
+                : pprData[field];
               const columnSettings = getColumnSettings(
-                columnName,
+                field,
                 pprYearStatus,
                 currentTimePeriod,
                 pprMonthsStatuses,
                 correctionView
               );
-              const transfers = getTransfers(pprData.id, columnName);
+              const transfers = isPlanWorkPeriodField && getTransfers(pprData.id, field);
               return (
                 <td
-                  key={pprData.id + columnName}
+                  key={pprData.id + field}
                   className="border border-black relative"
                   style={{
-                    ...getTdStyle(columnName),
+                    ...getTdStyle(field),
                   }}
                 >
-                  {isArrowsShow && transfers && checkIsPlanWorkPeriodField(columnName) ? (
+                  {isArrowsShow && transfers ? (
                     <CorrectionArrowsConteiner
                       transfers={transfers}
-                      fieldFrom={columnName}
+                      fieldFrom={field}
                       objectId={pprData.id}
                       planCellRef={planCellRef}
                     />
                   ) : null}
                   <PprTableCellMemo
                     {...columnSettings}
-                    isVertical={checkIsWorkAndTimeColumnsFieldsSet(columnName)}
+                    updatePprTableCell={updatePprTableCell}
+                    isVertical={checkIsWorkOrTimeField(field)}
                     pprData={pprData}
                     indexData={rowIndex}
-                    field={columnName}
-                    updatePprData={updatePprData}
-                    updateNewValueInCorrection={updateNewValueInCorrection}
+                    field={field}
                     value={value}
                   />
                 </td>
