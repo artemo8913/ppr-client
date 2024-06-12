@@ -1,7 +1,7 @@
 "use client";
 import { FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { TPprTimePeriod } from "@/1shared/lib/date";
+import { TTimePeriod } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { IPprData } from "@/2entities/ppr";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
@@ -10,7 +10,7 @@ type TMonthPlanColumns = IPprData;
 
 const columnHelper = createColumnHelper<TMonthPlanColumns>();
 
-const columns = (timePeriod: TPprTimePeriod) => [
+const columns = (timePeriod: TTimePeriod) => [
   columnHelper.group({
     header: "Работа",
     columns: [

@@ -1,6 +1,6 @@
 "use client";
 import { FC } from "react";
-import { TPprTimePeriod } from "@/1shared/lib/date";
+import { TTimePeriod } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
@@ -10,7 +10,7 @@ const columnHelper = createColumnHelper<
   IWorkingManYearPlan & { expl_plan?: string; expl_fact?: string; expl_per?: string; all_per?: string }
 >();
 
-const columns = (timePeriod: TPprTimePeriod) => [
+const columns = (timePeriod: TTimePeriod) => [
   columnHelper.group({
     header: "Данные о работнике",
     columns: [

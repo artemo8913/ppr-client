@@ -15,9 +15,9 @@ export const months: TMonth[] = [
   "dec",
 ] as const;
 
-export type TPprTimePeriod = "year" | TMonth;
+export type TTimePeriod = "year" | TMonth;
 
-export const pprTimePeriods: TPprTimePeriod[] = ["year", ...months] as const;
+export const timePeriods: TTimePeriod[] = ["year", ...months] as const;
 
 export const timePeriodIntlRu = {
   year: "год",
@@ -36,7 +36,7 @@ export const timePeriodIntlRu = {
 };
 
 export const stringToTimePeriodIntlRu = (string: string): string => {
-  for (const period of pprTimePeriods) {
+  for (const period of timePeriods) {
     if (string.startsWith(period)) {
       return timePeriodIntlRu[period];
     }
@@ -45,7 +45,7 @@ export const stringToTimePeriodIntlRu = (string: string): string => {
 };
 
 export const isStringStartsWithTimePeriodName = (string: string): boolean => {
-  for (const period of pprTimePeriods) {
+  for (const period of timePeriods) {
     if (string.startsWith(period)) {
       return true;
     }
@@ -55,7 +55,7 @@ export const isStringStartsWithTimePeriodName = (string: string): boolean => {
 
 export type TQuartalNumber = 1 | 2 | 3 | 4;
 
-export function getCurrentQuartal(timePeriod?: TPprTimePeriod): TQuartalNumber | undefined {
+export function getCurrentQuartal(timePeriod?: TTimePeriod): TQuartalNumber | undefined {
   if (timePeriod === "jan" || timePeriod === "feb" || timePeriod === "mar") {
     return 1;
   } else if (timePeriod === "apr" || timePeriod === "may" || timePeriod === "june") {

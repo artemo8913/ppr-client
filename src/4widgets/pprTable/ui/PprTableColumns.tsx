@@ -4,7 +4,7 @@ import {
   usePprTableSettings,
 } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData } from "@/2entities/ppr";
-import { TPprTimePeriod, getCurrentQuartal, getQuartalMonths, pprTimePeriods } from "@/1shared/lib/date";
+import { TTimePeriod, getCurrentQuartal, getQuartalMonths, timePeriods } from "@/1shared/lib/date";
 
 const columnsDefault: Array<keyof IPprData> = [
   "name",
@@ -21,19 +21,19 @@ const columnsDefault: Array<keyof IPprData> = [
   "unity",
 ] as const;
 
-function getTimePeriodsColumns(currentTimePeriod?: TPprTimePeriod, option?: TFilterTimePeriodOption): TPprTimePeriod[] {
+function getTimePeriodsColumns(currentTimePeriod?: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":
-      return pprTimePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
+      return timePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
     case "SHOW_CURRENT_QUARTAL":
-      const result: TPprTimePeriod[] = ["year"];
+      const result: TTimePeriod[] = ["year"];
       return result.concat(getQuartalMonths(getCurrentQuartal(currentTimePeriod)));
     default:
-      return pprTimePeriods;
+      return timePeriods;
   }
 }
 
-function getPlanFactColumns(pprTimePeriod: TPprTimePeriod, option?: TFilterPlanFactOption): Array<keyof IPprData> {
+function getPlanFactColumns(pprTimePeriod: TTimePeriod, option?: TFilterPlanFactOption): Array<keyof IPprData> {
   switch (option) {
     case "SHOW_ONLY_PLAN":
       return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_plan_time`];
@@ -54,7 +54,7 @@ function getPlanFactColumns(pprTimePeriod: TPprTimePeriod, option?: TFilterPlanF
 
 export const useCreateColumns = (): {
   columnsDefault: (keyof IPprData)[];
-  timePeriods: TPprTimePeriod[];
+  timePeriods: TTimePeriod[];
   timePeriodsColums: (keyof IPprData)[][];
 } => {
   const { filterColumns, currentTimePeriod } = usePprTableSettings();
