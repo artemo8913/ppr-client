@@ -44,6 +44,10 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     () => correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS",
     [correctionView]
   );
+  const isCorrectedView = useMemo(
+    () => correctionView === "CORRECTED_PLAN" || correctionView === "CORRECTED_PLAN_WITH_ARROWS",
+    [correctionView]
+  );
 
   const updatePprTableCell = useCallback(
     (newValue: string, isWorkApproved: boolean, indexData: number, field: keyof IPprData) => {
@@ -109,14 +113,19 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColums.flat()).map((field) => {
               const isPlanWorkPeriodField = checkIsPlanWorkField(field);
-              const value = isPlanWorkPeriodField
-                ? Number(pprData[field]) + getCorrectionValue(pprData.id, field)
-                : checkIsPlanTimeField(field) && getPlanWorkFieldPair(field)
-                ? Number(pprData[field]) +
-                  Number(
-                    (getCorrectionValue(pprData.id, getPlanWorkFieldPair(field)!) * pprData.norm_of_time).toFixed(2)
-                  )
-                : pprData[field];
+              const value =
+                isPlanWorkPeriodField && isCorrectedView
+                  ? pprData[field] + getCorrectionValue(pprData.id, field)
+                  : isPlanWorkPeriodField
+                  ? pprData[field]
+                  : checkIsPlanTimeField(field) && isCorrectedView
+                  ? Number(
+                      (
+                        pprData[field] +
+                        getCorrectionValue(pprData.id, getPlanWorkFieldPair(field)!) * pprData.norm_of_time
+                      ).toFixed(2)
+                    )
+                  : pprData[field];
               const columnSettings = getColumnSettings(
                 field,
                 pprYearStatus,
@@ -124,7 +133,6 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                 pprMonthsStatuses,
                 correctionView
               );
-              const transfers = isPlanWorkPeriodField && getTransfers(pprData.id, field);
               return (
                 <td
                   key={pprData.id + field}
@@ -133,13 +141,8 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                     ...getTdStyle(field),
                   }}
                 >
-                  {isArrowsShow && transfers ? (
-                    <CorrectionArrowsConteiner
-                      transfers={transfers}
-                      fieldFrom={field}
-                      objectId={pprData.id}
-                      planCellRef={planCellRef}
-                    />
+                  {isArrowsShow && isPlanWorkPeriodField ? (
+                    <CorrectionArrowsConteiner fieldFrom={field} objectId={pprData.id} planCellRef={planCellRef} />
                   ) : null}
                   <PprTableCellMemo
                     {...columnSettings}

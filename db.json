@@ -251,11 +251,18 @@
             "jan_plan_work": {
               "newValue": 2,
               "diff": 1,
-              "transfers": [
+              "planTransfers": [
                 {
                   "fieldTo": "feb_plan_work",
                   "is_approved": false,
                   "value": -1
+                }
+              ],
+              "undoneTransfers": [
+                {
+                  "fieldTo": "mar_plan_work",
+                  "is_approved": false,
+                  "value": 1
                 }
               ]
             }

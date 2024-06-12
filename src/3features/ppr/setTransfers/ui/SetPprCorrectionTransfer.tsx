@@ -11,16 +11,18 @@ import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransfe
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
 interface ISetPprCorrectionTransferProps<T> {
+  transferType: "plan" | "undone";
   objectId: string;
   fieldFrom: keyof T;
 }
 
 export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWorkPeriods>> = ({
+  transferType,
   fieldFrom,
   objectId,
 }) => {
-  const { getTransfers, updateTransfers } = usePpr();
-  const transfers = getTransfers(objectId, fieldFrom);
+  const { getTransfers, updateTransfers: updateTransfers } = usePpr();
+  const transfers = getTransfers(transferType, objectId, fieldFrom);
 
   const { currentTimePeriod } = usePprTableSettings();
   const monthIndex = useMemo(
@@ -54,9 +56,9 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
           ...transfers.slice(transferIndex + 1),
         ];
       }
-      updateTransfers(objectId, fieldFrom, newTransfers);
+      updateTransfers(transferType, objectId, fieldFrom, newTransfers);
     },
-    [objectId, fieldFrom, transfers, updateTransfers]
+    [objectId, fieldFrom, transferType, transfers, updateTransfers]
   );
 
   const addTransfer = useCallback(() => {
@@ -69,12 +71,13 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
         return;
       }
       updateTransfers(
+        transferType,
         objectId,
         fieldFrom,
         transfers?.filter((_, i) => i !== index)
       );
     },
-    [updateTransfers, transfers, fieldFrom, objectId]
+    [updateTransfers, transferType, transfers, fieldFrom, objectId]
   );
 
   const handleStratagy = useCallback(

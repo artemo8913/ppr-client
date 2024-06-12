@@ -92,7 +92,8 @@ export type TCorrection<T> = {
   [fieldFrom in keyof T]?: {
     newValue: number;
     diff: number;
-    transfers: TTransfer<T>[] | null;
+    planTransfers: TTransfer<T>[] | null;
+    undoneTransfers: TTransfer<T>[] | null;
   };
 };
 

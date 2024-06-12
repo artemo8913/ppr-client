@@ -43,6 +43,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   const worksCorrections = Object.entries(ppr?.corrections.works || {})
     .filter(([_, value]) => value && `${currentTimePeriod}_plan_work` in value)
     .map(([id, value]) => ({ id, data: value ? value![fieldFrom] : undefined }));
+
   return (
     <div>
       <p className="text-right">
@@ -58,7 +59,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       <h2 className="text-center font-bold">Рапорт</h2>
       <p className="font-bold indent-4 text-justify">
         При планировании ведомости выполненных работ (форма ЭУ-99) на {timePeriodIntlRu[currentTimePeriod]} месяц
-        возникла необходимости корректировки годового плана технического обслуживания ремонта в части:
+        возникла необходимости корректировки годового плана технического обслуживания и ремонта в части:
       </p>
       <p className="indent-4 text-justify">Состава персонала чел.-ч:</p>
       <ol className="list-decimal pl-[revert]">
@@ -70,17 +71,17 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
           return (
             <li key={correction.id}>
               <span>{workBasicInfo[correction.id].name}:</span> <span>план</span>{" "}
-              <span>{Number(correction.data?.newValue) - Number(correction.data?.diff)}</span>{" "}
+              <span>
+                {Number(correction.data?.newValue) -
+                  Number(correction.data?.diff) +
+                  getCorrectionValue(correction.id, getPlanWorkFieldByTimePeriod(currentTimePeriod))}
+              </span>{" "}
               <span>{workBasicInfo[correction.id].measure}</span> <span>изменить на</span>{" "}
               <span>{Number(correction.data?.newValue)}</span> <span>{workBasicInfo[correction.id].measure}</span>
               {". "}
-              <span>Разницу</span> <span>{Number(correction.data?.diff)}</span>{" "}
+              <span>Разницу</span> <span>{-Number(correction.data?.diff)}</span>{" "}
               <span>{workBasicInfo[correction.id].measure}</span>{" "}
-              <SetPprCorrectionTransfer
-                objectId={correction.id}
-                fieldFrom={fieldFrom}
-              />
-              ;
+              <SetPprCorrectionTransfer transferType="plan" objectId={correction.id} fieldFrom={fieldFrom} />;
             </li>
           );
         })}
@@ -108,9 +109,9 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
                 </span>{" "}
                 <span>Разницу</span>{" "}
                 <span>
-                  {Number(factWorkValue - planWorkValue)} {pprData.measure}
+                  {Number(planWorkValue - factWorkValue)} {pprData.measure}
                 </span>{" "}
-                <SetPprCorrectionTransfer objectId={pprData.id} fieldFrom={fieldFrom} />
+                <SetPprCorrectionTransfer transferType="undone" objectId={pprData.id} fieldFrom={fieldFrom} />
               </li>
             );
           })}
@@ -136,9 +137,9 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
                 </span>{" "}
                 <span>Разницу</span>{" "}
                 <span>
-                  {Number(factWorkValue - planWorkValue)} {pprData.measure}
+                  {Number(planWorkValue - factWorkValue)} {pprData.measure}
                 </span>{" "}
-                <SetPprCorrectionTransfer objectId={pprData.id} fieldFrom={fieldFrom} />
+                <SetPprCorrectionTransfer transferType="plan" objectId={pprData.id} fieldFrom={fieldFrom} />
               </li>
             );
           })}
