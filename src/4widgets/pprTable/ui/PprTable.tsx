@@ -61,7 +61,8 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         updatePprData(indexData, field, newValue);
       }
     },
-    [updateNormOfTime, updateFactWork, updateFactTime, updatePlanWork, updateNewValueInCorrection, updatePprData]
+    // все функции "чистые", у всех useCallback с пустым массивов
+    []
   );
 
   return (
