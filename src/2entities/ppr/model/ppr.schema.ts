@@ -78,8 +78,12 @@ export interface IPpr {
 }
 
 export type TPprCorrections = {
-  peoples: { [idWorkinMan: string]: TCorrection<IPlanTimePeriods> | undefined };
-  works: { [idWork: string]: TCorrection<IPlanWorkPeriods> | undefined };
+  peoples: {
+    [idWorkinMan: string]: { [field in keyof IPlanTimePeriods]?: TCorrection<IPlanTimePeriods> } | undefined;
+  };
+  works: {
+    [idWork: string]: { [field in keyof IPlanWorkPeriods]?: TCorrection<IPlanWorkPeriods> } | undefined;
+  };
 };
 
 export interface IPprDataWithRowSpan extends IPprData {
@@ -89,12 +93,14 @@ export interface IPprDataWithRowSpan extends IPprData {
 export type TTransfer<T> = { fieldTo: keyof T; value: number; is_approved: boolean };
 
 export type TCorrection<T> = {
-  [fieldFrom in keyof T]?: {
-    newValue: number;
-    diff: number;
-    planTransfers: TTransfer<T>[] | null;
-    undoneTransfers: TTransfer<T>[] | null;
-  };
+  isHandCorrected: boolean;
+  basicValue: number;
+  outsideCorrectionsSum: number;
+  correctedValue: number;
+  planTransfersSum: number;
+  undoneTransfersSum: number;
+  planTransfers: TTransfer<T>[] | null;
+  undoneTransfers: TTransfer<T>[] | null;
 };
 
 export type TWorkPlanCorrectionsResult = {
