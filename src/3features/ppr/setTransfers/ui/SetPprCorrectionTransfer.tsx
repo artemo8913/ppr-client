@@ -13,6 +13,7 @@ import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 interface ISetPprCorrectionTransferProps<T> {
   transferType: "plan" | "undone";
   objectId: string;
+  rowIndex: number;
   fieldFrom: keyof T;
 }
 
@@ -20,8 +21,9 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
   transferType,
   fieldFrom,
   objectId,
+  rowIndex,
 }) => {
-  const { getTransfers, updateTransfers: updateTransfers } = usePpr();
+  const { getTransfers, updateTransfers } = usePpr();
   const transfers = getTransfers(transferType, objectId, fieldFrom);
 
   const { currentTimePeriod } = usePprTableSettings();
@@ -56,9 +58,9 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
           ...transfers.slice(transferIndex + 1),
         ];
       }
-      updateTransfers(transferType, objectId, fieldFrom, newTransfers);
+      updateTransfers(transferType, rowIndex, fieldFrom, newTransfers);
     },
-    [objectId, fieldFrom, transferType, transfers, updateTransfers]
+    [rowIndex, fieldFrom, transferType, transfers, updateTransfers]
   );
 
   const addTransfer = useCallback(() => {
@@ -72,12 +74,12 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
       }
       updateTransfers(
         transferType,
-        objectId,
+        rowIndex,
         fieldFrom,
         transfers?.filter((_, i) => i !== index)
       );
     },
-    [updateTransfers, transferType, transfers, fieldFrom, objectId]
+    [updateTransfers, transferType, transfers, fieldFrom, rowIndex]
   );
 
   const handleStratagy = useCallback(
