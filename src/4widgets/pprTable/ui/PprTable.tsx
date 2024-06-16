@@ -137,7 +137,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                     ...getTdStyle(field),
                   }}
                 >
-                  <div className="flex flex-col justify-between gap-8">
+                  <div className="flex flex-col justify-between gap-6">
                     {isArrowsShow && isPlanWorkPeriodField ? (
                       <CorrectionArrowsConteiner fieldFrom={field} objectId={pprData.id} planCellRef={planCellRef} />
                     ) : null}
