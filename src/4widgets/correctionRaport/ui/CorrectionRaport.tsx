@@ -1,7 +1,7 @@
 "use client";
 import React, { FC } from "react";
 import { useSession } from "next-auth/react";
-import { usePpr } from "@/1shared/providers/pprProvider";
+import { isPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
 import { timePeriodIntlRu } from "@/1shared/lib/date";
@@ -11,7 +11,16 @@ import {
   getFactWorkFieldByTimePeriod,
   getPlanWorkFieldByTimePeriod,
 } from "@/2entities/ppr";
-import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
+import { DoneWorksCorrectionItem } from "./DoneWorksCorrectionItem";
+import { PlanCorrectionItem } from "./PlanCorrectionItem";
+
+export interface TCorrectionItem {
+  rowIndex: number;
+  objectId: string;
+  firstCompareValue: number;
+  secondCompareValue: number;
+  correctionData: TCorrection<IPlanWorkPeriods> | null;
+}
 
 interface ICorrectionRaportProps {}
 
@@ -19,46 +28,75 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   const { ppr, getWorkCorrection } = usePpr();
   const { currentTimePeriod } = usePprTableSettings();
   const { data: userData } = useSession();
+  if (!userData?.user) {
+    return "Не авторизирован пользователь";
+  }
+  const { id_direction, id_distance, id_subdivision } = userData?.user;
 
-  const { id_direction, id_distance, id_subdivision } = userData?.user!;
-
+  if (currentTimePeriod === "year") {
+    return "Рапорт доступен только при просмотре ППР за конкретный месяц";
+  }
   const fieldFrom: keyof IPlanWorkPeriods = `${currentTimePeriod}_plan_work`;
+  const monthStatus = ppr?.months_statuses[currentTimePeriod];
 
-  const undoneWorks: {
-    rowIndex: number;
-    objectId: string;
-    planWorkValue: number;
-    factWorkValue: number;
-  }[] = [];
-  const welldoneWorks: {
-    rowIndex: number;
-    objectId: string;
-    planWorkValue: number;
-    factWorkValue: number;
-  }[] = [];
-  const worksCorrections: {
-    rowIndex: number;
-    objectId: string;
-    correctionData: TCorrection<IPlanWorkPeriods> | undefined;
-  }[] = [];
+  const undoneWorks: TCorrectionItem[] = [];
+  const welldoneWorks: TCorrectionItem[] = [];
+  const planCorrections: TCorrectionItem[] = [];
 
   ppr?.data.forEach((pprData, rowIndex) => {
     const objectId = pprData.id;
     const correctionData = getWorkCorrection(rowIndex, getPlanWorkFieldByTimePeriod(currentTimePeriod));
-    const factWorkValue = Number(pprData[getFactWorkFieldByTimePeriod(currentTimePeriod)]);
-    if (correctionData) {
-      worksCorrections.push({ rowIndex, correctionData, objectId });
+
+    if (correctionData?.isHandCorrected) {
+      const planWorkValue = Number(correctionData?.basicValue) + Number(correctionData?.outsideCorrectionsSum);
+      const correctedValue = Number(correctionData?.planValueAfterCorrection);
+
+      planCorrections.push({
+        rowIndex,
+        correctionData,
+        objectId,
+        firstCompareValue: planWorkValue,
+        secondCompareValue: correctedValue,
+      });
     }
+
     const planWorkValue =
-      correctionData?.correctedValue !== undefined
-        ? correctionData?.correctedValue
+      correctionData !== undefined
+        ? correctionData.planValueAfterCorrection
         : Number(pprData[getPlanWorkFieldByTimePeriod(currentTimePeriod)]);
+    const factWorkValue = Number(pprData[getFactWorkFieldByTimePeriod(currentTimePeriod)]);
+
     if (planWorkValue > factWorkValue) {
-      undoneWorks.push({ rowIndex, planWorkValue, factWorkValue, objectId });
+      undoneWorks.push({
+        rowIndex,
+        firstCompareValue: planWorkValue,
+        secondCompareValue: factWorkValue,
+        objectId,
+        correctionData: correctionData || null,
+      });
     } else if (planWorkValue < factWorkValue) {
-      welldoneWorks.push({ rowIndex, planWorkValue, factWorkValue, objectId });
+      welldoneWorks.push({
+        rowIndex,
+        firstCompareValue: planWorkValue,
+        secondCompareValue: factWorkValue,
+        objectId,
+        correctionData: correctionData || null,
+      });
     }
   });
+
+  const isPprUnderControl = isPprInUserControl(ppr?.created_by, userData?.user).isForSubdivision;
+  const isEditablePlanCorrections = monthStatus === "plan_creating" && isPprUnderControl;
+  const isEditableDoneWorkCorrections = monthStatus === "fact_filling" && isPprUnderControl;
+  const isShowPlanCorrections = planCorrections.length > 0;
+  const isShowDoneWorkCorrections =
+    monthStatus === "fact_filling" ||
+    monthStatus === "fact_on_agreement_sub_boss" ||
+    monthStatus === "fact_verification_time_norm" ||
+    monthStatus === "fact_verification_engineer" ||
+    monthStatus === "done";
+  const isShowUndoneCorrections = undoneWorks.length > 0 && isShowDoneWorkCorrections;
+  const isShowWellDoneCorrections = welldoneWorks.length > 0 && isShowDoneWorkCorrections;
 
   return (
     <div>
@@ -73,88 +111,64 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
         ХХХ
       </p>
       <h2 className="text-center font-bold">Рапорт</h2>
-      <p className="font-bold indent-4 text-justify">
-        При планировании ведомости выполненных работ (форма ЭУ-99) на {timePeriodIntlRu[currentTimePeriod]} месяц
-        возникла необходимости корректировки годового плана технического обслуживания и ремонта:
-      </p>
-      <ol className="list-decimal pl-[revert]">
-        {worksCorrections.map((correction) => {
-          const name = ppr?.data[correction.rowIndex].name;
-          const planValue =
-            Number(correction.correctionData?.basicValue) + Number(correction.correctionData?.outsideCorrectionsSum);
-          const measure = ppr?.data[correction.rowIndex].measure;
-          const correctedValue = Number(correction.correctionData?.correctedValue);
-          return (
-            <li key={correction.rowIndex}>
-              <span>{name}:</span> <span>план</span> <span>{planValue}</span> <span>{measure}</span>{" "}
-              <span>изменить на</span> <span>{correctedValue}</span> <span>{measure}</span>. <span>Разницу</span>{" "}
-              <span>{planValue - correctedValue}</span> <span>{measure}</span>{" "}
-              <SetPprCorrectionTransfer
-                transferType="plan"
-                objectId={correction.objectId}
-                rowIndex={correction.rowIndex}
+      {isShowPlanCorrections && (
+        <>
+          <p className="font-bold indent-4 text-justify">
+            При планировании ведомости выполненных работ (форма ЭУ-99) на {timePeriodIntlRu[currentTimePeriod]} месяц{" "}
+            {ppr?.year} г. возникла необходимости корректировки годового плана технического обслуживания и ремонта:
+          </p>
+          <ol className="list-decimal pl-[revert]">
+            {planCorrections.map((correction) => (
+              <PlanCorrectionItem
+                isEditable={isEditablePlanCorrections}
+                key={correction.objectId}
+                correction={correction}
                 fieldFrom={fieldFrom}
+                measure={ppr?.data[correction.rowIndex].measure}
+                name={ppr?.data[correction.rowIndex].name}
               />
-            </li>
-          );
-        })}
-      </ol>
-      <p className="font-bold indent-4 text-justify">
-        За {timePeriodIntlRu[currentTimePeriod]} месяц не в полном объеме выполнены следующие работы:
-      </p>
-      <ol className="list-decimal pl-[revert] indent-4 text-justify">
-        {undoneWorks.map((correction) => {
-          const name = ppr?.data[correction.rowIndex].name;
-          const measure = ppr?.data[correction.rowIndex].measure;
-          const { factWorkValue, objectId, planWorkValue, rowIndex } = correction;
-
-          return (
-            <li key={objectId}>
-              <span>{name}:</span>{" "}
-              <span>
-                при плане {planWorkValue} {measure}
-              </span>{" "}
-              <span>факт составил {factWorkValue}.</span> <span>Разницу</span>{" "}
-              <span>
-                {Number(planWorkValue - factWorkValue)} {measure}
-              </span>{" "}
-              <SetPprCorrectionTransfer
-                transferType="undone"
-                objectId={objectId}
-                rowIndex={rowIndex}
+            ))}
+          </ol>
+        </>
+      )}
+      {isShowUndoneCorrections && (
+        <>
+          <p className="font-bold indent-4 text-justify">
+            За {timePeriodIntlRu[currentTimePeriod]} месяц не в полном объеме выполнены следующие работы:
+          </p>
+          <ol className="list-decimal pl-[revert] indent-4 text-justify">
+            {undoneWorks.map((correction) => (
+              <DoneWorksCorrectionItem
+                isEditable={isEditableDoneWorkCorrections}
+                key={correction.objectId}
+                correction={correction}
                 fieldFrom={fieldFrom}
+                measure={ppr?.data[correction.rowIndex].measure}
+                name={ppr?.data[correction.rowIndex].name}
               />
-            </li>
-          );
-        })}
-      </ol>
-      <p className="font-bold indent-4 text-justify">В тоже время были выполнены (перевыполнены) следующие работы:</p>
-      <ol className="list-decimal pl-[revert] indent-4 text-justify">
-        {welldoneWorks.map((correction) => {
-          const name = ppr?.data[correction.rowIndex].name;
-          const measure = ppr?.data[correction.rowIndex].measure;
-          const { factWorkValue, objectId, planWorkValue, rowIndex } = correction;
-
-          return (
-            <li key={objectId}>
-              <span>{name}:</span>{" "}
-              <span>
-                при плане {planWorkValue} {measure}
-              </span>{" "}
-              <span>факт составил {factWorkValue} .</span> <span>Разницу</span>{" "}
-              <span>
-                {Number(planWorkValue - factWorkValue)} {measure}
-              </span>{" "}
-              <SetPprCorrectionTransfer
-                transferType="plan"
-                objectId={objectId}
-                rowIndex={rowIndex}
+            ))}
+          </ol>
+        </>
+      )}
+      {isShowWellDoneCorrections && (
+        <>
+          <p className="font-bold indent-4 text-justify">
+            В тоже время были выполнены (перевыполнены) следующие работы:
+          </p>
+          <ol className="list-decimal pl-[revert] indent-4 text-justify">
+            {welldoneWorks.map((correction) => (
+              <DoneWorksCorrectionItem
+                isEditable={isEditableDoneWorkCorrections}
+                key={correction.objectId}
+                correction={correction}
                 fieldFrom={fieldFrom}
+                measure={ppr?.data[correction.rowIndex].measure}
+                name={ppr?.data[correction.rowIndex].name}
               />
-            </li>
-          );
-        })}
-      </ol>
+            ))}
+          </ol>
+        </>
+      )}
     </div>
   );
 };

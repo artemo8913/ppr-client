@@ -139,7 +139,7 @@ export const workAndTimeFieldsSet: Set<
   | string
 > = new Set(workAndTimeFields);
 
-export const workToTimePlanFieldsPair: { [field in keyof IPlanWorkPeriods]: keyof IPlanTimePeriods } = {
+export const workPlanToTimePlanFieldsPair: { [field in keyof IPlanWorkPeriods]: keyof IPlanTimePeriods } = {
   year_plan_work: "year_plan_time",
   jan_plan_work: "jan_plan_time",
   feb_plan_work: "feb_plan_time",
@@ -155,7 +155,23 @@ export const workToTimePlanFieldsPair: { [field in keyof IPlanWorkPeriods]: keyo
   dec_plan_work: "dec_plan_time",
 };
 
-export const workToNormTimeFactFieldsPair: { [field in keyof IFactWorkPeriods]: keyof IFactNormTimePeriods } = {
+export const workFactToFactPlanFieldsPair: { [field in keyof IFactWorkPeriods]: keyof IPlanWorkPeriods } = {
+  year_fact_work: "year_plan_work",
+  jan_fact_work: "jan_plan_work",
+  feb_fact_work: "feb_plan_work",
+  mar_fact_work: "mar_plan_work",
+  apr_fact_work: "apr_plan_work",
+  may_fact_work: "may_plan_work",
+  june_fact_work: "june_plan_work",
+  july_fact_work: "july_plan_work",
+  aug_fact_work: "aug_plan_work",
+  sept_fact_work: "sept_plan_work",
+  oct_fact_work: "oct_plan_work",
+  nov_fact_work: "nov_plan_work",
+  dec_fact_work: "dec_plan_work",
+};
+
+export const workFactToNormTimeFactFieldsPair: { [field in keyof IFactWorkPeriods]: keyof IFactNormTimePeriods } = {
   year_fact_work: "year_fact_norm_time",
   jan_fact_work: "jan_fact_norm_time",
   feb_fact_work: "feb_fact_norm_time",
@@ -171,7 +187,7 @@ export const workToNormTimeFactFieldsPair: { [field in keyof IFactWorkPeriods]: 
   dec_fact_work: "dec_fact_norm_time",
 };
 
-export const timeToWorkPlanFieldsPair: { [field in keyof IPlanTimePeriods]: keyof IPlanWorkPeriods } = {
+export const timePlanToWorkPlanFieldsPair: { [field in keyof IPlanTimePeriods]: keyof IPlanWorkPeriods } = {
   year_plan_time: "year_plan_work",
   jan_plan_time: "jan_plan_work",
   feb_plan_time: "feb_plan_work",
@@ -207,14 +223,18 @@ export function getFactNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): keyof
   return `${timePeriod}_fact_norm_time`;
 }
 
-export function getPlanTimeFieldPair(field: keyof IPlanWorkPeriods): keyof IPlanTimePeriods {
-  return workToTimePlanFieldsPair[field];
+export function getPlanTimeFieldByPlanWorkField(field: keyof IPlanWorkPeriods): keyof IPlanTimePeriods {
+  return workPlanToTimePlanFieldsPair[field];
 }
 
-export function getFactTimeFieldPair(field: keyof IFactWorkPeriods): keyof IFactNormTimePeriods {
-  return workToNormTimeFactFieldsPair[field];
+export function getFactTimeFieldByFactWorkField(field: keyof IFactWorkPeriods): keyof IFactNormTimePeriods {
+  return workFactToNormTimeFactFieldsPair[field];
 }
 
-export function getPlanWorkFieldPair(field: keyof IPlanTimePeriods): keyof IPlanWorkPeriods {
-  return timeToWorkPlanFieldsPair[field];
+export function getPlanWorkFieldByPlanTimeField(field: keyof IPlanTimePeriods): keyof IPlanWorkPeriods {
+  return timePlanToWorkPlanFieldsPair[field];
+}
+
+export function getPlanWorkFieldByFactWorkField(field: keyof IFactWorkPeriods): keyof IPlanWorkPeriods {
+  return workFactToFactPlanFieldsPair[field];
 }

@@ -11,7 +11,7 @@ import {
   checkIsPlanTimeField,
   checkIsPlanWorkField,
   checkIsWorkOrTimeField,
-  getPlanWorkFieldPair,
+  getPlanWorkFieldByPlanTimeField,
 } from "@/2entities/ppr";
 import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
@@ -28,7 +28,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     getWorkCorrection,
     updateFactTime,
     updateFactWork,
-    updateNewValueInCorrection,
+    updatePlanValueByUser,
     updateNormOfTime,
     updatePlanWork,
     updatePprData,
@@ -59,7 +59,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       } else if (!pprData.is_work_aproved && checkIsPlanWorkField(field)) {
         updatePlanWork(indexData, field, Number(newValue));
       } else if (pprData.is_work_aproved && checkIsPlanWorkField(field)) {
-        updateNewValueInCorrection(indexData, field, Number(newValue));
+        updatePlanValueByUser(indexData, field, Number(newValue));
       } else {
         updatePprData(indexData, field, newValue);
       }
@@ -115,12 +115,11 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
 
               let value = pprData[field];
               if (isPlanWorkPeriodField && isCorrectedView) {
-                const correctedValue = getWorkCorrection(rowIndex, field)?.correctedValue;
-                value = correctedValue === undefined ? value : correctedValue;
+                const correction = getWorkCorrection(rowIndex, field);
+                value = correction === undefined ? value : correction.finalCorrection;
               } else if (checkIsPlanTimeField(field) && isCorrectedView) {
-                const correctedValue = getWorkCorrection(rowIndex, getPlanWorkFieldPair(field))?.correctedValue;
-                value =
-                  correctedValue === undefined ? value : Number((correctedValue * pprData.norm_of_time).toFixed(2));
+                const finalValue = getWorkCorrection(rowIndex, getPlanWorkFieldByPlanTimeField(field))?.finalCorrection;
+                value = finalValue === undefined ? value : Number((finalValue * pprData.norm_of_time).toFixed(2));
               }
 
               const columnSettings = getColumnSettings(

@@ -93,10 +93,11 @@ export interface IPprDataWithRowSpan extends IPprData {
 export type TTransfer<T> = { fieldTo: keyof T; value: number; is_approved: boolean };
 
 export type TCorrection<T> = {
-  isHandCorrected: boolean;
   basicValue: number;
   outsideCorrectionsSum: number;
-  correctedValue: number;
+  isHandCorrected: boolean;
+  planValueAfterCorrection: number;
+  finalCorrection: number;
   planTransfersSum: number;
   undoneTransfersSum: number;
   planTransfers: TTransfer<T>[] | null;

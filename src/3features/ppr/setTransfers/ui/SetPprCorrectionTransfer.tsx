@@ -12,31 +12,32 @@ import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
 interface ISetPprCorrectionTransferProps<T> {
   transferType: "plan" | "undone";
-  objectId: string;
+  transfers: TTransfer<IPlanWorkPeriods>[] | null | undefined;
   rowIndex: number;
   fieldFrom: keyof T;
 }
 
+const monthPlanPeriods = planWorkFields.filter((field) => field !== "year_plan_work");
+
 export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWorkPeriods>> = ({
   transferType,
   fieldFrom,
-  objectId,
+  transfers = null,
   rowIndex,
 }) => {
-  const { getTransfers, updateTransfers } = usePpr();
-  const transfers = getTransfers(transferType, objectId, fieldFrom);
+  const { updateTransfers } = usePpr();
 
   const { currentTimePeriod } = usePprTableSettings();
   const monthIndex = useMemo(
-    () => planWorkFields.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
+    () => monthPlanPeriods.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
     [currentTimePeriod]
   );
-  const nearestPlanPeriod = planWorkFields[monthIndex + 1];
+  const nearestPlanPeriod = monthPlanPeriods[monthIndex + 1];
 
   const selectOptions: TOption<IPlanWorkPeriods>[] = useMemo(
     () =>
-      planWorkFields.map((field, index) => {
-        if (index <= monthIndex && field !== "year_plan_work") {
+      monthPlanPeriods.map((field, index) => {
+        if (index <= monthIndex) {
           return { value: field, label: stringToTimePeriodIntlRu(field || ""), disabled: true };
         }
         return { value: field, label: stringToTimePeriodIntlRu(field || "") };
