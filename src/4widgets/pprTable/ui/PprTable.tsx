@@ -132,23 +132,25 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
               return (
                 <td
                   key={pprData.id + field}
-                  className="border border-black relative"
+                  className="border border-black relative h-1"
                   style={{
                     ...getTdStyle(field),
                   }}
                 >
-                  {isArrowsShow && isPlanWorkPeriodField ? (
-                    <CorrectionArrowsConteiner fieldFrom={field} objectId={pprData.id} planCellRef={planCellRef} />
-                  ) : null}
-                  <PprTableCellMemo
-                    {...columnSettings}
-                    updatePprTableCell={updatePprTableCell}
-                    isVertical={checkIsWorkOrTimeField(field)}
-                    pprData={pprData}
-                    indexData={rowIndex}
-                    field={field}
-                    value={value}
-                  />
+                  <div className="flex flex-col justify-between gap-8">
+                    {isArrowsShow && isPlanWorkPeriodField ? (
+                      <CorrectionArrowsConteiner fieldFrom={field} objectId={pprData.id} planCellRef={planCellRef} />
+                    ) : null}
+                    <PprTableCellMemo
+                      {...columnSettings}
+                      updatePprTableCell={updatePprTableCell}
+                      isVertical={checkIsWorkOrTimeField(field)}
+                      pprData={pprData}
+                      indexData={rowIndex}
+                      field={field}
+                      value={value}
+                    />
+                  </div>
                 </td>
               );
             })}
