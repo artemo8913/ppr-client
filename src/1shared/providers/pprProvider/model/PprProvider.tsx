@@ -1,13 +1,11 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
-import { IWork } from "@/2entities/work";
 import {
   IPlanWorkPeriods,
   IPpr,
   IPprData,
   IPprDataWithRowSpan,
   TTransfer,
-  TWorkPlanCorrectionsResult,
   factWorkFields,
   getFactTimeFieldPair,
   getPlanTimeFieldPair,
@@ -15,17 +13,13 @@ import {
   IFactWorkPeriods,
   IFactTimePeriods,
   TCorrection,
-  checkIsPlanTimeField,
   checkIsPlanWorkField,
 } from "@/2entities/ppr";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 
-type TWorkBasicInfo = { [id: string]: Omit<IWork, "periodicity_normal_data"> };
-
 export interface IPprContextProps {
   ppr: IPpr | null;
-  workBasicInfo: TWorkBasicInfo;
   addWork: (newWork: Partial<IPprData>, indexToPlace?: number) => void;
   deleteWork: (workId: string) => void;
   updateNormOfTime: (rowIndex: number, value: unknown) => void;
@@ -36,7 +30,7 @@ export interface IPprContextProps {
   updateNewValueInCorrection: (rowIndex: number, field: keyof IPlanWorkPeriods, newValue: number) => void;
   updateTransfers: (
     transferType: "plan" | "undone",
-    objectId: string,
+    rowIndex: number,
     fieldFrom: keyof IPlanWorkPeriods,
     transfers: TTransfer<IPlanWorkPeriods>[] | null
   ) => void;
@@ -55,7 +49,6 @@ export interface IPprContextProps {
 
 const PprContext = createContext<IPprContextProps>({
   ppr: null,
-  workBasicInfo: {},
   addWork: () => {},
   deleteWork: () => {},
   updatePprData: () => {},
@@ -83,14 +76,6 @@ interface IPprProviderProps extends PropsWithChildren {
 export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }) => {
   //Данные ППРа
   const [ppr, setPpr] = useState<IPpr | null>(null);
-  //Данные о работах, применяемых в этом ППРе
-  const [workBasicInfo, setWorksDataInPpr] = useState<TWorkBasicInfo>({});
-
-  const handleWorksDataInPpr = useCallback((pprData: IPprData[]) => {
-    const worksData: TWorkBasicInfo = {};
-    pprData.forEach((work) => (worksData[work.id] = { ...work }));
-    setWorksDataInPpr(worksData);
-  }, []);
 
   /**Добавить работу в ППР */
   const addWork = useCallback((newWork: Partial<IPprData>, indexToPlace?: number) => {
@@ -127,7 +112,6 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         return undefined;
       }
       const workId = ppr.data[rowIndex].id;
-      const value = ppr.data[rowIndex][field];
       const correction: TCorrection<IPlanWorkPeriods> | undefined =
         ppr.corrections.works[workId] && ppr.corrections.works[workId]![field];
       if (!correction) {
@@ -300,7 +284,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           prev.data[rowIndex][planWorkField];
       }
 
-      const yearCorrections: TCorrection<IPlanWorkPeriods> = {
+      const yearCorrection: TCorrection<IPlanWorkPeriods> = {
         basicValue: prev.data[rowIndex].year_plan_work,
         correctedValue: allCorrectedValues,
         isHandCorrected: false,
@@ -319,7 +303,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             ...prev.corrections.works,
             [objectId]: {
               ...prev.corrections.works[objectId],
-              year_plan_work: yearCorrections,
+              year_plan_work: yearCorrection,
               [field]: { ...newCorrection },
             },
           },
@@ -332,14 +316,74 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   const updateTransfers = useCallback(
     (
       transferType: "plan" | "undone",
-      objectId: string,
-      fieldFrom: keyof IPlanWorkPeriods,
-      transfers: TTransfer<IPlanWorkPeriods>[] | null
+      rowIndex: number,
+      field: keyof IPlanWorkPeriods,
+      newTransfers: TTransfer<IPlanWorkPeriods>[] | null
     ) => {
       setPpr((prev) => {
         if (!prev) {
           return prev;
         }
+        function handleTransfer(transfers: TTransfer<IPlanWorkPeriods>[] | null | undefined): number {
+          let sum = 0;
+          transfers?.forEach((transfer) => {
+            if (correctionsSumByField[transfer.fieldTo]) {
+              correctionsSumByField[transfer.fieldTo]! += transfer.value;
+            } else {
+              correctionsSumByField[transfer.fieldTo] = transfer.value;
+            }
+            sum += transfer.value;
+          });
+          return sum;
+        }
+
+        const objectId = prev.data[rowIndex].id;
+        const allCorrections = prev.corrections.works[objectId];
+        const correctionsSumByField: { [field in keyof IPlanWorkPeriods]?: number } = {};
+        const newAllCorrections: { [field in keyof IPlanWorkPeriods]?: TCorrection<IPlanWorkPeriods> } = {};
+        let allCorrectedValues = 0;
+
+        for (const planWorkField of planWorkFields) {
+          if (!checkIsPlanWorkField(planWorkField) || planWorkField === "year_plan_work") {
+            continue;
+          }
+          const correction = allCorrections && allCorrections[planWorkField];
+          const planTransfers =
+            transferType === "plan" && field === planWorkField ? newTransfers : correction?.planTransfers || null;
+          const undoneTransfers =
+            transferType === "undone" && field === planWorkField ? newTransfers : correction?.undoneTransfers || null;
+          const planTransfersSum = handleTransfer(planTransfers);
+          const undoneTransfersSum = handleTransfer(undoneTransfers);
+          const basicValue = correction?.basicValue || prev.data[rowIndex][planWorkField];
+          const isHandCorrected = correction?.isHandCorrected || false;
+          const outsideCorrectionsSum = correctionsSumByField[planWorkField] || 0;
+          const correctedValue = isHandCorrected
+            ? correction?.correctedValue!
+            : basicValue + outsideCorrectionsSum + planTransfersSum + undoneTransfersSum;
+          const newCorrection: TCorrection<IPlanWorkPeriods> = {
+            basicValue,
+            isHandCorrected,
+            outsideCorrectionsSum,
+            planTransfersSum,
+            undoneTransfersSum,
+            correctedValue,
+            planTransfers,
+            undoneTransfers,
+          };
+          allCorrectedValues += correctedValue;
+          newAllCorrections[planWorkField] = newCorrection;
+        }
+
+        newAllCorrections.year_plan_work = {
+          basicValue: prev.data[rowIndex].year_plan_work,
+          correctedValue: allCorrectedValues,
+          isHandCorrected: false,
+          outsideCorrectionsSum: 0,
+          planTransfers: null,
+          planTransfersSum: 0,
+          undoneTransfers: null,
+          undoneTransfersSum: 0,
+        };
 
         return {
           ...prev,
@@ -348,11 +392,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             works: {
               ...prev.corrections.works,
               [objectId]: {
-                ...prev.corrections.works[objectId],
-                [fieldFrom]: {
-                  ...(prev.corrections.works[objectId] && prev.corrections.works[objectId]![fieldFrom]),
-                  ...(transferType === "plan" ? { planTransfers: transfers } : { undoneTransfers: transfers }),
-                },
+                ...newAllCorrections,
               },
             },
           },
@@ -373,7 +413,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         ppr?.corrections.works[objectId]![fieldFrom];
 
       if (!isHaveCorrections) {
-        return [];
+        return null;
       }
       if (transferType === "plan") {
         return ppr?.corrections.works[objectId]![fieldFrom]!.planTransfers;
@@ -479,17 +519,10 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     setPpr({ ...pprFromResponce });
   }, [pprFromResponce]);
 
-  useEffect(() => {
-    if (ppr?.data) {
-      handleWorksDataInPpr(ppr.data);
-    }
-  }, [ppr?.data, handleWorksDataInPpr]);
-
   return (
     <PprContext.Provider
       value={{
         ppr,
-        workBasicInfo,
         deleteWork,
         addWork,
         updatePprData,
