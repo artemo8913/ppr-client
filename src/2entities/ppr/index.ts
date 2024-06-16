@@ -1,7 +1,7 @@
 export type {
+  IPpr,
   IPprData,
   IPprDataWithRowSpan,
-  IPpr,
   TAllMonthStatuses,
   TMonthPprStatus,
   TYearPprStatus,
@@ -13,7 +13,7 @@ export type {
   IPlanWorkPeriods,
   TPprCorrections,
   TCorrection,
-  TWorkPlanCorrection,
+  TWorkPlanCorrectionsResult,
   TTransfer,
 } from "./model/ppr.schema";
 export {
@@ -21,9 +21,10 @@ export {
   planWorkFields,
   factWorkFields,
   factTimeFields,
-  getPlanTimeFieldPair,
-  getPlanWorkFieldPair,
-  getFactTimeFieldPair,
+  getPlanTimeFieldByPlanWorkField,
+  getPlanWorkFieldByPlanTimeField,
+  getFactTimeFieldByFactWorkField,
+  getPlanWorkFieldByFactWorkField,
   getFactNormTimeFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
   getFactWorkFieldByTimePeriod,

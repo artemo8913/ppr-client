@@ -1,14 +1,14 @@
 "use client";
 import { FC, memo } from "react";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
-import { IPprData, checkIsFactTimeField, checkIsFactWorkField, checkIsPlanWorkField } from "@/2entities/ppr";
+import { IPprData } from "@/2entities/ppr";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
 
 interface IPprTableCellProps extends ITableCellProps {
   pprData?: IPprData;
   indexData?: number;
   field?: keyof IPprData;
-  updatePprTableCell?: (newValue: string, isWorkApproved: boolean, indexData: number, field: keyof IPprData) => void;
+  updatePprTableCell?: (newValue: string, pprData: IPprData, indexData: number, field: keyof IPprData) => void;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
@@ -22,7 +22,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     if (!pprData || indexData === undefined || !field || !updatePprTableCell) {
       return;
     }
-    updatePprTableCell(newValue, pprData.is_work_aproved, indexData, field);
+    updatePprTableCell(newValue, pprData, indexData, field);
   };
   if (field === "name") {
     return (

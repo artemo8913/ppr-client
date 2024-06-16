@@ -30,12 +30,22 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     });
   }, [ppr, currentTimePeriod]);
 
-  const rejectPpr = useCallback(() => {
+  const rejectPlan = useCallback(() => {
     if (!ppr?.id || currentTimePeriod === "year") {
       return;
     }
     updatePprTable(ppr.id, {
-      months_statuses: { ...ppr.months_statuses, [currentTimePeriod]: "plan_on_correction" },
+      months_statuses: { ...ppr.months_statuses, [currentTimePeriod]: "plan_creating" },
+    }),
+      [ppr?.id];
+  }, [ppr?.id, ppr?.months_statuses, currentTimePeriod]);
+
+  const rejectFact = useCallback(() => {
+    if (!ppr?.id || currentTimePeriod === "year") {
+      return;
+    }
+    updatePprTable(ppr.id, {
+      months_statuses: { ...ppr.months_statuses, [currentTimePeriod]: "fact_filling" },
     }),
       [ppr?.id];
   }, [ppr?.id, ppr?.months_statuses, currentTimePeriod]);
@@ -45,7 +55,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   }
   const currentMonthStatus = ppr.months_statuses[currentTimePeriod];
 
-  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = isPprInUserControl(ppr.created_by, data.user);
+  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = isPprInUserControl(
+    ppr.created_by,
+    data.user
+  );
 
   // Состояния для начальника цеха
   if (isForSubdivision) {
@@ -72,7 +85,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       currentMonthStatus === "plan_on_agreement_time_norm" ||
       currentMonthStatus === "plan_on_aprove"
     ) {
-      return <Button onClick={rejectPpr}>Отозвать</Button>;
+      return <Button onClick={rejectPlan}>Отозвать</Button>;
     }
   }
 
@@ -81,7 +94,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_agreement_engineer") {
       return (
         <>
-          <Button onClick={rejectPpr}>Отклонить</Button>
+          <Button onClick={rejectPlan}>Отклонить</Button>
           <Button onClick={setNextStatus}>Согласовать</Button>
         </>
       );
@@ -89,7 +102,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_verification_engineer") {
       return (
         <>
-          <Button onClick={rejectPpr}>Отклонить</Button>
+          <Button onClick={rejectPlan}>Отклонить</Button>
           <Button onClick={setNextStatus}>Согласовать</Button>
         </>
       );
@@ -101,7 +114,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_agreement_time_norm") {
       return (
         <>
-          <Button onClick={rejectPpr}>Отклонить</Button>
+          <Button onClick={rejectPlan}>Отклонить</Button>
           <Button onClick={setNextStatus}>Согласовать</Button>
         </>
       );
@@ -109,7 +122,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_verification_time_norm") {
       return (
         <>
-          <Button onClick={rejectPpr}>Отклонить</Button>
+          <Button onClick={rejectPlan}>Отклонить</Button>
           <Button onClick={setNextStatus}>Согласовать</Button>
         </>
       );
@@ -121,16 +134,16 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_aprove") {
       return (
         <>
-          <Button onClick={rejectPpr}>Отклонить</Button>
-          <Button onClick={setNextStatus}>Согласовать</Button>
+          <Button onClick={rejectPlan}>Отклонить</Button>
+          <Button onClick={setNextStatus}>Утвердить</Button>
         </>
       );
     }
     if (currentMonthStatus === "fact_on_agreement_sub_boss") {
       return (
         <>
-          <Button onClick={rejectPpr}>Отклонить</Button>
-          <Button onClick={setNextStatus}>Согласовать</Button>
+          <Button onClick={rejectPlan}>Отклонить</Button>
+          <Button onClick={setNextStatus}>Утвердить</Button>
         </>
       );
     }

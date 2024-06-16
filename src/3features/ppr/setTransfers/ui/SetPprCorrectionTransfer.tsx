@@ -1,4 +1,6 @@
 "use client";
+import Button from "antd/es/button";
+import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
@@ -7,32 +9,35 @@ import { IPlanWorkPeriods, TTransfer, planWorkFields } from "@/2entities/ppr";
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
-import { PlusOutlined } from "@ant-design/icons";
-import Button from "antd/es/button";
 
 interface ISetPprCorrectionTransferProps<T> {
-  objectId: string;
+  transferType: "plan" | "undone";
+  transfers: TTransfer<IPlanWorkPeriods>[] | null | undefined;
+  rowIndex: number;
   fieldFrom: keyof T;
 }
 
+const monthPlanPeriods = planWorkFields.filter((field) => field !== "year_plan_work");
+
 export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWorkPeriods>> = ({
+  transferType,
   fieldFrom,
-  objectId,
+  transfers = null,
+  rowIndex,
 }) => {
-  const { getTransfers, updateTransfers } = usePpr();
-  const transfers = getTransfers(objectId, fieldFrom);
+  const { updateTransfers } = usePpr();
 
   const { currentTimePeriod } = usePprTableSettings();
   const monthIndex = useMemo(
-    () => planWorkFields.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
+    () => monthPlanPeriods.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
     [currentTimePeriod]
   );
-  const nearestPlanPeriod = planWorkFields[monthIndex + 1];
+  const nearestPlanPeriod = monthPlanPeriods[monthIndex + 1];
 
   const selectOptions: TOption<IPlanWorkPeriods>[] = useMemo(
     () =>
-      planWorkFields.map((field, index) => {
-        if (index <= monthIndex && field !== "year_plan_work") {
+      monthPlanPeriods.map((field, index) => {
+        if (index <= monthIndex) {
           return { value: field, label: stringToTimePeriodIntlRu(field || ""), disabled: true };
         }
         return { value: field, label: stringToTimePeriodIntlRu(field || "") };
@@ -54,9 +59,9 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
           ...transfers.slice(transferIndex + 1),
         ];
       }
-      updateTransfers(objectId, fieldFrom, newTransfers);
+      updateTransfers(transferType, rowIndex, fieldFrom, newTransfers);
     },
-    [objectId, fieldFrom, transfers, updateTransfers]
+    [rowIndex, fieldFrom, transferType, transfers, updateTransfers]
   );
 
   const addTransfer = useCallback(() => {
@@ -69,12 +74,13 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
         return;
       }
       updateTransfers(
-        objectId,
+        transferType,
+        rowIndex,
         fieldFrom,
         transfers?.filter((_, i) => i !== index)
       );
     },
-    [updateTransfers, transfers, fieldFrom, objectId]
+    [updateTransfers, transferType, transfers, fieldFrom, rowIndex]
   );
 
   const handleStratagy = useCallback(

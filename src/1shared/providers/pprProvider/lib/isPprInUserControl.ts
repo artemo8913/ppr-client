@@ -1,7 +1,17 @@
 import { IUser } from "@/2entities/user";
 
 /**Подходит ли данный ППР для определенных ролей (начальника цеха, инженера, заместителя начальника дистанции, начальника дистанции и т.п.) */
-export function isPprInUserControl(ppr_created_by: IUser, userData: IUser) {
+export function isPprInUserControl(ppr_created_by?: IUser, userData?: IUser) {
+  if (!ppr_created_by || !userData) {
+    return {
+      isForSubdivision: false,
+      isForEngineer: false,
+      isForTimeNorm: false,
+      isForSecurityEngineer: false,
+      isForSubBoss: false,
+      isForBoss: false,
+    };
+  }
   const {
     id_distance: user_id_distance,
     id_subdivision: user_id_subdivision,

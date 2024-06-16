@@ -3,12 +3,12 @@ import { FC, MutableRefObject, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { Arrow } from "@/1shared/ui/arrow";
 import { IPlanWorkPeriods, TTransfer, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
+import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
   objectId: string;
-  fieldFrom: keyof IPlanWorkPeriods | string;
-  transfers: TTransfer<IPlanWorkPeriods>[] | null;
+  fieldFrom: keyof IPlanWorkPeriods;
 }
 
 function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
@@ -27,11 +27,12 @@ function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
 }
 
 export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
+  objectId,
   planCellRef,
   fieldFrom,
-  transfers,
 }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
+  const { getTransfers } = usePpr();
   const { filterColumns } = usePprTableSettings();
   const fieldFromIndex = checkIsPlanWorkField(fieldFrom)
     ? planWorkFields.indexOf(fieldFrom as keyof IPlanWorkPeriods)
@@ -43,6 +44,11 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
     setBasicArrowWidth(width * widthFactor);
   }, [filterColumns, planCellRef]);
 
+  const planTransfers = getTransfers("plan", objectId, fieldFrom);
+  const undoneTransfers = getTransfers("undone", objectId, fieldFrom);
+
+  const transfers = [...(planTransfers || []), ...(undoneTransfers || [])];
+
   const arrows = transfers?.map((field, index) => {
     const fieldToIndex = checkIsPlanWorkField(field.fieldTo) ? planWorkFields.indexOf(field.fieldTo) : undefined;
     const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
@@ -53,5 +59,3 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   }
   return <div>{arrows}</div>;
 };
-
-// getTransfers(objectId, fieldFrom)
