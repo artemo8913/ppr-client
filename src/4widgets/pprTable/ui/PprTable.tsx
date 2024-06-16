@@ -25,8 +25,7 @@ interface IPprTableProps {}
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const {
     ppr,
-    getCorrectionValue,
-    getTransfers,
+    getWorkCorrection,
     updateFactTime,
     updateFactWork,
     updateNewValueInCorrection,
@@ -50,16 +49,16 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   );
 
   const updatePprTableCell = useCallback(
-    (newValue: string, isWorkApproved: boolean, indexData: number, field: keyof IPprData) => {
+    (newValue: string, pprData: IPprData, indexData: number, field: keyof IPprData) => {
       if (field === "norm_of_time") {
         updateNormOfTime(indexData, newValue);
       } else if (checkIsFactWorkField(field)) {
         updateFactWork(indexData, field, Number(newValue));
       } else if (checkIsFactTimeField(field)) {
         updateFactTime(indexData, field, Number(newValue));
-      } else if (!isWorkApproved && checkIsPlanWorkField(field)) {
+      } else if (!pprData.is_work_aproved && checkIsPlanWorkField(field)) {
         updatePlanWork(indexData, field, Number(newValue));
-      } else if (isWorkApproved && checkIsPlanWorkField(field)) {
+      } else if (pprData.is_work_aproved && checkIsPlanWorkField(field)) {
         updateNewValueInCorrection(indexData, field, Number(newValue));
       } else {
         updatePprData(indexData, field, newValue);
@@ -113,19 +112,17 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColums.flat()).map((field) => {
               const isPlanWorkPeriodField = checkIsPlanWorkField(field);
-              const value =
-                isPlanWorkPeriodField && isCorrectedView
-                  ? pprData[field] + getCorrectionValue(pprData.id, field)
-                  : isPlanWorkPeriodField
-                  ? pprData[field]
-                  : checkIsPlanTimeField(field) && isCorrectedView
-                  ? Number(
-                      (
-                        pprData[field] +
-                        getCorrectionValue(pprData.id, getPlanWorkFieldPair(field)!) * pprData.norm_of_time
-                      ).toFixed(2)
-                    )
-                  : pprData[field];
+
+              let value = pprData[field];
+              if (isPlanWorkPeriodField && isCorrectedView) {
+                const correctedValue = getWorkCorrection(rowIndex, field)?.correctedValue;
+                value = correctedValue === undefined ? value : correctedValue;
+              } else if (checkIsPlanTimeField(field) && isCorrectedView) {
+                const correctedValue = getWorkCorrection(rowIndex, getPlanWorkFieldPair(field))?.correctedValue;
+                value =
+                  correctedValue === undefined ? value : Number((correctedValue * pprData.norm_of_time).toFixed(2));
+              }
+
               const columnSettings = getColumnSettings(
                 field,
                 pprYearStatus,
