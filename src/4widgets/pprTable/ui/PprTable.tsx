@@ -26,9 +26,9 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   const {
     ppr,
     getWorkCorrection,
-    updateFactTime,
+    updateFactWorkTime,
     updateFactWork,
-    updatePlanValueByUser,
+    updatePlanWorkValueByUser,
     updateNormOfTime,
     updatePlanWork,
     updatePprData,
@@ -55,11 +55,11 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       } else if (checkIsFactWorkField(field)) {
         updateFactWork(indexData, field, Number(newValue));
       } else if (checkIsFactTimeField(field)) {
-        updateFactTime(indexData, field, Number(newValue));
+        updateFactWorkTime(indexData, field, Number(newValue));
       } else if (!pprData.is_work_aproved && checkIsPlanWorkField(field)) {
         updatePlanWork(indexData, field, Number(newValue));
       } else if (pprData.is_work_aproved && checkIsPlanWorkField(field)) {
-        updatePlanValueByUser(indexData, field, Number(newValue));
+        updatePlanWorkValueByUser(indexData, field, Number(newValue));
       } else {
         updatePprData(indexData, field, newValue);
       }

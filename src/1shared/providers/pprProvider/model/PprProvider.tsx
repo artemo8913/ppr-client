@@ -27,17 +27,17 @@ export interface IPprContextProps {
   updateNormOfTime: (rowIndex: number, value: unknown) => void;
   updatePlanWork: (rowIndex: number, field: keyof IPlanWorkPeriods, value: unknown) => void;
   updateFactWork: (rowIndex: number, field: keyof IFactWorkPeriods, value: unknown) => void;
-  updateFactTime: (rowIndex: number, field: keyof IFactTimePeriods, value: unknown) => void;
+  updateFactWorkTime: (rowIndex: number, field: keyof IFactTimePeriods, value: unknown) => void;
   updatePprData: (rowIndex: number, columnId: keyof IPprData, value: unknown) => void;
-  updatePlanValueByUser: (rowIndex: number, field: keyof IPlanWorkPeriods, newValue: number) => void;
-  updateTransfers: (
+  updatePlanWorkValueByUser: (rowIndex: number, field: keyof IPlanWorkPeriods, newValue: number) => void;
+  updateWorkTransfers: (
     transferType: "plan" | "undone",
     rowIndex: number,
     fieldFrom: keyof IPlanWorkPeriods,
     transfers: TTransfer<IPlanWorkPeriods>[] | null
   ) => void;
   getWorkCorrection: (rowIndex: number, field: keyof IPlanWorkPeriods) => TCorrection<IPlanWorkPeriods> | undefined;
-  getTransfers: (
+  getWorkTransfers: (
     transferType: "plan" | "undone",
     objectId: string,
     fieldFrom: keyof IPlanWorkPeriods
@@ -57,11 +57,11 @@ const PprContext = createContext<IPprContextProps>({
   updateNormOfTime: () => {},
   updatePlanWork: () => {},
   updateFactWork: () => {},
-  updateFactTime: () => {},
-  updatePlanValueByUser: () => {},
-  updateTransfers: () => {},
+  updateFactWorkTime: () => {},
+  updatePlanWorkValueByUser: () => {},
+  updateWorkTransfers: () => {},
   getWorkCorrection: () => undefined,
-  getTransfers: () => null,
+  getWorkTransfers: () => null,
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
@@ -228,7 +228,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateFactTime = useCallback((rowIndex: number, field: keyof IFactTimePeriods, value: unknown) => {
+  const updateFactWorkTime = useCallback((rowIndex: number, field: keyof IFactTimePeriods, value: unknown) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -277,7 +277,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Задать вручную новое значение в плане ППРа */
-  const updatePlanValueByUser = useCallback((rowIndex: number, field: keyof IPlanWorkPeriods, newValue: number) => {
+  const updatePlanWorkValueByUser = useCallback((rowIndex: number, field: keyof IPlanWorkPeriods, newValue: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -347,7 +347,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить переносы*/
-  const updateTransfers = useCallback(
+  const updateWorkTransfers = useCallback(
     (
       transferType: "plan" | "undone",
       rowIndex: number,
@@ -445,7 +445,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   );
 
   /**Получить переносы*/
-  const getTransfers = useCallback(
+  const getWorkTransfers = useCallback(
     (transferType: "plan" | "undone", objectId: string, fieldFrom: keyof IPlanWorkPeriods) => {
       const isHaveCorrections =
         ppr?.corrections.works &&
@@ -571,10 +571,10 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateNormOfTime,
         updatePlanWork,
         updateFactWork,
-        updateFactTime,
-        updatePlanValueByUser,
-        getTransfers,
-        updateTransfers,
+        updateFactWorkTime,
+        updatePlanWorkValueByUser,
+        getWorkTransfers,
+        updateWorkTransfers,
         getWorkCorrection,
         addWorkingMan,
         updateWorkingMan,

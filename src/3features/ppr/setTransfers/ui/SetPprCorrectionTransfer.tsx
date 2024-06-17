@@ -25,7 +25,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
   transfers = null,
   rowIndex,
 }) => {
-  const { updateTransfers } = usePpr();
+  const { updateWorkTransfers } = usePpr();
 
   const { currentTimePeriod } = usePprTableSettings();
   const monthIndex = useMemo(
@@ -59,9 +59,9 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
           ...transfers.slice(transferIndex + 1),
         ];
       }
-      updateTransfers(transferType, rowIndex, fieldFrom, newTransfers);
+      updateWorkTransfers(transferType, rowIndex, fieldFrom, newTransfers);
     },
-    [rowIndex, fieldFrom, transferType, transfers, updateTransfers]
+    [rowIndex, fieldFrom, transferType, transfers, updateWorkTransfers]
   );
 
   const addTransfer = useCallback(() => {
@@ -73,14 +73,14 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
       if (transfers === null) {
         return;
       }
-      updateTransfers(
+      updateWorkTransfers(
         transferType,
         rowIndex,
         fieldFrom,
         transfers?.filter((_, i) => i !== index)
       );
     },
-    [updateTransfers, transferType, transfers, fieldFrom, rowIndex]
+    [updateWorkTransfers, transferType, transfers, fieldFrom, rowIndex]
   );
 
   const handleStratagy = useCallback(

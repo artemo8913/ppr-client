@@ -32,7 +32,7 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   fieldFrom,
 }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
-  const { getTransfers } = usePpr();
+  const { getWorkTransfers } = usePpr();
   const { filterColumns } = usePprTableSettings();
   const fieldFromIndex = checkIsPlanWorkField(fieldFrom)
     ? planWorkFields.indexOf(fieldFrom as keyof IPlanWorkPeriods)
@@ -44,8 +44,8 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
     setBasicArrowWidth(width * widthFactor);
   }, [filterColumns, planCellRef]);
 
-  const planTransfers = getTransfers("plan", objectId, fieldFrom);
-  const undoneTransfers = getTransfers("undone", objectId, fieldFrom);
+  const planTransfers = getWorkTransfers("plan", objectId, fieldFrom);
+  const undoneTransfers = getWorkTransfers("undone", objectId, fieldFrom);
 
   const transfers = [...(planTransfers || []), ...(undoneTransfers || [])];
 
