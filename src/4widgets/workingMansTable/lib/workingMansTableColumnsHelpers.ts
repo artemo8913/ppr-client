@@ -62,6 +62,18 @@ export function getColumnSettings(column: keyof IWorkingManYearPlan, status?: TY
       oct_plan_tabel_time: { cellType: "input" },
       nov_plan_tabel_time: { cellType: "input" },
       dec_plan_tabel_time: { cellType: "input" },
+      jan_fact_time: { cellType: "input" },
+      feb_fact_time: { cellType: "input" },
+      mar_fact_time: { cellType: "input" },
+      apr_fact_time: { cellType: "input" },
+      may_fact_time: { cellType: "input" },
+      june_fact_time: { cellType: "input" },
+      july_fact_time: { cellType: "input" },
+      aug_fact_time: { cellType: "input" },
+      sept_fact_time: { cellType: "input" },
+      oct_fact_time: { cellType: "input" },
+      nov_fact_time: { cellType: "input" },
+      dec_fact_time: { cellType: "input" },
     };
     return settings[column] || {};
   } else if (status === "in_process") {
