@@ -2,7 +2,7 @@
 import { FC, MutableRefObject, memo, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { Arrow } from "@/1shared/ui/arrow";
-import { IPlanWorkPeriods, TTransfer, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
+import { IPlanWorkPeriods, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface ICorrectionArrowsConteinerProps {
