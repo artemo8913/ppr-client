@@ -12,23 +12,30 @@ import {
   planWorkFields,
   IFactWorkPeriods,
   IFactTimePeriods,
-  TCorrection,
+  TWorkCorrection,
   checkIsPlanWorkField,
   factTimeFields,
   getPlanWorkFieldByFactWorkField,
+  IWorkingManYearPlan,
 } from "@/2entities/ppr";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
+import { IPlanNormTimePeriods, IPlanTabelTimePeriods } from "@/2entities/ppr/model/ppr.schema";
+import {
+  getPlanTimeFieldByPlanTabelTimeField,
+  planNormTimeFields,
+  planTabelTimeFields,
+} from "@/2entities/ppr/lib/constFields";
 
 export interface IPprContextProps {
   ppr: IPpr | null;
   addWork: (newWork: Partial<IPprData>, indexToPlace?: number) => void;
   deleteWork: (workId: string) => void;
-  updateNormOfTime: (rowIndex: number, value: unknown) => void;
-  updatePlanWork: (rowIndex: number, field: keyof IPlanWorkPeriods, value: unknown) => void;
-  updateFactWork: (rowIndex: number, field: keyof IFactWorkPeriods, value: unknown) => void;
-  updateFactWorkTime: (rowIndex: number, field: keyof IFactTimePeriods, value: unknown) => void;
-  updatePprData: (rowIndex: number, columnId: keyof IPprData, value: unknown) => void;
+  updateNormOfTime: (rowIndex: number, value: number) => void;
+  updatePlanWork: (rowIndex: number, field: keyof IPlanWorkPeriods, value: number) => void;
+  updateFactWork: (rowIndex: number, field: keyof IFactWorkPeriods, value: number) => void;
+  updateFactWorkTime: (rowIndex: number, field: keyof IFactTimePeriods, value: number) => void;
+  updatePprData: (rowIndex: number, field: keyof IPprData, value: unknown) => void;
   updatePlanWorkValueByUser: (rowIndex: number, field: keyof IPlanWorkPeriods, newValue: number) => void;
   updateWorkTransfers: (
     transferType: "plan" | "undone",
@@ -36,17 +43,21 @@ export interface IPprContextProps {
     fieldFrom: keyof IPlanWorkPeriods,
     transfers: TTransfer<IPlanWorkPeriods>[] | null
   ) => void;
-  getWorkCorrection: (rowIndex: number, field: keyof IPlanWorkPeriods) => TCorrection<IPlanWorkPeriods> | undefined;
+  getWorkCorrection: (rowIndex: number, field: keyof IPlanWorkPeriods) => TWorkCorrection<IPlanWorkPeriods> | undefined;
   getWorkTransfers: (
     transferType: "plan" | "undone",
-    objectId: string,
+    field: string,
     fieldFrom: keyof IPlanWorkPeriods
   ) => TTransfer<IPlanWorkPeriods>[] | null;
-  addWorkingMan: () => void;
-  updateWorkingMan: (rowIndex: number, columnId: keyof IPprData, value: unknown) => void;
-  deleteWorkingMan: (id: string) => void;
   setOneUnityInAllWorks: (unity: string) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
+  addWorkingMan: () => void;
+  deleteWorkingMan: (id: string) => void;
+  updateWorkingMan: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
+  updateWorkingManPlanNormTime: (rowIndex: number, field: keyof IPlanNormTimePeriods, value: number) => void;
+  updateWorkingManPlanTabelTime: (rowIndex: number, field: keyof IPlanTabelTimePeriods, value: number) => void;
+  updateWorkingManFactTime: (rowIndex: number, field: keyof IFactTimePeriods, value: number) => void;
+  updateWorkingManParticipation: (rowIndex: number, value: number) => void;
 }
 
 const PprContext = createContext<IPprContextProps>({
@@ -65,8 +76,12 @@ const PprContext = createContext<IPprContextProps>({
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
+  updateWorkingManPlanNormTime: () => {},
+  updateWorkingManPlanTabelTime: () => {},
+  updateWorkingManFactTime: () => {},
   setOneUnityInAllWorks: () => {},
   getPprDataWithRowSpan: () => [],
+  updateWorkingManParticipation: () => [],
 });
 
 export const usePpr = () => useContext(PprContext);
@@ -109,12 +124,12 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   const getWorkCorrection = useCallback(
-    (rowIndex: number, field: keyof IPlanWorkPeriods): TCorrection<IPlanWorkPeriods> | undefined => {
+    (rowIndex: number, field: keyof IPlanWorkPeriods): TWorkCorrection<IPlanWorkPeriods> | undefined => {
       if (!ppr?.data) {
         return undefined;
       }
       const workId = ppr.data[rowIndex].id;
-      const correction: TCorrection<IPlanWorkPeriods> | undefined =
+      const correction: TWorkCorrection<IPlanWorkPeriods> | undefined =
         ppr.corrections.works[workId] && ppr.corrections.works[workId]![field];
       if (!correction) {
         return undefined;
@@ -143,7 +158,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить значение запланированного объема работ  */
-  const updatePlanWork = useCallback((rowIndex: number, field: keyof IPlanWorkPeriods, value: unknown) => {
+  const updatePlanWork = useCallback((rowIndex: number, field: keyof IPlanWorkPeriods, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -173,7 +188,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateFactWork = useCallback((rowIndex: number, field: keyof IFactWorkPeriods, value: unknown) => {
+  const updateFactWork = useCallback((rowIndex: number, field: keyof IFactWorkPeriods, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -228,7 +243,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateFactWorkTime = useCallback((rowIndex: number, field: keyof IFactTimePeriods, value: unknown) => {
+  const updateFactWorkTime = useCallback((rowIndex: number, field: keyof IFactTimePeriods, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -283,14 +298,14 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         return prev;
       }
       const objectId = prev.data[rowIndex].id;
-      const correction: TCorrection<IPlanWorkPeriods> | undefined =
+      const correction: TWorkCorrection<IPlanWorkPeriods> | undefined =
         prev.corrections.works[objectId] &&
         prev.corrections.works[objectId]![field] &&
         prev.corrections.works[objectId]![field]!;
       if (correction && correction.planValueAfterCorrection === newValue) {
         return prev;
       }
-      const newCorrection: TCorrection<IPlanWorkPeriods> = {
+      const newCorrection: TWorkCorrection<IPlanWorkPeriods> = {
         isHandCorrected: true,
         basicValue: prev.data[rowIndex][field],
         outsideCorrectionsSum: correction?.outsideCorrectionsSum || 0,
@@ -317,7 +332,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           prev.data[rowIndex][planWorkField];
       }
 
-      const yearCorrection: TCorrection<IPlanWorkPeriods> = {
+      const yearCorrection: TWorkCorrection<IPlanWorkPeriods> = {
         basicValue: prev.data[rowIndex].year_plan_work,
         planValueAfterCorrection: yearPlanAfterCorrection,
         isHandCorrected: false,
@@ -375,7 +390,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         const objectId = prev.data[rowIndex].id;
         const allCorrections = prev.corrections.works[objectId];
         const correctionsSumByField: { [field in keyof IPlanWorkPeriods]?: number } = {};
-        const newAllCorrections: { [field in keyof IPlanWorkPeriods]?: TCorrection<IPlanWorkPeriods> } = {};
+        const newAllCorrections: { [field in keyof IPlanWorkPeriods]?: TWorkCorrection<IPlanWorkPeriods> } = {};
 
         let yearFinalCorrection = 0;
         let yearPlanValueAfterCorrections = 0;
@@ -399,7 +414,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
               ? correction?.planValueAfterCorrection
               : basicValue + outsideCorrectionsSum;
           const finalCorrection = planValueAfterCorrection - undoneTransfersSum;
-          const newCorrection: TCorrection<IPlanWorkPeriods> = {
+          const newCorrection: TWorkCorrection<IPlanWorkPeriods> = {
             basicValue,
             isHandCorrected,
             outsideCorrectionsSum,
@@ -479,7 +494,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить данные рабочено из списка людей ППР */
-  const updateWorkingMan = useCallback((rowIndex: number, columnId: keyof IPprData, value: unknown) => {
+  const updateWorkingMan = useCallback((rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -490,8 +505,123 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           if (arrayIndex === rowIndex) {
             return {
               ...man,
-              [columnId]: value,
+              [field]: value,
             };
+          }
+          return man;
+        }),
+      };
+    });
+  }, []);
+
+  const updateWorkingManPlanNormTime = useCallback(
+    (rowIndex: number, field: keyof IPlanNormTimePeriods, value: number) => {
+      setPpr((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const correctedWorkingMan = { ...prev.peoples[rowIndex] };
+        correctedWorkingMan[field] = value;
+        correctedWorkingMan.year_plan_norm_time = 0;
+        for (const planNormPeriod of planNormTimeFields) {
+          if (planNormPeriod === "year_plan_norm_time") {
+            continue;
+          }
+          correctedWorkingMan.year_plan_norm_time += correctedWorkingMan[planNormPeriod];
+        }
+        return {
+          ...prev,
+          peoples: prev.peoples.map((man, index) => {
+            if (rowIndex === index) {
+              return { ...correctedWorkingMan };
+            }
+            return man;
+          }),
+        };
+      });
+    },
+    []
+  );
+
+  const updateWorkingManPlanTabelTime = useCallback(
+    (rowIndex: number, field: keyof IPlanTabelTimePeriods, value: number) => {
+      setPpr((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const correctedWorkingMan = { ...prev.peoples[rowIndex] };
+        correctedWorkingMan[field] = value;
+        correctedWorkingMan.year_plan_tabel_time = 0;
+        for (const planTabelPeriod of planTabelTimeFields) {
+          if (planTabelPeriod === "year_plan_tabel_time") {
+            continue;
+          }
+          correctedWorkingMan.year_plan_tabel_time += correctedWorkingMan[planTabelPeriod];
+          const planTimePeriod = getPlanTimeFieldByPlanTabelTimeField(planTabelPeriod);
+          correctedWorkingMan[planTimePeriod] =
+            correctedWorkingMan.participation * correctedWorkingMan[planTabelPeriod];
+        }
+        correctedWorkingMan.year_plan_time =
+          correctedWorkingMan.participation * correctedWorkingMan.year_plan_tabel_time;
+
+        return {
+          ...prev,
+          peoples: prev.peoples.map((man, index) => {
+            if (rowIndex === index) {
+              return { ...correctedWorkingMan };
+            }
+            return man;
+          }),
+        };
+      });
+    },
+    []
+  );
+
+  const updateWorkingManFactTime = useCallback((rowIndex: number, field: keyof IFactTimePeriods, value: number) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      const correctedWorkinMan = { ...prev.peoples[rowIndex] };
+      correctedWorkinMan[field] = value;
+      correctedWorkinMan.year_fact_time = 0;
+      for (const factPeriod of factTimeFields) {
+        if (factPeriod === "year_fact_time") {
+          continue;
+        }
+        correctedWorkinMan.year_fact_time += correctedWorkinMan[factPeriod];
+      }
+      return {
+        ...prev,
+        peoples: prev.peoples.map((man, index) => {
+          if (rowIndex === index) {
+            return { ...correctedWorkinMan };
+          }
+          return man;
+        }),
+      };
+    });
+  }, []);
+
+  const updateWorkingManParticipation = useCallback((rowIndex: number, value: number) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      const correctedWorkingMan = { ...prev.peoples[rowIndex] };
+      correctedWorkingMan.participation = value;
+
+      for (const planTabelPeriod of planTabelTimeFields) {
+        const planTimePeriod = getPlanTimeFieldByPlanTabelTimeField(planTabelPeriod);
+        correctedWorkingMan[planTimePeriod] = correctedWorkingMan.participation * correctedWorkingMan[planTabelPeriod];
+      }
+
+      return {
+        ...prev,
+        peoples: prev.peoples.map((man, index) => {
+          if (rowIndex === index) {
+            return { ...correctedWorkingMan };
           }
           return man;
         }),
@@ -577,10 +707,14 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateWorkTransfers,
         getWorkCorrection,
         addWorkingMan,
-        updateWorkingMan,
-        deleteWorkingMan,
         setOneUnityInAllWorks,
         getPprDataWithRowSpan,
+        updateWorkingMan,
+        deleteWorkingMan,
+        updateWorkingManPlanNormTime,
+        updateWorkingManPlanTabelTime,
+        updateWorkingManFactTime,
+        updateWorkingManParticipation,
       }}
     >
       {children}
