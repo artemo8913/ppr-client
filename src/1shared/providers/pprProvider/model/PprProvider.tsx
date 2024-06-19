@@ -30,7 +30,8 @@ import {
 export interface IPprContextProps {
   ppr: IPpr | null;
   addWork: (newWork: Partial<IPprData>, indexToPlace?: number) => void;
-  deleteWork: (workId: string) => void;
+  copyWork: (rowIndex: number) => void;
+  deleteWork: (rowIndex: number) => void;
   updateNormOfTime: (rowIndex: number, value: number) => void;
   updatePlanWork: (rowIndex: number, field: keyof IPlanWorkPeriods, value: number) => void;
   updateFactWork: (rowIndex: number, field: keyof IFactWorkPeriods, value: number) => void;
@@ -63,6 +64,7 @@ export interface IPprContextProps {
 const PprContext = createContext<IPprContextProps>({
   ppr: null,
   addWork: () => {},
+  copyWork: () => {},
   deleteWork: () => {},
   updatePprData: () => {},
   updateNormOfTime: () => {},
@@ -113,13 +115,41 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  /**Убрать работу из ППР */
-  const deleteWork = useCallback((workId: string) => {
+  const copyWork = useCallback((rowIndex: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
       }
-      return { ...prev, data: prev.data.filter((work) => work.id !== workId) };
+      const pprData = prev.data[rowIndex];
+      const newWork = {
+        name: pprData?.name,
+        workId: pprData?.workId,
+        branch: pprData?.branch,
+        subbranch: pprData?.subbranch,
+        measure: pprData?.measure,
+        periodicity_normal: pprData?.periodicity_normal,
+        periodicity_fact: pprData?.periodicity_fact,
+        norm_of_time: pprData?.norm_of_time,
+        norm_of_time_document: pprData?.norm_of_time_document,
+        unity: pprData?.unity,
+      };
+      return {
+        ...prev,
+        data: prev.data
+          .slice(0, rowIndex + 1)
+          .concat(createNewPprWorkInstance(newWork))
+          .concat(prev.data.slice(rowIndex + 1)),
+      };
+    });
+  }, []);
+
+  /**Убрать работу из ППР */
+  const deleteWork = useCallback((rowIndex: number) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return { ...prev, data: prev.data.filter((_, index) => index !== rowIndex) };
     });
   }, []);
 
@@ -697,6 +727,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         ppr,
         deleteWork,
         addWork,
+        copyWork,
         updatePprData,
         updateNormOfTime,
         updatePlanWork,
