@@ -13,6 +13,7 @@ import {
 } from "@/2entities/ppr";
 import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
 import { WorkingManTableCellMemo } from "./WorkingManTableCell";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 interface IWorkingMansTableProps {}
 
@@ -25,6 +26,7 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
     updateWorkingManPlanNormTime,
     updateWorkingManPlanTabelTime,
   } = usePpr();
+  const { currentTimePeriod } = usePprTableSettings();
   const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
 
   const updateWorkingManTableCell = useCallback(
@@ -56,7 +58,7 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
         <tr>
           {columnsDefault.map((field) => (
             <th style={getThStyle(field)} className="border border-black" key={field} rowSpan={2}>
-              <TableCellMemo isVertical={field === 'participation'} value={getColumnTitle(field)} />
+              <TableCellMemo isVertical={field === "participation"} value={getColumnTitle(field)} />
             </th>
           ))}
           {timePeriods.map((period) => (
@@ -83,10 +85,10 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
                 style={{ backgroundColor: setBgColor(field) }}
               >
                 <WorkingManTableCellMemo
-                  {...getColumnSettings(field, ppr.status)}
+                  {...getColumnSettings(field, ppr.status, currentTimePeriod, ppr?.months_statuses)}
                   rowIndex={rowIndex}
                   field={field}
-                  isVertical={field.endsWith("_time") || field === 'participation'}
+                  isVertical={field.endsWith("_time") || field === "participation"}
                   updateWorkingManTableCell={updateWorkingManTableCell}
                   value={workingMan[field]}
                 />
