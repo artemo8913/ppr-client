@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, memo, useState } from "react";
 import clsx from "clsx";
 
 type TCell = "none" | "input" | "textarea";
@@ -59,3 +59,7 @@ export const TableCell: FC<ITableCellProps> = (props) => {
     </div>
   );
 };
+
+const TableCellMemo = memo(TableCell);
+
+export { TableCellMemo };
