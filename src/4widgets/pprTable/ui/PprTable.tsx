@@ -49,16 +49,16 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   );
 
   const updatePprTableCell = useCallback(
-    (newValue: string, pprData: IPprData, indexData: number, field: keyof IPprData) => {
+    (newValue: string, isWorkAproved: boolean, indexData: number, field: keyof IPprData) => {
       if (field === "norm_of_time") {
         updateNormOfTime(indexData, Number(newValue));
       } else if (checkIsFactWorkField(field)) {
         updateFactWork(indexData, field, Number(newValue));
       } else if (checkIsFactTimeField(field)) {
         updateFactWorkTime(indexData, field, Number(newValue));
-      } else if (!pprData.is_work_aproved && checkIsPlanWorkField(field)) {
+      } else if (!isWorkAproved && checkIsPlanWorkField(field)) {
         updatePlanWork(indexData, field, Number(newValue));
-      } else if (pprData.is_work_aproved && checkIsPlanWorkField(field)) {
+      } else if (isWorkAproved && checkIsPlanWorkField(field)) {
         updatePlanWorkValueByUser(indexData, field, Number(newValue));
       } else {
         updatePprData(indexData, field, newValue);
@@ -145,8 +145,8 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                       {...columnSettings}
                       updatePprTableCell={updatePprTableCell}
                       isVertical={checkIsWorkOrTimeField(field)}
-                      pprData={pprData}
-                      indexData={rowIndex}
+                      isWorkAproved={pprData.is_work_aproved}
+                      rowIndex={rowIndex}
                       field={field}
                       value={value}
                     />
