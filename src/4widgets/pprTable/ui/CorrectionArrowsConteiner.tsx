@@ -1,5 +1,5 @@
 "use client";
-import { FC, MutableRefObject, useEffect, useState } from "react";
+import { FC, MutableRefObject, memo, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { Arrow } from "@/1shared/ui/arrow";
 import { IPlanWorkPeriods, TTransfer, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
@@ -26,11 +26,7 @@ function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
   return timePeriodCount * planFactFieldCount;
 }
 
-export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
-  objectId,
-  planCellRef,
-  fieldFrom,
-}) => {
+const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ objectId, planCellRef, fieldFrom }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
   const { getWorkTransfers } = usePpr();
   const { filterColumns } = usePprTableSettings();
@@ -59,3 +55,6 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   }
   return <div>{arrows}</div>;
 };
+
+const CorrectionArrowsConteinerMemo = memo(CorrectionArrowsConteiner);
+export { CorrectionArrowsConteiner, CorrectionArrowsConteinerMemo };

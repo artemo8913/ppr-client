@@ -14,7 +14,7 @@ import {
   getPlanWorkFieldByPlanTimeField,
 } from "@/2entities/ppr";
 import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
-import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
+import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
 import { getColumnTitle } from "../lib/pprTableColumnsHelper";
 import { PprTableCellMemo } from "./PprTableCell";
 import { useCreateColumns } from "./PprTableColumns";
@@ -139,7 +139,11 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                 >
                   <div className="flex flex-col justify-between gap-6">
                     {isArrowsShow && isPlanWorkPeriodField ? (
-                      <CorrectionArrowsConteiner fieldFrom={field} objectId={pprData.id} planCellRef={planCellRef} />
+                      <CorrectionArrowsConteinerMemo
+                        fieldFrom={field}
+                        objectId={pprData.id}
+                        planCellRef={planCellRef}
+                      />
                     ) : null}
                     <PprTableCellMemo
                       {...columnSettings}
