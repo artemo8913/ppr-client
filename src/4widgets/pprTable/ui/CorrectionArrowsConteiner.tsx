@@ -30,9 +30,7 @@ const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ object
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
   const { getWorkTransfers } = usePpr();
   const { filterColumns } = usePprTableSettings();
-  const fieldFromIndex = checkIsPlanWorkField(fieldFrom)
-    ? planWorkFields.indexOf(fieldFrom as keyof IPlanWorkPeriods)
-    : undefined;
+  const fieldFromIndex = checkIsPlanWorkField(fieldFrom) ? planWorkFields.indexOf(fieldFrom) : undefined;
 
   useEffect(() => {
     const width = planCellRef.current?.getBoundingClientRect().width || 0;
