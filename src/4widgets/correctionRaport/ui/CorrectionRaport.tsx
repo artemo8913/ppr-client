@@ -7,7 +7,7 @@ import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
 import { timePeriodIntlRu } from "@/1shared/lib/date";
 import {
   IPlanWorkPeriods,
-  TCorrection,
+  TWorkCorrection,
   getFactWorkFieldByTimePeriod,
   getPlanWorkFieldByTimePeriod,
 } from "@/2entities/ppr";
@@ -19,7 +19,7 @@ export interface TCorrectionItem {
   objectId: string;
   firstCompareValue: number;
   secondCompareValue: number;
-  correctionData: TCorrection<IPlanWorkPeriods> | null;
+  correctionData: TWorkCorrection<IPlanWorkPeriods> | null;
 }
 
 interface ICorrectionRaportProps {}
