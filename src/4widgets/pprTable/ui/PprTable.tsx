@@ -51,7 +51,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   const updatePprTableCell = useCallback(
     (newValue: string, pprData: IPprData, indexData: number, field: keyof IPprData) => {
       if (field === "norm_of_time") {
-        updateNormOfTime(indexData, newValue);
+        updateNormOfTime(indexData, Number(newValue));
       } else if (checkIsFactWorkField(field)) {
         updateFactWork(indexData, field, Number(newValue));
       } else if (checkIsFactTimeField(field)) {
