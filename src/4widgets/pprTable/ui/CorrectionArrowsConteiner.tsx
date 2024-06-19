@@ -1,8 +1,8 @@
 "use client";
-import { FC, MutableRefObject, useEffect, useState } from "react";
+import { FC, MutableRefObject, memo, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { Arrow } from "@/1shared/ui/arrow";
-import { IPlanWorkPeriods, TTransfer, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
+import { IPlanWorkPeriods, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface ICorrectionArrowsConteinerProps {
@@ -26,17 +26,11 @@ function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
   return timePeriodCount * planFactFieldCount;
 }
 
-export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
-  objectId,
-  planCellRef,
-  fieldFrom,
-}) => {
+const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ objectId, planCellRef, fieldFrom }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
-  const { getTransfers } = usePpr();
+  const { getWorkTransfers } = usePpr();
   const { filterColumns } = usePprTableSettings();
-  const fieldFromIndex = checkIsPlanWorkField(fieldFrom)
-    ? planWorkFields.indexOf(fieldFrom as keyof IPlanWorkPeriods)
-    : undefined;
+  const fieldFromIndex = checkIsPlanWorkField(fieldFrom) ? planWorkFields.indexOf(fieldFrom) : undefined;
 
   useEffect(() => {
     const width = planCellRef.current?.getBoundingClientRect().width || 0;
@@ -44,8 +38,8 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
     setBasicArrowWidth(width * widthFactor);
   }, [filterColumns, planCellRef]);
 
-  const planTransfers = getTransfers("plan", objectId, fieldFrom);
-  const undoneTransfers = getTransfers("undone", objectId, fieldFrom);
+  const planTransfers = getWorkTransfers("plan", objectId, fieldFrom);
+  const undoneTransfers = getWorkTransfers("undone", objectId, fieldFrom);
 
   const transfers = [...(planTransfers || []), ...(undoneTransfers || [])];
 
@@ -59,3 +53,6 @@ export const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({
   }
   return <div>{arrows}</div>;
 };
+
+const CorrectionArrowsConteinerMemo = memo(CorrectionArrowsConteiner);
+export { CorrectionArrowsConteiner, CorrectionArrowsConteinerMemo };

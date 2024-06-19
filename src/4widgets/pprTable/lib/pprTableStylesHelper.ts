@@ -46,15 +46,12 @@ export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
 }
 
 export function getColumnSettings(
-  coulumnName: keyof Partial<IPprData> | string,
+  field: keyof IPprData,
   pprYearStatus: TYearPprStatus,
   timePeriod: TTimePeriod,
   pprMonthStatuses?: TAllMonthStatuses,
   pprView?: TCorrectionView
 ): ITableCellProps | undefined {
-  if (!checkIsPprDataField(coulumnName)) {
-    return;
-  }
   if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {
     return {};
   }
@@ -109,17 +106,17 @@ export function getColumnSettings(
       nov_fact_time: { cellType: "input" },
       dec_fact_time: { cellType: "input" },
     };
-    return settings[coulumnName];
+    return settings[field];
   }
   if (pprYearStatus !== "in_process" || timePeriod === "year" || !pprMonthStatuses) {
     return {};
   }
-  if (pprMonthStatuses[timePeriod] === "plan_creating" && coulumnName === `${timePeriod}_plan_work`) {
+  if (pprMonthStatuses[timePeriod] === "plan_creating" && field === `${timePeriod}_plan_work`) {
     return { cellType: "input" };
   }
   if (
     pprMonthStatuses[timePeriod] === "fact_filling" &&
-    (coulumnName === `${timePeriod}_fact_work` || coulumnName === `${timePeriod}_fact_time`)
+    (field === `${timePeriod}_fact_work` || field === `${timePeriod}_fact_time`)
   ) {
     return { cellType: "input" };
   }

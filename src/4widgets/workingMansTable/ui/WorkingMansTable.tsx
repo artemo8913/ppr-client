@@ -1,18 +1,51 @@
 "use client";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
-import { TableCell } from "@/1shared/ui/table";
+import { TableCellMemo } from "@/1shared/ui/table";
 import { useCreateColumns } from "../lib/useCreateColumns";
-import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import {
+  IWorkingManYearPlan,
+  checkIsFactTimeField,
+  checkIsPlanNormTimeField,
+  checkIsPlanTabelTimeField,
+} from "@/2entities/ppr";
+import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
+import { WorkingManTableCellMemo } from "./WorkingManTableCell";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 interface IWorkingMansTableProps {}
 
 export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
-  const { ppr, updateWorkingMan } = usePpr();
+  const {
+    ppr,
+    updateWorkingMan,
+    updateWorkingManParticipation,
+    updateWorkingManFactTime,
+    updateWorkingManPlanNormTime,
+    updateWorkingManPlanTabelTime,
+  } = usePpr();
+  const { currentTimePeriod } = usePprTableSettings();
   const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
+
+  const updateWorkingManTableCell = useCallback(
+    (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => {
+      if (field === "participation") {
+        updateWorkingManParticipation(rowIndex, Number(value || 0));
+      } else if (checkIsFactTimeField(field)) {
+        updateWorkingManFactTime(rowIndex, field, Number(value || 0));
+      } else if (checkIsPlanNormTimeField(field)) {
+        updateWorkingManPlanNormTime(rowIndex, field, Number(value || 0));
+      } else if (checkIsPlanTabelTimeField(field)) {
+        updateWorkingManPlanTabelTime(rowIndex, field, Number(value || 0));
+      } else {
+        updateWorkingMan(rowIndex, field, value);
+      }
+    },
+    // все функции "чистые", у всех useCallback с пустым массивов
+    []
+  );
 
   return (
     <table
@@ -23,38 +56,41 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
     >
       <thead>
         <tr>
-          {columnsDefault.map((column) => (
-            <th style={getThStyle(column)} className="border border-black" key={column} rowSpan={2}>
-              <TableCell value={getColumnTitle(column)} />
+          {columnsDefault.map((field) => (
+            <th style={getThStyle(field)} className="border border-black" key={field} rowSpan={2}>
+              <TableCellMemo isVertical={field === "participation"} value={getColumnTitle(field)} />
             </th>
           ))}
           {timePeriods.map((period) => (
             <th key={period} colSpan={4} className="border border-black">
-              <TableCell value={stringToTimePeriodIntlRu(period)} />
+              <TableCellMemo value={stringToTimePeriodIntlRu(period)} />
             </th>
           ))}
         </tr>
         <tr>
           {timePeriodsColumns.flat().map((column) => (
             <th key={column} className="border border-black">
-              <TableCell isVertical value={getColumnTitle(column)} />
+              <TableCellMemo isVertical value={getColumnTitle(column)} />
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {ppr?.peoples.map((workingMan) => (
+        {ppr?.peoples.map((workingMan, rowIndex) => (
           <tr key={workingMan.id}>
-            {columnsDefault.concat(timePeriodsColumns.flat()).map((column) => (
+            {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => (
               <td
-                className="border border-black"
-                key={workingMan.id + column}
-                style={{ backgroundColor: setBgColor(column) }}
+                className="border border-black align-bottom"
+                key={workingMan.id + field}
+                style={{ backgroundColor: setBgColor(field) }}
               >
-                <TableCell
-                  {...getColumnSettings(column, ppr.status)}
-                  isVertical={column.endsWith("_time")}
-                  value={workingMan[column]}
+                <WorkingManTableCellMemo
+                  {...getColumnSettings(field, ppr.status, currentTimePeriod, ppr?.months_statuses)}
+                  rowIndex={rowIndex}
+                  field={field}
+                  isVertical={field.endsWith("_time") || field === "participation"}
+                  updateWorkingManTableCell={updateWorkingManTableCell}
+                  value={workingMan[field]}
                 />
               </td>
             ))}

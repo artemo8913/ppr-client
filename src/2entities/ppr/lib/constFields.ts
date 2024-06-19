@@ -3,6 +3,8 @@ import {
   IFactNormTimePeriods,
   IFactTimePeriods,
   IFactWorkPeriods,
+  IPlanNormTimePeriods,
+  IPlanTabelTimePeriods,
   IPlanTimePeriods,
   IPlanWorkPeriods,
   IPprData,
@@ -72,7 +74,7 @@ export const factTimeFields: (keyof IFactTimePeriods)[] = [
   "dec_fact_time",
 ] as const;
 
-export const normTimeFields: (keyof IFactNormTimePeriods)[] = [
+export const factNormTimeFields: (keyof IFactNormTimePeriods)[] = [
   "year_fact_norm_time",
   "jan_fact_norm_time",
   "feb_fact_norm_time",
@@ -88,11 +90,43 @@ export const normTimeFields: (keyof IFactNormTimePeriods)[] = [
   "dec_fact_norm_time",
 ] as const;
 
+export const planNormTimeFields: (keyof IPlanNormTimePeriods)[] = [
+  "year_plan_norm_time",
+  "jan_plan_norm_time",
+  "feb_plan_norm_time",
+  "mar_plan_norm_time",
+  "apr_plan_norm_time",
+  "may_plan_norm_time",
+  "june_plan_norm_time",
+  "july_plan_norm_time",
+  "aug_plan_norm_time",
+  "sept_plan_norm_time",
+  "oct_plan_norm_time",
+  "nov_plan_norm_time",
+  "dec_plan_norm_time",
+] as const;
+
+export const planTabelTimeFields: (keyof IPlanTabelTimePeriods)[] = [
+  "year_plan_tabel_time",
+  "jan_plan_tabel_time",
+  "feb_plan_tabel_time",
+  "mar_plan_tabel_time",
+  "apr_plan_tabel_time",
+  "may_plan_tabel_time",
+  "june_plan_tabel_time",
+  "july_plan_tabel_time",
+  "aug_plan_tabel_time",
+  "sept_plan_tabel_time",
+  "oct_plan_tabel_time",
+  "nov_plan_tabel_time",
+  "dec_plan_tabel_time",
+] as const;
+
 export const workAndTimeFields = [
   ...planWorkFields,
   ...planTimeFields,
   ...factWorkFields,
-  ...normTimeFields,
+  ...factNormTimeFields,
   ...factTimeFields,
 ];
 
@@ -117,16 +151,16 @@ export const pprDataFields: (keyof IPprData)[] = [
   ...planWorkFields,
   ...planTimeFields,
   ...factWorkFields,
-  ...normTimeFields,
+  ...factNormTimeFields,
   ...factTimeFields,
 ] as const;
 
-export const pprTableFieldsSet: Set<keyof IPprData | string> = new Set(pprDataFields);
-export const planWorkFieldsSet: Set<keyof IPlanWorkPeriods | string> = new Set(planWorkFields);
-export const factWorkFieldsSet: Set<keyof IFactWorkPeriods | string> = new Set(factWorkFields);
-export const planTimeFieldsSet: Set<keyof IPlanTimePeriods | string> = new Set(planTimeFields);
-export const factTimeFieldsSet: Set<keyof IFactTimePeriods | string> = new Set(factTimeFields);
-export const planFactWorkFieldsSet: Set<keyof IPlanWorkPeriods | keyof IFactWorkPeriods | string> = new Set([
+export const pprTableFieldsSet: Set<keyof IPprData> = new Set(pprDataFields);
+export const planWorkFieldsSet: Set<keyof IPlanWorkPeriods> = new Set(planWorkFields);
+export const factWorkFieldsSet: Set<keyof IFactWorkPeriods> = new Set(factWorkFields);
+export const planTimeFieldsSet: Set<keyof IPlanTimePeriods> = new Set(planTimeFields);
+export const factTimeFieldsSet: Set<keyof IFactTimePeriods> = new Set(factTimeFields);
+export const planFactWorkFieldsSet: Set<keyof IPlanWorkPeriods | keyof IFactWorkPeriods> = new Set([
   ...planWorkFields,
   ...factWorkFields,
 ]);
@@ -136,8 +170,10 @@ export const workAndTimeFieldsSet: Set<
   | keyof IPlanTimePeriods
   | keyof IFactWorkPeriods
   | keyof IFactTimePeriods
-  | string
 > = new Set(workAndTimeFields);
+export const planNormTimeFieldsSet: Set<keyof IPlanNormTimePeriods> = new Set(planNormTimeFields);
+export const planTabelTimeFieldsSet: Set<keyof IPlanTabelTimePeriods> = new Set(planTabelTimeFields);
+export const factNormTimeFieldsSet: Set<keyof IFactNormTimePeriods> = new Set(factNormTimeFields);
 
 export const workPlanToTimePlanFieldsPair: { [field in keyof IPlanWorkPeriods]: keyof IPlanTimePeriods } = {
   year_plan_work: "year_plan_time",
@@ -203,6 +239,22 @@ export const timePlanToWorkPlanFieldsPair: { [field in keyof IPlanTimePeriods]: 
   dec_plan_time: "dec_plan_work",
 };
 
+export const tabelTimePlanToTimePlanFieldsPair: { [field in keyof IPlanTabelTimePeriods]: keyof IPlanTimePeriods } = {
+  year_plan_tabel_time: "year_plan_time",
+  jan_plan_tabel_time: "jan_plan_time",
+  feb_plan_tabel_time: "feb_plan_time",
+  mar_plan_tabel_time: "mar_plan_time",
+  apr_plan_tabel_time: "apr_plan_time",
+  may_plan_tabel_time: "may_plan_time",
+  june_plan_tabel_time: "june_plan_time",
+  july_plan_tabel_time: "july_plan_time",
+  aug_plan_tabel_time: "aug_plan_time",
+  sept_plan_tabel_time: "sept_plan_time",
+  oct_plan_tabel_time: "oct_plan_time",
+  nov_plan_tabel_time: "nov_plan_time",
+  dec_plan_tabel_time: "dec_plan_time",
+};
+
 export function getPlanWorkFieldByTimePeriod(timePeriod: TTimePeriod): keyof IPlanWorkPeriods {
   return `${timePeriod}_plan_work`;
 }
@@ -237,4 +289,8 @@ export function getPlanWorkFieldByPlanTimeField(field: keyof IPlanTimePeriods): 
 
 export function getPlanWorkFieldByFactWorkField(field: keyof IFactWorkPeriods): keyof IPlanWorkPeriods {
   return workFactToFactPlanFieldsPair[field];
+}
+
+export function getPlanTimeFieldByPlanTabelTimeField(field: keyof IPlanTabelTimePeriods): keyof IPlanTimePeriods {
+  return tabelTimePlanToTimePlanFieldsPair[field];
 }

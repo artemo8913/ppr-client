@@ -14,7 +14,7 @@ import {
   getPlanWorkFieldByPlanTimeField,
 } from "@/2entities/ppr";
 import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
-import { CorrectionArrowsConteiner } from "./CorrectionArrowsConteiner";
+import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
 import { getColumnTitle } from "../lib/pprTableColumnsHelper";
 import { PprTableCellMemo } from "./PprTableCell";
 import { useCreateColumns } from "./PprTableColumns";
@@ -26,9 +26,9 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   const {
     ppr,
     getWorkCorrection,
-    updateFactTime,
+    updateFactWorkTime,
     updateFactWork,
-    updatePlanValueByUser,
+    updatePlanWorkValueByUser,
     updateNormOfTime,
     updatePlanWork,
     updatePprData,
@@ -49,17 +49,17 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   );
 
   const updatePprTableCell = useCallback(
-    (newValue: string, pprData: IPprData, indexData: number, field: keyof IPprData) => {
+    (newValue: string, isWorkAproved: boolean, indexData: number, field: keyof IPprData) => {
       if (field === "norm_of_time") {
-        updateNormOfTime(indexData, newValue);
+        updateNormOfTime(indexData, Number(newValue));
       } else if (checkIsFactWorkField(field)) {
         updateFactWork(indexData, field, Number(newValue));
       } else if (checkIsFactTimeField(field)) {
-        updateFactTime(indexData, field, Number(newValue));
-      } else if (!pprData.is_work_aproved && checkIsPlanWorkField(field)) {
+        updateFactWorkTime(indexData, field, Number(newValue));
+      } else if (!isWorkAproved && checkIsPlanWorkField(field)) {
         updatePlanWork(indexData, field, Number(newValue));
-      } else if (pprData.is_work_aproved && checkIsPlanWorkField(field)) {
-        updatePlanValueByUser(indexData, field, Number(newValue));
+      } else if (isWorkAproved && checkIsPlanWorkField(field)) {
+        updatePlanWorkValueByUser(indexData, field, Number(newValue));
       } else {
         updatePprData(indexData, field, newValue);
       }
@@ -139,14 +139,18 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                 >
                   <div className="flex flex-col justify-between gap-6">
                     {isArrowsShow && isPlanWorkPeriodField ? (
-                      <CorrectionArrowsConteiner fieldFrom={field} objectId={pprData.id} planCellRef={planCellRef} />
+                      <CorrectionArrowsConteinerMemo
+                        fieldFrom={field}
+                        objectId={pprData.id}
+                        planCellRef={planCellRef}
+                      />
                     ) : null}
                     <PprTableCellMemo
                       {...columnSettings}
                       updatePprTableCell={updatePprTableCell}
                       isVertical={checkIsWorkOrTimeField(field)}
-                      pprData={pprData}
-                      indexData={rowIndex}
+                      isWorkAproved={pprData.is_work_aproved}
+                      rowIndex={rowIndex}
                       field={field}
                       value={value}
                     />
