@@ -5,15 +5,15 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useWorkModal } from "@/1shared/providers/workModalProvider";
 
 interface IAddWorkButtonProps extends React.ComponentProps<typeof Button> {
-  indexToPlace?: number;
+  rowIndex?: number;
 }
 
-export const AddWorkButton: FC<IAddWorkButtonProps> = ({ indexToPlace }) => {
+export const AddWorkButton: FC<IAddWorkButtonProps> = ({ rowIndex }) => {
   const { openModal } = useWorkModal();
   return (
     <Button
       onClick={() => {
-        openModal(indexToPlace);
+        openModal(rowIndex);
       }}
       size="small"
       shape="circle"
