@@ -12,7 +12,7 @@ export type {
   IPlanTimePeriods,
   IPlanWorkPeriods,
   TPprCorrections,
-  TCorrection,
+  TWorkCorrection,
   TWorkPlanCorrectionsResult,
   TTransfer,
 } from "./model/ppr.schema";
@@ -21,6 +21,8 @@ export {
   planWorkFields,
   factWorkFields,
   factTimeFields,
+  factNormTimeFields,
+  planTabelTimeFields,
   getPlanTimeFieldByPlanWorkField,
   getPlanWorkFieldByPlanTimeField,
   getFactTimeFieldByFactWorkField,
@@ -30,6 +32,7 @@ export {
   getFactWorkFieldByTimePeriod,
   getPlanTimeFieldByTimePeriod,
   getPlanWorkFieldByTimePeriod,
+  getPlanTimeFieldByPlanTabelTimeField,
 } from "./lib/constFields";
 export {
   checkIsPprDataField,
@@ -39,5 +42,8 @@ export {
   checkIsWorkOrTimeField,
   checkIsFactWorkField,
   checkIsFactTimeField,
+  checkIsFactNormTimeField,
+  checkIsPlanNormTimeField,
+  checkIsPlanTabelTimeField,
 } from "./lib/validateTypes";
 export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
