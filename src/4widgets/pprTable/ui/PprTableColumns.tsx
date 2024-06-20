@@ -55,13 +55,13 @@ function getPlanFactColumns(pprTimePeriod: TTimePeriod, option?: TFilterPlanFact
 export const useCreateColumns = (): {
   columnsDefault: (keyof IPprData)[];
   timePeriods: TTimePeriod[];
-  timePeriodsColums: (keyof IPprData)[][];
+  timePeriodsColumns: (keyof IPprData)[][];
 } => {
   const { filterColumns, currentTimePeriod } = usePprTableSettings();
   return {
     columnsDefault,
     timePeriods: getTimePeriodsColumns(currentTimePeriod, filterColumns.months),
-    timePeriodsColums: getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) =>
+    timePeriodsColumns: getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) =>
       getPlanFactColumns(month, filterColumns.planFact)
     ),
   };

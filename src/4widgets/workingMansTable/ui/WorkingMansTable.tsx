@@ -7,6 +7,7 @@ import { useCreateColumns } from "../lib/useCreateColumns";
 import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 import {
   IWorkingManYearPlan,
+  SummaryTableFoot,
   checkIsFactTimeField,
   checkIsPlanNormTimeField,
   checkIsPlanTabelTimeField,
@@ -97,6 +98,11 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
           </tr>
         ))}
       </tbody>
+      <SummaryTableFoot
+        fields={timePeriodsColumns.flat()}
+        summaryNameColSpan={columnsDefault.length}
+        totalFieldsValues={ppr?.total_fields_value}
+      />
     </table>
   );
 };

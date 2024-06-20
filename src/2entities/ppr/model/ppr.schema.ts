@@ -61,6 +61,20 @@ export type IFactTimePeriods = {
   [key in `${TTimePeriod}_fact_time`]: number;
 };
 
+export type TPprDataFieldsTotalValues = Partial<IPlanTimePeriods> &
+  Partial<IFactNormTimePeriods> &
+  Partial<IFactTimePeriods>;
+
+export type TWorkingManFieldsTotalValues = Partial<IPlanNormTimePeriods> &
+  Partial<IPlanTabelTimePeriods> &
+  Partial<IPlanTimePeriods> &
+  Partial<IFactTimePeriods>;
+
+export type TTotalFieldsValues = {
+  peoples: TWorkingManFieldsTotalValues;
+  works: TPprDataFieldsTotalValues;
+};
+
 export interface IPpr {
   id: string;
   name: string;
@@ -75,6 +89,7 @@ export interface IPpr {
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
   corrections: TPprCorrections;
+  total_fields_value: TTotalFieldsValues;
 }
 
 export type TPprCorrections = {

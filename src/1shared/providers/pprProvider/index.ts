@@ -1,4 +1,4 @@
-export type { IPprContextProps } from "./model/PprProvider";
+export type { IPprContext } from "./model/PprProvider";
 export { PprProvider, usePpr } from "./model/PprProvider";
 export {
   getNextPprMonthStatus,
