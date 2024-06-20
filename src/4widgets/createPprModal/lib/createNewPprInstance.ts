@@ -13,6 +13,7 @@ export function createNewPprInstance(session: Session | null, values?: Partial<I
     created_at: new Date().toString(),
     created_by: session?.user!,
     peoples: [],
+    total_fields_value: { peoples: {}, works: {} },
     corrections: { peoples: {}, works: {} },
     months_statuses: {
       jan: "none",

@@ -120,13 +120,15 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
               const corrections = (isPlanWorkPeriodField && getWorkCorrection(rowIndex, field)) || undefined;
 
               let value = pprData[field];
-              if (isCorrectedView && corrections) {
-                if (isPlanWorkPeriodField) {
-                  value = corrections.finalCorrection;
-                } else if (checkIsPlanTimeField(field)) {
-                  const finalValue = corrections.finalCorrection;
-                  value = Number((finalValue * pprData.norm_of_time).toFixed(2));
-                }
+
+              if (isCorrectedView && isPlanWorkPeriodField) {
+                value = corrections?.finalCorrection || value;
+              } else if (isCorrectedView && checkIsPlanTimeField(field)) {
+                const finalCorrection = getWorkCorrection(
+                  rowIndex,
+                  getPlanWorkFieldByPlanTimeField(field)
+                )?.finalCorrection;
+                value = finalCorrection ? Number((finalCorrection * pprData.norm_of_time).toFixed(2)) : value;
               }
 
               const transfers = (corrections?.planTransfers || []).concat(corrections?.undoneTransfers || []);
