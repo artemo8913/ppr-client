@@ -11,7 +11,7 @@ interface ICopyWorkButtonProps extends React.ComponentProps<typeof Button> {
 const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ rowIndex }) => {
   const { copyWork } = usePpr();
   const handleClick = useCallback(() => {
-    rowIndex && copyWork(rowIndex);
+    rowIndex !== undefined && copyWork(rowIndex);
   }, [copyWork, rowIndex]);
   return <Button onClick={handleClick} size="small" shape="circle" icon={<CopyOutlined />} />;
 };
