@@ -4,6 +4,7 @@ import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   IPprData,
+  SummaryTableFoot,
   TAllMonthStatuses,
   TYearPprStatus,
   checkIsFactTimeField,
@@ -33,7 +34,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     updatePlanWork,
     updatePprData,
   } = usePpr();
-  const { columnsDefault, timePeriods, timePeriodsColums } = useCreateColumns();
+  const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
   const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, currentTimePeriod } = usePprTableSettings();
   const pprYearStatus: TYearPprStatus = ppr?.status || "template";
   const pprMonthsStatuses: TAllMonthStatuses | undefined = ppr?.months_statuses || undefined;
@@ -90,13 +91,17 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
             </th>
           ))}
           {timePeriods.map((month) => (
-            <th key={month} colSpan={timePeriodsColums[0].length} className="border border-black sticky top-0 z-20">
+            <th
+              key={month}
+              colSpan={timePeriodsColumns[0].length}
+              className="border border-black sticky top-0 z-20 bg-[#f5f5f5]"
+            >
               <PprTableCellMemo value={stringToTimePeriodIntlRu(month)} />
             </th>
           ))}
         </tr>
         <tr>
-          {timePeriodsColums.flat().map((periodField) => (
+          {timePeriodsColumns.flat().map((periodField) => (
             <th
               key={periodField}
               ref={periodField === "year_plan_work" ? planCellRef : null}
@@ -110,7 +115,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
       <tbody>
         {ppr?.data.map((pprData, rowIndex) => (
           <tr key={pprData.id}>
-            {columnsDefault.concat(timePeriodsColums.flat()).map((field) => {
+            {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => {
               const isPlanWorkPeriodField = checkIsPlanWorkField(field);
 
               let value = pprData[field];
@@ -161,6 +166,11 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           </tr>
         ))}
       </tbody>
+      <SummaryTableFoot
+        fields={timePeriodsColumns.flat()}
+        summaryNameColSpan={columnsDefault.length}
+        totalFieldsValues={ppr?.total_fields_value}
+      />
     </table>
   );
 };
