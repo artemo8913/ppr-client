@@ -4,7 +4,10 @@ import {
   IPlanWorkPeriods,
   IPpr,
   IPprData,
+  TTotalFieldsValues,
   IPprDataWithRowSpan,
+  IPlanNormTimePeriods,
+  IPlanTabelTimePeriods,
   TTransfer,
   factWorkFields,
   getFactTimeFieldByFactWorkField,
@@ -20,14 +23,16 @@ import {
 } from "@/2entities/ppr";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
-import { IPlanNormTimePeriods, IPlanTabelTimePeriods } from "@/2entities/ppr/model/ppr.schema";
 import {
+  factNormTimeFields,
   getPlanTimeFieldByPlanTabelTimeField,
   planNormTimeFields,
   planTabelTimeFields,
+  planTimeFields,
 } from "@/2entities/ppr/lib/constFields";
+import { TPprDataFieldsTotalValues, TWorkingManFieldsTotalValues } from "@/2entities/ppr/model/ppr.schema";
 
-export interface IPprContextProps {
+export interface IPprContext {
   ppr: IPpr | null;
   addWork: (newWork: Partial<IPprData>, indexToPlace?: number) => void;
   copyWork: (rowIndex: number) => void;
@@ -66,7 +71,7 @@ export interface IPprContextProps {
   updateWorkingManParticipation: (rowIndex: number, value: number) => void;
 }
 
-const PprContext = createContext<IPprContextProps>({
+const PprContext = createContext<IPprContext>({
   ppr: null,
   addWork: () => {},
   copyWork: () => {},
@@ -752,6 +757,48 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   useEffect(() => {
     setPpr({ ...pprFromResponce });
   }, [pprFromResponce]);
+
+  //Расчитать и сохранить значения в итоговые значения.
+  //Скорее всего было бы лучше сделать не useEffect, а при вызове функций изменения ячеек сразу же считать сумму по столбцам/
+  //Ибо сейчас скорее всего получится, что я делаю перерендеринг из-за перерасчета, из-за useEffect
+  useEffect(() => {
+    const totalFieldsValues: TTotalFieldsValues = { works: {}, peoples: {} };
+
+    function handleWorkPeriod(pprData: IPprData, period: keyof TPprDataFieldsTotalValues) {
+      if (totalFieldsValues.works[period] !== undefined) {
+        totalFieldsValues.works[period]! += pprData[period];
+      } else {
+        totalFieldsValues.works[period] = pprData[period];
+      }
+    }
+
+    function handleWorkingMansPeriod(peoples: IWorkingManYearPlan, period: keyof TWorkingManFieldsTotalValues) {
+      if (totalFieldsValues.peoples[period] !== undefined) {
+        totalFieldsValues.peoples[period]! += peoples[period];
+      } else {
+        totalFieldsValues.peoples[period] = peoples[period];
+      }
+    }
+
+    ppr?.data.forEach((pprData) => {
+      planTimeFields.forEach((period) => handleWorkPeriod(pprData, period));
+      factNormTimeFields.forEach((period) => handleWorkPeriod(pprData, period));
+      factTimeFields.forEach((period) => handleWorkPeriod(pprData, period));
+    });
+
+    ppr?.peoples.forEach((workingMan) => {
+      planNormTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
+      planTabelTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
+      planTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
+      factTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
+    });
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return { ...prev, total_fields_value: totalFieldsValues };
+    });
+  }, [ppr?.data, ppr?.peoples]);
 
   return (
     <PprContext.Provider
