@@ -1,16 +1,19 @@
 export type {
   IPpr,
   IPprData,
+  TTotalFieldsValues,
   IPprDataWithRowSpan,
   TAllMonthStatuses,
   TMonthPprStatus,
   TYearPprStatus,
   IWorkingManYearPlan,
-  IFactNormTimePeriods,
-  IFactTimePeriods,
-  IFactWorkPeriods,
+  IPlanNormTimePeriods,
+  IPlanTabelTimePeriods,
   IPlanTimePeriods,
   IPlanWorkPeriods,
+  IFactWorkPeriods,
+  IFactNormTimePeriods,
+  IFactTimePeriods,
   TPprCorrections,
   TWorkCorrection,
   TWorkPlanCorrectionsResult,
@@ -47,3 +50,4 @@ export {
   checkIsPlanTabelTimeField,
 } from "./lib/validateTypes";
 export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
+export { SummaryTableFoot } from "./ui/SummaryTableFoot";
