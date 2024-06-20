@@ -117,15 +117,19 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => {
               const isPlanWorkPeriodField = checkIsPlanWorkField(field);
+              const corrections = (isPlanWorkPeriodField && getWorkCorrection(rowIndex, field)) || undefined;
 
               let value = pprData[field];
-              if (isPlanWorkPeriodField && isCorrectedView) {
-                const correction = getWorkCorrection(rowIndex, field);
-                value = correction === undefined ? value : correction.finalCorrection;
-              } else if (checkIsPlanTimeField(field) && isCorrectedView) {
-                const finalValue = getWorkCorrection(rowIndex, getPlanWorkFieldByPlanTimeField(field))?.finalCorrection;
-                value = finalValue === undefined ? value : Number((finalValue * pprData.norm_of_time).toFixed(2));
+              if (isCorrectedView && corrections) {
+                if (isPlanWorkPeriodField) {
+                  value = corrections.finalCorrection;
+                } else if (checkIsPlanTimeField(field)) {
+                  const finalValue = corrections.finalCorrection;
+                  value = Number((finalValue * pprData.norm_of_time).toFixed(2));
+                }
               }
+
+              const transfers = (corrections?.planTransfers || []).concat(corrections?.undoneTransfers || []);
 
               const columnSettings = getColumnSettings(
                 field,
@@ -143,13 +147,9 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                   }}
                 >
                   <div className="flex flex-col justify-between gap-6">
-                    {isArrowsShow && isPlanWorkPeriodField ? (
-                      <CorrectionArrowsConteinerMemo
-                        fieldFrom={field}
-                        objectId={pprData.id}
-                        planCellRef={planCellRef}
-                      />
-                    ) : null}
+                    {isArrowsShow && isPlanWorkPeriodField && corrections && (
+                      <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
+                    )}
                     <PprTableCellMemo
                       {...columnSettings}
                       updatePprTableCell={updatePprTableCell}
