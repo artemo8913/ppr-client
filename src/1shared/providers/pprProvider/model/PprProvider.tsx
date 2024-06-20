@@ -50,11 +50,6 @@ export interface IPprContext {
     transfers: TTransfer<IPlanWorkPeriods>[] | null
   ) => void;
   getWorkCorrection: (rowIndex: number, field: keyof IPlanWorkPeriods) => TWorkCorrection<IPlanWorkPeriods> | undefined;
-  getWorkTransfers: (
-    transferType: "plan" | "undone",
-    field: string,
-    fieldFrom: keyof IPlanWorkPeriods
-  ) => TTransfer<IPlanWorkPeriods>[] | null;
   setOneUnityInAllWorks: (unity: string) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   addWorkingMan: () => void;
@@ -84,7 +79,6 @@ const PprContext = createContext<IPprContext>({
   updatePlanWorkValueByUser: () => {},
   updateWorkTransfers: () => {},
   getWorkCorrection: () => undefined,
-  getWorkTransfers: () => null,
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
@@ -501,27 +495,6 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     []
   );
 
-  /**Получить переносы*/
-  const getWorkTransfers = useCallback(
-    (transferType: "plan" | "undone", objectId: string, fieldFrom: keyof IPlanWorkPeriods) => {
-      const isHaveCorrections =
-        ppr?.corrections.works &&
-        objectId in ppr?.corrections.works &&
-        ppr?.corrections.works[objectId] &&
-        fieldFrom in ppr?.corrections.works[objectId]! &&
-        ppr?.corrections.works[objectId]![fieldFrom];
-
-      if (!isHaveCorrections) {
-        return null;
-      }
-      if (transferType === "plan") {
-        return ppr?.corrections.works[objectId]![fieldFrom]!.planTransfers;
-      }
-      return ppr?.corrections.works[objectId]![fieldFrom]!.undoneTransfers;
-    },
-    [ppr?.corrections]
-  );
-
   /**Добавить рабочего в список людей ППР */
   const addWorkingMan = useCallback(() => {
     setPpr((prev) => {
@@ -813,7 +786,6 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateFactWork,
         updateFactWorkTime,
         updatePlanWorkValueByUser,
-        getWorkTransfers,
         updateWorkTransfers,
         getWorkCorrection,
         addWorkingMan,
