@@ -3,6 +3,6 @@ export type {
   TFilterPlanFactOption,
   TCorrectionView,
   TFilterColumns,
-} from "./model/PprTableSettingsProvider";
+} from "./ui/PprTableSettingsProvider";
 
-export { PprTableSettingsProvider, usePprTableSettings } from "./model/PprTableSettingsProvider";
+export { PprTableSettingsProvider, usePprTableSettings } from "./ui/PprTableSettingsProvider";
