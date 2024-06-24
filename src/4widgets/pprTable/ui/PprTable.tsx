@@ -122,13 +122,14 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
               let value = pprData[field];
 
               if (isCorrectedView && isPlanWorkPeriodField) {
-                value = corrections?.finalCorrection || value;
+                value = corrections ? corrections.finalCorrection : value;
               } else if (isCorrectedView && checkIsPlanTimeField(field)) {
                 const finalCorrection = getWorkCorrection(
                   rowIndex,
                   getPlanWorkFieldByPlanTimeField(field)
                 )?.finalCorrection;
-                value = finalCorrection ? Number((finalCorrection * pprData.norm_of_time).toFixed(2)) : value;
+                value =
+                  finalCorrection !== undefined ? Number((finalCorrection * pprData.norm_of_time).toFixed(2)) : value;
               }
 
               const transfers = (corrections?.planTransfers || []).concat(corrections?.undoneTransfers || []);

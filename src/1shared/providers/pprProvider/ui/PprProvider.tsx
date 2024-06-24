@@ -359,13 +359,17 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         if (!checkIsPlanWorkField(planWorkField) || planWorkField === "year_plan_work" || field === planWorkField) {
           continue;
         }
-        yearPlanAfterCorrection +=
-          (prev.corrections.works[objectId] &&
-            prev.corrections.works[objectId]![planWorkField]?.planValueAfterCorrection) ||
-          prev.data[rowIndex][planWorkField];
-        yearFinalCorrection +=
-          (prev.corrections.works[objectId] && prev.corrections.works[objectId]![planWorkField]?.finalCorrection) ||
-          prev.data[rowIndex][planWorkField];
+
+        let planValueAfterCorrection = prev.data[rowIndex][planWorkField];
+        let finalCorrection = prev.data[rowIndex][planWorkField];
+
+        if (prev.corrections.works[objectId] && prev.corrections.works[objectId]![planWorkField]) {
+          planValueAfterCorrection = prev.corrections.works[objectId]![planWorkField]!.planValueAfterCorrection;
+          finalCorrection = prev.corrections.works[objectId]![planWorkField]!.finalCorrection;
+        }
+
+        yearFinalCorrection += finalCorrection;
+        yearPlanAfterCorrection += planValueAfterCorrection;
       }
 
       const yearCorrection: TWorkCorrection<IPlanWorkPeriods> = {
