@@ -1,6 +1,6 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TTimePeriod, isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
-import { IPprData, TAllMonthStatuses, TYearPprStatus, checkIsPprDataField } from "@/2entities/ppr";
+import { IPprData, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
 import { ITableCellProps } from "@/1shared/ui/table";
 import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 
@@ -36,9 +36,6 @@ export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
 }
 
 export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
-  if (key === "norm_of_time_document") {
-    return { fontSize: "0.7vw" };
-  }
   if (isStringStartsWithTimePeriodName(key)) {
     return { backgroundColor: setBgColor(key), verticalAlign: "bottom" };
   }

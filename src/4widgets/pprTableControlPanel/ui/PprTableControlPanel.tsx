@@ -65,7 +65,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
             <div>Размер шрифта, px: </div>
             <PprTableSelectFontSize />
           </div>
-          <div className="flex justify-start gap-2">
+          <div className="flex justify-start gap-2 text-gray-400 cursor-not-allowed">
             <div>Объединять работы с одинаковым наименованием (без возможности добавлять/удалять работы) </div>
             <PprTableCombineSameWork />
           </div>
