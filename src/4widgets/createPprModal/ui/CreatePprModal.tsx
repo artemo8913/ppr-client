@@ -16,7 +16,7 @@ export const CreatePprModal: FC<ICreatePprModalProps> = () => {
       <Button type="primary" onClick={openModal}>
         Добавить
       </Button>
-      <Modal title="Выберите работу" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
+      <Modal title="Создать годовой план" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
         <CreatePprForm onFinish={closeModal} />
       </Modal>
     </>
