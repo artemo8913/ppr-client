@@ -65,6 +65,24 @@ const monthStatusIntlRu: { [status in TMonthPprStatus]: string } = {
   done: "завершен",
 };
 
+const yearStatusIntlRu: { [status in TYearPprStatus]: string } = {
+  done: "Выполнен",
+  in_process: "В процессе выполнения",
+  plan_aproved: "Утвержден",
+  plan_creating: "Создается",
+  plan_on_agreement_engineer: "На согласовании отраслевого инженера",
+  plan_on_agreement_security_engineer: "На согласовании инженера по охране труда",
+  plan_on_agreement_sub_boss: "На согласовании отраслевого заместителя",
+  plan_on_agreement_time_norm: "На согласовании инженера по нормированию труда",
+  plan_on_aprove: "На утверждении",
+  plan_on_correction: "На исправлении",
+  template: "Шаблон",
+};
+
 export function stringToMonthStatusIntlRu(status: TMonthPprStatus): string {
   return monthStatusIntlRu[status];
+}
+
+export function stringToYearStatusIntlRu(status: TYearPprStatus): string {
+  return yearStatusIntlRu[status];
 }

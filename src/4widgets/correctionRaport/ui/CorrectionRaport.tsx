@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { isPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
-import { timePeriodIntlRu } from "@/1shared/lib/date";
+import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
 import {
   IPlanWorkPeriods,
   TWorkCorrection,
@@ -114,8 +114,9 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       {isShowPlanCorrections && (
         <>
           <p className="font-bold indent-4 text-justify">
-            При планировании ведомости выполненных работ (форма ЭУ-99) на {timePeriodIntlRu[currentTimePeriod]} месяц{" "}
-            {ppr?.year} г. возникла необходимости корректировки годового плана технического обслуживания и ремонта:
+            При планировании ведомости выполненных работ (форма ЭУ-99) на {stringToTimePeriodIntlRu(currentTimePeriod)}{" "}
+            месяц {ppr?.year} г. возникла необходимости корректировки годового плана технического обслуживания и
+            ремонта:
           </p>
           <ol className="list-decimal pl-[revert]">
             {planCorrections.map((correction) => (
@@ -134,7 +135,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       {isShowUndoneCorrections && (
         <>
           <p className="font-bold indent-4 text-justify">
-            За {timePeriodIntlRu[currentTimePeriod]} месяц не в полном объеме выполнены следующие работы:
+            За {stringToTimePeriodIntlRu(currentTimePeriod)} месяц не в полном объеме выполнены следующие работы:
           </p>
           <ol className="list-decimal pl-[revert] indent-4 text-justify">
             {undoneWorks.map((correction) => (

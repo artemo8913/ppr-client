@@ -19,7 +19,7 @@ export type TTimePeriod = "year" | TMonth;
 
 export const timePeriods: TTimePeriod[] = ["year", ...months] as const;
 
-export const timePeriodIntlRu = {
+const timePeriodIntlRu = {
   year: "год",
   jan: "январь",
   feb: "февраль",
