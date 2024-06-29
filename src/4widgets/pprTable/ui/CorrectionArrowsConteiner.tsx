@@ -44,7 +44,11 @@ const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCe
   if (!arrows || arrows.length === 0) {
     return null;
   }
-  return <div>{arrows}</div>;
+  return (
+    <div className="relative z-10 hover:z-20 hover:scale-105 transition-transform" style={{ width: basicArrowWidth }}>
+      {arrows}
+    </div>
+  );
 };
 
 const CorrectionArrowsConteinerMemo = memo(CorrectionArrowsConteiner);
