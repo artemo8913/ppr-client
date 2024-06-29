@@ -4,6 +4,8 @@ import Tooltip from "antd/es/tooltip";
 import Button from "antd/es/button";
 import Modal from "antd/es/modal";
 import { SettingOutlined } from "@ant-design/icons";
+import { usePpr } from "@/1shared/providers/pprProvider";
+import { stringToYearStatusIntlRu } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
 import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTimePeriod";
@@ -17,7 +19,6 @@ import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontS
 import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
 import { PprTableCombineSameWork } from "@/3features/pprTableSettings/combineWorkWithSameName";
-import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IPprTableControlPanelProps {}
 
@@ -29,8 +30,9 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
 
   return (
     <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300 overflow-hidden">
-      Статус: {ppr?.status} Создан: {new Date(ppr?.created_at!).toLocaleDateString()} Год: {ppr?.year}{" "}
-      {ppr?.id_subdivision}-{ppr?.id_distance}-{ppr?.id_direction}
+      Статус: {ppr ? stringToYearStatusIntlRu(ppr.status) : ""} Создан:{" "}
+      {new Date(ppr?.created_at!).toLocaleDateString()} Год: {ppr?.year} {ppr?.id_subdivision}-{ppr?.id_distance}-
+      {ppr?.id_direction}
       <PprTableSaveButton />
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />

@@ -7,6 +7,7 @@ import { months } from "@/1shared/lib/date";
 import { IPpr } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
+import { stringToYearStatusIntlRu } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
 
 interface IPprInfoProps {
   data: Omit<IPpr, "data">[];
@@ -46,6 +47,7 @@ const columns: TableProps<Omit<IPpr, "data">>["columns"] = [
     title: "Статус",
     dataIndex: "status",
     key: "status",
+    render: (value) => stringToYearStatusIntlRu(value),
   },
   {
     title: "Месяцы",

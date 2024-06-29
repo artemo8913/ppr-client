@@ -1,7 +1,7 @@
 "use client";
 import Select from "antd/es/select";
 import { FC, useEffect, useMemo } from "react";
-import { TTimePeriod, timePeriodIntlRu, timePeriods } from "@/1shared/lib/date";
+import { TTimePeriod, stringToTimePeriodIntlRu, timePeriods } from "@/1shared/lib/date";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { usePpr, findPossibleCurrentPprPeriod } from "@/1shared/providers/pprProvider";
 
@@ -17,7 +17,7 @@ export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () =
   }, [Boolean(ppr?.months_statuses)]);
 
   const options = useMemo(
-    () => timePeriods.map((period) => ({ value: period, label: timePeriodIntlRu[period] })),
+    () => timePeriods.map((period) => ({ value: period, label: stringToTimePeriodIntlRu(period) })),
     []
   );
 
