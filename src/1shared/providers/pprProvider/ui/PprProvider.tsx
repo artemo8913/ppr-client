@@ -26,6 +26,7 @@ import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance"
 import {
   factNormTimeFields,
   getPlanTimeFieldByPlanTabelTimeField,
+  getPlanWorkFieldByPlanTimeField,
   planNormTimeFields,
   planTabelTimeFields,
   planTimeFields,
@@ -742,33 +743,43 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   useEffect(() => {
     const totalFieldsValues: TTotalFieldsValues = { works: {}, peoples: {} };
 
-    function handleWorkPeriod(pprData: IPprData, period: keyof TPprDataFieldsTotalValues) {
-      if (totalFieldsValues.works[period] !== undefined) {
-        totalFieldsValues.works[period]! += pprData[period];
+    function handleWorkPeriod(value: number, field: keyof TPprDataFieldsTotalValues) {
+      if (totalFieldsValues.works[field] !== undefined) {
+        totalFieldsValues.works[field]! += value;
       } else {
-        totalFieldsValues.works[period] = pprData[period];
+        totalFieldsValues.works[field] = value;
       }
     }
 
-    function handleWorkingMansPeriod(peoples: IWorkingManYearPlan, period: keyof TWorkingManFieldsTotalValues) {
-      if (totalFieldsValues.peoples[period] !== undefined) {
-        totalFieldsValues.peoples[period]! += peoples[period];
+    function handleWorkingMansPeriod(value: number, field: keyof TWorkingManFieldsTotalValues) {
+      if (totalFieldsValues.peoples[field] !== undefined) {
+        totalFieldsValues.peoples[field]! += value;
       } else {
-        totalFieldsValues.peoples[period] = peoples[period];
+        totalFieldsValues.peoples[field] = value;
       }
     }
 
     ppr?.data.forEach((pprData) => {
-      planTimeFields.forEach((period) => handleWorkPeriod(pprData, period));
-      factNormTimeFields.forEach((period) => handleWorkPeriod(pprData, period));
-      factTimeFields.forEach((period) => handleWorkPeriod(pprData, period));
+      const correction = ppr.corrections?.works[pprData.id];
+      planTimeFields.forEach((field) => {
+        if (correction) {
+          const planWorkField = getPlanWorkFieldByPlanTimeField(field);
+          const finalCorrection = correction[planWorkField]?.finalCorrection;
+          const value = finalCorrection !== undefined ? finalCorrection * pprData.norm_of_time : pprData[field];
+          handleWorkPeriod(value, field);
+        } else {
+          handleWorkPeriod(pprData[field], field);
+        }
+      });
+      factNormTimeFields.forEach((field) => handleWorkPeriod(pprData[field], field));
+      factTimeFields.forEach((field) => handleWorkPeriod(pprData[field], field));
     });
 
     ppr?.peoples.forEach((workingMan) => {
-      planNormTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
-      planTabelTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
-      planTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
-      factTimeFields.forEach((period) => handleWorkingMansPeriod(workingMan, period));
+      planNormTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
+      planTabelTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
+      planTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
+      factTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
     });
     setPpr((prev) => {
       if (!prev) {
@@ -776,7 +787,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return { ...prev, total_fields_value: totalFieldsValues };
     });
-  }, [ppr?.data, ppr?.peoples]);
+  }, [ppr?.data, ppr?.peoples, ppr?.corrections]);
 
   return (
     <PprContext.Provider
