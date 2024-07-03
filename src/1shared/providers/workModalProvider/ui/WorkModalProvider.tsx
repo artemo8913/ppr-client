@@ -3,8 +3,8 @@ import { FC, PropsWithChildren, createContext, useCallback, useContext, useState
 
 interface IWorkModalProps {
   isOpen: boolean;
-  indexToPlace?: number;
-  openModal: (workIndex?: number) => void;
+  nearWorkId?: string;
+  openModal: (nearWorkId?: string) => void;
   closeModal: () => void;
 }
 const defaultValue: boolean = false;
@@ -19,17 +19,17 @@ interface IWorkModalProviderProps extends PropsWithChildren {}
 
 export const WorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => {
   const [isOpen, setIsModalOpen] = useState(defaultValue);
-  const [indexToPlace, setWorkIndex] = useState<number>();
-  const openModal = useCallback((workIndex?: number) => {
-    setWorkIndex(workIndex);
+  const [nearWorkId, setNearWorkId] = useState<string>();
+  const openModal = useCallback((nearWorkId?: string) => {
+    setNearWorkId(nearWorkId);
     setIsModalOpen(true);
   }, []);
   const closeModal = useCallback(() => {
-    setWorkIndex(undefined);
+    setNearWorkId(undefined);
     setIsModalOpen(false);
   }, []);
   return (
-    <ModalContext.Provider value={{ indexToPlace, isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>
+    <ModalContext.Provider value={{ nearWorkId, isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>
   );
 };
 

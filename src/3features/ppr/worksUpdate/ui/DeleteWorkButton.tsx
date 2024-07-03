@@ -5,15 +5,15 @@ import { MinusOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IDeleteWorkButtonProps extends React.ComponentProps<typeof Button> {
-  rowIndex?: number;
+  id?: string;
 }
 
-const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ rowIndex }) => {
+const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ id }) => {
   const { deleteWork } = usePpr();
 
   const handleClick = useCallback(() => {
-    rowIndex && deleteWork(rowIndex);
-  }, [deleteWork, rowIndex]);
+    id && deleteWork(id);
+  }, [deleteWork, id]);
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
 };

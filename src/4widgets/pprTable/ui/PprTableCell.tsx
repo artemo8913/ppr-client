@@ -5,27 +5,27 @@ import { IPprData } from "@/2entities/ppr";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
 
 interface IPprTableCellProps extends ITableCellProps {
-  rowIndex?: number;
+  id?: string;
   isWorkAproved?: boolean;
   field?: keyof IPprData;
-  updatePprTableCell?: (newValue: string, isWorkAproved: boolean, indexData: number, field: keyof IPprData) => void;
+  updatePprTableCell?: (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
-  rowIndex,
+  id,
   field,
   isWorkAproved,
   updatePprTableCell,
   ...otherProps
 }) => {
   const handleChange = (newValue: string) => {
-    if (rowIndex === undefined || !field || !updatePprTableCell) {
+    if (id === undefined || !field || !updatePprTableCell) {
       return;
     }
-    updatePprTableCell(newValue, isWorkAproved || false, rowIndex, field);
+    updatePprTableCell(id, field, newValue, isWorkAproved);
   };
   if (field === "name") {
-    return <TableCellWithWorkControl handleBlur={handleChange} rowIndex={rowIndex} {...otherProps} />;
+    return <TableCellWithWorkControl handleBlur={handleChange} id={id} {...otherProps} />;
   }
   return <TableCell handleBlur={handleChange} {...otherProps} />;
 };
