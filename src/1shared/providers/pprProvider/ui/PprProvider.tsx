@@ -54,11 +54,6 @@ export interface IPprContext {
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   addWorkingMan: () => void;
   deleteWorkingMan: (id: string) => void;
-  getWorkingManCorrection: (
-    rowIndex: number,
-    field: keyof (IPlanNormTimePeriods | IPlanTabelTimePeriods)
-  ) => number | undefined;
-  setWorkingManCorrection: (rowIndex: number, field: keyof IWorkingManYearPlan, value: number) => void;
   updateWorkingMan: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
   updateWorkingManPlanNormTime: (rowIndex: number, field: keyof IPlanNormTimePeriods, value: number) => void;
   updateWorkingManPlanTabelTime: (rowIndex: number, field: keyof IPlanTabelTimePeriods, value: number) => void;
@@ -82,8 +77,6 @@ const PprContext = createContext<IPprContext>({
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
-  getWorkingManCorrection: () => undefined,
-  setWorkingManCorrection: () => {},
   updateWorkingManPlanNormTime: () => {},
   updateWorkingManPlanTabelTime: () => {},
   updateWorkingManFactTime: () => {},
@@ -681,31 +674,6 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const getWorkingManCorrection = useCallback(
-    (rowIndex: number, field: keyof (IPlanNormTimePeriods | IPlanTabelTimePeriods)) => {
-      const workingManId = ppr?.peoples[rowIndex].id;
-      if (!workingManId || !ppr?.corrections.peoples[workingManId]) {
-        return undefined;
-      }
-      return ppr?.corrections.peoples[workingManId]![field];
-    },
-    [ppr?.corrections.peoples, ppr?.peoples]
-  );
-  const setWorkingManCorrection = useCallback((rowIndex: number, field: keyof IWorkingManYearPlan, value: number) => {
-    setPpr((prev) => {
-      if (!prev) {
-        return prev;
-      }
-      const workingManId = prev.peoples[rowIndex].id;
-      const corrections = prev.corrections.peoples[workingManId];
-      const newCorrections = { ...corrections, [field]: value };
-      return {
-        ...prev,
-        corrections: { ...prev.corrections, peoples: { ...prev.corrections.peoples, [workingManId]: newCorrections } },
-      };
-    });
-  }, []);
-
   /**Убрать рабочего из списка людей ППР */
   const deleteWorkingMan = useCallback((id: string) => {
     setPpr((prev) => {
@@ -828,8 +796,6 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         addWorkingMan,
         setOneUnityInAllWorks,
         getPprDataWithRowSpan,
-        getWorkingManCorrection,
-        setWorkingManCorrection,
         updateWorkingMan,
         deleteWorkingMan,
         updateWorkingManPlanNormTime,
