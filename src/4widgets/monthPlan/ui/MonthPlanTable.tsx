@@ -21,6 +21,12 @@ const useColumns = (
         columnHelper.accessor("name", {
           header: "Наименование работ",
           size: 800,
+          cell: (props) => {
+            if (props.row.original.location) {
+              return `${props.row.original.name} (${props.row.original.location})`;
+            }
+            return props.cell.getValue();
+          },
         }),
         columnHelper.accessor("measure", {
           header: "Измеритель",
