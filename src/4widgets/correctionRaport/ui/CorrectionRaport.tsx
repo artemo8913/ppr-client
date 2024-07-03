@@ -45,7 +45,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
 
   ppr?.data.forEach((pprData, rowIndex) => {
     const objectId = pprData.id;
-    const correctionData = getWorkCorrection(rowIndex, getPlanWorkFieldByTimePeriod(currentTimePeriod));
+    const correctionData = getWorkCorrection(objectId, getPlanWorkFieldByTimePeriod(currentTimePeriod));
 
     if (correctionData?.isHandCorrected) {
       const planWorkValue = Number(correctionData?.basicValue) + Number(correctionData?.outsideCorrectionsSum);
