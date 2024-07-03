@@ -7,10 +7,10 @@ import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvide
 import { CopyWorkButton } from "./CopyWorkButton";
 
 interface ITableCellWithWorkControlProps extends ITableCellProps {
-  rowIndex?: number;
+  id?: string;
 }
 
-export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ rowIndex, ...otherProps }) => {
+export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ id, ...otherProps }) => {
   const [isHide, setIsHide] = useState<boolean>(true);
 
   const { headerHeightPx } = usePprTableSettings();
@@ -24,9 +24,9 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ r
     >
       {!isHide && (
         <div className="!absolute -bottom-6 left-0 z-10 flex">
-          <DeleteWorkButton rowIndex={rowIndex} />
-          <AddWorkButton rowIndex={rowIndex} />
-          <CopyWorkButton rowIndex={rowIndex} />
+          <DeleteWorkButton id={id} />
+          <AddWorkButton nearWorkId={id} />
+          <CopyWorkButton id={id} />
         </div>
       )}
       <TableCell {...otherProps} />

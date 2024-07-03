@@ -12,7 +12,7 @@ interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
 }
 
 export const WorkModal: FC<IWorkModalProps> = ({ data }) => {
-  const { closeModal, isOpen, indexToPlace: workIndex } = useWorkModal();
+  const { closeModal, isOpen, nearWorkId } = useWorkModal();
   return (
     <Modal title="Выберите работу" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
       <Tabs
@@ -21,12 +21,12 @@ export const WorkModal: FC<IWorkModalProps> = ({ data }) => {
           {
             label: "Выбрать из перечня работ",
             key: "1",
-            children: <WorkSelectTable data={data} onFinish={closeModal} indexToPlace={workIndex} />,
+            children: <WorkSelectTable data={data} onFinish={closeModal} nearWorkId={nearWorkId} />,
           },
           {
             label: "Добавить самостоятельно",
             key: "2",
-            children: <WorkCreateForm onFinish={closeModal} indexToPlace={workIndex} />,
+            children: <WorkCreateForm onFinish={closeModal} nearWorkId={nearWorkId} />,
           },
         ]}
       />

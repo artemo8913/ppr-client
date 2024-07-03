@@ -5,14 +5,14 @@ import { CopyOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface ICopyWorkButtonProps extends React.ComponentProps<typeof Button> {
-  rowIndex?: number;
+  id?: string;
 }
 
-const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ rowIndex }) => {
+const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ id }) => {
   const { copyWork } = usePpr();
   const handleClick = useCallback(() => {
-    rowIndex !== undefined && copyWork(rowIndex);
-  }, [copyWork, rowIndex]);
+    id !== undefined && copyWork(id);
+  }, [copyWork, id]);
   return <Button onClick={handleClick} size="small" shape="circle" icon={<CopyOutlined />} />;
 };
 

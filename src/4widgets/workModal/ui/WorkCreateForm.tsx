@@ -10,12 +10,12 @@ import { IWork } from "@/2entities/work";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
-  indexToPlace?: number;
+  nearWorkId?: string;
 }
 
 type TAddWorkForm = Omit<IWork, "periodicity_normal_data">;
 
-export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, indexToPlace }) => {
+export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, nearWorkId }) => {
   const [form] = Form.useForm<TAddWorkForm>();
   const { addWork } = usePpr();
   const handleFinish = (values: TAddWorkForm) => {
@@ -23,7 +23,7 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, inde
       {
         ...values,
       },
-      indexToPlace
+      nearWorkId
     );
     form.resetFields();
     onFinish && onFinish();

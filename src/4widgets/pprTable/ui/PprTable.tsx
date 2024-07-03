@@ -50,19 +50,19 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   );
 
   const updatePprTableCell = useCallback(
-    (newValue: string, isWorkAproved: boolean, indexData: number, field: keyof IPprData) => {
+    (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => {
       if (field === "norm_of_time") {
-        updateNormOfTime(indexData, Number(newValue));
+        updateNormOfTime(id, Number(value));
       } else if (checkIsFactWorkField(field)) {
-        updateFactWork(indexData, field, Number(newValue));
+        updateFactWork(id, field, Number(value));
       } else if (checkIsFactTimeField(field)) {
-        updateFactWorkTime(indexData, field, Number(newValue));
+        updateFactWorkTime(id, field, Number(value));
       } else if (!isWorkAproved && checkIsPlanWorkField(field)) {
-        updatePlanWork(indexData, field, Number(newValue));
+        updatePlanWork(id, field, Number(value));
       } else if (isWorkAproved && checkIsPlanWorkField(field)) {
-        updatePlanWorkValueByUser(indexData, field, Number(newValue));
+        updatePlanWorkValueByUser(id, field, Number(value));
       } else {
-        updatePprData(indexData, field, newValue);
+        updatePprData(id, field, value);
       }
     },
     // все функции "чистые", у всех useCallback с пустым массивов
@@ -117,7 +117,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => {
               const isPlanWorkPeriodField = checkIsPlanWorkField(field);
-              const corrections = (isPlanWorkPeriodField && getWorkCorrection(rowIndex, field)) || undefined;
+              const corrections = (isPlanWorkPeriodField && getWorkCorrection(pprData.id, field)) || undefined;
 
               let value = pprData[field];
 
@@ -125,7 +125,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                 value = corrections ? corrections.finalCorrection : value;
               } else if (isCorrectedView && checkIsPlanTimeField(field)) {
                 const finalCorrection = getWorkCorrection(
-                  rowIndex,
+                  pprData.id,
                   getPlanWorkFieldByPlanTimeField(field)
                 )?.finalCorrection;
                 value =
@@ -158,7 +158,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                       updatePprTableCell={updatePprTableCell}
                       isVertical={checkIsWorkOrTimeField(field)}
                       isWorkAproved={pprData.is_work_aproved}
-                      rowIndex={rowIndex}
+                      id={pprData.id}
                       field={field}
                       value={value}
                     />
