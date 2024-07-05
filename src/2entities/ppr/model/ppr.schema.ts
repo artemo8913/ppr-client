@@ -93,9 +93,6 @@ export interface IPpr {
 }
 
 export type TPprCorrections = {
-  peoples: {
-    [idWorkinMan: string]: TWorkingManCorrections | undefined;
-  };
   works: {
     [idWork: string]: { [field in keyof IPlanWorkPeriods]?: TWorkCorrection<IPlanWorkPeriods> } | undefined;
   };
