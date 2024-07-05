@@ -45,6 +45,7 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
       }
     },
     // все функции "чистые", у всех useCallback с пустым массивов
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

@@ -14,7 +14,7 @@ export function createNewPprInstance(session: Session | null, values?: Partial<I
     created_by: session?.user!,
     peoples: [],
     total_fields_value: { peoples: {}, works: {} },
-    corrections: { peoples: {}, works: {} },
+    corrections: { works: {} },
     months_statuses: {
       jan: "none",
       feb: "none",
