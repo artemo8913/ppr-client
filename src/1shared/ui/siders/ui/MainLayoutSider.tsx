@@ -28,7 +28,7 @@ const items: MenuItem[] = [
   getItem(<Link href={"/ppr"}>Годовые планы</Link>, "year", <TableOutlined />),
   getItem(<Link href={"/agreement"}>На согласовании / утверждении</Link>, "agreement", <AuditOutlined />),
   getItem(<Link href={"/reports"}>Отчеты</Link>, "reports", <BarChartOutlined />),
-  getItem(<a onClick={() => signOut({ callbackUrl: "/", redirect: true })}>Выйти</a>, "logout", <LogoutOutlined />),
+  getItem(<a onClick={() => signOut()}>Выйти</a>, "logout", <LogoutOutlined />),
 ];
 
 interface ISiderProps {}

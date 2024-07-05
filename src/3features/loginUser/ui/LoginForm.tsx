@@ -19,7 +19,7 @@ export function LoginForm() {
       redirect: false,
     });
     if (!res?.error) {
-      router.push("/");
+      await Promise.resolve(router.push("/"));
       router.refresh();
     } else {
       setErrorMessage("Не верный логин / пароль");
