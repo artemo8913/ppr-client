@@ -1,6 +1,13 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TTimePeriod, isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
-import { IPprData, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
+import {
+  IPprData,
+  TAllMonthStatuses,
+  TYearPprStatus,
+  planWorkFields,
+  factWorkFields,
+  factTimeFields,
+} from "@/2entities/ppr";
 import { ITableCellProps } from "@/1shared/ui/table";
 import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 
@@ -46,13 +53,14 @@ export function getColumnSettings(
   field: keyof IPprData,
   pprYearStatus: TYearPprStatus,
   timePeriod: TTimePeriod,
+  isHaveWorkId?: boolean,
   pprMonthStatuses?: TAllMonthStatuses,
   pprView?: TCorrectionView
 ): ITableCellProps | undefined {
   if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {
     return {};
   }
-  if (pprYearStatus === "plan_creating") {
+  if (pprYearStatus === "plan_creating" && !isHaveWorkId) {
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       name: { cellType: "textarea" },
       location: { cellType: "textarea" },
@@ -66,43 +74,28 @@ export function getColumnSettings(
       norm_of_time: { cellType: "input" },
       norm_of_time_document: { cellType: "textarea" },
       unity: { cellType: "input" },
-      jan_plan_work: { cellType: "input" },
-      feb_plan_work: { cellType: "input" },
-      mar_plan_work: { cellType: "input" },
-      apr_plan_work: { cellType: "input" },
-      may_plan_work: { cellType: "input" },
-      june_plan_work: { cellType: "input" },
-      july_plan_work: { cellType: "input" },
-      aug_plan_work: { cellType: "input" },
-      sept_plan_work: { cellType: "input" },
-      oct_plan_work: { cellType: "input" },
-      nov_plan_work: { cellType: "input" },
-      dec_plan_work: { cellType: "input" },
-      jan_fact_work: { cellType: "input" },
-      feb_fact_work: { cellType: "input" },
-      mar_fact_work: { cellType: "input" },
-      apr_fact_work: { cellType: "input" },
-      may_fact_work: { cellType: "input" },
-      june_fact_work: { cellType: "input" },
-      july_fact_work: { cellType: "input" },
-      aug_fact_work: { cellType: "input" },
-      sept_fact_work: { cellType: "input" },
-      oct_fact_work: { cellType: "input" },
-      nov_fact_work: { cellType: "input" },
-      dec_fact_work: { cellType: "input" },
-      jan_fact_time: { cellType: "input" },
-      feb_fact_time: { cellType: "input" },
-      mar_fact_time: { cellType: "input" },
-      apr_fact_time: { cellType: "input" },
-      may_fact_time: { cellType: "input" },
-      june_fact_time: { cellType: "input" },
-      july_fact_time: { cellType: "input" },
-      aug_fact_time: { cellType: "input" },
-      sept_fact_time: { cellType: "input" },
-      oct_fact_time: { cellType: "input" },
-      nov_fact_time: { cellType: "input" },
-      dec_fact_time: { cellType: "input" },
     };
+    planWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
+    factWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
+    factTimeFields.forEach((field) => (settings[field] = { cellType: "input" }));
+
+    return settings[field];
+  }
+  if (pprYearStatus === "plan_creating" && isHaveWorkId) {
+    const settings: { [key in keyof IPprData]?: ITableCellProps } = {
+      location: { cellType: "textarea" },
+      line_class: { cellType: "input" },
+      total_count: { cellType: "input" },
+      entry_year: { cellType: "input" },
+      periodicity_normal: { cellType: "input" },
+      periodicity_fact: { cellType: "input" },
+      last_maintenance_year: { cellType: "input" },
+      unity: { cellType: "input" },
+    };
+    planWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
+    factWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
+    factTimeFields.forEach((field) => (settings[field] = { cellType: "input" }));
+
     return settings[field];
   }
   if (pprYearStatus !== "in_process" || timePeriod === "year" || !pprMonthStatuses) {

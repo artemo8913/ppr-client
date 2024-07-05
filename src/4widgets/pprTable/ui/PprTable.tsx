@@ -113,7 +113,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         </tr>
       </thead>
       <tbody>
-        {ppr?.data.map((pprData, rowIndex) => (
+        {ppr?.data.map((pprData) => (
           <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => {
               const isPlanWorkPeriodField = checkIsPlanWorkField(field);
@@ -138,6 +138,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                 field,
                 pprYearStatus,
                 currentTimePeriod,
+                pprData.workId !== null,
                 pprMonthsStatuses,
                 correctionView
               );
