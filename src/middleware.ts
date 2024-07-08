@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { withAuth } from "next-auth/middleware";
 
-export default withAuth(
-  function middleware(req) {
-    return NextResponse.rewrite(new URL("/", req.url));
-  },
-  {
-    pages: { signIn: "/login" },
+export async function middleware(request: NextRequest) {
+  const token = await getToken({ req: request });
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
-);
+}
 
 export const config = {
   matcher: ["/((?!api|_next/static|login|_next/image|.*\\.png$).*)"],
