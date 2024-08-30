@@ -4,7 +4,6 @@ import Button from "antd/es/button";
 import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { serverRedirect } from "@/1shared/lib/serverRedirect";
 
 export function LoginForm() {
   const router = useRouter();
@@ -19,9 +18,7 @@ export function LoginForm() {
       password: formData?.get("password"),
       redirect: false,
     });
-    if (!res?.error) {
-      serverRedirect('/');
-    } else {
+    if (res?.error) {
       setErrorMessage("Не верный логин / пароль");
     }
     setIsLoading(false);
