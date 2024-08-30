@@ -9,10 +9,12 @@ export default function LoginPage() {
   const route = useRouter();
 
   useEffect(()=>{
+    console.log(userData?.user.id);
     if(userData?.user.id){
+      console.log(1234);
       route.push('/');
     }
-  })
+  });
   return (
     <div className="h-screen flex justify-center">
       <LoginForm />
