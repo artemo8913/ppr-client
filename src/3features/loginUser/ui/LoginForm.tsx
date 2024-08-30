@@ -16,10 +16,13 @@ export function LoginForm() {
     const res = await signIn("credentials", {
       username: formData?.get("username"),
       password: formData?.get("password"),
-      redirect: false,
+      redirect: false
     });
     if (res?.error) {
       setErrorMessage("Не верный логин / пароль");
+    } else {
+      router.refresh();
+      router.push('/ppr');
     }
     setIsLoading(false);
   };
