@@ -6,13 +6,12 @@ import { useEffect } from "react";
 
 export default function LoginPage() {
   const { data: userData } = useSession();
-  const route = useRouter();
+  const router = useRouter();
 
   useEffect(()=>{
-    console.log(userData?.user.id);
     if(userData?.user.id){
-      console.log(1234);
-      route.push('/');
+      router.refresh();
+      router.push('/');
     }
   });
   return (
