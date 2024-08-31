@@ -24,7 +24,8 @@ interface IPprTableSettings {
   headerHeightPx: number;
   isUniteSameWorks: boolean;
 }
-interface IPprTableSettingsContext extends IPprTableSettings {
+
+export interface IPprTableSettingsContext extends IPprTableSettings {
   setFilterMonths: (state: TFilterTimePeriodOption) => void;
   setFilterPlanFact: (state: TFilterPlanFactOption) => void;
   setTimePeriod: (timePeriod: TTimePeriod) => void;
