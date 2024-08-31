@@ -22,13 +22,13 @@ export const authOptions: AuthOptions = {
   },
   providers: [
     Credentials({
+      id: "Credentials",
       name: "Credentials",
       credentials: {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        // Add logic here to look up the user from the credentials supplied
         const allLogins = await getAllLoginsData();
         const login = allLogins.find((login) => login.username === credentials?.username);
         const isPasswordCorrect = login?.password === credentials?.password;
