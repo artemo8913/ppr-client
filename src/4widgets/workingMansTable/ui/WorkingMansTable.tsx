@@ -4,7 +4,7 @@ import { usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCellMemo } from "@/1shared/ui/table";
 import { useCreateColumns } from "../lib/useCreateColumns";
-import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   IWorkingManYearPlan,
   SummaryTableFoot,
@@ -65,7 +65,7 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
           ))}
           {timePeriods.map((period) => (
             <th key={period} colSpan={4} className="border border-black">
-              <TableCellMemo value={stringToTimePeriodIntlRu(period)} />
+              <TableCellMemo value={translateRuTimePeriod(period)} />
             </th>
           ))}
         </tr>

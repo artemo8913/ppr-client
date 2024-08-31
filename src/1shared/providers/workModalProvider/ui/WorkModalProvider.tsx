@@ -3,14 +3,14 @@ import { FC, PropsWithChildren, createContext, useCallback, useContext, useState
 
 interface IWorkModalProps {
   isOpen: boolean;
-  nearWorkId?: string;
-  openModal: (nearWorkId?: string) => void;
+  workId?: string | null;
+  openModal: (workId?: string) => void;
   closeModal: () => void;
 }
-const defaultValue: boolean = false;
+const DEFAULT_VALUE: boolean = false;
 
 const ModalContext = createContext<IWorkModalProps>({
-  isOpen: defaultValue,
+  isOpen: DEFAULT_VALUE,
   openModal: () => {},
   closeModal: () => {},
 });
@@ -18,18 +18,22 @@ const ModalContext = createContext<IWorkModalProps>({
 interface IWorkModalProviderProps extends PropsWithChildren {}
 
 export const WorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => {
-  const [isOpen, setIsModalOpen] = useState(defaultValue);
-  const [nearWorkId, setNearWorkId] = useState<string>();
-  const openModal = useCallback((nearWorkId?: string) => {
-    setNearWorkId(nearWorkId);
+  const [isOpen, setIsModalOpen] = useState(DEFAULT_VALUE);
+
+  const [workId, setWorkId] = useState<string | null>();
+
+  const openModal = useCallback((workId?: string) => {
+    setWorkId(workId);
     setIsModalOpen(true);
   }, []);
+
   const closeModal = useCallback(() => {
-    setNearWorkId(undefined);
+    setWorkId(null);
     setIsModalOpen(false);
   }, []);
+
   return (
-    <ModalContext.Provider value={{ nearWorkId, isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>
+    <ModalContext.Provider value={{ workId, isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>
   );
 };
 

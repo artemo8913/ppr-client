@@ -1,8 +1,8 @@
 import Input from "antd/es/input";
 import Button from "antd/es/button";
 import Select, { DefaultOptionType } from "antd/es/select";
-import { ChangeEvent, FC, ReactElement } from "react";
-import { CloseCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { ChangeEvent, ReactElement } from "react";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 export type TOption<T> = { value: keyof T } & DefaultOptionType;
 
@@ -12,10 +12,12 @@ interface ISelectTransferParamsProps<T> {
   fieldTo: keyof T;
   handleChange: (fieldTo: keyof T, value: number) => void;
   handleAddTransfer?: () => void;
-  handleDeleteTransfer?: () => void;
+  handleDeleteTransfer?: (() => void) | null;
 }
 
-export const SelectTransferParams: <T>(props: ISelectTransferParamsProps<T>) => ReactElement = ({
+export const SelectTransferParams: <T>(
+  props: ISelectTransferParamsProps<T>
+) => ReactElement = ({
   value,
   options,
   fieldTo,
@@ -32,8 +34,17 @@ export const SelectTransferParams: <T>(props: ISelectTransferParamsProps<T>) => 
           handleChange(fieldTo, newValue);
         }}
       />
-      <Select value={fieldTo} options={options} onChange={(fieldTo) => handleChange(fieldTo, value)} />
-      {Boolean(handleDeleteTransfer) && <Button icon={<CloseCircleOutlined />} onClick={handleDeleteTransfer} />}
+      <Select
+        value={fieldTo}
+        options={options}
+        onChange={(fieldTo) => handleChange(fieldTo, value)}
+      />
+      {Boolean(handleDeleteTransfer) && (
+        <Button
+          icon={<CloseCircleOutlined />}
+          onClick={() => handleDeleteTransfer && handleDeleteTransfer()}
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { IUser } from "@/2entities/user";
 
 /**Подходит ли данный ППР для определенных ролей (начальника цеха, инженера, заместителя начальника дистанции, начальника дистанции и т.п.) */
-export function isPprInUserControl(ppr_created_by?: IUser, userData?: IUser) {
+export function checkIsPprInUserControl(ppr_created_by?: IUser, userData?: IUser) {
   if (!ppr_created_by || !userData) {
     return {
       isForSubdivision: false,

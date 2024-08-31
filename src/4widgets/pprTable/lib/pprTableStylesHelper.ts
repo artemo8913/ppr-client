@@ -1,5 +1,5 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
-import { TTimePeriod, isStringStartsWithTimePeriodName } from "@/1shared/lib/date";
+import { TTimePeriod, checkIsStartsWithTimePeriodName } from "@/1shared/lib/date";
 import {
   IPprData,
   TAllMonthStatuses,
@@ -43,7 +43,7 @@ export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
 }
 
 export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
-  if (isStringStartsWithTimePeriodName(key)) {
+  if (checkIsStartsWithTimePeriodName(key)) {
     return { backgroundColor: setBgColor(key), verticalAlign: "bottom" };
   }
   return {};
@@ -54,7 +54,7 @@ export function getColumnSettings(
   pprYearStatus: TYearPprStatus,
   timePeriod: TTimePeriod,
   isHaveWorkId?: boolean,
-  pprMonthStatuses?: TAllMonthStatuses,
+  pprMonthStatuses?: TAllMonthStatuses | null,
   pprView?: TCorrectionView
 ): ITableCellProps | undefined {
   if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {

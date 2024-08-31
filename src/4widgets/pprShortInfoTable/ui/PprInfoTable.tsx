@@ -2,12 +2,12 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
-import { getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
-import { months } from "@/1shared/lib/date";
+import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
+import { MONTHS } from "@/1shared/lib/date";
 import { IPpr } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
-import { stringToYearStatusIntlRu } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
+import { translateRuYearStatus } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
 
 interface IPprInfoProps {
   data: Omit<IPpr, "data">[];
@@ -29,25 +29,25 @@ const columns: TableProps<Omit<IPpr, "data">>["columns"] = [
     title: "Подразделение",
     dataIndex: "id_subdivision",
     key: "id_subdivision",
-    render: (_, data) => getShortNamesForAllHierarchy(data).subdivisionShortName || "-",
+    render: (_, data) => getShortNamesForAllDivisions(data).subdivisionShortName || "-",
   },
   {
     title: "Дистанция",
     dataIndex: "id_distance",
     key: "id_distance",
-    render: (_, data) => getShortNamesForAllHierarchy(data).distanceShortName || "-",
+    render: (_, data) => getShortNamesForAllDivisions(data).distanceShortName || "-",
   },
   {
     title: "Дирекция",
     dataIndex: "id_direction",
     key: "id_direction",
-    render: (_, data) => getShortNamesForAllHierarchy(data).directionShortName || "-",
+    render: (_, data) => getShortNamesForAllDivisions(data).directionShortName || "-",
   },
   {
     title: "Статус",
     dataIndex: "status",
     key: "status",
-    render: (value) => stringToYearStatusIntlRu(value),
+    render: (value) => translateRuYearStatus(value),
   },
   {
     title: "Месяцы",
@@ -56,7 +56,7 @@ const columns: TableProps<Omit<IPpr, "data">>["columns"] = [
     render: (_, data) => {
       return (
         <div className="flex flex-row">
-          {months.map((month) => (
+          {MONTHS.map((month) => (
             <PprMonthsInfoBadge key={month} month={month} monthStatus={data.months_statuses[month]} />
           ))}
         </div>

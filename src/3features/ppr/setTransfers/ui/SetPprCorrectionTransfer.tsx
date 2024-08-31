@@ -2,7 +2,7 @@
 import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
-import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPlanWorkPeriods, TTransfer, planWorkFields } from "@/2entities/ppr";
@@ -12,7 +12,7 @@ import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
 interface ISetPprCorrectionTransferProps<T> {
   transferType: "plan" | "undone";
-  transfers: TTransfer<IPlanWorkPeriods>[] | null | undefined;
+  transfers?: TTransfer<IPlanWorkPeriods>[] | null;
   rowIndex: number;
   fieldFrom: keyof T;
 }
@@ -38,9 +38,9 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
     () =>
       monthPlanPeriods.map((field, index) => {
         if (index <= monthIndex) {
-          return { value: field, label: stringToTimePeriodIntlRu(field || ""), disabled: true };
+          return { value: field, label: translateRuTimePeriod(field || ""), disabled: true };
         }
-        return { value: field, label: stringToTimePeriodIntlRu(field || "") };
+        return { value: field, label: translateRuTimePeriod(field || "") };
       }),
     [monthIndex]
   );
@@ -52,7 +52,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
         null;
       } else if (!transfers) {
         newTransfers = [createNewTransferInstance(fieldTo, value)];
-      } else if (transferIndex !== undefined) {
+      } else if (transferIndex) {
         newTransfers = [
           ...transfers.slice(0, transferIndex),
           createNewTransferInstance(fieldTo, value),
@@ -105,7 +105,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
           fieldTo={oneTransfer.fieldTo}
           handleChange={(fieldTo, value) => handleTransfersChange(fieldTo, value, transferIndex)}
           handleAddTransfer={addTransfer}
-          handleDeleteTransfer={transferIndex === 0 ? undefined : () => deleteTransfer(transferIndex)}
+          handleDeleteTransfer={transferIndex === 0 ? null : () => deleteTransfer(transferIndex)}
         />
       ))}
       {transfers && <Button icon={<PlusOutlined />} onClick={addTransfer} />}

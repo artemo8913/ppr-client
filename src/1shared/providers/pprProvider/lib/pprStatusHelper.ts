@@ -1,9 +1,9 @@
-import { months } from "@/1shared/lib/date";
-import { TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
+import { MONTHS, TTimePeriod } from "@/1shared/lib/date";
+import { IPpr, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
 
 export function isAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {
   let result = true;
-  months.forEach((month) => {
+  MONTHS.forEach((month) => {
     if (monthsStatuses[month] !== "done") {
       result = false;
     }
@@ -11,8 +11,25 @@ export function isAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) 
   return result;
 }
 
-const nextPprYearStatus: { [key in TYearPprStatus]?: TYearPprStatus | undefined } = {
-  template: undefined,
+
+export function findFirstUndonePprPeriod(ppr: IPpr | null): TTimePeriod {
+  if (!ppr) {
+    return "year";
+  }
+  const { status, months_statuses } = ppr;
+  if (status !== "in_process") {
+    return "year";
+  }
+  for (const month of MONTHS) {
+    if (months_statuses[month] !== "done") {
+      return month;
+    }
+  }
+  return "year";
+}
+
+const NEXT_PPR_YEAR_STATUS: { [key in TYearPprStatus]: TYearPprStatus | null } = {
+  template: null,
   plan_on_correction: "plan_creating",
   plan_creating: "plan_on_agreement_engineer",
   plan_on_agreement_engineer: "plan_on_agreement_time_norm",
@@ -22,10 +39,10 @@ const nextPprYearStatus: { [key in TYearPprStatus]?: TYearPprStatus | undefined 
   plan_on_aprove: "plan_aproved",
   plan_aproved: "in_process",
   in_process: "done",
-  done: undefined,
+  done: null,
 };
 
-const nextPprMonthStatus: { [key in TMonthPprStatus]?: TMonthPprStatus | undefined } = {
+const NEXT_PPR_MONTH_STATUS: { [key in TMonthPprStatus]: TMonthPprStatus } = {
   none: "plan_creating",
   plan_on_correction: "plan_creating",
   plan_creating: "plan_on_agreement_engineer",
@@ -41,15 +58,15 @@ const nextPprMonthStatus: { [key in TMonthPprStatus]?: TMonthPprStatus | undefin
   done: "plan_on_correction",
 };
 
-export function getNextPprYearStatus(currentStatus: TYearPprStatus): TYearPprStatus | undefined {
-  return nextPprYearStatus[currentStatus];
+export function getNextPprYearStatus(currentStatus: TYearPprStatus): TYearPprStatus | null {
+  return NEXT_PPR_YEAR_STATUS[currentStatus];
 }
 
-export function getNextPprMonthStatus(currentStatus: TMonthPprStatus): TMonthPprStatus | undefined {
-  return nextPprMonthStatus[currentStatus];
+export function getNextPprMonthStatus(currentStatus: TMonthPprStatus): TMonthPprStatus {
+  return NEXT_PPR_MONTH_STATUS[currentStatus];
 }
 
-const monthStatusIntlRu: { [status in TMonthPprStatus]: string } = {
+const MONTH_STATUS_RU: { [status in TMonthPprStatus]: string } = {
   none: "не запланирован",
   plan_creating: "план создаётся",
   plan_on_agreement_engineer: "на согласовании инженера",
@@ -65,7 +82,7 @@ const monthStatusIntlRu: { [status in TMonthPprStatus]: string } = {
   done: "завершен",
 };
 
-const yearStatusIntlRu: { [status in TYearPprStatus]: string } = {
+const YEAR_STATUS_RU: { [status in TYearPprStatus]: string } = {
   done: "Выполнен",
   in_process: "В процессе выполнения",
   plan_aproved: "Утвержден",
@@ -79,10 +96,10 @@ const yearStatusIntlRu: { [status in TYearPprStatus]: string } = {
   template: "Шаблон",
 };
 
-export function stringToMonthStatusIntlRu(status: TMonthPprStatus): string {
-  return monthStatusIntlRu[status];
+export function translateRuMonthStatus(status: TMonthPprStatus): string {
+  return MONTH_STATUS_RU[status];
 }
 
-export function stringToYearStatusIntlRu(status: TYearPprStatus): string {
-  return yearStatusIntlRu[status];
+export function translateRuYearStatus(status: TYearPprStatus): string {
+  return YEAR_STATUS_RU[status];
 }

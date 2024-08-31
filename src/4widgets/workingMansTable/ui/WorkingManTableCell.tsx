@@ -17,7 +17,7 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
 }) => {
   const handleChange = useCallback(
     (value: unknown) => {
-      if (rowIndex === undefined || !field || !updateWorkingManTableCell) {
+      if (!rowIndex || !field || !updateWorkingManTableCell) {
         return;
       }
       updateWorkingManTableCell(rowIndex, field, value);

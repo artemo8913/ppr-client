@@ -1,6 +1,6 @@
 export type TMonth = "jan" | "feb" | "mar" | "apr" | "may" | "june" | "july" | "aug" | "sept" | "oct" | "nov" | "dec";
 
-export const months: TMonth[] = [
+export const MONTHS: TMonth[] = [
   "jan",
   "feb",
   "mar",
@@ -17,9 +17,9 @@ export const months: TMonth[] = [
 
 export type TTimePeriod = "year" | TMonth;
 
-export const timePeriods: TTimePeriod[] = ["year", ...months] as const;
+export const TIME_PERIODS: TTimePeriod[] = ["year", ...MONTHS] as const;
 
-const timePeriodIntlRu = {
+const TIME_PERIOD_RU = {
   year: "год",
   jan: "январь",
   feb: "февраль",
@@ -35,17 +35,17 @@ const timePeriodIntlRu = {
   dec: "декабрь",
 };
 
-export const stringToTimePeriodIntlRu = (string: string): string => {
-  for (const period of timePeriods) {
+export const translateRuTimePeriod = (string: string): string => {
+  for (const period of TIME_PERIODS) {
     if (string.startsWith(period)) {
-      return timePeriodIntlRu[period];
+      return TIME_PERIOD_RU[period];
     }
   }
   return "";
 };
-
-export const isStringStartsWithTimePeriodName = (string: string): boolean => {
-  for (const period of timePeriods) {
+// TODO: удалить при переходе к scss стилям у таблицы ППР
+export const checkIsStartsWithTimePeriodName = (string: string): boolean => {
+  for (const period of TIME_PERIODS) {
     if (string.startsWith(period)) {
       return true;
     }
@@ -55,7 +55,7 @@ export const isStringStartsWithTimePeriodName = (string: string): boolean => {
 
 export type TQuartalNumber = 1 | 2 | 3 | 4;
 
-export function getCurrentQuartal(timePeriod?: TTimePeriod): TQuartalNumber | undefined {
+export function getQuartal(timePeriod?: TTimePeriod): TQuartalNumber | undefined {
   if (timePeriod === "jan" || timePeriod === "feb" || timePeriod === "mar") {
     return 1;
   } else if (timePeriod === "apr" || timePeriod === "may" || timePeriod === "june") {
@@ -67,7 +67,7 @@ export function getCurrentQuartal(timePeriod?: TTimePeriod): TQuartalNumber | un
   }
 }
 
-export function getQuartalMonths(quartal?: TQuartalNumber): TMonth[] {
+export function getMonthsByQuartal(quartal?: TQuartalNumber): TMonth[] {
   if (quartal === 1) {
     return ["jan", "feb", "mar"];
   } else if (quartal === 2) {

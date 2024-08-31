@@ -35,7 +35,7 @@ import { TPprDataFieldsTotalValues, TWorkingManFieldsTotalValues } from "@/2enti
 
 export interface IPprContext {
   ppr: IPpr | null;
-  addWork: (newWork: Partial<IPprData>, nearWorkId?: string) => void;
+  addWork: (newWork: Partial<IPprData>, nearWorkId?: string | null) => void;
   copyWork: (id: string) => void;
   deleteWork: (id: string) => void;
   updateNormOfTime: (id: string, value: number) => void;
@@ -97,12 +97,12 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   const [ppr, setPpr] = useState<IPpr | null>(null);
 
   /**Добавить работу в ППР */
-  const addWork = useCallback((newWork: Partial<IPprData>, nearWorkId?: string) => {
+  const addWork = useCallback((newWork: Partial<IPprData>, nearWorkId?: string | null) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
       }
-      let indexToPlace: number | undefined;
+      let indexToPlace: number | null = null;
 
       for (let i = 0; i < prev.data.length; i++) {
         if (prev.data[i].id !== nearWorkId) {
@@ -115,8 +115,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       return {
         ...prev,
         data:
-          indexToPlace !== undefined
-            ? prev.data
+          indexToPlace ? prev.data
                 .slice(0, indexToPlace + 1)
                 .concat(createNewPprWorkInstance(newWork))
                 .concat(prev.data.slice(indexToPlace + 1))

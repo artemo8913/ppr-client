@@ -1,28 +1,30 @@
 "use client";
-import { FC } from "react";
+import { useSession } from "next-auth/react";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { FormOutlined } from "@ant-design/icons";
+
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { useSession } from "next-auth/react";
-import { getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
+import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
 
-interface IPprTableSetOneUnityButtonProps {}
-
-export const PprTableSetOneUnityButton: FC<IPprTableSetOneUnityButtonProps> = () => {
+export const PprTableSetOneUnityButton = () => {
   const { setOneUnityInAllWorks } = usePpr();
   const { data: sessionData } = useSession();
 
-  const unitiesShortNames = getShortNamesForAllHierarchy(sessionData?.user || {});
+  const subdivisionShortName = getShortNamesForAllDivisions(sessionData?.user || {}).subdivisionShortName;
+
+  const handleClick = () => {
+    subdivisionShortName && setOneUnityInAllWorks(subdivisionShortName);
+  }
 
   return (
     <Tooltip title="Массово заполнить подразделение">
       <Button
-        disabled={!unitiesShortNames.subdivisionShortName}
+        disabled={!subdivisionShortName}
         icon={<FormOutlined />}
         type="text"
         shape="circle"
-        onClick={() => setOneUnityInAllWorks(unitiesShortNames.subdivisionShortName || "")}
+        onClick={handleClick}
       />
     </Tooltip>
   );

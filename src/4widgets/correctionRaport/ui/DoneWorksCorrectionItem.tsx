@@ -2,13 +2,13 @@ import { FC } from "react";
 import { TCorrectionItem } from "./CorrectionRaport";
 import { IPlanWorkPeriods, IPprData } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
-import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 
 interface IDoneWorksCorrectionItemProps {
   correction: TCorrectionItem;
   fieldFrom: keyof IPlanWorkPeriods;
-  name: string | undefined;
-  measure: string | undefined;
+  name?: string;
+  measure?: string;
   isEditable?: boolean;
 }
 
@@ -38,7 +38,7 @@ export const DoneWorksCorrectionItem: FC<IDoneWorksCorrectionItemProps> = ({
           <span>перенести на/с: </span>
           {transfers?.map((transfer, index, arr) => (
             <span key={transfer.fieldTo + index}>
-              {transfer.value} {measure} {stringToTimePeriodIntlRu(transfer.fieldTo)}
+              {transfer.value} {measure} {translateRuTimePeriod(transfer.fieldTo)}
               <span>{arr.length - 1 === index ? "." : ","}</span>
             </span>
           ))}

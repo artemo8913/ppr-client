@@ -19,7 +19,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   ...otherProps
 }) => {
   const handleChange = (newValue: string) => {
-    if (id === undefined || !field || !updatePprTableCell) {
+    if (!id || !field || !updatePprTableCell) {
       return;
     }
     updatePprTableCell(id, field, newValue, isWorkAproved);

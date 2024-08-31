@@ -1,4 +1,4 @@
-import { TTimePeriod, timePeriods } from "@/1shared/lib/date";
+import { TTimePeriod, TIME_PERIODS } from "@/1shared/lib/date";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
 
 const columnsDefault: (keyof IWorkingManYearPlan)[] = ["full_name", "work_position", "participation"];
@@ -19,7 +19,7 @@ export const useCreateColumns = (): {
 } => {
   return {
     columnsDefault,
-    timePeriods: timePeriods,
-    timePeriodsColumns: timePeriods.map((period) => getPlanFactColumns(period)),
+    timePeriods: TIME_PERIODS,
+    timePeriodsColumns: TIME_PERIODS.map((period) => getPlanFactColumns(period)),
   };
 };

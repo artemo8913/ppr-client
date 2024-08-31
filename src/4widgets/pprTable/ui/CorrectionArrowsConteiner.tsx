@@ -28,7 +28,7 @@ function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
 const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCellRef, field, transfers }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
   const { filterColumns } = usePprTableSettings();
-  const fieldFromIndex = checkIsPlanWorkField(field) ? planWorkFields.indexOf(field) : undefined;
+  const fieldFromIndex = checkIsPlanWorkField(field) ? planWorkFields.indexOf(field) : null;
 
   useEffect(() => {
     const width = planCellRef.current?.getBoundingClientRect().width || 0;
@@ -37,7 +37,7 @@ const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCe
   }, [filterColumns, planCellRef]);
 
   const arrows = transfers?.map((field, index) => {
-    const fieldToIndex = checkIsPlanWorkField(field.fieldTo) ? planWorkFields.indexOf(field.fieldTo) : undefined;
+    const fieldToIndex = checkIsPlanWorkField(field.fieldTo) ? planWorkFields.indexOf(field.fieldTo) : null;
     const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
     return <Arrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
   });

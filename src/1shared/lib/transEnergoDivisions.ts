@@ -1,19 +1,18 @@
-export type TDivisions = "directions" | "distances" | "subdivisions";
-
-interface basicInfo {
+//TODO: вынести на бэк и сделать типы и сущности для подразделений, всё это удалить
+interface IDivisionBasicInfo {
   name: string;
   short_name: string;
 }
 
-interface IDistancesInfo extends basicInfo {
-  subdivisions: Record<number, basicInfo>;
+interface IDistancesInfo extends IDivisionBasicInfo {
+  subdivisions: Record<number, IDivisionBasicInfo>;
 }
 
-export interface IDivisionInfo extends basicInfo {
+interface IDivisionInfo extends IDivisionBasicInfo {
   distances: Record<number, IDistancesInfo>;
 }
 
-export function getShortNamesForAllHierarchy({
+export function getShortNamesForAllDivisions({
   id_direction,
   id_distance,
   id_subdivision,

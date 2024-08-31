@@ -19,7 +19,7 @@ import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
 import { getColumnTitle } from "../lib/pprTableColumnsHelper";
 import { PprTableCellMemo } from "./PprTableCell";
 import { useCreateColumns } from "./PprTableColumns";
-import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 
 interface IPprTableProps {}
 
@@ -37,7 +37,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
   const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
   const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, currentTimePeriod } = usePprTableSettings();
   const pprYearStatus: TYearPprStatus = ppr?.status || "template";
-  const pprMonthsStatuses: TAllMonthStatuses | undefined = ppr?.months_statuses || undefined;
+  const pprMonthsStatuses: TAllMonthStatuses | null = ppr?.months_statuses || null;
 
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
   const isArrowsShow = useMemo(
@@ -97,7 +97,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
               colSpan={timePeriodsColumns[0].length}
               className="border border-black sticky top-0 z-20 bg-[#f5f5f5]"
             >
-              <PprTableCellMemo value={stringToTimePeriodIntlRu(month)} />
+              <PprTableCellMemo value={translateRuTimePeriod(month)} />
             </th>
           ))}
         </tr>
@@ -118,7 +118,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
           <tr key={pprData.id}>
             {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => {
               const isPlanWorkPeriodField = checkIsPlanWorkField(field);
-              const corrections = (isPlanWorkPeriodField && getWorkCorrection(pprData.id, field)) || undefined;
+              const corrections = (isPlanWorkPeriodField && getWorkCorrection(pprData.id, field)) || null;
 
               let value = pprData[field];
 
@@ -130,7 +130,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                   getPlanWorkFieldByPlanTimeField(field)
                 )?.finalCorrection;
                 value =
-                  finalCorrection !== undefined ? Number((finalCorrection * pprData.norm_of_time).toFixed(2)) : value;
+                  finalCorrection ? Number((finalCorrection * pprData.norm_of_time).toFixed(2)) : value;
               }
 
               const transfers = (corrections?.planTransfers || []).concat(corrections?.undoneTransfers || []);

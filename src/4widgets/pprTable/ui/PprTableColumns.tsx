@@ -4,7 +4,7 @@ import {
   usePprTableSettings,
 } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData } from "@/2entities/ppr";
-import { TTimePeriod, getCurrentQuartal, getQuartalMonths, timePeriods } from "@/1shared/lib/date";
+import { TTimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/lib/date";
 
 const columnsDefault: Array<keyof IPprData> = [
   "name",
@@ -24,12 +24,12 @@ const columnsDefault: Array<keyof IPprData> = [
 function getTimePeriodsColumns(currentTimePeriod?: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":
-      return timePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
+      return TIME_PERIODS.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
     case "SHOW_CURRENT_QUARTAL":
       const result: TTimePeriod[] = ["year"];
-      return result.concat(getQuartalMonths(getCurrentQuartal(currentTimePeriod)));
+      return result.concat(getMonthsByQuartal(getQuartal(currentTimePeriod)));
     default:
-      return timePeriods;
+      return TIME_PERIODS;
   }
 }
 

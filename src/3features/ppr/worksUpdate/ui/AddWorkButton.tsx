@@ -5,15 +5,15 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useWorkModal } from "@/1shared/providers/workModalProvider";
 
 interface IAddWorkButtonProps extends React.ComponentProps<typeof Button> {
-  nearWorkId?: string;
+  workId?: string;
 }
 
-export const AddWorkButton: FC<IAddWorkButtonProps> = ({ nearWorkId }) => {
+export const AddWorkButton: FC<IAddWorkButtonProps> = ({ workId }) => {
   const { openModal } = useWorkModal();
   return (
     <Button
       onClick={() => {
-        openModal(nearWorkId);
+        openModal(workId);
       }}
       size="small"
       shape="circle"

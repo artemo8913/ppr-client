@@ -10,7 +10,7 @@ import { IWork } from "@/2entities/work";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
-  nearWorkId?: string;
+  nearWorkId?: string | null;
 }
 
 type TAddWorkForm = Omit<IWork, "periodicity_normal_data">;
