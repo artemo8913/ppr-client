@@ -23,7 +23,6 @@ export const authOptions: AuthOptions = {
   },
   providers: [
     Credentials({
-      id: "Credentials",
       name: "Credentials",
       credentials: {
         username: { label: "username", type: "text" },
