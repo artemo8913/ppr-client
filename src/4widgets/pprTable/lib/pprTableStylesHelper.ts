@@ -1,5 +1,7 @@
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TTimePeriod, checkIsStartsWithTimePeriodName } from "@/1shared/lib/date";
+import { ITableCellProps } from "@/1shared/ui/table";
+import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   IPprData,
   TAllMonthStatuses,
@@ -8,10 +10,8 @@ import {
   factWorkFields,
   factTimeFields,
 } from "@/2entities/ppr";
-import { ITableCellProps } from "@/1shared/ui/table";
-import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 
-export function getThStyle(key: keyof IPprData | string): React.CSSProperties {
+export function getThStyle(key?: keyof IPprData | string): React.CSSProperties {
   switch (key) {
     case "name":
       return { width: "10%" };
@@ -64,16 +64,16 @@ export function getColumnSettings(
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       name: { cellType: "textarea" },
       location: { cellType: "textarea" },
-      line_class: { cellType: "input" },
-      measure: { cellType: "input" },
-      total_count: { cellType: "input" },
-      entry_year: { cellType: "input" },
-      periodicity_normal: { cellType: "input" },
-      periodicity_fact: { cellType: "input" },
-      last_maintenance_year: { cellType: "input" },
-      norm_of_time: { cellType: "input" },
+      line_class: { cellType: "textarea" },
+      measure: { cellType: "textarea" },
+      total_count: { cellType: "textarea" },
+      entry_year: { cellType: "textarea" },
+      periodicity_normal: { cellType: "textarea" },
+      periodicity_fact: { cellType: "textarea" },
+      last_maintenance_year: { cellType: "textarea" },
+      norm_of_time: { cellType: "textarea" },
       norm_of_time_document: { cellType: "textarea" },
-      unity: { cellType: "input" },
+      unity: { cellType: "textarea" },
     };
     planWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
     factWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
@@ -84,13 +84,13 @@ export function getColumnSettings(
   if (pprYearStatus === "plan_creating" && isHaveWorkId) {
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       location: { cellType: "textarea" },
-      line_class: { cellType: "input" },
-      total_count: { cellType: "input" },
-      entry_year: { cellType: "input" },
-      periodicity_normal: { cellType: "input" },
-      periodicity_fact: { cellType: "input" },
-      last_maintenance_year: { cellType: "input" },
-      unity: { cellType: "input" },
+      line_class: { cellType: "textarea" },
+      total_count: { cellType: "textarea" },
+      entry_year: { cellType: "textarea" },
+      periodicity_normal: { cellType: "textarea" },
+      periodicity_fact: { cellType: "textarea" },
+      last_maintenance_year: { cellType: "textarea" },
+      unity: { cellType: "textarea" },
     };
     planWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
     factWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));

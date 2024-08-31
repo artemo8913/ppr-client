@@ -25,7 +25,7 @@ export interface ITableCellProps {
 const TEXTAREA_BASIC_ROWS_COUNT = 4;
 const INPUT_BASIC_MAX_LENGTH = 8;
 
-export const TableCell: FC<ITableCellProps> = (props) => {
+const TableCell: FC<ITableCellProps> = (props) => {
   const {
     cellType = "none",
     value,
@@ -86,4 +86,4 @@ export const TableCell: FC<ITableCellProps> = (props) => {
 
 const TableCellMemo = memo(TableCell);
 
-export { TableCellMemo };
+export { TableCell, TableCellMemo };

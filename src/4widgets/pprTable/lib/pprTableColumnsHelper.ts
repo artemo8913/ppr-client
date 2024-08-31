@@ -1,6 +1,6 @@
 import { IPprData, checkIsPprDataField } from "@/2entities/ppr";
 
-export const columnsTitles: { [key in keyof IPprData]?: string } = {
+export const FIELDS_NAMES_RU: { [key in keyof IPprData]?: string } = {
   name: "Наименования и условия выполнения технологических операций, испытаний и измерений",
   location: "Наименование места проведения работ / тип оборудования",
   line_class: "Класс участка / вид технического обслуживания и ремонта",
@@ -29,9 +29,9 @@ function findPlanFactTitle(string: string) {
   }
 }
 
-export function getColumnTitle(column: keyof IPprData | string): string {
+export function translateRuFieldName(column: keyof IPprData | string): string {
   if (!checkIsPprDataField(column)) {
     return "";
   }
-  return columnsTitles[column] || findPlanFactTitle(column) || "";
+  return FIELDS_NAMES_RU[column] || findPlanFactTitle(column) || "";
 }
