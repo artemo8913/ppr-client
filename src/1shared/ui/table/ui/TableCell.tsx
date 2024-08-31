@@ -1,61 +1,85 @@
 "use client";
-import { FC, memo, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  HTMLInputTypeAttribute,
+  memo,
+  useCallback,
+  useState,
+} from "react";
 import clsx from "clsx";
+
+import style from "./TableCell.module.scss";
 
 type TCell = "none" | "input" | "textarea";
 
 export interface ITableCellProps {
   cellType?: TCell;
-  bgColor?: string;
-  className?: string;
-  isVertical?: boolean;
   value?: string | number | boolean | null;
-  handleBlur?: (value: string) => void;
+  type?: HTMLInputTypeAttribute;
+  isVertical?: boolean;
+  onBlur?: (value: string) => void;
+  className?: string;
 }
 
+const TEXTAREA_BASIC_ROWS_COUNT = 4;
+const INPUT_BASIC_MAX_LENGTH = 8;
+
 export const TableCell: FC<ITableCellProps> = (props) => {
-  const { cellType = "none", value, isVertical = false, bgColor, className, handleBlur: handleBlur } = props;
+  const {
+    cellType = "none",
+    value,
+    type,
+    isVertical = false,
+    onBlur,
+    className,
+  } = props;
+
   const [currentValue, setCurrentValue] = useState(value);
+
+  const handleUpdateValue = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setCurrentValue(e.target.value),
+    []
+  );
+
+  const handleBlur = useCallback(() => {
+    if (onBlur) {
+      onBlur(String(currentValue));
+    }
+  }, [currentValue, onBlur]);
+
   return (
-    /* Контейнер содержимого ячейки */
     <div
-      style={{ backgroundColor: bgColor }}
       className={clsx(
-        "w-full flex justify-center items-center bg-transparent [overflow-wrap:anywhere]",
-        "border-none focus-within:relative focus-within:z-10",
-        isVertical &&
-          "[writing-mode:vertical-rl] focus-within:[writing-mode:horizontal-tb] rotate-180 focus-within:rotate-0",
+        style.TableCell,
+        isVertical && style.isVertical,
         className
       )}
     >
-      {/* TEXTAREA */}
       {cellType === "textarea" && (
         <textarea
           value={String(currentValue)}
-          onChange={(e) => setCurrentValue(e.target.value)}
-          onBlur={() => handleBlur && handleBlur(String(currentValue))}
+          onChange={handleUpdateValue}
+          onBlur={handleBlur}
           className={clsx(
-            "cursor-pointer focus:cursor-text resize-none border-none bg-inherit",
-            !isVertical && "w-full"
+            style.TextareaCell,
+            !isVertical && style.isNotVertical
           )}
-          rows={4}
+          rows={TEXTAREA_BASIC_ROWS_COUNT}
         />
       )}
-      {/* INPUT */}
       {cellType === "input" && (
         <input
-          value={String(currentValue || "")}
-          onChange={(e) => setCurrentValue(e.target.value)}
-          onBlur={() => handleBlur && handleBlur(String(currentValue || ""))}
-          className={clsx(
-            "w-full h-[80px] cursor-pointer focus:cursor-text border-none bg-transparent",
-            isVertical && "focus-within:bg-white focus:w-[80px] focus:h-auto"
-          )}
-          maxLength={8}
+          value={String(currentValue)}
+          onChange={handleUpdateValue}
+          onBlur={handleBlur}
+          className={clsx(style.InputCell, isVertical && style.isVertical)}
+          maxLength={INPUT_BASIC_MAX_LENGTH}
+          type={type}
         />
       )}
-      {/* JUST VALUE */}
-      {(cellType === "none" && value) || ""}
+      {cellType === "none" && value}
     </div>
   );
 };
