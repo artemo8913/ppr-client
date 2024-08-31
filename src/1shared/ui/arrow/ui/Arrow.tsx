@@ -6,14 +6,22 @@ interface IArrowProps {
   value?: number;
 }
 
-const offset = 4;
+const OFFSET_PX = 4;
+const WIDTH_DEFAULT = 100;
+const HEIGHT_DEFAULT = 18;
 
-export const Arrow: FC<IArrowProps> = ({ width = 100, height = 18, value }) => {
+export const Arrow: FC<IArrowProps> = ({
+  width = WIDTH_DEFAULT,
+  height = HEIGHT_DEFAULT,
+  value,
+}) => {
   const isOnRight = Number(value) >= 0;
   const color = isOnRight ? "red" : "green";
   const text = value ? (isOnRight ? `+${value}` : value) : "";
   const middleHeight = height / 2;
-  const middleHeightWithOffset = middleHeight + (isOnRight ? offset : -offset);
+  const middleHeightWithOffset =
+    middleHeight + (isOnRight ? OFFSET_PX : -OFFSET_PX);
+
   return (
     <svg width={width} height={height} color={color}>
       <defs>
@@ -25,13 +33,32 @@ export const Arrow: FC<IArrowProps> = ({ width = 100, height = 18, value }) => {
           </feMerge>
         </filter>
       </defs>
-      <text fontWeight={700} filter="url(#solid)" fill={color} x={width / 4} y={middleHeight}>
+      <text
+        fontWeight={700}
+        filter="url(#solid)"
+        fill={color}
+        x={width / 4}
+        y={middleHeight}
+      >
         {text}
       </text>
-      <g strokeWidth={2} style={{ rotate: isOnRight ? "" : "180deg", transformOrigin: "center" }}>
+      <g
+        strokeWidth={2}
+        style={{ rotate: isOnRight ? "" : "180deg", transformOrigin: "center" }}
+      >
         <path stroke={color} d={`M0 ${middleHeightWithOffset} H ${width}`} />
-        <path d={`M${width - 8} ${middleHeightWithOffset - 4} L${width} ${middleHeightWithOffset}`} stroke={color} />
-        <path d={`M${width - 8} ${middleHeightWithOffset + 4} L${width} ${middleHeightWithOffset}`} stroke={color} />
+        <path
+          d={`M${width - 8} ${
+            middleHeightWithOffset - 4
+          } L${width} ${middleHeightWithOffset}`}
+          stroke={color}
+        />
+        <path
+          d={`M${width - 8} ${
+            middleHeightWithOffset + 4
+          } L${width} ${middleHeightWithOffset}`}
+          stroke={color}
+        />
       </g>
     </svg>
   );
