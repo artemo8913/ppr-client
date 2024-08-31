@@ -25,7 +25,7 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
     [rowIndex, field, updateWorkingManTableCell]
   );
 
-  return <TableCell {...otherProps} handleBlur={handleChange} />;
+  return <TableCell {...otherProps} onBlur={handleChange} />;
 };
 
 const WorkingManTableCellMemo = memo(WorkingManTableCell);
