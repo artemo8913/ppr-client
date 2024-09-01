@@ -2,30 +2,32 @@
 import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
+
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPlanWorkPeriods, TTransfer, planWorkFields } from "@/2entities/ppr";
+import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, planWorkFields } from "@/2entities/ppr";
+
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
-interface ISetPprCorrectionTransferProps<T> {
+interface ISetPprCorrectionTransferProps {
+  id: string;
+  fieldFrom: TPlanWorkPeriods;
+  transfers?: TTransfer[] | null;
   transferType: "plan" | "undone";
-  transfers?: TTransfer<IPlanWorkPeriods>[] | null;
-  rowIndex: number;
-  fieldFrom: keyof T;
 }
 
 const monthPlanPeriods = planWorkFields.filter((field) => field !== "year_plan_work");
 
-export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWorkPeriods>> = ({
-  transferType,
+export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
+  id,
   fieldFrom,
   transfers = null,
-  rowIndex,
+  transferType,
 }) => {
-  const { updateWorkTransfers } = usePpr();
+  const { updateTransfers } = usePpr();
 
   const { currentTimePeriod } = usePprTableSettings();
   const monthIndex = useMemo(
@@ -34,7 +36,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
   );
   const nearestPlanPeriod = monthPlanPeriods[monthIndex + 1];
 
-  const selectOptions: TOption<IPlanWorkPeriods>[] = useMemo(
+  const selectOptions: TOption<TPlanWorkPeriods>[] = useMemo(
     () =>
       monthPlanPeriods.map((field, index) => {
         if (index <= monthIndex) {
@@ -46,22 +48,22 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
   );
 
   const handleTransfersChange = useCallback(
-    (fieldTo: keyof IPlanWorkPeriods | null, value?: number, transferIndex?: number) => {
-      let newTransfers: TTransfer<IPlanWorkPeriods>[] | null = null;
+    (fieldTo: keyof TPlanWorkPeriodsFields | null, value?: number, transferIndex?: number) => {
+      let newTransfers: TTransfer[] | null = null;
       if (!fieldTo) {
         null;
       } else if (!transfers) {
         newTransfers = [createNewTransferInstance(fieldTo, value)];
-      } else if (transferIndex) {
+      } else if (transferIndex !== undefined) {
         newTransfers = [
           ...transfers.slice(0, transferIndex),
           createNewTransferInstance(fieldTo, value),
           ...transfers.slice(transferIndex + 1),
         ];
       }
-      updateWorkTransfers(transferType, rowIndex, fieldFrom, newTransfers);
+      updateTransfers(id, fieldFrom, newTransfers, transferType);
     },
-    [rowIndex, fieldFrom, transferType, transfers, updateWorkTransfers]
+    [id, fieldFrom, transferType, transfers, updateTransfers]
   );
 
   const addTransfer = useCallback(() => {
@@ -73,14 +75,14 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps<IPlanWo
       if (transfers === null) {
         return;
       }
-      updateWorkTransfers(
-        transferType,
-        rowIndex,
+      updateTransfers(
+        id,
         fieldFrom,
-        transfers?.filter((_, i) => i !== index)
+        transfers?.filter((_, i) => i !== index),
+        transferType
       );
     },
-    [updateWorkTransfers, transferType, transfers, fieldFrom, rowIndex]
+    [updateTransfers, transferType, transfers, fieldFrom, id]
   );
 
   const handleStratagy = useCallback(
