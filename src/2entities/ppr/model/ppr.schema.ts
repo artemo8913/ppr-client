@@ -33,42 +33,72 @@ export type TAllMonthStatuses = {
   [month in TMonth]: TMonthPprStatus;
 };
 
-export type IPlanWorkPeriods = {
-  [key in `${TTimePeriod}_plan_work`]: number;
+export type TTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
+
+export type TPlanWorkPeriods = `${TTimePeriod}_plan_work`;
+export type TFactWorkPeriods = `${TTimePeriod}_fact_work`;
+export type TPlanNormTimePeriods = `${TTimePeriod}_plan_norm_time`;
+export type TPlanTabelTimePeriods = `${TTimePeriod}_plan_tabel_time`;
+export type TPlanTimePeriods = `${TTimePeriod}_plan_time`;
+export type TFactNormTimePeriods = `${TTimePeriod}_fact_norm_time`;
+export type TFactTimePeriods = `${TTimePeriod}_fact_time`;
+
+export interface IPlanWorkValues {
+  original: number;
+  handCorrection: number | null;
+  final: number;
+  outsideCorrectionsSum: number;
+  planTransfersSum: number;
+  planTransfers: TTransfer[] | null;
+  undoneTransfersSum: number;
+  undoneTransfers: TTransfer[] | null;
+}
+
+export interface TPlanTimeValues {
+  original: number;
+  final: number;
 };
 
-export type IPlanNormTimePeriods = {
-  [key in `${TTimePeriod}_plan_norm_time`]: number;
+export type TPlanWorkPeriodsFields = {
+  [key in TPlanWorkPeriods]: IPlanWorkValues;
 };
 
-export type IPlanTabelTimePeriods = {
-  [key in `${TTimePeriod}_plan_tabel_time`]: number;
+export type TFactWorkPeriodsFields = {
+  [key in TFactWorkPeriods]: number;
 };
 
-export type IPlanTimePeriods = {
-  [key in `${TTimePeriod}_plan_time`]: number;
+export type TPlanNormTimePeriodsFields = {
+  [key in TPlanNormTimePeriods]: number;
 };
 
-export type IFactWorkPeriods = {
-  [key in `${TTimePeriod}_fact_work`]: number;
+export type TPlanTabelTimePeriodsFields = {
+  [key in TPlanTabelTimePeriods]: number;
+};
+/**Поля месячных и годовых планируемых трудозатрат (для работ)*/
+export type TWorkPlanTimePeriodsFields = {
+  [key in TPlanTimePeriods]: TPlanTimeValues;
+};
+/**Поля месячных и годовых планируемых трудозатрат (для людей)*/
+export type TPlanTimePeriodsFields = {
+  [key in TPlanTimePeriods]: number;
 };
 
-export type IFactNormTimePeriods = {
-  [key in `${TTimePeriod}_fact_norm_time`]: number;
+export type TFactNormTimePeriodsFields = {
+  [key in TFactNormTimePeriods]: number;
 };
 
-export type IFactTimePeriods = {
-  [key in `${TTimePeriod}_fact_time`]: number;
+export type TFactTimePeriodsFields = {
+  [key in TFactTimePeriods]: number;
 };
 
-export type TPprDataFieldsTotalValues = Partial<IPlanTimePeriods> &
-  Partial<IFactNormTimePeriods> &
-  Partial<IFactTimePeriods>;
+export type TPprDataFieldsTotalValues = Partial<TPlanTimePeriodsFields> &
+  Partial<TFactNormTimePeriodsFields> &
+  Partial<TFactTimePeriodsFields>;
 
-export type TWorkingManFieldsTotalValues = Partial<IPlanNormTimePeriods> &
-  Partial<IPlanTabelTimePeriods> &
-  Partial<IPlanTimePeriods> &
-  Partial<IFactTimePeriods>;
+export type TWorkingManFieldsTotalValues = Partial<TPlanNormTimePeriodsFields> &
+  Partial<TPlanTabelTimePeriodsFields> &
+  Partial<TPlanTimePeriodsFields> &
+  Partial<TFactTimePeriodsFields>;
 
 export type TTotalFieldsValues = {
   peoples: TWorkingManFieldsTotalValues;
@@ -88,45 +118,18 @@ export interface IPpr {
   id_subdivision: number | null;
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
-  corrections: TPprCorrections;
   total_fields_value: TTotalFieldsValues;
 }
-
-export type TPprCorrections = {
-  works: {
-    [idWork: string]: { [field in keyof IPlanWorkPeriods]?: TWorkCorrection<IPlanWorkPeriods> } | undefined;
-  };
-};
 
 export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;
 }
 
-export type TTransfer<T> = { fieldTo: keyof T; value: number; is_approved: boolean };
-
-export type TWorkCorrection<T> = {
-  basicValue: number;
-  outsideCorrectionsSum: number;
-  isHandCorrected: boolean;
-  planValueAfterCorrection: number;
-  finalCorrection: number;
-  planTransfersSum: number;
-  undoneTransfersSum: number;
-  planTransfers: TTransfer<T>[] | null;
-  undoneTransfers: TTransfer<T>[] | null;
-};
-
-export type TWorkingManCorrections = Partial<IPlanNormTimePeriods> | Partial<IPlanTabelTimePeriods>;
-
-export type TWorkPlanCorrectionsResult = {
-  [idWork: string]: { [planPeriod in keyof IPlanWorkPeriods]?: number } | undefined;
-};
-
 export interface IWorkingManYearPlan
-  extends IPlanNormTimePeriods,
-    IPlanTabelTimePeriods,
-    IPlanTimePeriods,
-    IFactTimePeriods {
+  extends TPlanNormTimePeriodsFields,
+    TPlanTabelTimePeriodsFields,
+    TPlanTimePeriodsFields,
+    TFactTimePeriodsFields {
   id: string;
   full_name: string;
   work_position: string;
@@ -134,11 +137,11 @@ export interface IWorkingManYearPlan
 }
 
 export interface IPprData
-  extends IPlanWorkPeriods,
-    IPlanTimePeriods,
-    IFactWorkPeriods,
-    IFactNormTimePeriods,
-    IFactTimePeriods {
+  extends TPlanWorkPeriodsFields,
+    TWorkPlanTimePeriodsFields,
+    TFactWorkPeriodsFields,
+    TFactNormTimePeriodsFields,
+    TFactTimePeriodsFields {
   id: string;
   workId: string | null;
   is_work_aproved: boolean;

@@ -1,7 +1,7 @@
 import { TTimePeriod } from "@/1shared/lib/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import { IWorkingManYearPlan, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
-import { IFactTimePeriods, IPlanNormTimePeriods, IPlanTabelTimePeriods } from "@/2entities/ppr/model/ppr.schema";
+import { TFactTimePeriodsFields, TPlanNormTimePeriodsFields, TPlanTabelTimePeriodsFields } from "@/2entities/ppr/model/ppr.schema";
 
 export const columnsTitles: { [key in keyof IWorkingManYearPlan | string]?: string } = {
   full_name: "Фамилия, имя, отчество",
@@ -77,8 +77,8 @@ const allEditableSettings: { [column in keyof IWorkingManYearPlan]?: ITableCellP
 };
 
 const getPlanEditableSettings = (
-  planNormField: keyof IPlanNormTimePeriods,
-  planTabelField: keyof IPlanTabelTimePeriods
+  planNormField: keyof TPlanNormTimePeriodsFields,
+  planTabelField: keyof TPlanTabelTimePeriodsFields
 ): { [column in keyof IWorkingManYearPlan]?: ITableCellProps } => ({
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
@@ -88,7 +88,7 @@ const getPlanEditableSettings = (
 });
 
 const getFactEditableSettings = (
-  factField: keyof IFactTimePeriods
+  factField: keyof TFactTimePeriodsFields
 ): { [column in keyof IWorkingManYearPlan]?: ITableCellProps } => ({
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
@@ -109,9 +109,9 @@ export function getColumnSettings(
     return {};
   }
 
-  const planNormField: keyof IPlanNormTimePeriods = `${timePeriod}_plan_norm_time`;
-  const planTabelField: keyof IPlanTabelTimePeriods = `${timePeriod}_plan_tabel_time`;
-  const factField: keyof IFactTimePeriods = `${timePeriod}_fact_time`;
+  const planNormField: keyof TPlanNormTimePeriodsFields = `${timePeriod}_plan_norm_time`;
+  const planTabelField: keyof TPlanTabelTimePeriodsFields = `${timePeriod}_plan_tabel_time`;
+  const factField: keyof TFactTimePeriodsFields = `${timePeriod}_fact_time`;
 
   const planEditableSettings = getPlanEditableSettings(planNormField, planTabelField);
   const factEditableSettings = getFactEditableSettings(factField);

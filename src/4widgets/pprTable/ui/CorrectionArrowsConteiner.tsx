@@ -2,12 +2,12 @@
 import { FC, MutableRefObject, memo, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { Arrow } from "@/1shared/ui/arrow";
-import { IPlanWorkPeriods, TTransfer, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
+import { TPlanWorkPeriodsFields, TTransfer, checkIsPlanWorkField, planWorkFields } from "@/2entities/ppr";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
-  field: keyof IPlanWorkPeriods;
-  transfers: TTransfer<IPlanWorkPeriods>[];
+  field: keyof TPlanWorkPeriodsFields;
+  transfers: TTransfer[];
 }
 
 function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
