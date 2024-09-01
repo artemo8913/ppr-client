@@ -75,9 +75,15 @@ export function getColumnSettings(
       norm_of_time_document: { cellType: "textarea" },
       unity: { cellType: "textarea" },
     };
-    planWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
-    factWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
-    factTimeFields.forEach((field) => (settings[field] = { cellType: "input" }));
+    planWorkFields
+      .filter((field) => !field.startsWith("year"))
+      .forEach((field) => (settings[field] = { cellType: "input" }));
+    factWorkFields
+      .filter((field) => !field.startsWith("year"))
+      .forEach((field) => (settings[field] = { cellType: "input" }));
+    factTimeFields
+      .filter((field) => !field.startsWith("year"))
+      .forEach((field) => (settings[field] = { cellType: "input" }));
 
     return settings[field];
   }
@@ -92,9 +98,15 @@ export function getColumnSettings(
       last_maintenance_year: { cellType: "textarea" },
       unity: { cellType: "textarea" },
     };
-    planWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
-    factWorkFields.forEach((field) => (settings[field] = { cellType: "input" }));
-    factTimeFields.forEach((field) => (settings[field] = { cellType: "input" }));
+    planWorkFields
+      .filter((field) => !field.startsWith("year"))
+      .forEach((field) => (settings[field] = { cellType: "input" }));
+    factWorkFields
+      .filter((field) => !field.startsWith("year"))
+      .forEach((field) => (settings[field] = { cellType: "input" }));
+    factTimeFields
+      .filter((field) => !field.startsWith("year"))
+      .forEach((field) => (settings[field] = { cellType: "input" }));
 
     return settings[field];
   }
