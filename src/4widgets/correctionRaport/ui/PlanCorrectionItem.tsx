@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { TCorrectionItem } from "./CorrectionRaport";
-import { IPlanWorkPeriods, IPprData } from "@/2entities/ppr";
+import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 
 interface IPlanCorrectionItemProps {
   correction: TCorrectionItem;
-  fieldFrom: keyof IPlanWorkPeriods;
+  fieldFrom: keyof TPlanWorkPeriodsFields;
   name?: string;
   measure?: string;
   isEditable?: boolean;
@@ -22,8 +22,7 @@ export const PlanCorrectionItem: FC<IPlanCorrectionItemProps> = ({
   const planValue = correction.firstCompareValue;
   const correctedValue = correction.secondCompareValue;
   const objectId = correction.objectId;
-  const rowIndex = correction.rowIndex;
-  const transfers = correction.correctionData?.planTransfers;
+  const transfers = correction.plan?.planTransfers;
   const isHaveTransfers = Boolean(transfers);
 
   return (
@@ -45,7 +44,7 @@ export const PlanCorrectionItem: FC<IPlanCorrectionItemProps> = ({
         </>
       )}
       {isEditable && (
-        <SetPprCorrectionTransfer transferType="plan" transfers={transfers} rowIndex={rowIndex} fieldFrom={fieldFrom} />
+        <SetPprCorrectionTransfer transferType="plan" transfers={transfers} id={objectId} fieldFrom={fieldFrom} />
       )}
     </li>
   );
