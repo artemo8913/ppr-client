@@ -5,7 +5,7 @@ import Button from "antd/es/button";
 import Tooltip from "antd/es/tooltip";
 import { DeleteTwoTone } from "@ant-design/icons";
 import Popconfirm from "antd/es/popconfirm";
-import { isPprInUserControl } from "@/1shared/providers/pprProvider";
+import { checkIsPprInUserControl } from "@/1shared/providers/pprProvider";
 import { TYearPprStatus, deletePprTable } from "@/2entities/ppr";
 import { IUser } from "@/2entities/user";
 
@@ -21,7 +21,7 @@ export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ pprId, created_by, 
   if (!userData) {
     return null;
   }
-  const { isForSubdivision } = isPprInUserControl(created_by, userData.user);
+  const { isForSubdivision } = checkIsPprInUserControl(created_by, userData.user);
   const isStatusCanBeDeleted = pprStatus === "plan_creating" || pprStatus === "template";
   const isPprCanBeDeleted = isForSubdivision && isStatusCanBeDeleted;
   return (

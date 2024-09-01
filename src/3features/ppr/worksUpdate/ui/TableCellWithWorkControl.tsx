@@ -25,7 +25,7 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ i
       {!isHide && (
         <div className="!absolute -bottom-6 left-0 z-10 flex">
           <DeleteWorkButton id={id} />
-          <AddWorkButton nearWorkId={id} />
+          <AddWorkButton workId={id} />
           <CopyWorkButton id={id} />
         </div>
       )}

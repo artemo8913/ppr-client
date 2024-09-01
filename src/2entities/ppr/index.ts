@@ -7,18 +7,24 @@ export type {
   TMonthPprStatus,
   TYearPprStatus,
   IWorkingManYearPlan,
-  IPlanNormTimePeriods,
-  IPlanTabelTimePeriods,
-  IPlanTimePeriods,
-  IPlanWorkPeriods,
-  IFactWorkPeriods,
-  IFactNormTimePeriods,
-  IFactTimePeriods,
-  TPprCorrections,
-  TWorkCorrection,
-  TWorkPlanCorrectionsResult,
+  TPlanNormTimePeriodsFields,
+  TPlanTabelTimePeriodsFields,
+  TWorkPlanTimePeriodsFields,
+  TPlanWorkPeriodsFields,
+  TFactWorkPeriodsFields,
+  TFactNormTimePeriodsFields,
+  TFactTimePeriodsFields,
+  IPlanWorkValues,
   TTransfer,
+  TPlanWorkPeriods,
+  TFactWorkPeriods,
+  TPlanNormTimePeriods,
+  TPlanTabelTimePeriods,
+  TPlanTimePeriods,
+  TFactNormTimePeriods,
+  TFactTimePeriods,
 } from "./model/ppr.schema";
+
 export {
   pprDataFields,
   planWorkFields,
@@ -37,6 +43,7 @@ export {
   getPlanWorkFieldByTimePeriod,
   getPlanTimeFieldByPlanTabelTimeField,
 } from "./lib/constFields";
+
 export {
   checkIsPprDataField,
   checkIsPlanOrFactWorkField,
@@ -49,5 +56,7 @@ export {
   checkIsPlanNormTimeField,
   checkIsPlanTabelTimeField,
 } from "./lib/validateTypes";
+
 export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
+
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";

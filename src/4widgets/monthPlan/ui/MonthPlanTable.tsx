@@ -3,17 +3,14 @@ import { FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { TTimePeriod } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { IPlanWorkPeriods, IPprData, TWorkCorrection } from "@/2entities/ppr";
+import { TPlanWorkPeriodsFields, IPprData, IPlanWorkValues } from "@/2entities/ppr";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 type TMonthPlanColumns = IPprData;
 
 const columnHelper = createColumnHelper<TMonthPlanColumns>();
 
-const useColumns = (
-  timePeriod: TTimePeriod,
-  getWorkCorrection: (id: string, field: keyof IPlanWorkPeriods) => TWorkCorrection<IPlanWorkPeriods> | undefined
-) => {
+const useColumns = (timePeriod: TTimePeriod) => {
   return [
     columnHelper.group({
       header: "Работа",
@@ -41,13 +38,7 @@ const useColumns = (
           header: "Количество",
           cell(props) {
             const pprData = props.row.original;
-            const correction = getWorkCorrection(pprData.id, `${timePeriod}_plan_work`);
-
-            if (!correction) {
-              return props.cell.getValue();
-            }
-
-            return correction.planValueAfterCorrection;
+            return pprData[`${timePeriod}_plan_work`].final;
           },
         }),
         columnHelper.accessor(`norm_of_time`, {
@@ -58,13 +49,7 @@ const useColumns = (
           header: "Всего трудозатрат по норме, чел.-ч",
           cell(props) {
             const pprData = props.row.original;
-            const correction = getWorkCorrection(pprData.id, `${timePeriod}_plan_work`);
-
-            if (!correction) {
-              return props.cell.getValue();
-            }
-
-            return (correction.planValueAfterCorrection * pprData.norm_of_time).toFixed(2);
+            return pprData[`${timePeriod}_plan_time`].final;
           },
         },
       ],
@@ -89,11 +74,11 @@ const useColumns = (
 interface IMonthPlanTableProps {}
 
 export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
-  const { ppr, getWorkCorrection } = usePpr();
+  const { ppr } = usePpr();
   const { currentTimePeriod } = usePprTableSettings();
   const table = useReactTable({
     data: ppr?.data || [],
-    columns: useColumns(currentTimePeriod, getWorkCorrection),
+    columns: useColumns(currentTimePeriod),
     getCoreRowModel: getCoreRowModel(),
   });
   return (
@@ -132,11 +117,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
             .getRowModel()
             .rows.filter((row) => {
               const pprData = row.original;
-              const correction = getWorkCorrection(pprData.id, `${currentTimePeriod}_plan_work`);
-
-              const planValue = correction
-                ? correction.planValueAfterCorrection
-                : row.original[`${currentTimePeriod}_plan_work`];
+              const planValue = pprData[`${currentTimePeriod}_plan_work`].final;
 
               return Boolean(Number(row.original[`${currentTimePeriod}_fact_work`])) || Boolean(planValue);
             })

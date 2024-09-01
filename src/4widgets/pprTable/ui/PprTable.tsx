@@ -1,6 +1,8 @@
 "use client";
 import { FC, useCallback, useMemo, useRef } from "react";
+
 import { usePpr } from "@/1shared/providers/pprProvider";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   IPprData,
@@ -9,24 +11,22 @@ import {
   TYearPprStatus,
   checkIsFactTimeField,
   checkIsFactWorkField,
-  checkIsPlanTimeField,
   checkIsPlanWorkField,
   checkIsWorkOrTimeField,
-  getPlanWorkFieldByPlanTimeField,
 } from "@/2entities/ppr";
-import { getColumnSettings, getTdStyle, getThStyle } from "../lib/pprTableStylesHelper";
-import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
-import { getColumnTitle } from "../lib/pprTableColumnsHelper";
+import { AddWorkButton } from "@/3features/ppr/worksUpdate";
+
 import { PprTableCellMemo } from "./PprTableCell";
 import { useCreateColumns } from "./PprTableColumns";
-import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import HeaderCell from "./HeaderCell";
+import { getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
+import { translateRuFieldName } from "../lib/pprTableColumnsHelper";
 
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = ({}) => {
   const {
     ppr,
-    getWorkCorrection,
     updateFactWorkTime,
     updateFactWork,
     updatePlanWorkValueByUser,
@@ -34,20 +34,15 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     updatePlanWork,
     updatePprData,
   } = usePpr();
-  const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
-  const { correctionView, tableWidthPercent, fontSizePx, headerHeightPx, currentTimePeriod } = usePprTableSettings();
+
+  const { basicColumns, timePeriods, planFactColumns, monthColSpan } = useCreateColumns();
+
+  const pprSettings = usePprTableSettings();
+
   const pprYearStatus: TYearPprStatus = ppr?.status || "template";
-  const pprMonthsStatuses: TAllMonthStatuses | undefined = ppr?.months_statuses || undefined;
+  const pprMonthsStatuses: TAllMonthStatuses | null = ppr?.months_statuses || null;
 
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
-  const isArrowsShow = useMemo(
-    () => correctionView === "CORRECTED_PLAN_WITH_ARROWS" || correctionView === "INITIAL_PLAN_WITH_ARROWS",
-    [correctionView]
-  );
-  const isCorrectedView = useMemo(
-    () => correctionView === "CORRECTED_PLAN" || correctionView === "CORRECTED_PLAN_WITH_ARROWS",
-    [correctionView]
-  );
 
   const updatePprTableCell = useCallback(
     (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => {
@@ -65,117 +60,81 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
         updatePprData(id, field, value);
       }
     },
-    // все функции "чистые", у всех useCallback с пустым массивов
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [updateFactWork, updateFactWorkTime, updateNormOfTime, updatePlanWork, updatePlanWorkValueByUser, updatePprData]
   );
 
   return (
-    <table
-      style={{
-        tableLayout: "fixed",
-        width: `${tableWidthPercent}%`,
-        fontSize: `${fontSizePx}px`,
-        position: "relative",
-      }}
-    >
-      <thead>
-        <tr>
-          {columnsDefault.map((field) => (
-            <th
-              key={field}
-              className="border border-black relative"
-              rowSpan={2}
-              style={{ ...getThStyle(field), height: `${headerHeightPx}px` }}
-            >
-              <PprTableCellMemo isVertical field={field} value={getColumnTitle(field)} />
-            </th>
-          ))}
-          {timePeriods.map((month) => (
-            <th
-              key={month}
-              colSpan={timePeriodsColumns[0].length}
-              className="border border-black sticky top-0 z-20 bg-[#f5f5f5]"
-            >
-              <PprTableCellMemo value={stringToTimePeriodIntlRu(month)} />
-            </th>
-          ))}
-        </tr>
-        <tr>
-          {timePeriodsColumns.flat().map((periodField) => (
-            <th
-              key={periodField}
-              ref={periodField === "year_plan_work" ? planCellRef : null}
-              className="border border-black relative"
-            >
-              <PprTableCellMemo isVertical value={getColumnTitle(periodField)} />
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {ppr?.data.map((pprData) => (
-          <tr key={pprData.id}>
-            {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => {
-              const isPlanWorkPeriodField = checkIsPlanWorkField(field);
-              const corrections = (isPlanWorkPeriodField && getWorkCorrection(pprData.id, field)) || undefined;
-
-              let value = pprData[field];
-
-              if (isCorrectedView && isPlanWorkPeriodField) {
-                value = corrections ? corrections.finalCorrection : value;
-              } else if (isCorrectedView && checkIsPlanTimeField(field)) {
-                const finalCorrection = getWorkCorrection(
-                  pprData.id,
-                  getPlanWorkFieldByPlanTimeField(field)
-                )?.finalCorrection;
-                value =
-                  finalCorrection !== undefined ? Number((finalCorrection * pprData.norm_of_time).toFixed(2)) : value;
-              }
-
-              const transfers = (corrections?.planTransfers || []).concat(corrections?.undoneTransfers || []);
-
-              const columnSettings = getColumnSettings(
-                field,
-                pprYearStatus,
-                currentTimePeriod,
-                pprData.workId !== null,
-                pprMonthsStatuses,
-                correctionView
-              );
-              return (
-                <td
-                  key={pprData.id + field}
-                  className="border border-black relative h-1"
-                  style={{
-                    ...getTdStyle(field),
-                  }}
-                >
-                  <div className="flex flex-col justify-between gap-6">
-                    {isArrowsShow && isPlanWorkPeriodField && corrections && (
-                      <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
-                    )}
-                    <PprTableCellMemo
-                      {...columnSettings}
-                      updatePprTableCell={updatePprTableCell}
-                      isVertical={checkIsWorkOrTimeField(field)}
-                      isWorkAproved={pprData.is_work_aproved}
-                      id={pprData.id}
-                      field={field}
-                      value={value}
-                    />
-                  </div>
-                </td>
-              );
-            })}
+    <>
+      {!Boolean(ppr?.data.length) && (
+        <AddWorkButton shape="default" size="middle" type="primary" label="Добавить работу" />
+      )}
+      <table
+        style={{
+          tableLayout: "fixed",
+          width: `${pprSettings.tableWidthPercent}%`,
+          fontSize: `${pprSettings.fontSizePx}px`,
+          position: "relative",
+        }}
+      >
+        <thead>
+          <tr>
+            {basicColumns.map((field) => (
+              <HeaderCell
+                isVertical
+                key={field}
+                rowSpan={2}
+                value={translateRuFieldName(field)}
+                style={{
+                  ...getThStyle(field),
+                  height: `${pprSettings.headerHeightPx}px`,
+                }}
+              />
+            ))}
+            {timePeriods.map((month) => (
+              <HeaderCell key={month} colSpan={monthColSpan} value={translateRuTimePeriod(month)} />
+            ))}
           </tr>
-        ))}
-      </tbody>
-      <SummaryTableFoot
-        fields={timePeriodsColumns.flat()}
-        summaryNameColSpan={columnsDefault.length}
-        totalFieldsValues={ppr?.total_fields_value}
-      />
-    </table>
+          <tr>
+            {planFactColumns.map((planFactField) => (
+              <HeaderCell
+                isVertical
+                key={planFactField}
+                value={translateRuFieldName(planFactField)}
+                cellRef={planFactField === "year_plan_work" ? planCellRef : null}
+              />
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {ppr?.data.map((pprData) => (
+            <tr key={pprData.id}>
+              {basicColumns.concat(planFactColumns).map((field) => (
+                <PprTableCellMemo
+                  key={pprData.id + field}
+                  pprData={pprData}
+                  updatePprTableCell={updatePprTableCell}
+                  isVertical={checkIsWorkOrTimeField(field)}
+                  field={field}
+                  planCellRef={planCellRef}
+                  {...getColumnSettings(
+                    field,
+                    pprYearStatus,
+                    pprSettings.currentTimePeriod,
+                    pprData.workId !== null,
+                    pprMonthsStatuses,
+                    pprSettings.correctionView
+                  )}
+                />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+        <SummaryTableFoot
+          fields={planFactColumns}
+          summaryNameColSpan={basicColumns.length}
+          totalFieldsValues={ppr?.total_fields_value}
+        />
+      </table>
+    </>
   );
 };

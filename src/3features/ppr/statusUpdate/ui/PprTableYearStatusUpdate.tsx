@@ -6,7 +6,7 @@ import {
   usePpr,
   getNextPprYearStatus,
   isAllMonthsPprStatusesIsDone,
-  isPprInUserControl,
+  checkIsPprInUserControl,
 } from "@/1shared/providers/pprProvider";
 import { updatePprTable } from "@/2entities/ppr";
 
@@ -21,6 +21,9 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = ({})
       return;
     }
     const nextStatus = getNextPprYearStatus(ppr.status);
+    if(!nextStatus){
+      return;
+    }
     if (nextStatus === "plan_aproved") {
       ppr?.data.forEach((datum) => (datum.is_work_aproved = true));
     }
@@ -35,7 +38,7 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = ({})
   const { months_statuses: ppr_months_statuses, status: ppr_status } = ppr;
 
   const { isForBoss, isForEngineer, isForSecurityEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } =
-    isPprInUserControl(ppr.created_by, data.user);
+    checkIsPprInUserControl(ppr.created_by, data.user);
 
   // Состояния для начальника цеха
   if (isForSubdivision) {

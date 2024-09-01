@@ -1,5 +1,6 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useState } from "react";
+
 import { TTimePeriod } from "@/1shared/lib/date";
 
 export type TFilterTimePeriodOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
@@ -21,9 +22,10 @@ interface IPprTableSettings {
   tableWidthPercent: number;
   fontSizePx: number;
   headerHeightPx: number;
-  isCombineSameWorks: boolean;
+  isUniteSameWorks: boolean;
 }
-interface IPprTableSettingsContext extends IPprTableSettings {
+
+export interface IPprTableSettingsContext extends IPprTableSettings {
   setFilterMonths: (state: TFilterTimePeriodOption) => void;
   setFilterPlanFact: (state: TFilterPlanFactOption) => void;
   setTimePeriod: (timePeriod: TTimePeriod) => void;
@@ -31,10 +33,10 @@ interface IPprTableSettingsContext extends IPprTableSettings {
   setTableWidthPercent: (tableWidthPercent: number) => void;
   setFontSizePx: (fontSize: number) => void;
   setHeaderHeightPx: (headerHeightPx: number) => void;
-  setIsCombineSameWorks: (isUniteSameWorks: boolean) => void;
+  setIsUniteSameWorks: (isUniteSameWorks: boolean) => void;
 }
 
-const intitalSettings: IPprTableSettings = {
+const INIT_SETTINGS: IPprTableSettings = {
   filterColumns: {
     months: "SHOW_ALL",
     planFact: "SHOW_ALL",
@@ -44,11 +46,11 @@ const intitalSettings: IPprTableSettings = {
   tableWidthPercent: 100,
   fontSizePx: 12,
   headerHeightPx: 300,
-  isCombineSameWorks: false,
+  isUniteSameWorks: false,
 };
 
-const initialContext: IPprTableSettingsContext = {
-  ...intitalSettings,
+const INIT_CONTEXT: IPprTableSettingsContext = {
+  ...INIT_SETTINGS,
   setFilterMonths: () => {},
   setFilterPlanFact: () => {},
   setTimePeriod: () => {},
@@ -56,15 +58,15 @@ const initialContext: IPprTableSettingsContext = {
   setTableWidthPercent: () => {},
   setFontSizePx: () => {},
   setHeaderHeightPx: () => {},
-  setIsCombineSameWorks: () => {},
+  setIsUniteSameWorks: () => {},
 };
 
-const PprTableSettingsContext = createContext<IPprTableSettingsContext>(initialContext);
+const PprTableSettingsContext = createContext<IPprTableSettingsContext>(INIT_CONTEXT);
 
 export const usePprTableSettings = () => useContext(PprTableSettingsContext);
 
 export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [pprTableSettings, setPprTableSettings] = useState<IPprTableSettings>(intitalSettings);
+  const [pprTableSettings, setPprTableSettings] = useState<IPprTableSettings>(INIT_SETTINGS);
 
   const setFilterMonths = useCallback(
     (state: TFilterTimePeriodOption) =>
@@ -120,8 +122,8 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     setPprTableSettings((prev) => ({ ...prev, headerHeightPx }));
   }, []);
 
-  const setIsCombineSameWorks = useCallback((isUniteSameWorks: boolean) => {
-    setPprTableSettings((prev) => ({ ...prev, isCombineSameWorks: isUniteSameWorks }));
+  const setIsUniteSameWorks = useCallback((isUniteSameWorks: boolean) => {
+    setPprTableSettings((prev) => ({ ...prev, isUniteSameWorks }));
   }, []);
 
   return (
@@ -135,7 +137,7 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
         setTableWidthPercent,
         setFontSizePx,
         setHeaderHeightPx,
-        setIsCombineSameWorks,
+        setIsUniteSameWorks,
       }}
     >
       {children}

@@ -1,15 +1,17 @@
 "use server";
 import { revalidateTag } from "next/cache";
+
+import { API_PPR, URL_BASIC } from "@/1shared/const/url";
 import { IPpr } from "..";
 
-const PPR_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/ppr";
-const PPR_SHORT_INFO_API_URL = process.env.NEXT_PUBLIC_API_DEV + "/all_pprs";
+const PPR_API_URL = URL_BASIC + API_PPR;
 
 export async function getPprTable(id: string) {
   const query = await fetch(`${PPR_API_URL}/${id}`, { next: { tags: [`ppr-${id}`] }, cache: "no-cache" });
   const responce: Promise<IPpr> = query.json();
   return responce;
 }
+
 export async function addPprTable(params: Omit<IPpr, "id">) {
   const query = await fetch(`${PPR_API_URL}`, {
     method: "POST",
@@ -21,6 +23,7 @@ export async function addPprTable(params: Omit<IPpr, "id">) {
   const responce: Promise<IPpr> = await query.json();
   return responce;
 }
+
 export async function updatePprTable(id: string, params: Partial<Omit<IPpr, "id">>) {
   const query = await fetch(`${PPR_API_URL}/${id}`, {
     method: "PATCH",
@@ -33,6 +36,7 @@ export async function updatePprTable(id: string, params: Partial<Omit<IPpr, "id"
   const responce: Promise<IPpr> = await query.json();
   return responce;
 }
+
 export async function deletePprTable(id: string) {
   const query = await fetch(`${PPR_API_URL}/${id}`, { method: "DELETE", cache: "no-cache" });
   revalidateTag(`ppr-${id}`);

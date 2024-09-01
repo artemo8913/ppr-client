@@ -1,5 +1,6 @@
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+
 import { getAllLoginsData } from "@/2entities/login";
 import { getUserData } from "@/2entities/user";
 
@@ -28,7 +29,6 @@ export const authOptions: AuthOptions = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        // Add logic here to look up the user from the credentials supplied
         const allLogins = await getAllLoginsData();
         const login = allLogins.find((login) => login.username === credentials?.username);
         const isPasswordCorrect = login?.password === credentials?.password;

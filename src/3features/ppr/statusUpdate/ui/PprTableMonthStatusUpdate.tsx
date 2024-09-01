@@ -2,7 +2,7 @@
 import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
-import { getNextPprMonthStatus, isPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
+import { getNextPprMonthStatus, checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
 
@@ -55,7 +55,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   }
   const currentMonthStatus = ppr.months_statuses[currentTimePeriod];
 
-  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = isPprInUserControl(
+  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = checkIsPprInUserControl(
     ppr.created_by,
     data.user
   );

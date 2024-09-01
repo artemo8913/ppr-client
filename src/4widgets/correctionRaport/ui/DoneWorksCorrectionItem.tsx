@@ -1,14 +1,15 @@
 import { FC } from "react";
-import { TCorrectionItem } from "./CorrectionRaport";
-import { IPlanWorkPeriods, IPprData } from "@/2entities/ppr";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
-import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+
+import { TCorrectionItem } from "./CorrectionRaport";
 
 interface IDoneWorksCorrectionItemProps {
   correction: TCorrectionItem;
-  fieldFrom: keyof IPlanWorkPeriods;
-  name: string | undefined;
-  measure: string | undefined;
+  fieldFrom: keyof TPlanWorkPeriodsFields;
+  name?: string;
+  measure?: string;
   isEditable?: boolean;
 }
 
@@ -22,8 +23,7 @@ export const DoneWorksCorrectionItem: FC<IDoneWorksCorrectionItemProps> = ({
   const planWorkValue = correction.firstCompareValue;
   const factWorkValue = correction.secondCompareValue;
   const objectId = correction.objectId;
-  const rowIndex = correction.rowIndex;
-  const transfers = correction.correctionData?.undoneTransfers;
+  const transfers = correction.plan?.undoneTransfers;
   const isHaveTransfers = Boolean(transfers);
 
   return (
@@ -38,19 +38,14 @@ export const DoneWorksCorrectionItem: FC<IDoneWorksCorrectionItemProps> = ({
           <span>перенести на/с: </span>
           {transfers?.map((transfer, index, arr) => (
             <span key={transfer.fieldTo + index}>
-              {transfer.value} {measure} {stringToTimePeriodIntlRu(transfer.fieldTo)}
+              {transfer.value} {measure} {translateRuTimePeriod(transfer.fieldTo)}
               <span>{arr.length - 1 === index ? "." : ","}</span>
             </span>
           ))}
         </>
       )}
       {isEditable && (
-        <SetPprCorrectionTransfer
-          transferType="undone"
-          transfers={transfers}
-          rowIndex={rowIndex}
-          fieldFrom={fieldFrom}
-        />
+        <SetPprCorrectionTransfer transferType="undone" transfers={transfers} id={objectId} fieldFrom={fieldFrom} />
       )}
     </li>
   );

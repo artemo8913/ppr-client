@@ -1,0 +1,58 @@
+.TableCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: transparent;
+  border-style: none;
+
+  &:focus-within {
+    position: relative;
+    z-index: 10;
+  }
+
+  &.isVertical {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+
+    &:focus-within {
+      writing-mode: horizontal-tb;
+      transform: rotate(0deg);
+    }
+  }
+}
+
+.TextareaCell {
+  cursor: pointer;
+  resize: none;
+  border-style: none;
+  background-color: inherit;
+
+  &:focus {
+    cursor: text;
+  }
+
+  &.isNotVertical {
+    width: 100%;
+  }
+}
+
+.InputCell {
+  --cell-width: 80px;
+
+  cursor: pointer;
+  background-color: transparent;
+  border-style: none;
+  width: 100%;
+  height: var(--cell-width);
+
+  :focus {
+    cursor: text;
+  }
+
+  &.isVertical:focus-within {
+    background-color: white;
+    width: var(--cell-width);
+    height: auto;
+  }
+}

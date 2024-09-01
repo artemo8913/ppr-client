@@ -1,10 +1,9 @@
 "use client";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { Menu, MenuProps } from "antd";
 import {
   AuditOutlined,
   BarChartOutlined,
-  DotChartOutlined,
   HomeFilled,
   LogoutOutlined,
   TableOutlined,
@@ -13,8 +12,20 @@ import Sider from "antd/es/layout/Sider";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
+import {
+  ROUTE_AGREEMENT,
+  ROUTE_PPR,
+  ROUTE_REPORTS,
+  ROUTE_ROOT,
+} from "@/1shared/const/routes";
+
 type MenuItem = Required<MenuProps>["items"][number];
-function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[]
+): MenuItem {
   return {
     key,
     icon,
@@ -24,18 +35,40 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const items: MenuItem[] = [
-  getItem(<Link href={"/"}>Главная</Link>, "home", <HomeFilled />),
-  getItem(<Link href={"/ppr"}>Годовые планы</Link>, "year", <TableOutlined />),
-  getItem(<Link href={"/agreement"}>На согласовании / утверждении</Link>, "agreement", <AuditOutlined />),
-  getItem(<Link href={"/reports"}>Отчеты</Link>, "reports", <BarChartOutlined />),
-  getItem(<a onClick={() => signOut({redirect: true, callbackUrl:'/'})}>Выйти</a>, "logout", <LogoutOutlined />),
+  getItem(<Link href={ROUTE_ROOT}>Главная</Link>, "home", <HomeFilled />),
+  getItem(
+    <Link href={ROUTE_PPR}>Годовые планы</Link>,
+    "year",
+    <TableOutlined />
+  ),
+  getItem(
+    <Link href={ROUTE_AGREEMENT}>На согласовании / утверждении</Link>,
+    "agreement",
+    <AuditOutlined />
+  ),
+  getItem(
+    <Link href={ROUTE_REPORTS}>Отчеты</Link>,
+    "reports",
+    <BarChartOutlined />
+  ),
+  getItem(
+    <a onClick={() => signOut({ redirect: true, callbackUrl: ROUTE_ROOT })}>
+      Выйти
+    </a>,
+    "logout",
+    <LogoutOutlined />
+  ),
 ];
 
-interface ISiderProps {}
-export const MainLayoutSider: FC<ISiderProps> = () => {
+export const MainLayoutSider = () => {
   const [collapsed, setCollapsed] = useState(true);
+
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(value) => setCollapsed(value)}
+    >
       <Menu theme="dark" mode="inline" items={items} />
     </Sider>
   );

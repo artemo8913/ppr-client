@@ -6,12 +6,12 @@ import { IWork, TLineClassData, getWorkById } from "@/2entities/work";
 import Button from "antd/es/button";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { useSession } from "next-auth/react";
-import { getShortNamesForAllHierarchy } from "@/1shared/lib/transEnergoDivisions";
+import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
 
 interface IWorkTableProps {
   data: IWork[];
   onFinish?: () => void;
-  nearWorkId?: string;
+  nearWorkId?: string | null;
 }
 
 const columns: TableProps<IWork>["columns"] = [
@@ -50,7 +50,7 @@ const columns: TableProps<IWork>["columns"] = [
 export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkId }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [workId, setWorkId] = useState<string>();
+  const [workId, setWorkId] = useState<string | null>();
 
   const { addWork } = usePpr();
 
@@ -70,12 +70,12 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
         measure: work.measure,
         norm_of_time: work.norm_of_time,
         norm_of_time_document: work.norm_of_time_document,
-        unity: (userData && getShortNamesForAllHierarchy(userData).subdivisionShortName) || undefined,
+        unity: userData && getShortNamesForAllDivisions(userData).subdivisionShortName,
       },
       nearWorkId
     );
     setSelectedRowKeys([]);
-    setWorkId(undefined);
+    setWorkId(null);
     setIsLoading(false);
     onFinish && onFinish();
   };

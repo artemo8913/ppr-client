@@ -17,7 +17,7 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
 }) => {
   const handleChange = useCallback(
     (value: unknown) => {
-      if (rowIndex === undefined || !field || !updateWorkingManTableCell) {
+      if (!rowIndex || !field || !updateWorkingManTableCell) {
         return;
       }
       updateWorkingManTableCell(rowIndex, field, value);
@@ -25,7 +25,7 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
     [rowIndex, field, updateWorkingManTableCell]
   );
 
-  return <TableCell {...otherProps} handleBlur={handleChange} />;
+  return <TableCell {...otherProps} onBlur={handleChange} />;
 };
 
 const WorkingManTableCellMemo = memo(WorkingManTableCell);

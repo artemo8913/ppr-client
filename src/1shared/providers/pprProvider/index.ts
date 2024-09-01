@@ -4,7 +4,7 @@ export {
   getNextPprMonthStatus,
   getNextPprYearStatus,
   isAllMonthsPprStatusesIsDone,
-  stringToMonthStatusIntlRu,
+  translateRuMonthStatus,
+  findFirstUndonePprPeriod,
 } from "./lib/pprStatusHelper";
-export { isPprInUserControl } from "./lib/isPprInUserControl";
-export { findPossibleCurrentPprPeriod } from "./lib/findPossibleCurrentPprPeriod";
+export { checkIsPprInUserControl } from "./lib/isPprInUserControl";

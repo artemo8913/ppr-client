@@ -3,10 +3,15 @@ import {
   TFilterTimePeriodOption,
   usePprTableSettings,
 } from "@/1shared/providers/pprTableSettingsProvider";
+import {
+  TTimePeriod,
+  getQuartal,
+  getMonthsByQuartal,
+  TIME_PERIODS,
+} from "@/1shared/lib/date";
 import { IPprData } from "@/2entities/ppr";
-import { TTimePeriod, getCurrentQuartal, getQuartalMonths, timePeriods } from "@/1shared/lib/date";
 
-const columnsDefault: Array<keyof IPprData> = [
+const BASIC_COLUMNS: Array<keyof IPprData> = [
   "name",
   "location",
   "line_class",
@@ -21,24 +26,37 @@ const columnsDefault: Array<keyof IPprData> = [
   "unity",
 ] as const;
 
-function getTimePeriodsColumns(currentTimePeriod?: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {
+function getTimePeriodsColumns(
+  currentTimePeriod?: TTimePeriod,
+  option?: TFilterTimePeriodOption
+): TTimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":
-      return timePeriods.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
+      return TIME_PERIODS.filter(
+        (timePeriod) =>
+          timePeriod === "year" || timePeriod === currentTimePeriod
+      );
     case "SHOW_CURRENT_QUARTAL":
       const result: TTimePeriod[] = ["year"];
-      return result.concat(getQuartalMonths(getCurrentQuartal(currentTimePeriod)));
+      return result.concat(getMonthsByQuartal(getQuartal(currentTimePeriod)));
     default:
-      return timePeriods;
+      return TIME_PERIODS;
   }
 }
 
-function getPlanFactColumns(pprTimePeriod: TTimePeriod, option?: TFilterPlanFactOption): Array<keyof IPprData> {
+function getPlanFactColumns(
+  pprTimePeriod: TTimePeriod,
+  option?: TFilterPlanFactOption
+): Array<keyof IPprData> {
   switch (option) {
     case "SHOW_ONLY_PLAN":
       return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_plan_time`];
     case "SHOW_ONLY_FACT":
-      return [`${pprTimePeriod}_fact_work`, `${pprTimePeriod}_fact_norm_time`, `${pprTimePeriod}_fact_time`];
+      return [
+        `${pprTimePeriod}_fact_work`,
+        `${pprTimePeriod}_fact_norm_time`,
+        `${pprTimePeriod}_fact_time`,
+      ];
     case "SHOW_ONLY_VALUES":
       return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_fact_work`];
     default:
@@ -52,17 +70,35 @@ function getPlanFactColumns(pprTimePeriod: TTimePeriod, option?: TFilterPlanFact
   }
 }
 
+function getPlanFactColumnsCount(option?: TFilterPlanFactOption) {
+  switch (option) {
+    case "SHOW_ONLY_PLAN":
+      return 2;
+    case "SHOW_ONLY_FACT":
+      return 3;
+    case "SHOW_ONLY_VALUES":
+      return 2;
+    default:
+      return 5;
+  }
+}
+
 export const useCreateColumns = (): {
-  columnsDefault: (keyof IPprData)[];
+  basicColumns: (keyof IPprData)[];
   timePeriods: TTimePeriod[];
-  timePeriodsColumns: (keyof IPprData)[][];
+  planFactColumns: (keyof IPprData)[];
+  monthColSpan: number;
 } => {
   const { filterColumns, currentTimePeriod } = usePprTableSettings();
   return {
-    columnsDefault,
+    basicColumns: BASIC_COLUMNS,
     timePeriods: getTimePeriodsColumns(currentTimePeriod, filterColumns.months),
-    timePeriodsColumns: getTimePeriodsColumns(currentTimePeriod, filterColumns.months).map((month) =>
-      getPlanFactColumns(month, filterColumns.planFact)
-    ),
+    planFactColumns: getTimePeriodsColumns(
+      currentTimePeriod,
+      filterColumns.months
+    )
+      .map((month) => getPlanFactColumns(month, filterColumns.planFact))
+      .flat(),
+    monthColSpan: getPlanFactColumnsCount(filterColumns.planFact),
   };
 };

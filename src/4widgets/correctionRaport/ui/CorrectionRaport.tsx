@@ -1,16 +1,11 @@
 "use client";
 import React, { FC } from "react";
 import { useSession } from "next-auth/react";
-import { isPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
+import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
-import { stringToTimePeriodIntlRu } from "@/1shared/lib/date";
-import {
-  IPlanWorkPeriods,
-  TWorkCorrection,
-  getFactWorkFieldByTimePeriod,
-  getPlanWorkFieldByTimePeriod,
-} from "@/2entities/ppr";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { TPlanWorkPeriodsFields, IPlanWorkValues, getFactWorkFieldByTimePeriod } from "@/2entities/ppr";
 import { DoneWorksCorrectionItem } from "./DoneWorksCorrectionItem";
 import { PlanCorrectionItem } from "./PlanCorrectionItem";
 
@@ -19,24 +14,27 @@ export interface TCorrectionItem {
   objectId: string;
   firstCompareValue: number;
   secondCompareValue: number;
-  correctionData: TWorkCorrection<IPlanWorkPeriods> | null;
+  plan: IPlanWorkValues | null;
 }
 
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { ppr, getWorkCorrection } = usePpr();
+  const { ppr } = usePpr();
   const { currentTimePeriod } = usePprTableSettings();
   const { data: userData } = useSession();
+
   if (!userData?.user) {
     return "Не авторизирован пользователь";
   }
+
   const { id_direction, id_distance, id_subdivision } = userData?.user;
 
   if (currentTimePeriod === "year") {
     return "Рапорт доступен только при просмотре ППР за конкретный месяц";
   }
-  const fieldFrom: keyof IPlanWorkPeriods = `${currentTimePeriod}_plan_work`;
+
+  const fieldFrom: keyof TPlanWorkPeriodsFields = `${currentTimePeriod}_plan_work`;
   const monthStatus = ppr?.months_statuses[currentTimePeriod];
 
   const undoneWorks: TCorrectionItem[] = [];
@@ -44,48 +42,45 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   const planCorrections: TCorrectionItem[] = [];
 
   ppr?.data.forEach((pprData, rowIndex) => {
+    const plan = pprData[fieldFrom];
     const objectId = pprData.id;
-    const correctionData = getWorkCorrection(objectId, getPlanWorkFieldByTimePeriod(currentTimePeriod));
 
-    if (correctionData?.isHandCorrected) {
-      const planWorkValue = Number(correctionData?.basicValue) + Number(correctionData?.outsideCorrectionsSum);
-      const correctedValue = Number(correctionData?.planValueAfterCorrection);
+    if (plan.handCorrection !== null) {
+      const planWorkValue = plan.original + plan.outsideCorrectionsSum;
+      const correctedValue = plan.handCorrection;
 
       planCorrections.push({
-        rowIndex,
-        correctionData,
         objectId,
+        rowIndex,
+        plan,
         firstCompareValue: planWorkValue,
         secondCompareValue: correctedValue,
       });
     }
 
-    const planWorkValue =
-      correctionData !== undefined
-        ? correctionData.planValueAfterCorrection
-        : Number(pprData[getPlanWorkFieldByTimePeriod(currentTimePeriod)]);
-    const factWorkValue = Number(pprData[getFactWorkFieldByTimePeriod(currentTimePeriod)]);
+    const planWorkValue = plan.handCorrection !== null ? plan.handCorrection : plan.original + plan.outsideCorrectionsSum;
+    const factWorkValue = pprData[getFactWorkFieldByTimePeriod(currentTimePeriod)];
 
     if (planWorkValue > factWorkValue) {
       undoneWorks.push({
+        objectId,
         rowIndex,
+        plan,
         firstCompareValue: planWorkValue,
         secondCompareValue: factWorkValue,
-        objectId,
-        correctionData: correctionData || null,
       });
     } else if (planWorkValue < factWorkValue) {
       welldoneWorks.push({
+        objectId,
         rowIndex,
+        plan,
         firstCompareValue: planWorkValue,
         secondCompareValue: factWorkValue,
-        objectId,
-        correctionData: correctionData || null,
       });
     }
   });
 
-  const isPprUnderControl = isPprInUserControl(ppr?.created_by, userData?.user).isForSubdivision;
+  const isPprUnderControl = checkIsPprInUserControl(ppr?.created_by, userData?.user).isForSubdivision;
   const isEditablePlanCorrections = monthStatus === "plan_creating" && isPprUnderControl;
   const isEditableDoneWorkCorrections = monthStatus === "fact_filling" && isPprUnderControl;
   const isShowPlanCorrections = planCorrections.length > 0;
@@ -114,7 +109,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       {isShowPlanCorrections && (
         <>
           <p className="font-bold indent-4 text-justify">
-            При планировании ведомости выполненных работ (форма ЭУ-99) на {stringToTimePeriodIntlRu(currentTimePeriod)}{" "}
+            При планировании ведомости выполненных работ (форма ЭУ-99) на {translateRuTimePeriod(currentTimePeriod)}{" "}
             месяц {ppr?.year} г. возникла необходимости корректировки годового плана технического обслуживания и
             ремонта:
           </p>
@@ -135,7 +130,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       {isShowUndoneCorrections && (
         <>
           <p className="font-bold indent-4 text-justify">
-            За {stringToTimePeriodIntlRu(currentTimePeriod)} месяц не в полном объеме выполнены следующие работы:
+            За {translateRuTimePeriod(currentTimePeriod)} месяц не в полном объеме выполнены следующие работы:
           </p>
           <ol className="list-decimal pl-[revert] indent-4 text-justify">
             {undoneWorks.map((correction) => (

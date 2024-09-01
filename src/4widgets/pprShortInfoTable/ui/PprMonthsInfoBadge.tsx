@@ -1,9 +1,9 @@
 import { FC } from "react";
 import Badge from "antd/es/badge";
 import Tooltip from "antd/es/tooltip";
-import { TMonth, stringToTimePeriodIntlRu } from "@/1shared/lib/date";
+import { TMonth, translateRuTimePeriod } from "@/1shared/lib/date";
 import { TMonthPprStatus } from "@/2entities/ppr";
-import { stringToMonthStatusIntlRu } from "@/1shared/providers/pprProvider";
+import { translateRuMonthStatus } from "@/1shared/providers/pprProvider";
 
 interface IPprMonthsInfoBadgeProps {
   month: TMonth;
@@ -26,11 +26,13 @@ const badgeColorByStatus: { [status in TMonthPprStatus]: string } = {
   done: "green",
 };
 
+const FIRST_LETTER_INDEX = 0;
+
 export const PprMonthsInfoBadge: FC<IPprMonthsInfoBadgeProps> = ({ month, monthStatus }) => {
   return (
-    <Tooltip className="cursor-default" key={month} title={stringToMonthStatusIntlRu(monthStatus)}>
+    <Tooltip className="cursor-default" key={month} title={translateRuMonthStatus(monthStatus)}>
       <div className="flex min-w-3 flex-col justify-center items-center">
-        <span>{stringToTimePeriodIntlRu(month)[0]}</span>
+        <span>{translateRuTimePeriod(month)[FIRST_LETTER_INDEX]}</span>
         <Badge key={month} color={badgeColorByStatus[monthStatus]} />
       </div>
     </Tooltip>
