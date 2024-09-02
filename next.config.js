@@ -12,6 +12,11 @@ const nextConfig = {
     "rc-pagination",
     "rc-picker",
   ],
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["pprclienttrans.com", "localhost:3000"]
+    }
+  }
 };
 
 module.exports = nextConfig;
