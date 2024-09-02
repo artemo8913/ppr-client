@@ -14,7 +14,7 @@ const nextConfig = {
   ],
   experimental: {
     serverActions: {
-      allowedOrigins: ["pprclienttrans.com", "localhost:3000"]
+      allowedOrigins: ["pprclienttrans.ru", "localhost:3000"]
     }
   }
 };
