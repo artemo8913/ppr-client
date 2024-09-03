@@ -12,11 +12,20 @@ const nextConfig = {
     "rc-pagination",
     "rc-picker",
   ],
+  compress: false,
+  webpack: (config) => {
+    return {
+      ...config,
+      optimization: {
+        minimize: false,
+      },
+    };
+  },
   experimental: {
     serverActions: {
-      allowedOrigins: ["pprclienttrans.ru"]
-    }
-  }
+      allowedOrigins: ["pprclienttrans.ru"],
+    },
+  },
 };
 
 module.exports = nextConfig;
