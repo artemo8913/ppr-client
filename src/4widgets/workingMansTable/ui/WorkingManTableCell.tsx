@@ -4,9 +4,9 @@ import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
 
 interface IWorkingManTableCellProps extends ITableCellProps {
-  rowIndex?: number;
-  field?: keyof IWorkingManYearPlan;
-  updateWorkingManTableCell?: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
+  rowIndex: number;
+  field: keyof IWorkingManYearPlan;
+  updateWorkingManTableCell: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
 }
 
 const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
@@ -17,9 +17,6 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
 }) => {
   const handleChange = useCallback(
     (value: unknown) => {
-      if (!rowIndex || !field || !updateWorkingManTableCell) {
-        return;
-      }
       updateWorkingManTableCell(rowIndex, field, value);
     },
     [rowIndex, field, updateWorkingManTableCell]
