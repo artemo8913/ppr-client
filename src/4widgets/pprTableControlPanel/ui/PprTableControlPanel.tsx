@@ -4,6 +4,7 @@ import Tooltip from "antd/es/tooltip";
 import Button from "antd/es/button";
 import Modal from "antd/es/modal";
 import { SettingOutlined } from "@ant-design/icons";
+
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuYearStatus } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
 import { PprTableSaveButton } from "@/3features/ppr/update";
@@ -29,10 +30,9 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
   const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   return (
-    <div className="flex justify-start items-center sticky top-0 left-0 z-10 bg-slate-300 overflow-hidden">
-      Статус: {ppr ? translateRuYearStatus(ppr.status) : ""} Создан:{" "}
-      {new Date(ppr?.created_at!).toLocaleDateString()} Год: {ppr?.year} {ppr?.id_subdivision}-{ppr?.id_distance}-
-      {ppr?.id_direction}
+    <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden">
+      Статус: {ppr ? translateRuYearStatus(ppr.status) : ""} Создан: {new Date(ppr?.created_at!).toLocaleDateString()}{" "}
+      Год: {ppr?.year} {ppr?.id_subdivision}-{ppr?.id_distance}-{ppr?.id_direction}
       <PprTableSaveButton />
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />

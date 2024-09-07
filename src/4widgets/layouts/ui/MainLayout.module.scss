@@ -1,0 +1,12 @@
+.MainLayout {
+  height: 100vh;
+}
+
+@media print {
+  .MainLayout {
+    background-color: white !important;
+  }
+  .Sider {
+    display: none;
+  }
+}

@@ -1,17 +1,19 @@
 "use client";
 import Tabs from "antd/es/tabs";
+
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { WorkingManAdd } from "@/3features/pprWorkingMans/add";
 import { PprTable } from "@/4widgets/pprTable";
 import { WorkingMansTable } from "@/4widgets/workingMansTable";
 import { CorrectionRaport } from "@/4widgets/correctionRaport";
 import { MonthPlan } from "@/4widgets/monthPlan";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 export const PprPage = () => {
   const { currentTimePeriod } = usePprTableSettings();
 
   return (
     <Tabs
+      className="overflow-auto print:overflow-visible"
       defaultActiveKey="2"
       destroyInactiveTabPane
       items={[
@@ -19,7 +21,7 @@ export const PprPage = () => {
           key: "1",
           label: "Настой часов",
           children: (
-            <div className="h-[80vh] overflow-auto">
+            <div>
               <WorkingManAdd className="mb-2" />
               <WorkingMansTable />
             </div>
@@ -28,22 +30,13 @@ export const PprPage = () => {
         {
           key: "2",
           label: "План ТОиР",
-          children: (
-            // TODO #16 Переписать на свой компонент табы. Здесь костыль с высотой
-            <div className="h-[80vh] overflow-auto">
-              <PprTable />
-            </div>
-          ),
+          children: <PprTable />,
         },
         {
           key: "3",
           label: "Месячный план",
           disabled: currentTimePeriod === "year",
-          children: (
-            <div className="h-[80vh] overflow-auto">
-              <MonthPlan />
-            </div>
-          ),
+          children: <MonthPlan />,
         },
         {
           key: "4",
