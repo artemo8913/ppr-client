@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media print {
+  body {
+    background-color: white;
+  }
+
+  .ant-tabs-nav {
+    display: none !important;
+  }
+}
