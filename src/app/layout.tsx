@@ -1,12 +1,14 @@
-import "./globals.css";
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { MainLayout } from "@/4widgets/layouts";
+
 import { SessionProvider } from "@/1shared/providers/sessionProvider";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { LoginForm } from "@/3features/loginUser";
+import { MainLayout } from "@/4widgets/layouts";
+
+import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 

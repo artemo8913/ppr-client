@@ -1,12 +1,5 @@
 "use client";
-import {
-  ChangeEvent,
-  FC,
-  HTMLInputTypeAttribute,
-  memo,
-  useCallback,
-  useState,
-} from "react";
+import { ChangeEvent, FC, HTMLInputTypeAttribute, memo, useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import style from "./TableCell.module.scss";
@@ -26,20 +19,12 @@ const TEXTAREA_BASIC_ROWS_COUNT = 4;
 const INPUT_BASIC_MAX_LENGTH = 8;
 
 const TableCell: FC<ITableCellProps> = (props) => {
-  const {
-    cellType = "none",
-    value,
-    type,
-    isVertical = false,
-    onBlur,
-    className,
-  } = props;
+  const { cellType = "none", value, type, isVertical = false, onBlur, className } = props;
 
   const [currentValue, setCurrentValue] = useState(value);
 
   const handleUpdateValue = useCallback(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setCurrentValue(e.target.value),
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setCurrentValue(e.target.value),
     []
   );
 
@@ -49,23 +34,18 @@ const TableCell: FC<ITableCellProps> = (props) => {
     }
   }, [currentValue, onBlur]);
 
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
+
   return (
-    <div
-      className={clsx(
-        style.TableCell,
-        isVertical && style.isVertical,
-        className
-      )}
-    >
+    <div className={clsx(style.TableCell, isVertical && style.isVertical, className)}>
       {cellType === "textarea" && (
         <textarea
           value={String(currentValue)}
           onChange={handleUpdateValue}
           onBlur={handleBlur}
-          className={clsx(
-            style.TextareaCell,
-            !isVertical && style.isNotVertical
-          )}
+          className={clsx(style.TextareaCell, !isVertical && style.isNotVertical)}
           rows={TEXTAREA_BASIC_ROWS_COUNT}
         />
       )}

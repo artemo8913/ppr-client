@@ -6,7 +6,7 @@ import { FC, useCallback, useMemo } from "react";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, planWorkFields } from "@/2entities/ppr";
+import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, PLAN_WORK_FIELDS } from "@/2entities/ppr";
 
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
@@ -19,7 +19,7 @@ interface ISetPprCorrectionTransferProps {
   transferType: "plan" | "undone";
 }
 
-const monthPlanPeriods = planWorkFields.filter((field) => field !== "year_plan_work");
+const MONTH_PLAN_PERIODS = PLAN_WORK_FIELDS.filter((field) => field !== "year_plan_work");
 
 export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
   id,
@@ -31,14 +31,14 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
 
   const { currentTimePeriod } = usePprTableSettings();
   const monthIndex = useMemo(
-    () => monthPlanPeriods.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
+    () => MONTH_PLAN_PERIODS.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
     [currentTimePeriod]
   );
-  const nearestPlanPeriod = monthPlanPeriods[monthIndex + 1];
+  const nearestPlanPeriod = MONTH_PLAN_PERIODS[monthIndex + 1];
 
   const selectOptions: TOption<TPlanWorkPeriods>[] = useMemo(
     () =>
-      monthPlanPeriods.map((field, index) => {
+      MONTH_PLAN_PERIODS.map((field, index) => {
         if (index <= monthIndex) {
           return { value: field, label: translateRuTimePeriod(field || ""), disabled: true };
         }

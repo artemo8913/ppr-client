@@ -1,5 +1,5 @@
 "use client";
-import { FC, useCallback, useMemo, useRef } from "react";
+import { FC, useCallback, useRef } from "react";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
@@ -63,6 +63,19 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
     [updateFactWork, updateFactWorkTime, updateNormOfTime, updatePlanWork, updatePlanWorkValueByUser, updatePprData]
   );
 
+  const getColumnSettingsForField = useCallback(
+    (field: keyof IPprData, isHaveWorkId: boolean) =>
+      getColumnSettings(
+        field,
+        pprYearStatus,
+        pprSettings.currentTimePeriod,
+        isHaveWorkId,
+        pprMonthsStatuses,
+        pprSettings.correctionView
+      ),
+    [pprMonthsStatuses, pprSettings.correctionView, pprSettings.currentTimePeriod, pprYearStatus]
+  );
+
   return (
     <>
       {!Boolean(ppr?.data.length) && (
@@ -116,14 +129,7 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
                   isVertical={checkIsWorkOrTimeField(field)}
                   field={field}
                   planCellRef={planCellRef}
-                  {...getColumnSettings(
-                    field,
-                    pprYearStatus,
-                    pprSettings.currentTimePeriod,
-                    pprData.workId !== null,
-                    pprMonthsStatuses,
-                    pprSettings.correctionView
-                  )}
+                  {...getColumnSettingsForField(field, pprData.workId !== null)}
                 />
               ))}
             </tr>

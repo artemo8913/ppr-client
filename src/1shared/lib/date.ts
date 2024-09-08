@@ -43,15 +43,14 @@ export const translateRuTimePeriod = (string: string): string => {
   }
   return "";
 };
-// TODO: удалить при переходе к scss стилям у таблицы ППР
-export const checkIsStartsWithTimePeriodName = (string: string): boolean => {
+
+export function getTimePeriodFromString(string: string): TTimePeriod | undefined {
   for (const period of TIME_PERIODS) {
     if (string.startsWith(period)) {
-      return true;
+      return period;
     }
   }
-  return false;
-};
+}
 
 export type TQuartalNumber = 1 | 2 | 3 | 4;
 
