@@ -4,31 +4,30 @@ import {
   IPpr,
   IPprData,
   TTotalFieldsValues,
+  TPlanTabelTimePeriods,
   IPprDataWithRowSpan,
+  TPprDataFieldsTotalValues,
+  TWorkingManFieldsTotalValues,
   TTransfer,
-  factWorkFields,
-  getFactTimeFieldByFactWorkField,
-  getPlanTimeFieldByPlanWorkField,
-  planWorkFields,
   IPlanWorkValues,
-  checkIsPlanWorkField,
-  factTimeFields,
   IWorkingManYearPlan,
   TPlanWorkPeriods,
   TFactWorkPeriods,
   TFactTimePeriods,
   TPlanNormTimePeriods,
-  TPlanTabelTimePeriods,
-} from "@/2entities/ppr";
-import {
-  factNormTimeFields,
+  PLAN_WORK_FIELDS,
+  FACT_TIME_FIELDS,
+  FACT_WORK_FIELDS,
+  FACT_NORM_TIME_FIELDS,
+  PLAN_NORM_TIME_FIELDS,
+  PLAN_TABEL_TIME_FIELDS,
+  PLAN_TIME_FIELDS,
+  checkIsPlanWorkField,
+  getPlanTimeFieldByPlanWorkField,
   getPlanTimeFieldByPlanTabelTimeField,
+  getFactTimeFieldByFactWorkField,
   getPlanWorkFieldByPlanTimeField,
-  planNormTimeFields,
-  planTabelTimeFields,
-  planTimeFields,
-} from "@/2entities/ppr/lib/constFields";
-import { TPprDataFieldsTotalValues, TWorkingManFieldsTotalValues } from "@/2entities/ppr/model/ppr.schema";
+} from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
@@ -190,7 +189,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           newPprData.norm_of_time = Number(value);
 
-          for (const planWorkField of planWorkFields) {
+          for (const planWorkField of PLAN_WORK_FIELDS) {
             const planTimeField = getPlanTimeFieldByPlanWorkField(planWorkField);
             newPprData[planTimeField].original = Number(
               (newPprData.norm_of_time * newPprData[planWorkField].original).toFixed(2)
@@ -200,7 +199,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             );
           }
 
-          for (const factWorkField of factWorkFields) {
+          for (const factWorkField of FACT_WORK_FIELDS) {
             const factTimeField = getFactTimeFieldByFactWorkField(factWorkField);
             newPprData[factTimeField] = Number((newPprData.norm_of_time * newPprData[factWorkField]).toFixed(2));
           }
@@ -233,7 +232,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           newPprData.year_plan_work.final = newPprData.year_plan_work.original = 0;
 
-          for (const periodField of planWorkFields) {
+          for (const periodField of PLAN_WORK_FIELDS) {
             newPprData.year_plan_work.original += newPprData[periodField].original;
             newPprData.year_plan_work.final += newPprData[periodField].final;
           }
@@ -269,7 +268,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           newPprData[field] = value;
           newPprData.year_fact_work = 0;
 
-          for (const periodField of factWorkFields) {
+          for (const periodField of FACT_WORK_FIELDS) {
             newPprData.year_fact_work += newPprData[periodField];
           }
 
@@ -301,7 +300,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           newPprData[field] = value;
           newPprData.year_fact_time = 0;
 
-          for (const periodField of factTimeFields) {
+          for (const periodField of FACT_TIME_FIELDS) {
             newPprData.year_fact_time += Number(newPprData[periodField]);
           }
 
@@ -359,7 +358,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           newPprData.year_plan_work.final = 0;
 
-          for (const periodField of planWorkFields) {
+          for (const periodField of PLAN_WORK_FIELDS) {
             newPprData.year_plan_work.final += newPprData[periodField].final;
           }
 
@@ -418,7 +417,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             newPprData[field][transferType] = newTransfers;
             newPprData[field][transferSumType] = newTransfers?.reduce((sum, val) => sum + val.value, 0) || 0;
 
-            for (const planWorkField of planWorkFields) {
+            for (const planWorkField of PLAN_WORK_FIELDS) {
               if (planWorkField === "year_plan_work") {
                 newPprData.year_plan_work.final = 0;
                 continue;
@@ -498,7 +497,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       const correctedWorkingMan = { ...prev.peoples[rowIndex] };
       correctedWorkingMan[field] = value;
       correctedWorkingMan.year_plan_norm_time = 0;
-      for (const planNormPeriod of planNormTimeFields) {
+      for (const planNormPeriod of PLAN_NORM_TIME_FIELDS) {
         if (planNormPeriod === "year_plan_norm_time") {
           continue;
         }
@@ -524,7 +523,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       const correctedWorkingMan = { ...prev.peoples[rowIndex] };
       correctedWorkingMan[field] = value;
       correctedWorkingMan.year_plan_tabel_time = 0;
-      for (const planTabelPeriod of planTabelTimeFields) {
+      for (const planTabelPeriod of PLAN_TABEL_TIME_FIELDS) {
         if (planTabelPeriod === "year_plan_tabel_time") {
           continue;
         }
@@ -554,7 +553,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       const correctedWorkinMan = { ...prev.peoples[rowIndex] };
       correctedWorkinMan[field] = value;
       correctedWorkinMan.year_fact_time = 0;
-      for (const factPeriod of factTimeFields) {
+      for (const factPeriod of FACT_TIME_FIELDS) {
         if (factPeriod === "year_fact_time") {
           continue;
         }
@@ -580,7 +579,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       const correctedWorkingMan = { ...prev.peoples[rowIndex] };
       correctedWorkingMan.participation = value;
 
-      for (const planTabelPeriod of planTabelTimeFields) {
+      for (const planTabelPeriod of PLAN_TABEL_TIME_FIELDS) {
         const planTimePeriod = getPlanTimeFieldByPlanTabelTimeField(planTabelPeriod);
         correctedWorkingMan[planTimePeriod] = correctedWorkingMan.participation * correctedWorkingMan[planTabelPeriod];
       }
@@ -682,20 +681,20 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     }
 
     ppr?.data.forEach((pprData) => {
-      planTimeFields.forEach((field) => {
+      PLAN_TIME_FIELDS.forEach((field) => {
         const planWorkField = getPlanWorkFieldByPlanTimeField(field);
         const value = pprData[planWorkField].final * pprData.norm_of_time;
         handleWorkPeriod(value, field);
       });
-      factNormTimeFields.forEach((field) => handleWorkPeriod(pprData[field], field));
-      factTimeFields.forEach((field) => handleWorkPeriod(pprData[field], field));
+      FACT_NORM_TIME_FIELDS.forEach((field) => handleWorkPeriod(pprData[field], field));
+      FACT_TIME_FIELDS.forEach((field) => handleWorkPeriod(pprData[field], field));
     });
 
     ppr?.peoples.forEach((workingMan) => {
-      planNormTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
-      planTabelTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
-      planTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
-      factTimeFields.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
+      PLAN_NORM_TIME_FIELDS.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
+      PLAN_TABEL_TIME_FIELDS.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
+      PLAN_TIME_FIELDS.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
+      FACT_TIME_FIELDS.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
     });
     setPpr((prev) => {
       if (!prev) {

@@ -1,17 +1,20 @@
-import { setBgColor } from "@/1shared/lib/setBgColor";
-import { TTimePeriod, checkIsStartsWithTimePeriodName } from "@/1shared/lib/date";
+import { TTimePeriod } from "@/1shared/lib/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   IPprData,
   TAllMonthStatuses,
   TYearPprStatus,
-  planWorkFields,
-  factWorkFields,
-  factTimeFields,
+  PLAN_WORK_FIELDS,
+  FACT_WORK_FIELDS,
+  FACT_TIME_FIELDS,
 } from "@/2entities/ppr";
 
-export function getThStyle(key?: keyof IPprData | string): React.CSSProperties {
+const EDITABLE_PLAN_FACT_FIELDS = [...PLAN_WORK_FIELDS, ...FACT_WORK_FIELDS, ...FACT_TIME_FIELDS].filter(
+  (field) => !field.startsWith("year")
+);
+
+export function getThStyle(key?: keyof IPprData): React.CSSProperties {
   switch (key) {
     case "name":
       return { width: "10%" };
@@ -42,13 +45,6 @@ export function getThStyle(key?: keyof IPprData | string): React.CSSProperties {
   }
 }
 
-export function getTdStyle(key: keyof IPprData | string): React.CSSProperties {
-  if (checkIsStartsWithTimePeriodName(key)) {
-    return { backgroundColor: setBgColor(key), verticalAlign: "bottom" };
-  }
-  return {};
-}
-
 export function getColumnSettings(
   field: keyof IPprData,
   pprYearStatus: TYearPprStatus,
@@ -75,15 +71,7 @@ export function getColumnSettings(
       norm_of_time_document: { cellType: "textarea" },
       unity: { cellType: "textarea" },
     };
-    planWorkFields
-      .filter((field) => !field.startsWith("year"))
-      .forEach((field) => (settings[field] = { cellType: "input" }));
-    factWorkFields
-      .filter((field) => !field.startsWith("year"))
-      .forEach((field) => (settings[field] = { cellType: "input" }));
-    factTimeFields
-      .filter((field) => !field.startsWith("year"))
-      .forEach((field) => (settings[field] = { cellType: "input" }));
+    EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input" }));
 
     return settings[field];
   }
@@ -98,15 +86,7 @@ export function getColumnSettings(
       last_maintenance_year: { cellType: "textarea" },
       unity: { cellType: "textarea" },
     };
-    planWorkFields
-      .filter((field) => !field.startsWith("year"))
-      .forEach((field) => (settings[field] = { cellType: "input" }));
-    factWorkFields
-      .filter((field) => !field.startsWith("year"))
-      .forEach((field) => (settings[field] = { cellType: "input" }));
-    factTimeFields
-      .filter((field) => !field.startsWith("year"))
-      .forEach((field) => (settings[field] = { cellType: "input" }));
+    EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input" }));
 
     return settings[field];
   }

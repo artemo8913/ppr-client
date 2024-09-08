@@ -1,13 +1,22 @@
 "use client";
 import { FC, memo, MutableRefObject, useCallback, useMemo } from "react";
+import clsx from "clsx";
 
+import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { checkIsPlanTimeField, checkIsPlanWorkField, IPprData, TTransfer } from "@/2entities/ppr";
+import {
+  checkIsPlanTimeField,
+  checkIsPlanWorkField,
+  checkIsWorkOrTimeField,
+  IPprData,
+  TTransfer,
+} from "@/2entities/ppr";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
 
-import { getTdStyle } from "../lib/pprTableStylesHelper";
 import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
+
+import style from "./PprTableCell.module.scss";
 
 function getValue(pprData: IPprData, field: keyof IPprData, isCorrectedView: boolean) {
   if (checkIsPlanWorkField(field) || checkIsPlanTimeField(field)) {
@@ -36,7 +45,14 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   ...otherProps
 }) => {
   const pprSettings = usePprTableSettings();
+
   const isPlanWorkPeriodField = checkIsPlanWorkField(field);
+  const isPlanTimePeriodField = checkIsPlanTimeField(field);
+
+  const quartalNumber = getQuartal(getTimePeriodFromString(field));
+  const isBgNotTransparent = isPlanWorkPeriodField || isPlanTimePeriodField;
+
+  const isPlanTimeField = checkIsWorkOrTimeField(field);
 
   const isCorrectedView = useMemo(
     () =>
@@ -72,21 +88,23 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   return (
     <td
-      className="border border-black relative h-1"
-      style={{
-        ...getTdStyle(field),
-      }}
+      className={clsx(
+        style.PprTableCell,
+        quartalNumber && style[`Q${quartalNumber}`],
+        !isBgNotTransparent && style.transparent,
+        isPlanTimeField && style.bottom
+      )}
     >
-      <div className="flex flex-col justify-between gap-6">
-        {isArrowsShow && isPlanWorkPeriodField && (
+      {isArrowsShow && isPlanWorkPeriodField ? (
+        <div className="flex flex-col justify-between gap-6">
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
-        )}
-        {field === "name" ? (
-          <TableCellWithWorkControl {...otherProps} onBlur={handleChange} id={pprData.id} value={value} />
-        ) : (
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
-        )}
-      </div>
+        </div>
+      ) : field === "name" ? (
+        <TableCellWithWorkControl {...otherProps} onBlur={handleChange} id={pprData.id} value={value} />
+      ) : (
+        <TableCell {...otherProps} onBlur={handleChange} value={value} />
+      )}
     </td>
   );
 };

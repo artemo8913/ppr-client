@@ -15,7 +15,7 @@ function HeaderCell(props: IHeaderCellProps) {
   return (
     <th
       ref={props.cellRef}
-      className="border border-black relative"
+      className="border border-black"
       rowSpan={props.rowSpan}
       colSpan={props.colSpan}
       style={props.style}

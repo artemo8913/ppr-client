@@ -10,7 +10,7 @@ import {
   TPlanTabelTimePeriods,
 } from "../model/ppr.schema";
 
-export const planWorkFields: TPlanWorkPeriods[] = [
+export const PLAN_WORK_FIELDS: TPlanWorkPeriods[] = [
   "year_plan_work",
   "jan_plan_work",
   "feb_plan_work",
@@ -26,7 +26,7 @@ export const planWorkFields: TPlanWorkPeriods[] = [
   "dec_plan_work",
 ] as const;
 
-export const planTimeFields: TPlanTimePeriods[] = [
+export const PLAN_TIME_FIELDS: TPlanTimePeriods[] = [
   "year_plan_time",
   "jan_plan_time",
   "feb_plan_time",
@@ -42,7 +42,7 @@ export const planTimeFields: TPlanTimePeriods[] = [
   "dec_plan_time",
 ] as const;
 
-export const factWorkFields: TFactWorkPeriods[] = [
+export const FACT_WORK_FIELDS: TFactWorkPeriods[] = [
   "year_fact_work",
   "jan_fact_work",
   "feb_fact_work",
@@ -58,7 +58,7 @@ export const factWorkFields: TFactWorkPeriods[] = [
   "dec_fact_work",
 ] as const;
 
-export const factTimeFields: TFactTimePeriods[] = [
+export const FACT_TIME_FIELDS: TFactTimePeriods[] = [
   "year_fact_time",
   "jan_fact_time",
   "feb_fact_time",
@@ -74,7 +74,7 @@ export const factTimeFields: TFactTimePeriods[] = [
   "dec_fact_time",
 ] as const;
 
-export const factNormTimeFields: TFactNormTimePeriods[] = [
+export const FACT_NORM_TIME_FIELDS: TFactNormTimePeriods[] = [
   "year_fact_norm_time",
   "jan_fact_norm_time",
   "feb_fact_norm_time",
@@ -90,7 +90,7 @@ export const factNormTimeFields: TFactNormTimePeriods[] = [
   "dec_fact_norm_time",
 ] as const;
 
-export const planNormTimeFields: TPlanNormTimePeriods[] = [
+export const PLAN_NORM_TIME_FIELDS: TPlanNormTimePeriods[] = [
   "year_plan_norm_time",
   "jan_plan_norm_time",
   "feb_plan_norm_time",
@@ -106,7 +106,7 @@ export const planNormTimeFields: TPlanNormTimePeriods[] = [
   "dec_plan_norm_time",
 ] as const;
 
-export const planTabelTimeFields: TPlanTabelTimePeriods[] = [
+export const PLAN_TABEL_TIME_FIELDS: TPlanTabelTimePeriods[] = [
   "year_plan_tabel_time",
   "jan_plan_tabel_time",
   "feb_plan_tabel_time",
@@ -122,15 +122,15 @@ export const planTabelTimeFields: TPlanTabelTimePeriods[] = [
   "dec_plan_tabel_time",
 ] as const;
 
-export const workAndTimeFields = [
-  ...planWorkFields,
-  ...planTimeFields,
-  ...factWorkFields,
-  ...factNormTimeFields,
-  ...factTimeFields,
+export const WORK_AND_TIME_FIELDS = [
+  ...PLAN_WORK_FIELDS,
+  ...PLAN_TIME_FIELDS,
+  ...FACT_WORK_FIELDS,
+  ...FACT_NORM_TIME_FIELDS,
+  ...FACT_TIME_FIELDS,
 ];
 
-export const pprDataFields: (keyof IPprData)[] = [
+export const PPR_DATA_FIELDS: (keyof IPprData)[] = [
   "id",
   "workId",
   "is_work_aproved",
@@ -148,28 +148,28 @@ export const pprDataFields: (keyof IPprData)[] = [
   "norm_of_time",
   "norm_of_time_document",
   "unity",
-  ...planWorkFields,
-  ...planTimeFields,
-  ...factWorkFields,
-  ...factNormTimeFields,
-  ...factTimeFields,
+  ...PLAN_WORK_FIELDS,
+  ...PLAN_TIME_FIELDS,
+  ...FACT_WORK_FIELDS,
+  ...FACT_NORM_TIME_FIELDS,
+  ...FACT_TIME_FIELDS,
 ] as const;
 
-export const pprTableFieldsSet: Set<keyof IPprData> = new Set(pprDataFields);
-export const planWorkFieldsSet: Set<TPlanWorkPeriods> = new Set(planWorkFields);
-export const factWorkFieldsSet: Set<TFactWorkPeriods> = new Set(factWorkFields);
-export const planTimeFieldsSet: Set<TPlanTimePeriods> = new Set(planTimeFields);
-export const factTimeFieldsSet: Set<TFactTimePeriods> = new Set(factTimeFields);
+export const pprTableFieldsSet: Set<keyof IPprData> = new Set(PPR_DATA_FIELDS);
+export const planWorkFieldsSet: Set<TPlanWorkPeriods> = new Set(PLAN_WORK_FIELDS);
+export const factWorkFieldsSet: Set<TFactWorkPeriods> = new Set(FACT_WORK_FIELDS);
+export const planTimeFieldsSet: Set<TPlanTimePeriods> = new Set(PLAN_TIME_FIELDS);
+export const factTimeFieldsSet: Set<TFactTimePeriods> = new Set(FACT_TIME_FIELDS);
 export const planFactWorkFieldsSet: Set<TPlanWorkPeriods | TFactWorkPeriods> = new Set([
-  ...planWorkFields,
-  ...factWorkFields,
+  ...PLAN_WORK_FIELDS,
+  ...FACT_WORK_FIELDS,
 ]);
 export const workAndTimeFieldsSet: Set<
   TPlanWorkPeriods | TPlanTimePeriods | TFactWorkPeriods | TFactNormTimePeriods | TFactTimePeriods
-> = new Set(workAndTimeFields);
-export const planNormTimeFieldsSet: Set<TPlanNormTimePeriods> = new Set(planNormTimeFields);
-export const planTabelTimeFieldsSet: Set<TPlanTabelTimePeriods> = new Set(planTabelTimeFields);
-export const factNormTimeFieldsSet: Set<TFactNormTimePeriods> = new Set(factNormTimeFields);
+> = new Set(WORK_AND_TIME_FIELDS);
+export const planNormTimeFieldsSet: Set<TPlanNormTimePeriods> = new Set(PLAN_NORM_TIME_FIELDS);
+export const planTabelTimeFieldsSet: Set<TPlanTabelTimePeriods> = new Set(PLAN_TABEL_TIME_FIELDS);
+export const factNormTimeFieldsSet: Set<TFactNormTimePeriods> = new Set(FACT_NORM_TIME_FIELDS);
 
 export const workPlanToTimePlanFieldsPair: { [field in TPlanWorkPeriods]: TPlanTimePeriods } = {
   year_plan_work: "year_plan_time",

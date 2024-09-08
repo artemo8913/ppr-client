@@ -1,0 +1,35 @@
+.PprTableCell {
+  border: solid 1px black;
+
+  &.bottom {
+    vertical-align: bottom;
+  }
+
+  &.Q1 {
+    background-color: var(--FIRST_QUARTER);
+  }
+  &.Q2 {
+    background-color: var(--SECOND_QUARTER);
+  }
+  &.Q3 {
+    background-color: var(--THIRD_QUARTER);
+  }
+  &.Q4 {
+    background-color: var(--FOURTH_QUARTER);
+  }
+
+  &.transparent {
+    &.Q1 {
+      background-color: var(--FIRST_QUARTER_TRANSPARENT);
+    }
+    &.Q2 {
+      background-color: var(--SECOND_QUARTER_TRANSPARENT);
+    }
+    &.Q3 {
+      background-color: var(--THIRD_QUARTER_TRANSPARENT);
+    }
+    &.Q4 {
+      background-color: var(--FOURTH_QUARTER_TRANSPARENT);
+    }
+  }
+}
