@@ -4,11 +4,12 @@ import Input from "antd/es/input";
 import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import Button from "antd/es/button";
-import { IPpr, addPprTable } from "@/2entities/ppr";
 import { useSession } from "next-auth/react";
+import DatePicker from "antd/es/date-picker";
+import { Dayjs } from "dayjs";
+
+import { IPpr, addPprTable } from "@/2entities/ppr";
 import { createNewPprInstance } from "../lib/createNewPprInstance";
-import DatePicker, { DatePickerProps } from "antd/es/date-picker";
-import dayjs, { Dayjs } from "dayjs";
 
 interface ICreatePprFormProps {
   onFinish?: () => void;

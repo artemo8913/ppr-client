@@ -8,6 +8,7 @@ import { IPpr } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 import { translateRuYearStatus } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
+import { PprCopyButton } from "@/3features/ppr/copy";
 
 interface IPprInfoProps {
   data: Omit<IPpr, "data">[];
@@ -66,7 +67,12 @@ const columns: TableProps<Omit<IPpr, "data">>["columns"] = [
   {
     title: "Действия",
     dataIndex: "id",
-    render: (_, row) => <PprDeleteButton created_by={row.created_by} pprId={row.id} pprStatus={row.status} />,
+    render: (_, row) => (
+      <>
+        <PprDeleteButton created_by={row.created_by} pprId={row.id} pprStatus={row.status} />
+        <PprCopyButton pprId={row.id} />
+      </>
+    ),
   },
 ];
 

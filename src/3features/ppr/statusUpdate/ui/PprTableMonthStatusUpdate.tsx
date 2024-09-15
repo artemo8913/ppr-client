@@ -2,6 +2,7 @@
 import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
+
 import { getNextPprMonthStatus, checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
@@ -18,9 +19,15 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       return;
     }
     const nextStatus = getNextPprMonthStatus(ppr.months_statuses[currentTimePeriod]);
-    if (nextStatus === "plan_aproved") {
+
+    if (!nextStatus) {
+      return;
+    }
+
+    if (nextStatus === "in_process") {
       ppr.data.forEach((datum) => (datum.is_work_aproved = true));
     }
+
     updatePprTable(ppr.id, {
       ...ppr,
       months_statuses: {
@@ -40,7 +47,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       [ppr?.id];
   }, [ppr?.id, ppr?.months_statuses, currentTimePeriod]);
 
-  const rejectFact = useCallback(() => {
+  const rejectFactFilling = useCallback(() => {
     if (!ppr?.id || currentTimePeriod === "year") {
       return;
     }
@@ -68,12 +75,6 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_creating") {
       return <Button onClick={setNextStatus}>Отправить на согласование</Button>;
     }
-    if (currentMonthStatus === "plan_on_correction") {
-      return <Button onClick={setNextStatus}>Исправить замечания ППР</Button>;
-    }
-    if (currentMonthStatus === "plan_aproved") {
-      return <Button onClick={setNextStatus}>Взять в работу</Button>;
-    }
     if (currentMonthStatus === "in_process") {
       return <Button onClick={setNextStatus}>Заполнить выполнение работ</Button>;
     }
@@ -86,6 +87,13 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       currentMonthStatus === "plan_on_aprove"
     ) {
       return <Button onClick={rejectPlan}>Отозвать</Button>;
+    }
+    if (
+      currentMonthStatus === "fact_verification_engineer" ||
+      currentMonthStatus === "fact_verification_time_norm" ||
+      currentMonthStatus === "fact_on_agreement_sub_boss"
+    ) {
+      return <Button onClick={rejectFactFilling}>Отозвать</Button>;
     }
   }
 
