@@ -3,7 +3,9 @@ export { PprProvider, usePpr } from "./ui/PprProvider";
 export {
   getNextPprMonthStatus,
   getNextPprYearStatus,
-  isAllMonthsPprStatusesIsDone,
+  checkIsAllMonthsPprStatusesIsDone,
+  checkIsTimePeriodAvailableToSelect,
+  checkIsTimePeriodAvailableToTransfer,
   translateRuMonthStatus,
   findFirstUndonePprPeriod,
 } from "./lib/pprStatusHelper";

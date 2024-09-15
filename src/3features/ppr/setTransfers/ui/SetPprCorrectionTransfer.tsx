@@ -3,8 +3,8 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date";
-import { usePpr } from "@/1shared/providers/pprProvider";
+import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
+import { checkIsTimePeriodAvailableToTransfer, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, PLAN_WORK_FIELDS } from "@/2entities/ppr";
 
@@ -19,7 +19,7 @@ interface ISetPprCorrectionTransferProps {
   transferType: "plan" | "undone";
 }
 
-const MONTH_PLAN_PERIODS = PLAN_WORK_FIELDS.filter((field) => field !== "year_plan_work");
+const MONTH_PLAN_WORK_FIELDS = PLAN_WORK_FIELDS.filter((field) => field !== "year_plan_work");
 
 export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
   id,
@@ -27,25 +27,29 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
   transfers = null,
   transferType,
 }) => {
-  const { updateTransfers } = usePpr();
+  const { ppr, updateTransfers } = usePpr();
 
   const { currentTimePeriod } = usePprTableSettings();
+
   const monthIndex = useMemo(
-    () => MONTH_PLAN_PERIODS.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
+    () => MONTH_PLAN_WORK_FIELDS.findIndex((planWorkPeriod) => planWorkPeriod?.startsWith(currentTimePeriod)),
     [currentTimePeriod]
   );
-  const nearestPlanPeriod = MONTH_PLAN_PERIODS[monthIndex + 1];
 
-  const selectOptions: TOption<TPlanWorkPeriods>[] = useMemo(
-    () =>
-      MONTH_PLAN_PERIODS.map((field, index) => {
-        if (index <= monthIndex) {
-          return { value: field, label: translateRuTimePeriod(field || ""), disabled: true };
-        }
-        return { value: field, label: translateRuTimePeriod(field || "") };
-      }),
-    [monthIndex]
-  );
+  const nextPlanPeriodField = MONTH_PLAN_WORK_FIELDS[monthIndex + 1];
+
+  const selectOptions: TOption<TPlanWorkPeriods>[] = MONTH_PLAN_WORK_FIELDS.map((field) => {
+    const timePeriod = getTimePeriodFromString(field);
+
+    const disabled =
+      ppr !== null && timePeriod ? !checkIsTimePeriodAvailableToTransfer(timePeriod, ppr.months_statuses) : true;
+
+    return {
+      value: field,
+      label: translateRuTimePeriod(field),
+      disabled,
+    };
+  });
 
   const handleTransfersChange = useCallback(
     (fieldTo: keyof TPlanWorkPeriodsFields | null, value?: number, transferIndex?: number) => {
@@ -67,8 +71,8 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
   );
 
   const addTransfer = useCallback(() => {
-    handleTransfersChange(nearestPlanPeriod, 0, transfers?.length || 0 + 1);
-  }, [transfers, nearestPlanPeriod, handleTransfersChange]);
+    handleTransfersChange(nextPlanPeriodField, 0, transfers?.length || 0 + 1);
+  }, [transfers, nextPlanPeriodField, handleTransfersChange]);
 
   const deleteTransfer = useCallback(
     (index: number) => {
@@ -90,10 +94,10 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
       if (strategy === "NULL") {
         handleTransfersChange(null);
       } else if (strategy === "PERIOD") {
-        handleTransfersChange(nearestPlanPeriod);
+        handleTransfersChange(nextPlanPeriodField);
       }
     },
-    [handleTransfersChange, nearestPlanPeriod]
+    [handleTransfersChange, nextPlanPeriodField]
   );
 
   return (
