@@ -1,9 +1,10 @@
 "use client";
 import { FC, useCallback } from "react";
+
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCellMemo } from "@/1shared/ui/table";
-import { useCreateColumns } from "../lib/useCreateColumns";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   IWorkingManYearPlan,
@@ -14,7 +15,7 @@ import {
 } from "@/2entities/ppr";
 import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
 import { WorkingManTableCellMemo } from "./WorkingManTableCell";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { useCreateColumns } from "../lib/useCreateColumns";
 
 interface IWorkingMansTableProps {}
 
