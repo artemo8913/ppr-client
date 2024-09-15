@@ -5,8 +5,8 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 import { SessionProvider } from "@/1shared/providers/sessionProvider";
 import { authOptions } from "@/1shared/auth/authConfig";
-import { LoginForm } from "@/3features/loginUser";
 import { MainLayout } from "@/4widgets/layouts";
+import { LoginPage } from "@/5pages/loginPage";
 
 import "./globals.scss";
 
@@ -28,15 +28,7 @@ export default async function RootLayout(props: IRootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         <AntdRegistry>
-          <SessionProvider>
-            {user ? (
-              <MainLayout>{props.children}</MainLayout>
-            ) : (
-              <div className="h-screen flex justify-center">
-                <LoginForm />
-              </div>
-            )}
-          </SessionProvider>
+          <SessionProvider>{user ? <MainLayout>{props.children}</MainLayout> : <LoginPage />}</SessionProvider>
         </AntdRegistry>
       </body>
     </html>
