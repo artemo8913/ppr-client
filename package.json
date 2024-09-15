@@ -1,6 +1,6 @@
 {
   "name": "ech-ppr-client",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "server": "json-server --host 127.0.0.1 --watch db.json --port 3001 --routes routes.json",
