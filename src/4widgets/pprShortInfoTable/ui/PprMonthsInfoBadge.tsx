@@ -16,13 +16,11 @@ const badgeColorByStatus: { [status in TMonthPprStatus]: string } = {
   plan_on_agreement_engineer: "cyan",
   plan_on_agreement_time_norm: "cyan",
   plan_on_aprove: "cyan",
-  plan_aproved: "blue",
   in_process: "blue",
   fact_filling: "blue",
   fact_verification_engineer: "purple",
   fact_verification_time_norm: "purple",
   fact_on_agreement_sub_boss: "purple",
-  plan_on_correction: "red",
   done: "green",
 };
 

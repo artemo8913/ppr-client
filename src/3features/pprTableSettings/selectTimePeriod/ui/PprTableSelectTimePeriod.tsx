@@ -1,27 +1,36 @@
 "use client";
-import Select from "antd/es/select";
-import { FC, useEffect, useMemo } from "react";
+import Select, { DefaultOptionType } from "antd/es/select";
+import { FC, useEffect } from "react";
+
 import { TTimePeriod, translateRuTimePeriod, TIME_PERIODS } from "@/1shared/lib/date";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { usePpr, findFirstUndonePprPeriod } from "@/1shared/providers/pprProvider";
+import { usePpr, findFirstUndonePprPeriod, checkIsTimePeriodAvailableToSelect } from "@/1shared/providers/pprProvider";
+
+type TOption = { value: TTimePeriod } & DefaultOptionType;
 
 interface IPprTableSelectTimePeriodProps {}
 
 export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () => {
-  const { currentTimePeriod, setTimePeriod } = usePprTableSettings();
   const { ppr } = usePpr();
+  const { currentTimePeriod, setTimePeriod } = usePprTableSettings();
+
+  const options: TOption[] = TIME_PERIODS.map((period) => ({
+    value: period,
+    label: translateRuTimePeriod(period),
+    disabled: ppr !== null ? !checkIsTimePeriodAvailableToSelect(period, ppr.status, ppr.months_statuses) : true,
+  }));
 
   useEffect(() => {
     setTimePeriod(findFirstUndonePprPeriod(ppr));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Boolean(ppr?.months_statuses)]);
 
-  const options = useMemo(
-    () => TIME_PERIODS.map((period) => ({ value: period, label: translateRuTimePeriod(period) })),
-    []
-  );
-
   return (
-    <Select<TTimePeriod> className="min-w-24" options={options} value={currentTimePeriod} onChange={setTimePeriod} />
+    <Select<TTimePeriod, TOption>
+      className="min-w-24"
+      options={options}
+      value={currentTimePeriod}
+      onChange={setTimePeriod}
+    />
   );
 };

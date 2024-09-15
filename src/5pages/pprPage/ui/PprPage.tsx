@@ -13,7 +13,7 @@ export const PprPage = () => {
 
   return (
     <Tabs
-      className="overflow-auto print:overflow-visible"
+      className="overflow-scroll print:overflow-visible"
       defaultActiveKey="2"
       destroyInactiveTabPane
       items={[
