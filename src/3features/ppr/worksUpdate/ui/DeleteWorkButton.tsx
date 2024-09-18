@@ -2,9 +2,10 @@
 import { FC, memo, useCallback } from "react";
 import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
+
 import { usePpr } from "@/1shared/providers/pprProvider";
 
-interface IDeleteWorkButtonProps extends React.ComponentProps<typeof Button> {
+interface IDeleteWorkButtonProps {
   id?: string;
 }
 

@@ -2,10 +2,11 @@
 import { FC } from "react";
 import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
-import { useWorkModal } from "@/1shared/providers/workModalProvider";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
-interface IAddWorkButtonProps extends React.ComponentProps<typeof Button> {
+import { useWorkModal } from "@/1shared/providers/workModalProvider";
+
+interface IAddWorkButtonProps {
   workId?: string;
   label?: string;
   size?: SizeType;
