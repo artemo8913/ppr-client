@@ -1,11 +1,15 @@
 "use client";
 import { FC } from "react";
 import Input from "antd/es/input";
+import Select from "antd/es/select";
 import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import Button from "antd/es/button";
+
+import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
+import { TWorkBranch } from "@/2entities/ppr";
 import { IWork } from "@/2entities/work";
 
 interface IWorkCreateNewWorkFormProps {
@@ -15,16 +19,16 @@ interface IWorkCreateNewWorkFormProps {
 
 type TAddWorkForm = Omit<IWork, "periodicity_normal_data">;
 
+const SELECT_INITIAL_VALUE: TWorkBranch = "exploitation";
+
 export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, nearWorkId }) => {
   const [form] = Form.useForm<TAddWorkForm>();
+
   const { addWork } = usePpr();
+
   const handleFinish = (values: TAddWorkForm) => {
-    addWork(
-      {
-        ...values,
-      },
-      nearWorkId
-    );
+    addWork({ ...values }, nearWorkId);
+
     form.resetFields();
     onFinish && onFinish();
   };
@@ -35,9 +39,9 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
       name="create_new_work"
       onFinish={handleFinish}
       labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
-      initialValues={{ remember: true }}
+      wrapperCol={{ span: 24 }}
+      style={{ maxWidth: 800 }}
+      initialValues={{ remember: true, branch: SELECT_INITIAL_VALUE }}
       autoComplete="off"
     >
       <FormItem<TAddWorkForm>
@@ -67,6 +71,13 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
         rules={[{ required: true, message: "Введите документ, регламинтирующий норму времени!" }]}
       >
         <Input />
+      </FormItem>
+      <FormItem<TAddWorkForm>
+        label="Раздел ППР (категория работ)"
+        name="branch"
+        rules={[{ required: true, message: "Выберите раздел работ" }]}
+      >
+        <Select<TWorkBranch> defaultValue={SELECT_INITIAL_VALUE} options={BRANCH_SELECT_OPTIONS} />
       </FormItem>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
