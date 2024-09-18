@@ -27,6 +27,8 @@ import {
   getPlanTimeFieldByPlanTabelTimeField,
   getFactTimeFieldByFactWorkField,
   getPlanWorkFieldByPlanTimeField,
+  checkIsFactWorkField,
+  checkIsFactTimeField,
 } from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -43,6 +45,7 @@ export interface IPprContext {
   updateFactWorkTime: (id: string, field: TFactTimePeriods, value: number) => void;
   updatePprData: (id: string, field: keyof IPprData, value: string | number) => void;
   updatePlanWorkValueByUser: (id: string, field: TPlanWorkPeriods, newValue: number) => void;
+  updatePprTableCell: (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
   updateTransfers: (
     id: string,
     field: TPlanWorkPeriods,
@@ -71,6 +74,7 @@ const PprContext = createContext<IPprContext>({
   updateFactWork: () => {},
   updateFactWorkTime: () => {},
   updatePlanWorkValueByUser: () => {},
+  updatePprTableCell: () => {},
   updateTransfers: () => {},
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
@@ -455,6 +459,25 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     []
   );
 
+  const updatePprTableCell = useCallback(
+    (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => {
+      if (field === "norm_of_time") {
+        updateNormOfTime(id, Number(value));
+      } else if (checkIsFactWorkField(field)) {
+        updateFactWork(id, field, Number(value));
+      } else if (checkIsFactTimeField(field)) {
+        updateFactWorkTime(id, field, Number(value));
+      } else if (!isWorkAproved && checkIsPlanWorkField(field)) {
+        updatePlanWork(id, field, Number(value));
+      } else if (isWorkAproved && checkIsPlanWorkField(field)) {
+        updatePlanWorkValueByUser(id, field, Number(value));
+      } else {
+        updatePprData(id, field, value);
+      }
+    },
+    [updateFactWork, updateFactWorkTime, updateNormOfTime, updatePlanWork, updatePlanWorkValueByUser, updatePprData]
+  );
+
   /**Добавить рабочего в список людей ППР */
   const addWorkingMan = useCallback(() => {
     setPpr((prev) => {
@@ -717,6 +740,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateFactWork,
         updateFactWorkTime,
         updatePlanWorkValueByUser,
+        updatePprTableCell,
         updateTransfers,
         addWorkingMan,
         setOneUnityInAllWorks,
