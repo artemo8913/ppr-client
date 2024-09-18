@@ -27,6 +27,7 @@ export type {
   TPlanTimePeriodsFields,
   TWorkingManFieldsTotalValues,
   TPlanTimeValues,
+  TWorkBranch,
 } from "./model/ppr.schema";
 
 export {
