@@ -131,7 +131,7 @@ export interface IWorkingManYearPlan
   participation: number;
 }
 
-export type TWorkBranch = "exploitation" | "additional" | "unforeseen" | "security" | "none";
+export type TWorkBranch = "exploitation" | "additional" | "unforeseen";
 
 export interface IPprData
   extends TPlanWorkPeriodsFields,

@@ -9,5 +9,9 @@ export interface IWork {
   measure: string;
   norm_of_time: number;
   norm_of_time_document: string;
+}
+
+export interface IWorkExtended extends IWork {
   branch: TWorkBranch;
+  subbranch: string;
 }
