@@ -3,7 +3,6 @@ import { FC, Fragment, useCallback, useRef } from "react";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
-import { translateRuPprBranchName } from "@/1shared/locale/pprBranches";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { checkIsWorkOrTimeField, IPprData, SummaryTableFoot, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
 import { AddWorkButton } from "@/3features/ppr/worksUpdate";
@@ -17,8 +16,8 @@ import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
 
 interface IPprTableProps {}
 
-export const PprTable: FC<IPprTableProps> = ({}) => {
-  const { ppr, updatePprTableCell, getBranchesMeta } = usePpr();
+export const PprTable: FC<IPprTableProps> = () => {
+  const { ppr, updatePprTableCell, getBranchesMeta, updateSubbranch } = usePpr();
 
   const { basicFields, timePeriods, planFactFields, monthColSpan, allFields } = useCreateColumns();
 
@@ -92,8 +91,9 @@ export const PprTable: FC<IPprTableProps> = ({}) => {
             {index in branchesAndSubbrunchesOrder &&
               branchesAndSubbrunchesOrder[index].map((branch) => (
                 <PprTableBranchNameRowMemo
-                  key={branch.name}
-                  label={`${branch.orderIndex} ${translateRuPprBranchName(branch.name)}`}
+                  key={branch.name + index}
+                  branch={branch}
+                  updateSubbranch={updateSubbranch}
                 />
               ))}
             <tr key={pprData.id}>

@@ -1,4 +1,4 @@
-export type { IPprContext } from "./ui/PprProvider";
+export type { IPprContext, IBranchDefaultMeta, IBranchMeta } from "./ui/PprProvider";
 export { PprProvider, usePpr } from "./ui/PprProvider";
 export {
   getNextPprMonthStatus,
