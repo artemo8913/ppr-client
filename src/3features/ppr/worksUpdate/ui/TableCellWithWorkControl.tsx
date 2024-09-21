@@ -6,7 +6,7 @@ import { TWorkBranch } from "@/2entities/ppr";
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
 import { CopyWorkButton } from "./CopyWorkButton";
-import { ChangeBranchButton } from "./ChangeBranchButton";
+import { EditWorkButtonMemo } from "./EditWorkButton";
 
 interface ITableCellWithWorkControlProps extends ITableCellProps {
   id?: string;
@@ -23,7 +23,7 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ i
           <DeleteWorkButton id={id} />
           <AddWorkButton workId={id} />
           <CopyWorkButton id={id} />
-          <ChangeBranchButton workId={id} branch={branch} />
+          <EditWorkButtonMemo workId={id} branch={branch} />
         </div>
       )}
       <TableCell {...otherProps} />

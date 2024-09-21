@@ -13,7 +13,7 @@ interface IChangeBranchButtonProps {
   branch?: TWorkBranch;
 }
 
-const ChangeBranchButton: FC<IChangeBranchButtonProps> = (props) => {
+const EditWorkButton: FC<IChangeBranchButtonProps> = (props) => {
   const { updatePprData } = usePpr();
 
   const [isHide, setIsHide] = useState<boolean>(true);
@@ -42,6 +42,6 @@ const ChangeBranchButton: FC<IChangeBranchButtonProps> = (props) => {
   );
 };
 
-const ChangeBranchButtonMemo = memo(ChangeBranchButton);
+const EditWorkButtonMemo = memo(EditWorkButton);
 
-export { ChangeBranchButtonMemo as ChangeBranchButton };
+export { EditWorkButtonMemo };
