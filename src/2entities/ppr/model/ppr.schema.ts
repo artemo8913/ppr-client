@@ -52,7 +52,7 @@ export interface IPlanWorkValues {
 export interface TPlanTimeValues {
   original: number;
   final: number;
-};
+}
 
 export type TPlanWorkPeriodsFields = {
   [key in TPlanWorkPeriods]: IPlanWorkValues;
@@ -131,6 +131,8 @@ export interface IWorkingManYearPlan
   participation: number;
 }
 
+export type TWorkBranch = "exploitation" | "additional" | "unforeseen";
+
 export interface IPprData
   extends TPlanWorkPeriodsFields,
     TWorkPlanTimePeriodsFields,
@@ -140,7 +142,7 @@ export interface IPprData
   id: string;
   workId: string | null;
   is_work_aproved: boolean;
-  branch: string;
+  branch: TWorkBranch;
   subbranch: string;
   name: string;
   location: string;

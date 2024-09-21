@@ -10,9 +10,11 @@ import { PprPage } from "@/5pages/pprPage";
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(params.id);
   const works = await getAllWorks();
-  if (!ppr.id) {
+
+  if (!ppr?.id) {
     throw new Error("ППР не найден");
   }
+
   return (
     <PprTableSettingsProvider>
       <WorkModalProvider>

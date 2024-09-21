@@ -27,10 +27,25 @@ import {
   getPlanTimeFieldByPlanTabelTimeField,
   getFactTimeFieldByFactWorkField,
   getPlanWorkFieldByPlanTimeField,
+  checkIsFactWorkField,
+  checkIsFactTimeField,
+  TWorkBranch,
 } from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
+
+export interface IBranchDefaultMeta {
+  workIds: Set<string>;
+  name: string;
+  orderIndex: string;
+  indexToPlaceTitle: number;
+  type: "branch" | "subbranch";
+}
+
+export interface IBranchMeta extends IBranchDefaultMeta {
+  subbranches: IBranchDefaultMeta[];
+}
 
 export interface IPprContext {
   ppr: IPpr | null;
@@ -43,6 +58,7 @@ export interface IPprContext {
   updateFactWorkTime: (id: string, field: TFactTimePeriods, value: number) => void;
   updatePprData: (id: string, field: keyof IPprData, value: string | number) => void;
   updatePlanWorkValueByUser: (id: string, field: TPlanWorkPeriods, newValue: number) => void;
+  updatePprTableCell: (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
   updateTransfers: (
     id: string,
     field: TPlanWorkPeriods,
@@ -50,6 +66,7 @@ export interface IPprContext {
     type: "plan" | "undone"
   ) => void;
   setOneUnityInAllWorks: (unity: string) => void;
+  updateSubbranch: (newSubbranch: string, workIdsSet: Set<string>) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   addWorkingMan: () => void;
   deleteWorkingMan: (id: string) => void;
@@ -58,6 +75,13 @@ export interface IPprContext {
   updateWorkingManPlanTabelTime: (rowIndex: number, field: TPlanTabelTimePeriods, value: number) => void;
   updateWorkingManFactTime: (rowIndex: number, field: TFactTimePeriods, value: number) => void;
   updateWorkingManParticipation: (rowIndex: number, value: number) => void;
+  getBranchesMeta: () => {
+    branchesMeta: IBranchMeta[];
+    branchesAndSubbrunchesOrder: {
+      [indexToPlace: number]: IBranchDefaultMeta[];
+    };
+    subbranchesList: string[];
+  };
 }
 
 const PprContext = createContext<IPprContext>({
@@ -71,7 +95,9 @@ const PprContext = createContext<IPprContext>({
   updateFactWork: () => {},
   updateFactWorkTime: () => {},
   updatePlanWorkValueByUser: () => {},
+  updatePprTableCell: () => {},
   updateTransfers: () => {},
+  updateSubbranch: () => {},
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
   deleteWorkingMan: () => {},
@@ -81,6 +107,7 @@ const PprContext = createContext<IPprContext>({
   setOneUnityInAllWorks: () => {},
   getPprDataWithRowSpan: () => [],
   updateWorkingManParticipation: () => [],
+  getBranchesMeta: () => ({ branchesMeta: [], branchesAndSubbrunchesOrder: {}, subbranchesList: [] }),
 });
 
 export const usePpr = () => useContext(PprContext);
@@ -111,12 +138,13 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
       return {
         ...prev,
-        data: indexToPlace
-          ? prev.data
-              .slice(0, indexToPlace + 1)
-              .concat(createNewPprWorkInstance(newWork))
-              .concat(prev.data.slice(indexToPlace + 1))
-          : prev.data.concat(createNewPprWorkInstance(newWork)),
+        data:
+          indexToPlace !== null
+            ? prev.data
+                .slice(0, indexToPlace + 1)
+                .concat(createNewPprWorkInstance(newWork))
+                .concat(prev.data.slice(indexToPlace + 1))
+            : prev.data.concat(createNewPprWorkInstance(newWork)),
       };
     });
   }, []);
@@ -455,6 +483,43 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     []
   );
 
+  const updatePprTableCell = useCallback(
+    (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => {
+      if (field === "norm_of_time") {
+        updateNormOfTime(id, Number(value));
+      } else if (checkIsFactWorkField(field)) {
+        updateFactWork(id, field, Number(value));
+      } else if (checkIsFactTimeField(field)) {
+        updateFactWorkTime(id, field, Number(value));
+      } else if (!isWorkAproved && checkIsPlanWorkField(field)) {
+        updatePlanWork(id, field, Number(value));
+      } else if (isWorkAproved && checkIsPlanWorkField(field)) {
+        updatePlanWorkValueByUser(id, field, Number(value));
+      } else {
+        updatePprData(id, field, value);
+      }
+    },
+    [updateFactWork, updateFactWorkTime, updateNormOfTime, updatePlanWork, updatePlanWorkValueByUser, updatePprData]
+  );
+
+  const updateSubbranch = useCallback((newSubbranch: string, workIdsSet: Set<string>) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        data: prev.data.map((pprData) => {
+          if (!workIdsSet.has(pprData.id)) {
+            return pprData;
+          }
+          return { ...pprData, subbranch: newSubbranch };
+        }),
+      };
+    });
+  }, []);
+
   /**Добавить рабочего в список людей ППР */
   const addWorkingMan = useCallback(() => {
     setPpr((prev) => {
@@ -653,6 +718,82 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
+  /**
+   * Получить информацию о месте размещения строк категорий. Для этого перебирается массив pprData.data
+   * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
+   */
+  const getBranchesMeta = useCallback(() => {
+    const branchesMeta: IBranchMeta[] = [];
+    const branchesAndSubbrunchesOrder: { [indexToPlace: number]: IBranchDefaultMeta[] } = {};
+    const subbranchesSet = new Set<string>();
+
+    if (!ppr?.data) {
+      return { branchesMeta, branchesAndSubbrunchesOrder, subbranchesList: [] };
+    }
+
+    let prevBranchMeta: IBranchMeta = {
+      workIds: new Set(),
+      indexToPlaceTitle: 0,
+      name: "",
+      subbranches: [],
+      orderIndex: "",
+      type: "branch",
+    };
+
+    let prevSubbranchMeta: IBranchDefaultMeta = {
+      workIds: new Set(),
+      indexToPlaceTitle: 0,
+      name: "",
+      orderIndex: "",
+      type: "subbranch",
+    };
+
+    function initPrevBranchMeta(branchName: TWorkBranch, index: number) {
+      prevBranchMeta = {
+        workIds: new Set(),
+        indexToPlaceTitle: index,
+        name: branchName,
+        subbranches: [],
+        orderIndex: `${branchesMeta.length + 1}.`,
+        type: "branch",
+      };
+    }
+
+    function initPrevSubbranchMeta(subbranchName: string, index: number, isBranchChange?: boolean) {
+      prevSubbranchMeta = {
+        workIds: new Set(),
+        indexToPlaceTitle: index,
+        name: subbranchName,
+        orderIndex: `${branchesMeta.length + (isBranchChange ? 1 : 0)}.${prevBranchMeta.subbranches.length + 1}.`,
+        type: "subbranch",
+      };
+    }
+
+    ppr.data.forEach((pprData, index) => {
+      if (pprData.branch !== prevBranchMeta.name) {
+        initPrevBranchMeta(pprData.branch, index);
+        initPrevSubbranchMeta(pprData.subbranch, index, true);
+        prevBranchMeta.subbranches.push(prevSubbranchMeta);
+        branchesMeta.push(prevBranchMeta);
+        subbranchesSet.add(prevSubbranchMeta.name);
+        branchesAndSubbrunchesOrder[index] = [prevBranchMeta, prevSubbranchMeta];
+      } else if (pprData.subbranch !== prevSubbranchMeta.name) {
+        initPrevSubbranchMeta(pprData.subbranch, index);
+        prevBranchMeta.subbranches.push(prevSubbranchMeta);
+        subbranchesSet.add(prevSubbranchMeta.name);
+        branchesAndSubbrunchesOrder[index] = [prevSubbranchMeta];
+      }
+      prevBranchMeta.workIds.add(pprData.id);
+      prevSubbranchMeta.workIds.add(pprData.id);
+    });
+
+    return {
+      branchesMeta,
+      branchesAndSubbrunchesOrder,
+      subbranchesList: Array.from(subbranchesSet),
+    };
+  }, [ppr?.data]);
+
   // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
     setPpr({ ...pprFromResponce });
@@ -717,9 +858,11 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateFactWork,
         updateFactWorkTime,
         updatePlanWorkValueByUser,
+        updatePprTableCell,
         updateTransfers,
         addWorkingMan,
         setOneUnityInAllWorks,
+        updateSubbranch,
         getPprDataWithRowSpan,
         updateWorkingMan,
         deleteWorkingMan,
@@ -727,6 +870,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateWorkingManPlanTabelTime,
         updateWorkingManFactTime,
         updateWorkingManParticipation,
+        getBranchesMeta,
       }}
     >
       {children}

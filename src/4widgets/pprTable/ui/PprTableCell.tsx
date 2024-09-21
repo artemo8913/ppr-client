@@ -101,7 +101,13 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
         </div>
       ) : field === "name" ? (
-        <TableCellWithWorkControl {...otherProps} onBlur={handleChange} id={pprData.id} value={value} />
+        <TableCellWithWorkControl
+          {...otherProps}
+          onBlur={handleChange}
+          id={pprData.id}
+          branch={pprData.branch}
+          value={value}
+        />
       ) : (
         <TableCell {...otherProps} onBlur={handleChange} value={value} />
       )}
