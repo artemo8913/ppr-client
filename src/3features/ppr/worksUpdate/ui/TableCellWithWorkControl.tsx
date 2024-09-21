@@ -19,7 +19,7 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ i
   return (
     <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
       {!isHide && (
-        <div className="!absolute -bottom-6 left-0 z-10 flex pb-1">
+        <div className="!absolute -bottom-6 left-0 z-10 flex py-2">
           <DeleteWorkButton id={id} />
           <AddWorkButton workId={id} />
           <CopyWorkButton id={id} />
