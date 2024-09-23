@@ -3,10 +3,13 @@ import { FC, useState } from "react";
 
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { TWorkBranch } from "@/2entities/ppr";
+
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
 import { CopyWorkButton } from "./CopyWorkButton";
 import { EditWorkButtonMemo } from "./EditWorkButton";
+import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
+import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 
 interface ITableCellWithWorkControlProps extends ITableCellProps {
   id?: string;
@@ -20,6 +23,8 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ i
     <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
       {!isHide && (
         <div className="!absolute -bottom-6 left-0 z-10 flex py-2">
+          <IncreaseWorkPositionButton id={id} />
+          <DecreaseWorkPositionButton id={id} />
           <DeleteWorkButton id={id} />
           <AddWorkButton workId={id} />
           <CopyWorkButton id={id} />

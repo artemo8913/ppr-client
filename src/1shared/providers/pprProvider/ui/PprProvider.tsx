@@ -66,6 +66,8 @@ export interface IPprContext {
     type: "plan" | "undone"
   ) => void;
   setOneUnityInAllWorks: (unity: string) => void;
+  increaseWorkPosition: (id: string) => void;
+  decreaseWorkPosition: (id: string) => void;
   updateSubbranch: (newSubbranch: string, workIdsSet: Set<string>) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   addWorkingMan: () => void;
@@ -97,6 +99,9 @@ const PprContext = createContext<IPprContext>({
   updatePlanWorkValueByUser: () => {},
   updatePprTableCell: () => {},
   updateTransfers: () => {},
+  setOneUnityInAllWorks: () => {},
+  increaseWorkPosition: () => {},
+  decreaseWorkPosition: () => {},
   updateSubbranch: () => {},
   addWorkingMan: () => {},
   updateWorkingMan: () => {},
@@ -104,7 +109,6 @@ const PprContext = createContext<IPprContext>({
   updateWorkingManPlanNormTime: () => {},
   updateWorkingManPlanTabelTime: () => {},
   updateWorkingManFactTime: () => {},
-  setOneUnityInAllWorks: () => {},
   getPprDataWithRowSpan: () => [],
   updateWorkingManParticipation: () => [],
   getBranchesMeta: () => ({ branchesMeta: [], branchesAndSubbrunchesOrder: {}, subbranchesList: [] }),
@@ -718,6 +722,52 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
+  const increaseWorkPosition = useCallback((id: string) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      const workIndex = prev.data.findIndex((pprData) => pprData.id === id);
+
+      if (workIndex === -1 || workIndex === prev.data.length - 1) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        data: prev.data
+          .slice(0, workIndex)
+          .concat(prev.data[workIndex + 1])
+          .concat(prev.data[workIndex])
+          .concat(prev.data.slice(workIndex + 2)),
+      };
+    });
+  }, []);
+
+  const decreaseWorkPosition = useCallback((id: string) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      const workIndex = prev.data.findIndex((pprData) => pprData.id === id);
+
+      if (workIndex === -1 || workIndex === 0) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        data: prev.data
+          .slice(0, workIndex - 1)
+          .concat(prev.data[workIndex])
+          .concat(prev.data[workIndex - 1])
+          .concat(prev.data.slice(workIndex + 1)),
+      };
+    });
+  }, []);
+
   /**
    * Получить информацию о месте размещения строк категорий. Для этого перебирается массив pprData.data
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
@@ -860,8 +910,10 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updatePlanWorkValueByUser,
         updatePprTableCell,
         updateTransfers,
-        addWorkingMan,
         setOneUnityInAllWorks,
+        increaseWorkPosition,
+        decreaseWorkPosition,
+        addWorkingMan,
         updateSubbranch,
         getPprDataWithRowSpan,
         updateWorkingMan,
