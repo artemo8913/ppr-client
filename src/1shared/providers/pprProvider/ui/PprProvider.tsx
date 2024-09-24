@@ -1,5 +1,7 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
+
+import { TMonth } from "@/1shared/lib/date";
 import {
   IPpr,
   IPprData,
@@ -30,6 +32,8 @@ import {
   checkIsFactWorkField,
   checkIsFactTimeField,
   TWorkBranch,
+  getFactNormTimeFieldByTimePeriod,
+  getFactTimeFieldByTimePeriod,
 } from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -56,6 +60,7 @@ export interface IPprContext {
   updatePlanWork: (id: string, field: TPlanWorkPeriods, value: number) => void;
   updateFactWork: (id: string, field: TFactWorkPeriods, value: number) => void;
   updateFactWorkTime: (id: string, field: TFactTimePeriods, value: number) => void;
+  copyFactNormTimeToFactTime: (mode: "EVERY" | "NOT_FILLED", month: TMonth) => void;
   updatePprData: (id: string, field: keyof IPprData, value: string | number) => void;
   updatePlanWorkValueByUser: (id: string, field: TPlanWorkPeriods, newValue: number) => void;
   updatePprTableCell: (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
@@ -96,6 +101,7 @@ const PprContext = createContext<IPprContext>({
   updatePlanWork: () => {},
   updateFactWork: () => {},
   updateFactWorkTime: () => {},
+  copyFactNormTimeToFactTime: () => {},
   updatePlanWorkValueByUser: () => {},
   updatePprTableCell: () => {},
   updateTransfers: () => {},
@@ -334,6 +340,37 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           for (const periodField of FACT_TIME_FIELDS) {
             newPprData.year_fact_time += Number(newPprData[periodField]);
+          }
+
+          return newPprData;
+        }),
+      };
+    });
+  }, []);
+
+  //TODO: сделать единую функцию для перерасчета итоговых значений по годовым столбцам. Функция будет считать сразу и объемы, и чел.-ч
+  //везде, где надо
+
+  const copyFactNormTimeToFactTime = useCallback((mode: "EVERY" | "NOT_FILLED", month: TMonth) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        data: prev.data.map((pprData) => {
+          const newPprData: IPprData = { ...pprData };
+
+          const factNormTimePeriod = getFactNormTimeFieldByTimePeriod(month);
+          const factTimePeriod = getFactTimeFieldByTimePeriod(month);
+
+          if (mode === "EVERY" || (mode === "NOT_FILLED" && !pprData[factTimePeriod])) {
+            newPprData[factTimePeriod] = newPprData[factNormTimePeriod];
+            newPprData.year_fact_time = 0;
+
+            for (const periodField of FACT_TIME_FIELDS) {
+              newPprData.year_fact_time += Number(newPprData[periodField]);
+            }
           }
 
           return newPprData;
@@ -907,6 +944,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updatePlanWork,
         updateFactWork,
         updateFactWorkTime,
+        copyFactNormTimeToFactTime,
         updatePlanWorkValueByUser,
         updatePprTableCell,
         updateTransfers,

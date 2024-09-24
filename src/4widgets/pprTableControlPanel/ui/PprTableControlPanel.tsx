@@ -7,6 +7,8 @@ import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTimePeriod";
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
+import { PprTableCopyFactNormTimeToFactTime } from "@/3features/ppr/copyFactNormTimeToFactTime";
+
 import PprTableSettingsModal from "./PprTableSettingsModal";
 
 interface IPprTableControlPanelProps {}
@@ -20,6 +22,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
       Год: {ppr?.year} {ppr?.id_subdivision}-{ppr?.id_distance}-{ppr?.id_direction}
       <PprTableSaveButton />
       <PprTableSetOneUnityButton />
+      <PprTableCopyFactNormTimeToFactTime />
       <PprTableSettingsModal />
       <PprTableSelectTimePeriod />
       <PprTableYearStatusUpdate />
