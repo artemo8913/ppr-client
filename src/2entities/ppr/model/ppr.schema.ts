@@ -29,7 +29,7 @@ export type TAllMonthStatuses = {
 };
 
 export type TTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
-
+//TODO: переименовать Periods в Fields
 export type TPlanWorkPeriods = `${TTimePeriod}_plan_work`;
 export type TFactWorkPeriods = `${TTimePeriod}_fact_work`;
 export type TPlanNormTimePeriods = `${TTimePeriod}_plan_norm_time`;
