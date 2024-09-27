@@ -50,6 +50,7 @@ export {
   getPlanTimeFieldByTimePeriod,
   getPlanWorkFieldByTimePeriod,
   getPlanTimeFieldByPlanTabelTimeField,
+  getPlanTabelTimeFieldByPlanNormTimeField,
 } from "./lib/constFields";
 
 export {

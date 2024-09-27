@@ -171,7 +171,7 @@ export const planNormTimeFieldsSet: Set<TPlanNormTimePeriods> = new Set(PLAN_NOR
 export const planTabelTimeFieldsSet: Set<TPlanTabelTimePeriods> = new Set(PLAN_TABEL_TIME_FIELDS);
 export const factNormTimeFieldsSet: Set<TFactNormTimePeriods> = new Set(FACT_NORM_TIME_FIELDS);
 
-export const workPlanToTimePlanFieldsPair: { [field in TPlanWorkPeriods]: TPlanTimePeriods } = {
+const planWorkToPlanTimeFieldsPair: { [field in TPlanWorkPeriods]: TPlanTimePeriods } = {
   year_plan_work: "year_plan_time",
   jan_plan_work: "jan_plan_time",
   feb_plan_work: "feb_plan_time",
@@ -187,7 +187,7 @@ export const workPlanToTimePlanFieldsPair: { [field in TPlanWorkPeriods]: TPlanT
   dec_plan_work: "dec_plan_time",
 };
 
-export const workFactToFactPlanFieldsPair: { [field in TFactWorkPeriods]: TPlanWorkPeriods } = {
+const factWorkToPlanWorkFieldsPair: { [field in TFactWorkPeriods]: TPlanWorkPeriods } = {
   year_fact_work: "year_plan_work",
   jan_fact_work: "jan_plan_work",
   feb_fact_work: "feb_plan_work",
@@ -203,7 +203,7 @@ export const workFactToFactPlanFieldsPair: { [field in TFactWorkPeriods]: TPlanW
   dec_fact_work: "dec_plan_work",
 };
 
-export const workFactToNormTimeFactFieldsPair: {
+const factWorkToFactNormTimeFieldsPair: {
   [field in TFactWorkPeriods]: TFactNormTimePeriods;
 } = {
   year_fact_work: "year_fact_norm_time",
@@ -221,7 +221,7 @@ export const workFactToNormTimeFactFieldsPair: {
   dec_fact_work: "dec_fact_norm_time",
 };
 
-export const timePlanToWorkPlanFieldsPair: { [field in TPlanTimePeriods]: TPlanWorkPeriods } = {
+const planTimeToPlanWorkFieldsPair: { [field in TPlanTimePeriods]: TPlanWorkPeriods } = {
   year_plan_time: "year_plan_work",
   jan_plan_time: "jan_plan_work",
   feb_plan_time: "feb_plan_work",
@@ -237,7 +237,7 @@ export const timePlanToWorkPlanFieldsPair: { [field in TPlanTimePeriods]: TPlanW
   dec_plan_time: "dec_plan_work",
 };
 
-export const tabelTimePlanToTimePlanFieldsPair: {
+const planTabelTimeToPlanTimeFieldsPair: {
   [field in TPlanTabelTimePeriods]: TPlanTimePeriods;
 } = {
   year_plan_tabel_time: "year_plan_time",
@@ -253,6 +253,24 @@ export const tabelTimePlanToTimePlanFieldsPair: {
   oct_plan_tabel_time: "oct_plan_time",
   nov_plan_tabel_time: "nov_plan_time",
   dec_plan_tabel_time: "dec_plan_time",
+};
+
+const planNormTimeToPlanTabelTimeFieldsPair: {
+  [field in TPlanNormTimePeriods]: TPlanTabelTimePeriods;
+} = {
+  year_plan_norm_time: "year_plan_tabel_time",
+  jan_plan_norm_time: "jan_plan_tabel_time",
+  feb_plan_norm_time: "feb_plan_tabel_time",
+  mar_plan_norm_time: "mar_plan_tabel_time",
+  apr_plan_norm_time: "apr_plan_tabel_time",
+  may_plan_norm_time: "may_plan_tabel_time",
+  june_plan_norm_time: "june_plan_tabel_time",
+  july_plan_norm_time: "july_plan_tabel_time",
+  aug_plan_norm_time: "aug_plan_tabel_time",
+  sept_plan_norm_time: "sept_plan_tabel_time",
+  oct_plan_norm_time: "oct_plan_tabel_time",
+  nov_plan_norm_time: "nov_plan_tabel_time",
+  dec_plan_norm_time: "dec_plan_tabel_time",
 };
 
 export function getPlanWorkFieldByTimePeriod(timePeriod: TTimePeriod): TPlanWorkPeriods {
@@ -276,21 +294,25 @@ export function getFactNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): TFact
 }
 
 export function getPlanTimeFieldByPlanWorkField(field: TPlanWorkPeriods): TPlanTimePeriods {
-  return workPlanToTimePlanFieldsPair[field];
+  return planWorkToPlanTimeFieldsPair[field];
 }
 
 export function getFactTimeFieldByFactWorkField(field: TFactWorkPeriods): TFactNormTimePeriods {
-  return workFactToNormTimeFactFieldsPair[field];
+  return factWorkToFactNormTimeFieldsPair[field];
 }
 
 export function getPlanWorkFieldByPlanTimeField(field: TPlanTimePeriods): TPlanWorkPeriods {
-  return timePlanToWorkPlanFieldsPair[field];
+  return planTimeToPlanWorkFieldsPair[field];
 }
 
 export function getPlanWorkFieldByFactWorkField(field: TFactWorkPeriods): TPlanWorkPeriods {
-  return workFactToFactPlanFieldsPair[field];
+  return factWorkToPlanWorkFieldsPair[field];
 }
 
 export function getPlanTimeFieldByPlanTabelTimeField(field: TPlanTabelTimePeriods): TPlanTimePeriods {
-  return tabelTimePlanToTimePlanFieldsPair[field];
+  return planTabelTimeToPlanTimeFieldsPair[field];
+}
+
+export function getPlanTabelTimeFieldByPlanNormTimeField(field: TPlanNormTimePeriods): TPlanTabelTimePeriods {
+  return planNormTimeToPlanTabelTimeFieldsPair[field];
 }

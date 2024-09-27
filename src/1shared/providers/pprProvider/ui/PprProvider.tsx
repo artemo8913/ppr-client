@@ -34,6 +34,7 @@ import {
   TWorkBranch,
   getFactNormTimeFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
+  getPlanTabelTimeFieldByPlanNormTimeField,
 } from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -74,7 +75,6 @@ export interface IPprContext {
   increaseWorkPosition: (id: string) => void;
   decreaseWorkPosition: (id: string) => void;
   updateSubbranch: (newSubbranch: string, workIdsSet: Set<string>) => void;
-  getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   addWorkingMan: () => void;
   deleteWorkingMan: (id: string) => void;
   updateWorkingMan: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
@@ -82,6 +82,8 @@ export interface IPprContext {
   updateWorkingManPlanTabelTime: (rowIndex: number, field: TPlanTabelTimePeriods, value: number) => void;
   updateWorkingManFactTime: (rowIndex: number, field: TFactTimePeriods, value: number) => void;
   updateWorkingManParticipation: (rowIndex: number, value: number) => void;
+  getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
+  fillWorkingManPlanTime: (mode: "EVERY" | "NOT_FILLED", value: number) => void;
   getBranchesMeta: () => {
     branchesMeta: IBranchMeta[];
     branchesAndSubbrunchesOrder: {
@@ -116,9 +118,12 @@ const PprContext = createContext<IPprContext>({
   updateWorkingManPlanTabelTime: () => {},
   updateWorkingManFactTime: () => {},
   getPprDataWithRowSpan: () => [],
+  fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
   getBranchesMeta: () => ({ branchesMeta: [], branchesAndSubbrunchesOrder: {}, subbranchesList: [] }),
 });
+
+//TODO: Сделать функцию, которая округляет после математических операций. Использовать везде (чтобы округлялось норм)
 
 export const usePpr = () => useContext(PprContext);
 
@@ -749,6 +754,42 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
+  /**Массово заполнить планируемый настой часов (по норме и по табелю) по всем работникам на каждый месяц */
+  const fillWorkingManPlanTime = useCallback((mode: "EVERY" | "NOT_FILLED", value: number) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        peoples: prev.peoples.map((workingMan) => {
+          const correctedWorkingMan: IWorkingManYearPlan = { ...workingMan };
+
+          correctedWorkingMan.year_plan_norm_time = 0;
+          correctedWorkingMan.year_plan_tabel_time = 0;
+          correctedWorkingMan.year_plan_time = 0;
+
+          PLAN_NORM_TIME_FIELDS.forEach((planNormTimeField) => {
+            const planTabelTimeField = getPlanTabelTimeFieldByPlanNormTimeField(planNormTimeField);
+            const planTimeField = getPlanTimeFieldByPlanTabelTimeField(planTabelTimeField);
+
+            if (mode === "EVERY" || (mode === "NOT_FILLED" && !correctedWorkingMan[planNormTimeField])) {
+              correctedWorkingMan[planNormTimeField] = value;
+              correctedWorkingMan[planTabelTimeField] = value;
+              correctedWorkingMan[planTimeField] = Number((value * correctedWorkingMan.participation).toFixed(2));
+            }
+
+            correctedWorkingMan.year_plan_norm_time += correctedWorkingMan[planNormTimeField];
+            correctedWorkingMan.year_plan_tabel_time += correctedWorkingMan[planTabelTimeField];
+            correctedWorkingMan.year_plan_time += correctedWorkingMan[planTimeField];
+          });
+
+          return correctedWorkingMan;
+        }),
+      };
+    });
+  }, []);
+
   /**Массово заполнить одно подразделение в перечне работ */
   const setOneUnityInAllWorks = useCallback((unity: string) => {
     setPpr((prev) => {
@@ -953,13 +994,14 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         decreaseWorkPosition,
         addWorkingMan,
         updateSubbranch,
-        getPprDataWithRowSpan,
         updateWorkingMan,
         deleteWorkingMan,
         updateWorkingManPlanNormTime,
         updateWorkingManPlanTabelTime,
         updateWorkingManFactTime,
         updateWorkingManParticipation,
+        getPprDataWithRowSpan,
+        fillWorkingManPlanTime,
         getBranchesMeta,
       }}
     >
