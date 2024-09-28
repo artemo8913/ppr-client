@@ -1,6 +1,6 @@
 import { TableCellMemo } from "@/1shared/ui/table";
 import { FC } from "react";
-import { IPprData, IWorkingManYearPlan, TTotalFieldsValues } from "../model/ppr.schema";
+import { IPprData, IWorkingManYearPlan, TTotalFieldsValues } from "../model/ppr.types";
 import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
 import clsx from "clsx";
 

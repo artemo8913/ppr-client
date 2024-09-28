@@ -1,6 +1,7 @@
 "use server";
-import {URL_BASIC, API_LOGIN} from '@/1shared/const/url';
-import { ILoginData } from "./login.schema";
+import { URL_BASIC, API_LOGIN } from "@/1shared/const/url";
+
+import { ILoginData } from "./login.types";
 
 const LOGIN_API_URL = URL_BASIC + API_LOGIN;
 

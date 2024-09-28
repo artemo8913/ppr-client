@@ -8,7 +8,7 @@ import {
   TFactNormTimePeriods,
   TPlanNormTimePeriods,
   TPlanTabelTimePeriods,
-} from "../model/ppr.schema";
+} from "../model/ppr.types";
 
 export const PLAN_WORK_FIELDS: TPlanWorkPeriods[] = [
   "year_plan_work",
