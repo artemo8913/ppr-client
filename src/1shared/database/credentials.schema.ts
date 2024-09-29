@@ -1,6 +1,6 @@
 import { varchar, serial, mysqlTable } from "drizzle-orm/mysql-core";
 
-import { usersTable } from "@/1shared/database/user.schema";
+import { usersTable } from "@/1shared/database/users.schema";
 
 export const credentialsTable = mysqlTable("credentials", {
   id: serial("id").references(() => usersTable.id),
@@ -8,4 +8,4 @@ export const credentialsTable = mysqlTable("credentials", {
   password: varchar("password", { length: 32 }).notNull(),
 });
 
-export type TUserDB = typeof credentialsTable.$inferSelect;
+export type TCredentialsDB = typeof credentialsTable.$inferSelect;
