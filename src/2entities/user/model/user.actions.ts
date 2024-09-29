@@ -1,11 +1,17 @@
 "use server";
-import { API_USER, URL_BASIC } from "@/1shared/const/url";
+import { eq } from "drizzle-orm";
+
+import { db } from "@/1shared/database";
+import { usersTable } from "@/1shared/database/user.schema";
+
 import { IUser } from "..";
 
-const USER_API_URL = URL_BASIC + API_USER;
+export async function getUserData(id: number): Promise<IUser> {
+  const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, id) });
 
-export async function getUserData(id: string) {
-  const query = await fetch(`${USER_API_URL}/${id}`);
-  const responce: Promise<IUser> = query.json();
-  return responce;
+  if (!user) {
+    throw new Error(`User with id: ${id} not exist`);
+  }
+
+  return user;
 }

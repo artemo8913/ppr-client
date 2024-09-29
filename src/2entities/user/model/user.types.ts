@@ -9,8 +9,11 @@ export type TUserRole =
   | "transenergo";
 
 export interface IUser {
-  id: string;
+  id: number;
   role: TUserRole;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
   id_subdivision: number | null;
   id_distance: number | null;
   id_direction: number | null;
