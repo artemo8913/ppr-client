@@ -1,7 +1,7 @@
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-import { getAllLoginsData } from "@/2entities/login";
+import { getCredential } from "@/2entities/login";
 import { getUserData } from "@/2entities/user";
 
 export const authOptions: AuthOptions = {
@@ -14,7 +14,7 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token: { id } }) {
-      const user = await getUserData(String(id));
+      const user = await getUserData(Number(id));
       if (user) {
         return { expires: session.expires, user: { ...user } };
       }
@@ -29,15 +29,21 @@ export const authOptions: AuthOptions = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        const allLogins = await getAllLoginsData();
-        const login = allLogins.find((login) => login.username === credentials?.username);
-        const isPasswordCorrect = login?.password === credentials?.password;
-        if (isPasswordCorrect && login) {
+        if (!credentials) {
+          return null;
+        }
+
+        const response = await getCredential(credentials.username);
+
+        const isPasswordCorrect = response.password === credentials.password;
+
+        if (isPasswordCorrect) {
           return {
-            id: login.id,
-            username: login.username,
+            id: response.id,
+            username: response.username,
           };
         }
+
         return null;
       },
     }),
