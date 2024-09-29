@@ -1,9 +1,9 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2";
 
-import * as users from "./users.schema";
-import * as credentials from "./credentials.schema";
-import * as commonWorks from "./commonWorks.schema";
+import { usersTable } from "./users.schema";
+import { credentialsTable } from "./credentials.schema";
+import { commonWorksTable } from "./commonWorks.schema";
 
 const connection = mysql.createConnection({
   user: process.env.DB_USER,
@@ -11,4 +11,6 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-export const db = drizzle(connection, { mode: "default", schema: { ...users, ...credentials, ...commonWorks } });
+export const db = drizzle(connection, { mode: "default", schema: { usersTable, credentialsTable, commonWorksTable } });
+
+export { usersTable, credentialsTable, commonWorksTable };

@@ -1,8 +1,7 @@
 "use server";
 import { eq } from "drizzle-orm";
 
-import { db } from "@/1shared/database";
-import { commonWorksTable } from "@/1shared/database/commonWorks.schema";
+import { db, commonWorksTable } from "@/1shared/database";
 
 import { ICommonWork } from "..";
 

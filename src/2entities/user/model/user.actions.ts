@@ -1,8 +1,7 @@
 "use server";
 import { eq } from "drizzle-orm";
 
-import { db } from "@/1shared/database";
-import { usersTable } from "@/1shared/database/users.schema";
+import { db, usersTable } from "@/1shared/database";
 
 import { IUser } from "..";
 
