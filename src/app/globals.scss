@@ -1,5 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "../1shared/styles/print.scss";
-@import "../1shared/styles/colors.scss";
+
+@import "@/1shared/styles/print.scss";
+@import "@/1shared/styles/colors.scss";
