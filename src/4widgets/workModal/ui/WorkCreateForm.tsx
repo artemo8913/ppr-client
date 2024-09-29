@@ -10,19 +10,22 @@ import Button from "antd/es/button";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { TWorkBranch } from "@/2entities/ppr";
-import { IWorkExtended } from "@/2entities/work";
+import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
   nearWorkId?: string | null;
 }
 
-type TAddWorkForm = Omit<IWorkExtended, "subbranch"> & { subbranch: string[] };
+interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {
+  branch: TWorkBranch;
+  subbranch: string[];
+}
 
 const SELECT_INITIAL_VALUE: TWorkBranch = "exploitation";
 
 export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, nearWorkId }) => {
-  const [form] = Form.useForm<TAddWorkForm>();
+  const [form] = Form.useForm<ICommonWorkExtended>();
 
   const { addWork, getBranchesMeta } = usePpr();
 
@@ -32,7 +35,7 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
     return { value: subbranch, label: subbranch };
   });
 
-  const handleFinish = (values: TAddWorkForm) => {
+  const handleFinish = (values: ICommonWorkExtended) => {
     addWork({ ...values, subbranch: values.subbranch[0] }, nearWorkId);
 
     form.resetFields();
@@ -47,42 +50,42 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
       initialValues={{ remember: true, branch: SELECT_INITIAL_VALUE }}
       autoComplete="off"
     >
-      <FormItem<TAddWorkForm>
+      <FormItem<ICommonWorkExtended>
         label="Наименование"
         name="name"
         rules={[{ required: true, message: "Введите наименование" }]}
       >
         <TextArea />
       </FormItem>
-      <FormItem<TAddWorkForm>
+      <FormItem<ICommonWorkExtended>
         label="Единица измерения"
         name="measure"
         rules={[{ required: true, message: "Введите единицу измерения" }]}
       >
         <Input />
       </FormItem>
-      <FormItem<TAddWorkForm>
+      <FormItem<ICommonWorkExtended>
         label="Норма времени"
         name="norm_of_time"
         rules={[{ required: true, message: "Введите норму времени" }]}
       >
         <Input type="number" />
       </FormItem>
-      <FormItem<TAddWorkForm>
+      <FormItem<ICommonWorkExtended>
         label="Обоснование нормы времени"
         name="norm_of_time_document"
         rules={[{ required: true, message: "Введите документ, регламинтирующий норму времени" }]}
       >
         <Input />
       </FormItem>
-      <FormItem<TAddWorkForm>
+      <FormItem<ICommonWorkExtended>
         label="Раздел ППР (категория работ)"
         name="branch"
         rules={[{ required: true, message: "Выберите раздел работ" }]}
       >
         <Select<TWorkBranch> defaultValue={SELECT_INITIAL_VALUE} options={BRANCH_SELECT_OPTIONS} />
       </FormItem>
-      <FormItem<TAddWorkForm>
+      <FormItem<ICommonWorkExtended>
         label="Подраздел ППР (подраздел категории работ)"
         name="subbranch"
         rules={[{ required: true, message: "Выберите подраздел работ" }]}

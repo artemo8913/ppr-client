@@ -140,7 +140,7 @@ export interface IPprData
     TFactNormTimePeriodsFields,
     TFactTimePeriodsFields {
   id: string;
-  workId: string | null;
+  common_work_id: number | null;
   is_work_aproved: boolean;
   branch: TWorkBranch;
   subbranch: string;

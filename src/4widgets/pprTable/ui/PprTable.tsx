@@ -105,7 +105,7 @@ export const PprTable: FC<IPprTableProps> = () => {
                   isVertical={checkIsWorkOrTimeField(field)}
                   field={field}
                   planCellRef={planCellRef}
-                  {...getColumnSettingsForField(field, pprData.workId !== null)}
+                  {...getColumnSettingsForField(field, pprData.common_work_id !== null)}
                 />
               ))}
             </tr>

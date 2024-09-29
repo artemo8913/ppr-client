@@ -8,30 +8,20 @@ import Select from "antd/es/select";
 import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { IWork, TLineClassData, getWorkById } from "@/2entities/work";
+import { ICommonWork, getOneCommonWorkById } from "@/2entities/commonWork";
 import { TWorkBranch } from "@/2entities/ppr";
 
 interface IWorkTableProps {
-  data: IWork[];
+  data: ICommonWork[];
   onFinish?: () => void;
   nearWorkId?: string | null;
 }
 
-const columns: TableProps<IWork>["columns"] = [
+const columns: TableProps<ICommonWork>["columns"] = [
   {
     title: "Наименование работы",
     dataIndex: "name",
     key: "name",
-  },
-  {
-    title: "Периодичность",
-    dataIndex: "periodicity_normal_data",
-    key: "periodicity_normal_data",
-    render: (per: TLineClassData) => {
-      return Object.entries(per)
-        .map((entr) => `${entr[0]}: ${entr[1]}`)
-        .join("; ");
-    },
   },
   {
     title: "Ед.измерения",
@@ -53,7 +43,7 @@ const columns: TableProps<IWork>["columns"] = [
 export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkId }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [workId, setWorkId] = useState<string | null>();
+  const [workId, setWorkId] = useState<number | null>();
   const [branch, setBranch] = useState<TWorkBranch>("exploitation");
   const [subbranch, setSubbranch] = useState<string[]>([]);
 
@@ -73,11 +63,11 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
       return;
     }
 
-    const work = await getWorkById(workId);
+    const work = await getOneCommonWorkById(workId);
 
     addWork(
       {
-        workId: work.id,
+        common_work_id: work.id,
         name: work.name,
         branch,
         subbranch: subbranch[0],
@@ -99,7 +89,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
       <TableAntd
         rowSelection={{
           type: "radio",
-          onChange: (selectedKeys: React.Key[], selectedRows: IWork[]) => {
+          onChange: (selectedKeys: React.Key[], selectedRows: ICommonWork[]) => {
             setSelectedRowKeys(selectedKeys);
             setWorkId(selectedRows[0].id);
           },

@@ -183,7 +183,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
             newWork = {
               name: pprData?.name,
-              workId: pprData?.workId,
+              common_work_id: pprData?.common_work_id,
               branch: pprData?.branch,
               subbranch: pprData?.subbranch,
               measure: pprData?.measure,

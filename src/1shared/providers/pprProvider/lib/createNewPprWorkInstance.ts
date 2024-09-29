@@ -3,7 +3,7 @@ import { IPprData } from "@/2entities/ppr";
 export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData => {
   return {
     id: String(new Date().toString() + Math.random()),
-    workId: null,
+    common_work_id: null,
     is_work_aproved: false,
     branch: "additional",
     subbranch: "",
