@@ -4,9 +4,9 @@ import { IPpr } from "@/2entities/ppr";
 export function createNewPprInstance(session: Session | null, values?: Partial<IPpr>): Omit<IPpr, "id"> {
   return {
     data: [],
-    id_direction: session?.user.id_direction || null,
-    id_distance: session?.user.id_distance || null,
-    id_subdivision: session?.user.id_subdivision || null,
+    id_direction: session?.user.idDirection || null,
+    id_distance: session?.user.idDistance || null,
+    id_subdivision: session?.user.idSubdivision || null,
     name: "ППР",
     status: "plan_creating",
     year: new Date().getFullYear(),

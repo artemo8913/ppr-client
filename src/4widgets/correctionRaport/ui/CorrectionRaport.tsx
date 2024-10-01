@@ -28,7 +28,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     return "Не авторизирован пользователь";
   }
 
-  const { id_direction, id_distance, id_subdivision } = userData?.user;
+  const { idDirection, idDistance, idSubdivision } = userData?.user;
 
   if (currentTimePeriod === "year") {
     return "Рапорт доступен только при просмотре ППР за конкретный месяц";
@@ -58,7 +58,8 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       });
     }
 
-    const planWorkValue = plan.handCorrection !== null ? plan.handCorrection : plan.original + plan.outsideCorrectionsSum;
+    const planWorkValue =
+      plan.handCorrection !== null ? plan.handCorrection : plan.original + plan.outsideCorrectionsSum;
     const factWorkValue = pprData[getFactWorkFieldByTimePeriod(currentTimePeriod)];
 
     if (planWorkValue > factWorkValue) {
@@ -97,11 +98,11 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     <div>
       <p className="text-right">
         Начальнику{" "}
-        {Boolean(id_direction && id_distance) && directionsMock[id_direction!].distances[id_distance!].short_name}
+        {Boolean(idDirection && idDistance) && directionsMock[idDirection!].distances[idDistance!].short_name}
         <br />
         XXX
         <br />
-        начальника района контактной сети ЭЧК-{id_subdivision}
+        начальника района контактной сети ЭЧК-{idSubdivision}
         <br />
         ХХХ
       </p>

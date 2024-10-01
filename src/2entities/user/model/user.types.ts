@@ -11,10 +11,10 @@ export type TUserRole =
 export interface IUser {
   id: number;
   role: TUserRole;
-  first_name: string;
-  last_name: string;
-  middle_name: string;
-  id_subdivision: number | null;
-  id_distance: number | null;
-  id_direction: number | null;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  idSubdivision: number | null;
+  idDistance: number | null;
+  idDirection: number | null;
 }

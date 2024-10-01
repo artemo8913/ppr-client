@@ -12,16 +12,16 @@ export default async function Home() {
   }
 
   const credentials: IUser = user?.user;
-  const { id, id_direction, id_distance, id_subdivision, role, first_name, middle_name, last_name } = credentials;
+  const { id, idDirection, idDistance, idSubdivision, role, firstName, middleName, lastName } = credentials;
 
-  const fullName = `${last_name} ${first_name[0]}.${middle_name[0]}.`;
+  const fullName = `${lastName} ${firstName[0]}.${middleName[0]}.`;
 
   return (
     <main>
       <div>id: {id}</div>
-      <div>{id_direction ? directionsMock[id_direction].short_name : null}</div>
-      <div>{id_distance && id_direction ? directionsMock[id_direction].distances[id_distance].short_name : null}</div>
-      <div>ЭЧК-{id_subdivision}</div>
+      <div>{idDirection ? directionsMock[idDirection].short_name : null}</div>
+      <div>{idDistance && idDirection ? directionsMock[idDirection].distances[idDistance].short_name : null}</div>
+      <div>ЭЧК-{idSubdivision}</div>
       <div>Роль: {translateRuUserRole(role)}</div>
       <div>Ф.И.О.: {fullName}</div>
     </main>
