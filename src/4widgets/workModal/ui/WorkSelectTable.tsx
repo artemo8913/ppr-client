@@ -30,13 +30,13 @@ const columns: TableProps<ICommonWork>["columns"] = [
   },
   {
     title: "Норма времени",
-    dataIndex: "norm_of_time",
-    key: "norm_of_time",
+    dataIndex: "normOfTime",
+    key: "normOfTime",
   },
   {
     title: "Обоснование нормы времени",
-    dataIndex: "norm_of_time_document",
-    key: "norm_of_time_document",
+    dataIndex: "normOfTimeNameFull",
+    key: "normOfTimeNameFull",
   },
 ];
 
@@ -72,8 +72,8 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
         branch,
         subbranch: subbranch[0],
         measure: work.measure,
-        norm_of_time: work.norm_of_time,
-        norm_of_time_document: work.norm_of_time_document,
+        norm_of_time: work.normOfTime,
+        norm_of_time_document: work.normOfTimeNameFull,
         unity: userData && getShortNamesForAllDivisions(userData).subdivisionShortName,
       },
       nearWorkId

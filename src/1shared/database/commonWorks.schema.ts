@@ -1,11 +1,13 @@
 import { varchar, serial, mysqlTable, double } from "drizzle-orm/mysql-core";
 
-export const commonWorksTable = mysqlTable("commonWorks", {
+export const commonWorksTable = mysqlTable("common_works", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }).notNull(),
+  name: varchar("name", { length: 512 }).notNull(),
   measure: varchar("measure", { length: 128 }).notNull(),
-  norm_of_time: double("norm_of_time", { precision: 6, scale: 2 }).notNull(),
-  norm_of_time_document: varchar("norm_of_time_document", { length: 256 }).notNull(),
+  normOfTime: double("norm_of_time", { precision: 6, scale: 3 }).notNull(),
+  normOfTimeNameShort: varchar("norm_of_time_name_short", { length: 32 }).notNull(),
+  normOfTimeNameFull: varchar("norm_of_time_name_full", { length: 256 }).notNull(),
+  normOfTimeDocumentName: varchar("norm_of_time_document_name", { length: 256 }).notNull(),
 });
 
 export type TCommonWorksDB = typeof commonWorksTable.$inferSelect;
