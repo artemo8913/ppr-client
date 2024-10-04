@@ -8,7 +8,37 @@ import {
   TFactNormTimePeriods,
   TPlanNormTimePeriods,
   TPlanTabelTimePeriods,
+  TYearPprStatus,
+  TMonthPprStatus,
+  TWorkBranch,
 } from "../model/ppr.types";
+
+export const YEAR_STATUSES: TYearPprStatus[] = [
+  "template",
+  "plan_creating",
+  "plan_on_agreement_engineer",
+  "plan_on_agreement_time_norm",
+  "plan_on_agreement_sub_boss",
+  "plan_on_aprove",
+  "in_process",
+  "done",
+] as const;
+
+export const MONTH_STATUSES: TMonthPprStatus[] = [
+  "none",
+  "plan_creating",
+  "plan_on_agreement_engineer",
+  "plan_on_agreement_time_norm",
+  "plan_on_aprove",
+  "in_process",
+  "fact_filling",
+  "fact_verification_engineer",
+  "fact_verification_time_norm",
+  "fact_on_agreement_sub_boss",
+  "done",
+] as const;
+
+export const BRANCHES: TWorkBranch[] = ["exploitation", "additional", "unforeseen"] as const;
 
 export const PLAN_WORK_FIELDS: TPlanWorkPeriods[] = [
   "year_plan_work",
@@ -132,7 +162,7 @@ export const WORK_AND_TIME_FIELDS = [
 
 export const PPR_DATA_FIELDS: (keyof IPprData)[] = [
   "id",
-  "workId",
+  "common_work_id",
   "is_work_aproved",
   "branch",
   "subbranch",
