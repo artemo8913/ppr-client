@@ -8,8 +8,9 @@ export const usersTable = mysqlTable("users", {
   firstName: varchar("first_name", { length: 32 }).notNull(),
   lastName: varchar("last_name", { length: 32 }).notNull(),
   middleName: varchar("middle_name", { length: 32 }).notNull(),
-  //@ts-ignore
-  role: mysqlEnum("role", USER_ROLES).$type<TUserRole>().notNull(),
+  role: mysqlEnum("role", USER_ROLES as [string])
+    .$type<TUserRole>()
+    .notNull(),
   idSubdivision: smallint("id_subdivision"),
   idDistance: smallint("id_distance"),
   idDirection: smallint("id_direction"),
