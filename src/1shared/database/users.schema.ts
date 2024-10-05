@@ -1,19 +1,20 @@
-import { varchar, serial, smallint, mysqlTable, mysqlEnum } from "drizzle-orm/mysql-core";
+import { varchar, mysqlTable, mysqlEnum, int } from "drizzle-orm/mysql-core";
 
 import { TUserRole } from "@/2entities/user/model/user.types";
 import { USER_ROLES } from "@/2entities/user/lib/const";
+import { directionsTable, distancesTable, subdivisionsTable } from "./divisions.schema";
 
 export const usersTable = mysqlTable("users", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   firstName: varchar("first_name", { length: 32 }).notNull(),
   lastName: varchar("last_name", { length: 32 }).notNull(),
   middleName: varchar("middle_name", { length: 32 }).notNull(),
   role: mysqlEnum("role", USER_ROLES as [string])
     .$type<TUserRole>()
     .notNull(),
-  idSubdivision: smallint("id_subdivision"),
-  idDistance: smallint("id_distance"),
-  idDirection: smallint("id_direction"),
+  idSubdivision: int("id_subdivision").references(() => subdivisionsTable.id),
+  idDistance: int("id_distance").references(() => distancesTable.id),
+  idDirection: int("id_direction").references(() => directionsTable.id),
 });
 
 export type TUserDB = typeof usersTable.$inferSelect;

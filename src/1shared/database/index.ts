@@ -10,7 +10,11 @@ import {
   pprWorkingMansTable,
   pprsInfoTable,
   pprsWorkDataTable,
-} from "./maintenancePlan.schema";
+  TPprDataDB,
+  TPprInfoDB,
+  TPprMonthsStatusDB,
+  TPprWorkingManDB,
+} from "./ppr.schema";
 
 const connection = mysql.createConnection({
   user: process.env.DB_USER,
@@ -46,3 +50,5 @@ export {
   pprsInfoTable,
   pprsWorkDataTable,
 };
+
+export type { TPprDataDB, TPprInfoDB, TPprMonthsStatusDB, TPprWorkingManDB };

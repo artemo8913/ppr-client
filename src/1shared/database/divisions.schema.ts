@@ -1,14 +1,14 @@
-import { bigint, mysqlTable, serial, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 
 export const directionsTable = mysqlTable("directions", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 128 }).notNull(),
   shortName: varchar("short_name", { length: 16 }).notNull(),
 });
 
 export const distancesTable = mysqlTable("distances", {
-  id: serial("id").primaryKey(),
-  idDirection: bigint("id_direction", { mode: "bigint", unsigned: true })
+  id: int("id").autoincrement().primaryKey(),
+  idDirection: int("id_direction")
     .references(() => directionsTable.id)
     .notNull(),
   name: varchar("name", { length: 128 }).notNull(),
@@ -16,8 +16,8 @@ export const distancesTable = mysqlTable("distances", {
 });
 
 export const subdivisionsTable = mysqlTable("subdivisions", {
-  id: serial("id").primaryKey(),
-  idDistance: bigint("id_distance", { mode: "bigint", unsigned: true })
+  id: int("id").autoincrement().primaryKey(),
+  idDistance: int("id_distance")
     .references(() => distancesTable.id)
     .notNull(),
   name: varchar("name", { length: 128 }).notNull(),

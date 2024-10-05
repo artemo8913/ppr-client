@@ -1,6 +1,6 @@
 import {
   varchar,
-  serial,
+  int,
   smallint,
   mysqlTable,
   mysqlEnum,
@@ -9,11 +9,16 @@ import {
   boolean,
   tinyint,
   json,
-  bigint,
 } from "drizzle-orm/mysql-core";
 
 import { BRANCHES, MONTH_STATUSES, YEAR_STATUSES } from "@/2entities/ppr/lib/constFields";
-import { IPlanWorkValues, TMonthPprStatus, TWorkBranch, TYearPprStatus } from "@/2entities/ppr/model/ppr.types";
+import {
+  IPlanWorkValues,
+  TMonthPprStatus,
+  TPlanTimeValues,
+  TWorkBranch,
+  TYearPprStatus,
+} from "@/2entities/ppr/model/ppr.types";
 
 import { usersTable } from "./users.schema";
 import { directionsTable, distancesTable, subdivisionsTable } from "./divisions.schema";
@@ -22,39 +27,47 @@ import { commonWorksTable } from "./commonWorks.schema";
 function createMysqlPprMonthStatusType(fieldName: string) {
   return mysqlEnum(fieldName, MONTH_STATUSES as [string])
     .$type<TMonthPprStatus>()
+    .notNull()
     .default("none");
 }
 
 function createMysqlDoubleField(fieldName: string) {
-  return double(fieldName, { precision: 6, scale: 3 }).default(0);
+  return double(fieldName, { precision: 6, scale: 3 }).notNull().default(0);
 }
 
 function createMysqlBigDoubleField(fieldName: string) {
-  return double(fieldName, { precision: 12, scale: 3 }).default(0);
+  return double(fieldName, { precision: 12, scale: 3 }).notNull().default(0);
 }
 
-function createMysqlJsonPlanField(fieldName: string) {
+function createMysqlJsonPlanWorkField(fieldName: string) {
   return json(fieldName).$type<IPlanWorkValues>().notNull();
 }
 
+function createMysqlJsonPlanTimeField(fieldName: string) {
+  return json(fieldName).$type<TPlanTimeValues>().notNull();
+}
+
 export const pprsInfoTable = mysqlTable("pprs_info", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 128 }).notNull(),
   year: smallint("year").notNull(),
   status: mysqlEnum("status", YEAR_STATUSES as [string])
     .$type<TYearPprStatus>()
     .notNull(),
-  createdAt: date("created_at").notNull(),
-  idUserCreatedBy: bigint("id_user_created_by", { mode: "bigint", unsigned: true }).references(() => usersTable.id),
-  idDirection: bigint("id_direction", { mode: "bigint", unsigned: true }).references(() => directionsTable.id),
-  idDistance: bigint("id_distance", { mode: "bigint", unsigned: true }).references(() => distancesTable.id),
-  idSubdivision: bigint("id_subdivision", { mode: "bigint", unsigned: true }).references(() => subdivisionsTable.id),
+  created_at: date("created_at").notNull(),
+  idUserCreatedBy: int("id_user_created_by")
+    .references(() => usersTable.id)
+    .notNull(),
+  id_direction: int("id_direction").references(() => directionsTable.id),
+  id_distance: int("id_distance").references(() => distancesTable.id),
+  id_subdivision: int("id_subdivision").references(() => subdivisionsTable.id),
 });
 
 export const pprMonthsStatusesTable = mysqlTable("ppr_months_statuses", {
-  idPpr: bigint("id_ppr", { mode: "bigint", unsigned: true })
+  idPpr: int("id_ppr")
     .references(() => pprsInfoTable.id)
-    .unique(),
+    .unique()
+    .notNull(),
   jan: createMysqlPprMonthStatusType("jan"),
   feb: createMysqlPprMonthStatusType("feb"),
   mar: createMysqlPprMonthStatusType("mar"),
@@ -70,12 +83,13 @@ export const pprMonthsStatusesTable = mysqlTable("ppr_months_statuses", {
 });
 
 export const pprWorkingMansTable = mysqlTable("ppr_working_mans", {
-  idPpr: bigint("id_ppr", { mode: "bigint", unsigned: true })
+  idPpr: int("id_ppr")
     .references(() => pprsInfoTable.id)
-    .unique(),
-  full_name: varchar("full_name", { length: 128 }),
-  work_position: varchar("work_position", { length: 256 }),
-  participation: createMysqlDoubleField("participation"),
+    .notNull(),
+  id: int("id").autoincrement().primaryKey(),
+  full_name: varchar("full_name", { length: 128 }).notNull().default(""),
+  work_position: varchar("work_position", { length: 256 }).notNull().default(""),
+  participation: createMysqlDoubleField("participation").notNull().default(1),
   // Запланированное оплачиваемое время работника
   year_plan_time: createMysqlDoubleField("year_plan_time"),
   jan_plan_time: createMysqlDoubleField("jan_plan_time"),
@@ -135,55 +149,57 @@ export const pprWorkingMansTable = mysqlTable("ppr_working_mans", {
 });
 
 export const pprsWorkDataTable = mysqlTable("pprs_data", {
-  idPpr: bigint("id_ppr", { mode: "bigint", unsigned: true }).references(() => pprsInfoTable.id),
+  idPpr: int("id_ppr")
+    .references(() => pprsInfoTable.id)
+    .notNull(),
   order: smallint("order"),
-  id: serial("id").primaryKey(),
-  idCommonWork: bigint("id_common_work", { mode: "bigint", unsigned: true }).references(() => commonWorksTable.id),
-  isWorkAproved: boolean("is_work_aproved").notNull(),
+  id: int("id").autoincrement().primaryKey(),
+  common_work_id: int("id_common_work").references(() => commonWorksTable.id),
+  is_work_aproved: boolean("is_work_aproved").notNull(),
   branch: mysqlEnum("branch", BRANCHES as [string])
     .$type<TWorkBranch>()
     .notNull(),
-  subbranch: varchar("subbranch", { length: 128 }),
-  name: varchar("name", { length: 256 }),
-  location: varchar("location", { length: 128 }),
-  lineClass: tinyint("line_class"),
+  subbranch: varchar("subbranch", { length: 128 }).notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  location: varchar("location", { length: 128 }).notNull(),
+  line_class: tinyint("line_class").notNull(),
   measure: varchar("measure", { length: 128 }).notNull(),
-  totalCount: double("total_count", { precision: 10, scale: 3 }),
-  entryYear: smallint("entry_year"),
-  periodicityNormal: varchar("periodicity_normal", { length: 10 }),
-  periodicityFact: varchar("periodicity_fact", { length: 10 }),
-  lastMaintenanceYear: smallint("last_maintenance_year"),
-  normOfTime: double("norm_of_time", { precision: 6, scale: 3 }).notNull(),
-  normOfTimeNameFull: varchar("norm_of_time_name_full", { length: 256 }).notNull(),
-  unity: varchar("periodicity_fact", { length: 16 }),
+  total_count: double("total_count", { precision: 10, scale: 3 }).notNull(),
+  entry_year: smallint("entry_year").notNull(),
+  periodicity_normal: varchar("periodicity_normal", { length: 10 }).notNull(),
+  periodicity_fact: varchar("periodicity_fact", { length: 10 }).notNull(),
+  last_maintenance_year: smallint("last_maintenance_year").notNull(),
+  norm_of_time: double("norm_of_time", { precision: 6, scale: 3 }).notNull(),
+  norm_of_time_document: varchar("norm_of_time_name_full", { length: 256 }).notNull(),
+  unity: varchar("periodicity_fact", { length: 16 }).notNull(),
   // Запланированные объемы работ
-  year_plan_work: createMysqlJsonPlanField("year_plan_work"),
-  jan_plan_work: createMysqlJsonPlanField("jan_plan_work"),
-  feb_plan_work: createMysqlJsonPlanField("feb_plan_work"),
-  mar_plan_work: createMysqlJsonPlanField("mar_plan_work"),
-  apr_plan_work: createMysqlJsonPlanField("apr_plan_work"),
-  may_plan_work: createMysqlJsonPlanField("may_plan_work"),
-  june_plan_work: createMysqlJsonPlanField("june_plan_work"),
-  july_plan_work: createMysqlJsonPlanField("july_plan_work"),
-  aug_plan_work: createMysqlJsonPlanField("aug_plan_work"),
-  sept_plan_work: createMysqlJsonPlanField("sept_plan_work"),
-  oct_plan_work: createMysqlJsonPlanField("oct_plan_work"),
-  nov_plan_work: createMysqlJsonPlanField("nov_plan_work"),
-  dec_plan_work: createMysqlJsonPlanField("dec_plan_work"),
+  year_plan_work: createMysqlJsonPlanWorkField("year_plan_work"),
+  jan_plan_work: createMysqlJsonPlanWorkField("jan_plan_work"),
+  feb_plan_work: createMysqlJsonPlanWorkField("feb_plan_work"),
+  mar_plan_work: createMysqlJsonPlanWorkField("mar_plan_work"),
+  apr_plan_work: createMysqlJsonPlanWorkField("apr_plan_work"),
+  may_plan_work: createMysqlJsonPlanWorkField("may_plan_work"),
+  june_plan_work: createMysqlJsonPlanWorkField("june_plan_work"),
+  july_plan_work: createMysqlJsonPlanWorkField("july_plan_work"),
+  aug_plan_work: createMysqlJsonPlanWorkField("aug_plan_work"),
+  sept_plan_work: createMysqlJsonPlanWorkField("sept_plan_work"),
+  oct_plan_work: createMysqlJsonPlanWorkField("oct_plan_work"),
+  nov_plan_work: createMysqlJsonPlanWorkField("nov_plan_work"),
+  dec_plan_work: createMysqlJsonPlanWorkField("dec_plan_work"),
   // Запланированные трудозатраты
-  year_plan_time: createMysqlBigDoubleField("year_plan_time"),
-  jan_plan_time: createMysqlBigDoubleField("jan_plan_time"),
-  feb_plan_time: createMysqlBigDoubleField("feb_plan_time"),
-  mar_plan_time: createMysqlBigDoubleField("mar_plan_time"),
-  apr_plan_time: createMysqlBigDoubleField("apr_plan_time"),
-  may_plan_time: createMysqlBigDoubleField("may_plan_time"),
-  june_plan_time: createMysqlBigDoubleField("june_plan_time"),
-  july_plan_time: createMysqlBigDoubleField("july_plan_time"),
-  aug_plan_time: createMysqlBigDoubleField("aug_plan_time"),
-  sept_plan_time: createMysqlBigDoubleField("sept_plan_time"),
-  oct_plan_time: createMysqlBigDoubleField("oct_plan_time"),
-  nov_plan_time: createMysqlBigDoubleField("nov_plan_time"),
-  dec_plan_time: createMysqlBigDoubleField("dec_plan_time"),
+  year_plan_time: createMysqlJsonPlanTimeField("year_plan_time"),
+  jan_plan_time: createMysqlJsonPlanTimeField("jan_plan_time"),
+  feb_plan_time: createMysqlJsonPlanTimeField("feb_plan_time"),
+  mar_plan_time: createMysqlJsonPlanTimeField("mar_plan_time"),
+  apr_plan_time: createMysqlJsonPlanTimeField("apr_plan_time"),
+  may_plan_time: createMysqlJsonPlanTimeField("may_plan_time"),
+  june_plan_time: createMysqlJsonPlanTimeField("june_plan_time"),
+  july_plan_time: createMysqlJsonPlanTimeField("july_plan_time"),
+  aug_plan_time: createMysqlJsonPlanTimeField("aug_plan_time"),
+  sept_plan_time: createMysqlJsonPlanTimeField("sept_plan_time"),
+  oct_plan_time: createMysqlJsonPlanTimeField("oct_plan_time"),
+  nov_plan_time: createMysqlJsonPlanTimeField("nov_plan_time"),
+  dec_plan_time: createMysqlJsonPlanTimeField("dec_plan_time"),
   // Фактические объемы работ
   year_fact_work: createMysqlDoubleField("year_fact_work"),
   jan_fact_work: createMysqlDoubleField("jan_fact_work"),
