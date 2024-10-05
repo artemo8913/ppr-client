@@ -1,7 +1,7 @@
-import { varchar, serial, mysqlTable, double } from "drizzle-orm/mysql-core";
+import { varchar, mysqlTable, double, int } from "drizzle-orm/mysql-core";
 
 export const commonWorksTable = mysqlTable("common_works", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 512 }).notNull(),
   measure: varchar("measure", { length: 128 }).notNull(),
   normOfTime: double("norm_of_time", { precision: 6, scale: 3 }).notNull(),
