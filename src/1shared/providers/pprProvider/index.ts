@@ -10,3 +10,4 @@ export {
   findFirstUndonePprPeriod,
 } from "./lib/pprStatusHelper";
 export { checkIsPprInUserControl } from "./lib/isPprInUserControl";
+export { calculatePprTotalValues } from "./lib/calculatePprTotalValues";
