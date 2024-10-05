@@ -11,30 +11,29 @@ interface IDistancesInfo extends IDivisionBasicInfo {
 interface IDivisionInfo extends IDivisionBasicInfo {
   distances: Record<number, IDistancesInfo>;
 }
-
+// TODO: избавиться от mock
 export function getShortNamesForAllDivisions({
-  id_direction,
-  id_distance,
-  id_subdivision,
+  idDirection,
+  idDistance,
+  idSubdivision,
 }: {
-  id_direction?: number | null;
-  id_distance?: number | null;
-  id_subdivision?: number | null;
+  idDirection?: number | null;
+  idDistance?: number | null;
+  idSubdivision?: number | null;
 }): { directionShortName?: string; distanceShortName?: string; subdivisionShortName?: string } {
-  if (id_direction && id_distance && id_subdivision) {
+  if (idDirection && idDistance && idSubdivision) {
     return {
-      directionShortName: directionsMock[id_direction].short_name,
-      distanceShortName: directionsMock[id_direction].distances[id_distance].short_name,
-      subdivisionShortName:
-        directionsMock[id_direction].distances[id_distance].subdivisions[id_subdivision].short_name,
+      directionShortName: directionsMock[idDirection].short_name,
+      distanceShortName: directionsMock[idDirection].distances[idDistance].short_name,
+      subdivisionShortName: directionsMock[idDirection].distances[idDistance].subdivisions[idSubdivision].short_name,
     };
-  } else if (id_direction && id_distance) {
+  } else if (idDirection && idDistance) {
     return {
-      directionShortName: directionsMock[id_direction].short_name,
-      distanceShortName: directionsMock[id_direction].distances[id_distance].short_name,
+      directionShortName: directionsMock[idDirection].short_name,
+      distanceShortName: directionsMock[idDirection].distances[idDistance].short_name,
     };
-  } else if (id_direction) {
-    return { directionShortName: directionsMock[id_direction].short_name };
+  } else if (idDirection) {
+    return { directionShortName: directionsMock[idDirection].short_name };
   }
   return {};
 }
