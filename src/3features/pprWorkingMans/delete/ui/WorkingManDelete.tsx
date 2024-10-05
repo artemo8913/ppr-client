@@ -3,10 +3,11 @@ import { FC } from "react";
 import { DeleteTwoTone } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
+
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IWorkingManDeleteProps {
-  id: string;
+  id: number;
 }
 
 export const WorkingManDelete: FC<IWorkingManDeleteProps> = ({ id }) => {

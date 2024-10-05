@@ -15,7 +15,7 @@ export const PprTableSetOneUnityButton = () => {
 
   const handleClick = () => {
     subdivisionShortName && setOneUnityInAllWorks(subdivisionShortName);
-  }
+  };
 
   return (
     <Tooltip title="Массово заполнить подразделение">
