@@ -26,7 +26,7 @@ export async function getPprTable(id: number): Promise<IPpr> {
       db.select().from(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
       db.select().from(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
       db.select().from(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
-      db.select().from(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
+      db.select().from(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)).orderBy(pprsWorkDataTable.order),
     ]).catch((e) => {
       throw new Error(e);
     });
@@ -110,11 +110,11 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
     if (params.data) {
       await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
       await db.insert(pprsWorkDataTable).values(
-        params.data.map((pprData) => {
+        params.data.map((pprData, index) => {
           if (typeof pprData.id === "string") {
-            return { ...pprData, id: undefined, idPpr: id };
+            return { ...pprData, id: undefined, idPpr: id, order: index };
           }
-          return { ...pprData, id: pprData.id, idPpr: id };
+          return { ...pprData, id: pprData.id, idPpr: id, order: index };
         })
       );
     }
