@@ -36,7 +36,17 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
   });
 
   const handleFinish = (values: ICommonWorkExtended) => {
-    addWork({ ...values, subbranch: values.subbranch[0] }, nearWorkId);
+    addWork(
+      {
+        name: values.name,
+        measure: values.measure,
+        norm_of_time: values.normOfTime,
+        norm_of_time_document: values.normOfTimeNameFull,
+        branch: values.branch,
+        subbranch: values.subbranch[0],
+      },
+      nearWorkId
+    );
 
     form.resetFields();
     onFinish && onFinish();
