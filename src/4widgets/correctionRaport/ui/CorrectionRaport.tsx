@@ -1,17 +1,18 @@
 "use client";
 import React, { FC } from "react";
 import { useSession } from "next-auth/react";
+
 import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { TPlanWorkPeriodsFields, IPlanWorkValues, getFactWorkFieldByTimePeriod } from "@/2entities/ppr";
+
 import { DoneWorksCorrectionItem } from "./DoneWorksCorrectionItem";
 import { PlanCorrectionItem } from "./PlanCorrectionItem";
 
 export interface TCorrectionItem {
+  objectId: string | number;
   rowIndex: number;
-  objectId: string;
   firstCompareValue: number;
   secondCompareValue: number;
   plan: IPlanWorkValues | null;
@@ -22,13 +23,11 @@ interface ICorrectionRaportProps {}
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   const { ppr } = usePpr();
   const { currentTimePeriod } = usePprTableSettings();
-  const { data: userData } = useSession();
+  const { data: credential } = useSession();
 
-  if (!userData?.user) {
+  if (!credential?.user) {
     return "Не авторизирован пользователь";
   }
-
-  const { idDirection, idDistance, idSubdivision } = userData?.user;
 
   if (currentTimePeriod === "year") {
     return "Рапорт доступен только при просмотре ППР за конкретный месяц";
@@ -81,7 +80,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     }
   });
 
-  const isPprUnderControl = checkIsPprInUserControl(ppr?.created_by, userData?.user).isForSubdivision;
+  const isPprUnderControl = checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision;
   const isEditablePlanCorrections = monthStatus === "plan_creating" && isPprUnderControl;
   const isEditableDoneWorkCorrections = monthStatus === "fact_filling" && isPprUnderControl;
   const isShowPlanCorrections = planCorrections.length > 0;
@@ -97,12 +96,11 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   return (
     <div>
       <p className="text-right">
-        Начальнику{" "}
-        {Boolean(idDirection && idDistance) && directionsMock[idDirection!].distances[idDistance!].short_name}
+        Начальнику {ppr?.distanceShortName}
         <br />
         XXX
         <br />
-        начальника района контактной сети ЭЧК-{idSubdivision}
+        начальника {ppr?.subdivisionShortName}
         <br />
         ХХХ
       </p>

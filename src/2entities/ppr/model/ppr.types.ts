@@ -101,11 +101,11 @@ export type TTotalFieldsValues = {
 };
 
 export interface IPpr {
-  id: string;
+  id: number;
   name: string;
   year: number;
   status: TYearPprStatus;
-  created_at: string;
+  created_at: Date;
   created_by: IUser;
   months_statuses: TAllMonthStatuses;
   id_direction: number | null;
@@ -114,7 +114,12 @@ export interface IPpr {
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
   total_fields_value: TTotalFieldsValues;
+  directionShortName?: string;
+  distanceShortName?: string;
+  subdivisionShortName?: string;
 }
+
+export type TPprShortInfo = Omit<IPpr, "data" | "peoples" | "total_fields_value">;
 
 export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;
@@ -125,7 +130,7 @@ export interface IWorkingManYearPlan
     TPlanTabelTimePeriodsFields,
     TPlanTimePeriodsFields,
     TFactTimePeriodsFields {
-  id: string;
+  id: number | string;
   full_name: string;
   work_position: string;
   participation: number;
@@ -139,7 +144,7 @@ export interface IPprData
     TFactWorkPeriodsFields,
     TFactNormTimePeriodsFields,
     TFactTimePeriodsFields {
-  id: string;
+  id: number | string;
   common_work_id: number | null;
   is_work_aproved: boolean;
   branch: TWorkBranch;
@@ -150,8 +155,8 @@ export interface IPprData
   measure: string;
   total_count: number;
   entry_year: number;
-  periodicity_normal: number;
-  periodicity_fact: number;
+  periodicity_normal: string;
+  periodicity_fact: string;
   last_maintenance_year: number;
   norm_of_time: number;
   norm_of_time_document: string;

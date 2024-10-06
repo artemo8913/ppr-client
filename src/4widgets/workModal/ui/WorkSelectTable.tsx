@@ -5,7 +5,6 @@ import { Table as TableAntd, TableProps } from "antd";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
 
-import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { ICommonWork, getOneCommonWorkById } from "@/2entities/commonWork";
@@ -14,7 +13,7 @@ import { TWorkBranch } from "@/2entities/ppr";
 interface IWorkTableProps {
   data: ICommonWork[];
   onFinish?: () => void;
-  nearWorkId?: string | null;
+  nearWorkId?: string | number | null;
 }
 
 const columns: TableProps<ICommonWork>["columns"] = [
@@ -54,8 +53,8 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
     return { value: subbranch, label: subbranch };
   });
 
-  const { data: sessionData } = useSession();
-  const userData = sessionData?.user;
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const handleFinish = async () => {
     setIsLoading(true);
@@ -74,7 +73,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
         measure: work.measure,
         norm_of_time: work.normOfTime,
         norm_of_time_document: work.normOfTimeNameFull,
-        unity: userData && getShortNamesForAllDivisions(userData).subdivisionShortName,
+        unity: user?.subdivisionShortName,
       },
       nearWorkId
     );

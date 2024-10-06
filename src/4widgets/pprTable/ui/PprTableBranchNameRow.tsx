@@ -8,7 +8,7 @@ import { useCreateColumns } from "./PprTableColumns";
 
 interface IPprTableBranchNameRow {
   branch: IBranchDefaultMeta;
-  updateSubbranch: (newBranchName: string, workIdsSet: Set<string>) => void;
+  updateSubbranch: (newBranchName: string, workIdsSet: Set<string | number>) => void;
 }
 
 export const PprTableBranchNameRow: FC<IPprTableBranchNameRow> = (props) => {

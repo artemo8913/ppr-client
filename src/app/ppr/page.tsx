@@ -4,6 +4,7 @@ import { CreatePprModal } from "@/4widgets/createPprModal";
 
 export default async function PprPage() {
   const data = await getManyPprsShortInfo();
+
   return (
     <div>
       <CreatePprModal />

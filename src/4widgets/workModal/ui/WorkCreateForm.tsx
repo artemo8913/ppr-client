@@ -14,7 +14,7 @@ import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
-  nearWorkId?: string | null;
+  nearWorkId?: string | number | null;
 }
 
 interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {
@@ -66,14 +66,14 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
       </FormItem>
       <FormItem<ICommonWorkExtended>
         label="Норма времени"
-        name="norm_of_time"
+        name="normOfTime"
         rules={[{ required: true, message: "Введите норму времени" }]}
       >
         <Input type="number" />
       </FormItem>
       <FormItem<ICommonWorkExtended>
         label="Обоснование нормы времени"
-        name="norm_of_time_document"
+        name="normOfTimeNameFull"
         rules={[{ required: true, message: "Введите документ, регламинтирующий норму времени" }]}
       >
         <Input />

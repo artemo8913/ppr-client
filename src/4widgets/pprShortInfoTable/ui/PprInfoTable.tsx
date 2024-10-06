@@ -2,19 +2,20 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
-import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
+
 import { MONTHS } from "@/1shared/lib/date";
-import { IPpr } from "@/2entities/ppr";
-import { PprDeleteButton } from "@/3features/ppr/delete";
-import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 import { translateRuYearStatus } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
+import { TPprShortInfo } from "@/2entities/ppr";
+import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprCopyButton } from "@/3features/ppr/copy";
 
+import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
+
 interface IPprInfoProps {
-  data: Omit<IPpr, "data">[];
+  data: TPprShortInfo[];
 }
 
-const columns: TableProps<Omit<IPpr, "data">>["columns"] = [
+const columns: TableProps<TPprShortInfo>["columns"] = [
   {
     title: "Наименование",
     dataIndex: "name",
@@ -30,19 +31,19 @@ const columns: TableProps<Omit<IPpr, "data">>["columns"] = [
     title: "Подразделение",
     dataIndex: "id_subdivision",
     key: "id_subdivision",
-    render: (_, data) => getShortNamesForAllDivisions(data).subdivisionShortName || "-",
+    render: (_, data) => data.subdivisionShortName || "-",
   },
   {
     title: "Дистанция",
     dataIndex: "id_distance",
     key: "id_distance",
-    render: (_, data) => getShortNamesForAllDivisions(data).distanceShortName || "-",
+    render: (_, data) => data.distanceShortName || "-",
   },
   {
     title: "Дирекция",
     dataIndex: "id_direction",
     key: "id_direction",
-    render: (_, data) => getShortNamesForAllDivisions(data).directionShortName || "-",
+    render: (_, data) => data.directionShortName || "-",
   },
   {
     title: "Статус",

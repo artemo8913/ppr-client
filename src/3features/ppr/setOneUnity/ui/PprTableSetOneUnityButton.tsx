@@ -5,13 +5,12 @@ import Button from "antd/es/button";
 import { FormOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
 
 export const PprTableSetOneUnityButton = () => {
   const { setOneUnityInAllWorks } = usePpr();
-  const { data: sessionData } = useSession();
+  const { data: session } = useSession();
 
-  const subdivisionShortName = getShortNamesForAllDivisions(sessionData?.user || {}).subdivisionShortName;
+  const subdivisionShortName = session?.user.subdivisionShortName;
 
   const handleClick = () => {
     subdivisionShortName && setOneUnityInAllWorks(subdivisionShortName);

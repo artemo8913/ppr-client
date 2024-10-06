@@ -34,7 +34,7 @@ interface IPprTableCellProps extends ITableCellProps {
   pprData: IPprData;
   field: keyof IPprData;
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
-  updatePprTableCell: (id: string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
+  updatePprTableCell: (id: string | number, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
