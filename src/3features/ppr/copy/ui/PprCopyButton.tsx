@@ -5,7 +5,7 @@ import Tooltip from "antd/es/tooltip";
 import { CopyTwoTone } from "@ant-design/icons";
 
 interface IPprCopyButtonProps {
-  pprId: string;
+  pprId: number;
 }
 
 export const PprCopyButton: FC<IPprCopyButtonProps> = (props) => {

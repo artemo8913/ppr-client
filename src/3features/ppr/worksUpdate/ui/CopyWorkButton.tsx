@@ -6,7 +6,7 @@ import { CopyOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface ICopyWorkButtonProps {
-  id?: string;
+  id?: number | string;
 }
 
 const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ id }) => {

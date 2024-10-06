@@ -1,1 +1,1 @@
-export { getAllLoginsData } from "./model/login.actions";
+export { getCredential } from "./model/credentials.actions";

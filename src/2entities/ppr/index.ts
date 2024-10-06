@@ -1,5 +1,6 @@
 export type {
   IPpr,
+  TPprShortInfo,
   IPprData,
   TTotalFieldsValues,
   IPprDataWithRowSpan,
@@ -28,7 +29,7 @@ export type {
   TWorkingManFieldsTotalValues,
   TPlanTimeValues,
   TWorkBranch,
-} from "./model/ppr.schema";
+} from "./model/ppr.types";
 
 export {
   PPR_DATA_FIELDS,
@@ -40,6 +41,9 @@ export {
   PLAN_NORM_TIME_FIELDS,
   PLAN_TIME_FIELDS,
   WORK_AND_TIME_FIELDS,
+  YEAR_STATUSES,
+  MONTH_STATUSES,
+  BRANCHES,
   getPlanTimeFieldByPlanWorkField,
   getPlanWorkFieldByPlanTimeField,
   getFactTimeFieldByFactWorkField,
@@ -66,6 +70,6 @@ export {
   checkIsPlanTabelTimeField,
 } from "./lib/validateTypes";
 
-export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
+export { getPprTable, createPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";

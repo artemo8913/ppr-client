@@ -1,4 +1,4 @@
-import { TUserRole } from "../model/user.schema";
+import { TUserRole } from "../model/user.types";
 
 const USER_ROLE_RU: { [key in TUserRole]: string } = {
   subdivision: "Начальник подразделения",

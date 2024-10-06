@@ -9,7 +9,7 @@ import { TWorkBranch } from "@/2entities/ppr";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 
 interface IChangeBranchButtonProps {
-  workId?: string;
+  workId?: number | string;
   branch?: TWorkBranch;
 }
 

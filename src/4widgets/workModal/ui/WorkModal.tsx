@@ -2,13 +2,15 @@
 import { FC } from "react";
 import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
-import { IWork } from "@/2entities/work";
+
+import { useWorkModal } from "@/1shared/providers/workModalProvider";
+import { ICommonWork } from "@/2entities/commonWork";
+
 import { WorkCreateForm } from "./WorkCreateForm";
 import { WorkSelectTable } from "./WorkSelectTable";
-import { useWorkModal } from "@/1shared/providers/workModalProvider";
 
 interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
-  data: IWork[];
+  data: ICommonWork[];
 }
 
 export const WorkModal: FC<IWorkModalProps> = ({ data }) => {

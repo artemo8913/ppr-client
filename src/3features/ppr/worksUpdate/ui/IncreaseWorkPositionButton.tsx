@@ -6,7 +6,7 @@ import { ArrowDownOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IIncreaseWorkPositionButtonProps {
-  id?: string;
+  id?: string | number;
 }
 
 const IncreaseWorkPositionButton: FC<IIncreaseWorkPositionButtonProps> = ({ id }) => {

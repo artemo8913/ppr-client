@@ -6,7 +6,7 @@ import { MinusOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IDeleteWorkButtonProps {
-  id?: string;
+  id?: string | number;
 }
 
 const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ id }) => {

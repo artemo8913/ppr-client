@@ -4,12 +4,10 @@ import Input from "antd/es/input";
 import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import Button from "antd/es/button";
-import { useSession } from "next-auth/react";
 import DatePicker from "antd/es/date-picker";
 import { Dayjs } from "dayjs";
 
-import { IPpr, addPprTable } from "@/2entities/ppr";
-import { createNewPprInstance } from "../lib/createNewPprInstance";
+import { IPpr, createPprTable } from "@/2entities/ppr";
 
 interface ICreatePprFormProps {
   onFinish?: () => void;
@@ -19,13 +17,9 @@ type TNewPprForm = { name: string; year: Dayjs };
 
 export const CreatePprForm: FC<ICreatePprFormProps> = ({ onFinish }) => {
   const [form] = Form.useForm<TNewPprForm>();
-  const session = useSession();
 
   const handleFinish = async (values: TNewPprForm) => {
-    if (!session.data?.user) {
-      throw new Error("не авторизован");
-    }
-    await addPprTable(createNewPprInstance(session.data, { name: values.name, year: values.year.year() }));
+    await createPprTable(values.name, values.year.year());
     form.resetFields();
     onFinish && onFinish();
   };

@@ -12,7 +12,7 @@ import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
 import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 
 interface ITableCellWithWorkControlProps extends ITableCellProps {
-  id?: string;
+  id?: string | number;
   branch?: TWorkBranch;
 }
 
