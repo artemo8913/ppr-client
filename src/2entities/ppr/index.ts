@@ -1,5 +1,6 @@
 export type {
   IPpr,
+  TPprShortInfo,
   IPprData,
   TTotalFieldsValues,
   IPprDataWithRowSpan,
@@ -69,6 +70,6 @@ export {
   checkIsPlanTabelTimeField,
 } from "./lib/validateTypes";
 
-export { getPprTable, addPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
+export { getPprTable, createPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";
