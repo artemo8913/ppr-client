@@ -87,46 +87,37 @@ export async function createPprTable(name: string, year: number) {
 
 export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>) {
   try {
-    console.log(params);
-    const pprInfoReq =
-      params.status && db.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id));
+    params.status && (await db.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
 
-    const pprMonthStatusesReq =
-      params.months_statuses &&
-      db
+    params.months_statuses &&
+      (await db
         .update(pprMonthsStatusesTable)
         .set({ ...params.months_statuses })
-        .where(eq(pprMonthsStatusesTable.idPpr, id));
+        .where(eq(pprMonthsStatusesTable.idPpr, id)));
 
-    const workingMansReq: Promise<any>[] = [];
-    const pprDataReq: Promise<any>[] = [];
+    if (params.peoples) {
+      await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
+      await db.insert(pprWorkingMansTable).values(
+        params.peoples.map((workingMan) => {
+          if (typeof workingMan.id === "string") {
+            return { ...workingMan, id: undefined, idPpr: id };
+          }
+          return { ...workingMan, id: workingMan.id, idPpr: id };
+        })
+      );
+    }
 
-    params.peoples?.forEach((workingMan) => {
-      if (typeof workingMan.id === "string") {
-        workingMansReq.push(db.insert(pprWorkingMansTable).values({ ...workingMan, id: undefined, idPpr: id }));
-      } else {
-        workingMansReq.push(
-          db
-            .update(pprWorkingMansTable)
-            .set({ ...workingMan, id: undefined })
-            .where(and(eq(pprWorkingMansTable.idPpr, id), eq(pprWorkingMansTable.id, workingMan.id)))
-        );
-      }
-    });
-
-    params.data?.forEach((pprData) => {
-      if (typeof pprData.id === "string") {
-        pprDataReq.push(db.insert(pprsWorkDataTable).values({ ...pprData, id: undefined, idPpr: id }));
-      } else {
-        pprDataReq.push(
-          db
-            .update(pprsWorkDataTable)
-            .set({ ...pprData, id: undefined })
-            .where(and(eq(pprsWorkDataTable.idPpr, id), eq(pprsWorkDataTable.id, pprData.id)))
-        );
-      }
-    });
-    await Promise.all([pprInfoReq, pprMonthStatusesReq, ...workingMansReq, ...pprDataReq]);
+    if (params.data) {
+      await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
+      await db.insert(pprsWorkDataTable).values(
+        params.data.map((pprData) => {
+          if (typeof pprData.id === "string") {
+            return { ...pprData, id: undefined, idPpr: id };
+          }
+          return { ...pprData, id: pprData.id, idPpr: id };
+        })
+      );
+    }
   } catch (e) {
     throw new Error(`${e}`);
   }
