@@ -1,7 +1,7 @@
 "use server";
-import { and, eq, SQL } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 import { ROUTE_PPR } from "@/1shared/const/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
