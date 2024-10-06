@@ -1,24 +1,30 @@
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/1shared/auth/authConfig";
-import { directionsMock } from "@/1shared/lib/transEnergoDivisions";
 import { IUser, translateRuUserRole } from "@/2entities/user";
 
 export default async function Home() {
-  const user = await getServerSession(authOptions);
-  if (!user) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
     return null;
   }
 
-  const credentials: IUser = user?.user;
-  const { id, id_direction, id_distance, id_subdivision, role } = credentials;
+  const user: IUser = session?.user;
+
+  const { id, role, firstName, middleName, lastName, directionShortName, distanceShortName, subdivisionShortName } =
+    user;
+
+  const fullName = `${lastName} ${firstName[0]}.${middleName[0]}.`;
 
   return (
     <main>
-      <div>{id_direction ? directionsMock[id_direction].short_name : null}</div>
-      <div>{id_distance && id_direction ? directionsMock[id_direction].distances[id_distance].short_name : null}</div>
-      <div>ЭЧК-{id_subdivision}</div>
+      <div>id: {id}</div>
+      <div>Дирекция: {directionShortName}</div>
+      <div>Дистанция: {distanceShortName}</div>
+      <div>Подразделение: {subdivisionShortName}</div>
       <div>Роль: {translateRuUserRole(role)}</div>
+      <div>Ф.И.О.: {fullName}</div>
     </main>
   );
 }

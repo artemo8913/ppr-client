@@ -1,11 +1,37 @@
 "use server";
-import { API_USER, URL_BASIC } from "@/1shared/const/url";
+import { eq } from "drizzle-orm";
+
+import { db, directionsTable, distancesTable, subdivisionsTable, usersTable } from "@/1shared/database";
+
 import { IUser } from "..";
 
-const USER_API_URL = URL_BASIC + API_USER;
+export async function getUserData(id: number): Promise<IUser> {
+  try {
+    const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, id) });
 
-export async function getUserData(id: string) {
-  const query = await fetch(`${USER_API_URL}/${id}`);
-  const responce: Promise<IUser> = query.json();
-  return responce;
+    if (!user) {
+      throw new Error(`User with id = ${id} not exist`);
+    }
+
+    const directionReq =
+      (user.idDirection && db.query.directionsTable.findFirst({ where: eq(directionsTable.id, user.idDirection) })) ||
+      null;
+    const distanceReq =
+      (user.idDistance && db.query.distancesTable.findFirst({ where: eq(distancesTable.id, user.idDistance) })) || null;
+    const subdivisionReq =
+      (user.idSubdivision &&
+        db.query.subdivisionsTable.findFirst({ where: eq(subdivisionsTable.id, user.idSubdivision) })) ||
+      null;
+
+    const [direction, distance, subdivision] = await Promise.all([directionReq, distanceReq, subdivisionReq]);
+
+    return {
+      ...user,
+      directionShortName: direction?.shortName,
+      distanceShortName: distance?.shortName,
+      subdivisionShortName: subdivision?.shortName,
+    };
+  } catch (e) {
+    throw new Error(`${e}`);
+  }
 }

@@ -13,7 +13,7 @@ import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransfe
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
 interface ISetPprCorrectionTransferProps {
-  id: string;
+  id: number | string;
   fieldFrom: TPlanWorkPeriods;
   transfers?: TTransfer[] | null;
   transferType: "plan" | "undone";

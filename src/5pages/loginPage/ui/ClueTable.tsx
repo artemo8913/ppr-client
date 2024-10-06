@@ -11,32 +11,37 @@ export default function ClueTable() {
       <tbody>
         <tr>
           <td>ЭЧК-9</td>
-          <td>1</td>
+          <td>fadeev</td>
           <td>1</td>
         </tr>
         <tr>
           <td>ЭЧК-10</td>
-          <td>2</td>
+          <td>romanov</td>
           <td>2</td>
         </tr>
         <tr>
           <td>Инженер</td>
-          <td>3</td>
+          <td>spir</td>
           <td>3</td>
         </tr>
         <tr>
           <td>Нормировщик</td>
-          <td>4</td>
+          <td>belo</td>
           <td>4</td>
         </tr>
         <tr>
           <td>Зам. ЭЧ</td>
-          <td>6</td>
-          <td>6</td>
+          <td>gricak</td>
+          <td>5</td>
         </tr>
         <tr>
           <td>ЭЧ (ЭЧГ)</td>
-          <td>7</td>
+          <td>koval</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>НТЭ</td>
+          <td>ares</td>
           <td>7</td>
         </tr>
       </tbody>

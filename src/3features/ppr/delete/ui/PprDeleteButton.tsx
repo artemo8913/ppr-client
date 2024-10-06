@@ -10,7 +10,7 @@ import { TYearPprStatus, deletePprTable } from "@/2entities/ppr";
 import { IUser } from "@/2entities/user";
 
 interface IPprDeleteButtonProps {
-  pprId: string;
+  pprId: number;
   created_by: IUser;
   pprStatus: TYearPprStatus;
 }

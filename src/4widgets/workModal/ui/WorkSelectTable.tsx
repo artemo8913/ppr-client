@@ -5,33 +5,22 @@ import { Table as TableAntd, TableProps } from "antd";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
 
-import { getShortNamesForAllDivisions } from "@/1shared/lib/transEnergoDivisions";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { IWork, TLineClassData, getWorkById } from "@/2entities/work";
+import { ICommonWork, getOneCommonWorkById } from "@/2entities/commonWork";
 import { TWorkBranch } from "@/2entities/ppr";
 
 interface IWorkTableProps {
-  data: IWork[];
+  data: ICommonWork[];
   onFinish?: () => void;
-  nearWorkId?: string | null;
+  nearWorkId?: string | number | null;
 }
 
-const columns: TableProps<IWork>["columns"] = [
+const columns: TableProps<ICommonWork>["columns"] = [
   {
     title: "Наименование работы",
     dataIndex: "name",
     key: "name",
-  },
-  {
-    title: "Периодичность",
-    dataIndex: "periodicity_normal_data",
-    key: "periodicity_normal_data",
-    render: (per: TLineClassData) => {
-      return Object.entries(per)
-        .map((entr) => `${entr[0]}: ${entr[1]}`)
-        .join("; ");
-    },
   },
   {
     title: "Ед.измерения",
@@ -40,20 +29,20 @@ const columns: TableProps<IWork>["columns"] = [
   },
   {
     title: "Норма времени",
-    dataIndex: "norm_of_time",
-    key: "norm_of_time",
+    dataIndex: "normOfTime",
+    key: "normOfTime",
   },
   {
     title: "Обоснование нормы времени",
-    dataIndex: "norm_of_time_document",
-    key: "norm_of_time_document",
+    dataIndex: "normOfTimeNameFull",
+    key: "normOfTimeNameFull",
   },
 ];
 
 export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkId }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [workId, setWorkId] = useState<string | null>();
+  const [workId, setWorkId] = useState<number | null>();
   const [branch, setBranch] = useState<TWorkBranch>("exploitation");
   const [subbranch, setSubbranch] = useState<string[]>([]);
 
@@ -64,8 +53,8 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
     return { value: subbranch, label: subbranch };
   });
 
-  const { data: sessionData } = useSession();
-  const userData = sessionData?.user;
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const handleFinish = async () => {
     setIsLoading(true);
@@ -73,18 +62,18 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
       return;
     }
 
-    const work = await getWorkById(workId);
+    const work = await getOneCommonWorkById(workId);
 
     addWork(
       {
-        workId: work.id,
+        common_work_id: work.id,
         name: work.name,
         branch,
         subbranch: subbranch[0],
         measure: work.measure,
-        norm_of_time: work.norm_of_time,
-        norm_of_time_document: work.norm_of_time_document,
-        unity: userData && getShortNamesForAllDivisions(userData).subdivisionShortName,
+        norm_of_time: work.normOfTime,
+        norm_of_time_document: work.normOfTimeNameFull,
+        unity: user?.subdivisionShortName,
       },
       nearWorkId
     );
@@ -99,7 +88,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
       <TableAntd
         rowSelection={{
           type: "radio",
-          onChange: (selectedKeys: React.Key[], selectedRows: IWork[]) => {
+          onChange: (selectedKeys: React.Key[], selectedRows: ICommonWork[]) => {
             setSelectedRowKeys(selectedKeys);
             setWorkId(selectedRows[0].id);
           },

@@ -3,7 +3,7 @@ import { IPprData } from "@/2entities/ppr";
 export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData => {
   return {
     id: String(new Date().toString() + Math.random()),
-    workId: null,
+    common_work_id: null,
     is_work_aproved: false,
     branch: "additional",
     subbranch: "",
@@ -13,8 +13,8 @@ export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData =
     measure: "",
     total_count: 0,
     entry_year: 0,
-    periodicity_normal: 0,
-    periodicity_fact: 0,
+    periodicity_normal: "",
+    periodicity_fact: "",
     last_maintenance_year: 0,
     norm_of_time: 0,
     norm_of_time_document: "",

@@ -7,7 +7,7 @@ import {
   TPlanNormTimePeriods,
   TFactNormTimePeriods,
   TPlanTabelTimePeriods,
-} from "../model/ppr.schema";
+} from "../model/ppr.types";
 import {
   factNormTimeFieldsSet,
   factTimeFieldsSet,
