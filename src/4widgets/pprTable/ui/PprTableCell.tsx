@@ -66,7 +66,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     [pprSettings.correctionView]
   );
 
-  let value = getValue(pprData, field, isCorrectedView);
+  let value = getValue(pprData, field, isCorrectedView) || "";
 
   const transfers: TTransfer[] = [];
 
@@ -85,6 +85,8 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     },
     [pprData, field, updatePprTableCell]
   );
+
+  console.log(field, Boolean(value));
 
   return (
     <td
