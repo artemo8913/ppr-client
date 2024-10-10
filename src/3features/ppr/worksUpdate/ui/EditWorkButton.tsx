@@ -5,8 +5,8 @@ import Select from "antd/es/select";
 import { EditOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { TWorkBranch } from "@/2entities/ppr";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
+import { TWorkBranch } from "@/2entities/ppr";
 
 interface IChangeBranchButtonProps {
   workId: number | string;
