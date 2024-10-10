@@ -54,9 +54,10 @@ export function getColumnSettings(
   timePeriod: TTimePeriod,
   isHaveWorkId?: boolean,
   pprMonthStatuses?: TAllMonthStatuses | null,
-  pprView?: TCorrectionView
+  pprView?: TCorrectionView,
+  isInUserControl?: boolean
 ): ITableCellProps | undefined {
-  if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {
+  if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS" || !isInUserControl) {
     return {};
   }
   if (pprYearStatus === "plan_creating" && !isHaveWorkId) {

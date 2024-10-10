@@ -36,6 +36,7 @@ interface IPprTableCellProps extends ITableCellProps {
   field: keyof IPprData;
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
   updatePprTableCell: (workId: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
+  isPprInUserControl?: boolean;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
@@ -43,6 +44,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   field,
   updatePprTableCell,
   planCellRef,
+  isPprInUserControl,
   ...otherProps
 }) => {
   const pprSettings = usePprTableSettings();
@@ -103,7 +105,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
         </div>
-      ) : field === "name" ? (
+      ) : field === "name" && isPprInUserControl ? (
         <TableCellWithWorkControl
           {...otherProps}
           onBlur={handleChange}

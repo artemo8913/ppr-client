@@ -1,7 +1,8 @@
 "use client";
-import { FC, Fragment, useCallback, useRef } from "react";
+import { FC, Fragment, useCallback, useMemo, useRef } from "react";
+import { useSession } from "next-auth/react";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
+import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
@@ -18,8 +19,14 @@ interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = () => {
   const { ppr, updatePprTableCell, getBranchesMeta, updateSubbranch } = usePpr();
+  const { data: credential } = useSession();
 
   const { basicFields, timePeriods, planFactFields, monthColSpan, allFields } = useCreateColumns();
+
+  const isPprInUserControl = useMemo(
+    () => checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision,
+    [credential?.user, ppr?.created_by]
+  );
 
   const pprSettings = usePprTableSettings();
 
@@ -36,9 +43,10 @@ export const PprTable: FC<IPprTableProps> = () => {
         pprSettings.currentTimePeriod,
         isHaveWorkId,
         pprMonthsStatuses,
-        pprSettings.correctionView
+        pprSettings.correctionView,
+        isPprInUserControl
       ),
-    [pprMonthsStatuses, pprSettings.correctionView, pprSettings.currentTimePeriod, pprYearStatus]
+    [pprMonthsStatuses, pprSettings.correctionView, pprSettings.currentTimePeriod, pprYearStatus, isPprInUserControl]
   );
 
   if (!Boolean(ppr?.data.length)) {
@@ -105,6 +113,7 @@ export const PprTable: FC<IPprTableProps> = () => {
                   isVertical={checkIsFieldVertical(field)}
                   field={field}
                   planCellRef={planCellRef}
+                  isPprInUserControl={isPprInUserControl}
                   {...getColumnSettingsForField(field, pprData.common_work_id !== null)}
                 />
               ))}
