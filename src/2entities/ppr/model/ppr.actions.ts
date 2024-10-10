@@ -97,26 +97,32 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
 
     if (params.peoples) {
       await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
-      await db.insert(pprWorkingMansTable).values(
-        params.peoples.map((workingMan) => {
-          if (typeof workingMan.id === "string") {
-            return { ...workingMan, id: undefined, idPpr: id };
-          }
-          return { ...workingMan, id: workingMan.id, idPpr: id };
-        })
-      );
+
+      if (params.peoples.length) {
+        await db.insert(pprWorkingMansTable).values(
+          params.peoples.map((workingMan) => {
+            if (typeof workingMan.id === "string") {
+              return { ...workingMan, id: undefined, idPpr: id };
+            }
+            return { ...workingMan, id: workingMan.id, idPpr: id };
+          })
+        );
+      }
     }
 
     if (params.data) {
       await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
-      await db.insert(pprsWorkDataTable).values(
-        params.data.map((pprData, index) => {
-          if (typeof pprData.id === "string") {
-            return { ...pprData, id: undefined, idPpr: id, order: index };
-          }
-          return { ...pprData, id: pprData.id, idPpr: id, order: index };
-        })
-      );
+
+      if (params.data.length) {
+        await db.insert(pprsWorkDataTable).values(
+          params.data.map((pprData, index) => {
+            if (typeof pprData.id === "string") {
+              return { ...pprData, id: undefined, idPpr: id, order: index };
+            }
+            return { ...pprData, id: pprData.id, idPpr: id, order: index };
+          })
+        );
+      }
     }
   } catch (e) {
     throw new Error(`${e}`);
