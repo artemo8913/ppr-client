@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 

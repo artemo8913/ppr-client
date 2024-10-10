@@ -26,7 +26,7 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ w
           <IncreaseWorkPositionButton workId={workId} />
           <DecreaseWorkPositionButton workId={workId} />
           <DeleteWorkButton workId={workId} />
-          <AddWorkButton workId={workId} />
+          <AddWorkButton nearWorkId={workId} />
           <CopyWorkButton workId={workId} />
           <EditWorkButtonMemo workId={workId} branch={branch} />
         </div>

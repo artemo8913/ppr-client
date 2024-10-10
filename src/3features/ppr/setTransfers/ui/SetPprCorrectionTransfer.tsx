@@ -3,7 +3,8 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 
-import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
+import { getTimePeriodFromString } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { checkIsTimePeriodAvailableToTransfer, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, PLAN_WORK_FIELDS } from "@/2entities/ppr";

@@ -2,7 +2,8 @@
 import { FC, Fragment, useCallback, useRef } from "react";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData, SummaryTableFoot, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
 import { AddWorkButton } from "@/3features/ppr/worksUpdate";
@@ -10,7 +11,6 @@ import { AddWorkButton } from "@/3features/ppr/worksUpdate";
 import HeaderCell from "./HeaderCell";
 import { useCreateColumns } from "./PprTableColumns";
 import { checkIsFieldVertical, getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
-import { translateRuFieldName } from "../lib/pprTableColumnsHelper";
 import { PprTableCellMemo } from "./PprTableCell";
 import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
 

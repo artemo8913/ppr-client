@@ -1,8 +1,10 @@
 import { FC } from "react";
-import { TCorrectionItem } from "./CorrectionRaport";
+
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
+
+import { TCorrectionItem } from "./CorrectionRaport";
 
 interface IPlanCorrectionItemProps {
   correction: TCorrectionItem;

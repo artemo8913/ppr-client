@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Table, TableProps } from "antd";
 
 import { MONTHS } from "@/1shared/lib/date";
-import { translateRuYearStatus } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
+import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
 import { TPprShortInfo } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprCopyButton } from "@/3features/ppr/copy";

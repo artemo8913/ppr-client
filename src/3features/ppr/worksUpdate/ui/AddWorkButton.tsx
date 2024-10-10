@@ -7,19 +7,25 @@ import { SizeType } from "antd/es/config-provider/SizeContext";
 import { useWorkModal } from "@/1shared/providers/workModalProvider";
 
 interface IAddWorkButtonProps {
-  workId: number | string;
+  nearWorkId?: number | string;
   label?: string;
   size?: SizeType;
   shape?: "default" | "circle" | "round";
   type?: "default" | "link" | "text" | "primary" | "dashed";
 }
 
-export const AddWorkButton: FC<IAddWorkButtonProps> = ({ workId, label, type, size = "small", shape = "circle" }) => {
+export const AddWorkButton: FC<IAddWorkButtonProps> = ({
+  nearWorkId,
+  label,
+  type,
+  size = "small",
+  shape = "circle",
+}) => {
   const { openModal } = useWorkModal();
   return (
     <Button
       onClick={() => {
-        openModal(workId);
+        openModal(nearWorkId);
       }}
       type={type}
       size={size}

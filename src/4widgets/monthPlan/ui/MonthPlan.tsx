@@ -3,7 +3,7 @@ import { FC } from "react";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 
 import { MonthPlanTable } from "./MonthPlanTable";
 import { MonthWorkingMansTable } from "./MonthWorkingMansTable";

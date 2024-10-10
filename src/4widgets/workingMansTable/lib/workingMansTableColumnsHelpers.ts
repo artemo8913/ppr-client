@@ -3,7 +3,7 @@ import { ITableCellProps } from "@/1shared/ui/table";
 import { IWorkingManYearPlan, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
 import { TFactTimePeriodsFields, TPlanNormTimePeriodsFields, TPlanTabelTimePeriodsFields } from "@/2entities/ppr";
 
-export const columnsTitles: { [key in keyof IWorkingManYearPlan | string]?: string } = {
+const WORKING_MAN_TABLE_FIELDS_TITLES_RU: { [key in keyof IWorkingManYearPlan | string]?: string } = {
   full_name: "Фамилия, имя, отчество",
   work_position: "Должность, профессия, разряд рабочих, совмещаемые профессии",
   participation: "Доля участия",
@@ -22,7 +22,7 @@ function findPlanFactTitle(string: string) {
 }
 
 export function getColumnTitle(field: string) {
-  return columnsTitles[field] || findPlanFactTitle(field) || "";
+  return WORKING_MAN_TABLE_FIELDS_TITLES_RU[field] || findPlanFactTitle(field) || "";
 }
 
 export function getThStyle(column: keyof IWorkingManYearPlan): React.CSSProperties {

@@ -2,9 +2,9 @@
 import React, { FC } from "react";
 import { useSession } from "next-auth/react";
 
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { TPlanWorkPeriodsFields, IPlanWorkValues, getFactWorkFieldByTimePeriod } from "@/2entities/ppr";
 
 import { DoneWorksCorrectionItem } from "./DoneWorksCorrectionItem";

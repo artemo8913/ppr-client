@@ -1,4 +1,4 @@
-import { TUserRole } from "../model/user.types";
+import { TUserRole } from "../../2entities/user/model/user.types";
 
 const USER_ROLE_RU: { [key in TUserRole]: string } = {
   subdivision: "Начальник подразделения",

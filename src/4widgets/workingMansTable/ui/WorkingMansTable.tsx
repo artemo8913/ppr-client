@@ -5,7 +5,7 @@ import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvide
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCellMemo } from "@/1shared/ui/table";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 import {
   IWorkingManYearPlan,
   SummaryTableFoot,
@@ -13,6 +13,7 @@ import {
   checkIsPlanNormTimeField,
   checkIsPlanTabelTimeField,
 } from "@/2entities/ppr";
+
 import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
 import { WorkingManTableCellMemo } from "./WorkingManTableCell";
 import { useCreateColumns } from "../lib/useCreateColumns";

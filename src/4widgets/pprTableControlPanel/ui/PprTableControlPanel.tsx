@@ -2,7 +2,7 @@
 import { FC } from "react";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { translateRuYearStatus } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
+import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
 import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTimePeriod";
