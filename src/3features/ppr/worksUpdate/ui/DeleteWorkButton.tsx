@@ -4,9 +4,10 @@ import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
+import { TPprDataWorkId } from "@/2entities/ppr";
 
 interface IDeleteWorkButtonProps {
-  workId: string | number;
+  workId: TPprDataWorkId;
 }
 
 const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {

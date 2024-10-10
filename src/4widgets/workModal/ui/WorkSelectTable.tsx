@@ -8,12 +8,12 @@ import Select from "antd/es/select";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { ICommonWork, getOneCommonWorkById } from "@/2entities/commonWork";
-import { TWorkBranch } from "@/2entities/ppr";
+import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 interface IWorkTableProps {
   data: ICommonWork[];
   onFinish?: () => void;
-  nearWorkId?: string | number | null;
+  nearWorkId?: TPprDataWorkId | null;
 }
 
 const columns: TableProps<ICommonWork>["columns"] = [

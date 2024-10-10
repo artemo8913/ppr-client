@@ -4,9 +4,10 @@ import Button from "antd/es/button";
 import { ArrowDownOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
+import { TPprDataWorkId } from "@/2entities/ppr";
 
 interface IIncreaseWorkPositionButtonProps {
-  workId: string | number;
+  workId: TPprDataWorkId;
 }
 
 const IncreaseWorkPositionButton: FC<IIncreaseWorkPositionButtonProps> = ({ workId }) => {

@@ -23,12 +23,11 @@ export const PlanCorrectionItem: FC<IPlanCorrectionItemProps> = ({
 }) => {
   const planValue = correction.firstCompareValue;
   const correctedValue = correction.secondCompareValue;
-  const objectId = correction.objectId;
   const transfers = correction.plan?.planTransfers;
   const isHaveTransfers = Boolean(transfers);
 
   return (
-    <li key={objectId}>
+    <li key={correction.workId}>
       <span>
         {name}: план {planValue} {measure} изменить на {correctedValue} {measure}. Разницу {planValue - correctedValue}{" "}
         {measure}{" "}
@@ -46,7 +45,12 @@ export const PlanCorrectionItem: FC<IPlanCorrectionItemProps> = ({
         </>
       )}
       {isEditable && (
-        <SetPprCorrectionTransfer transferType="plan" transfers={transfers} id={objectId} fieldFrom={fieldFrom} />
+        <SetPprCorrectionTransfer
+          transferType="plan"
+          transfers={transfers}
+          workId={correction.workId}
+          fieldFrom={fieldFrom}
+        />
       )}
     </li>
   );

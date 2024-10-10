@@ -6,10 +6,10 @@ import { EditOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
-import { TWorkBranch } from "@/2entities/ppr";
+import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 interface IChangeBranchButtonProps {
-  workId: number | string;
+  workId: TPprDataWorkId;
   branch?: TWorkBranch;
 }
 

@@ -2,7 +2,7 @@
 import { FC, useState } from "react";
 
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
-import { TWorkBranch } from "@/2entities/ppr";
+import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
@@ -12,7 +12,7 @@ import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
 import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 
 interface ITableCellWithWorkControlProps extends ITableCellProps {
-  workId: string | number;
+  workId: TPprDataWorkId;
   branch?: TWorkBranch;
 }
 

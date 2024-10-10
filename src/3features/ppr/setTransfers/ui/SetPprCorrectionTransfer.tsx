@@ -7,14 +7,14 @@ import { getTimePeriodFromString } from "@/1shared/lib/date";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { checkIsTimePeriodAvailableToTransfer, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, PLAN_WORK_FIELDS } from "@/2entities/ppr";
+import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, PLAN_WORK_FIELDS, TPprDataWorkId } from "@/2entities/ppr";
 
 import { SelectTransferParams, TOption } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
 interface ISetPprCorrectionTransferProps {
-  id: number | string;
+  workId: TPprDataWorkId;
   fieldFrom: TPlanWorkPeriods;
   transfers?: TTransfer[] | null;
   transferType: "plan" | "undone";
@@ -23,7 +23,7 @@ interface ISetPprCorrectionTransferProps {
 const MONTH_PLAN_WORK_FIELDS = PLAN_WORK_FIELDS.filter((field) => field !== "year_plan_work");
 
 export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
-  id,
+  workId,
   fieldFrom,
   transfers = null,
   transferType,
@@ -66,9 +66,9 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
           ...transfers.slice(transferIndex + 1),
         ];
       }
-      updateTransfers(id, fieldFrom, newTransfers, transferType);
+      updateTransfers(workId, fieldFrom, newTransfers, transferType);
     },
-    [id, fieldFrom, transferType, transfers, updateTransfers]
+    [workId, fieldFrom, transferType, transfers, updateTransfers]
   );
 
   const addTransfer = useCallback(() => {
@@ -81,13 +81,13 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
         return;
       }
       updateTransfers(
-        id,
+        workId,
         fieldFrom,
         transfers?.filter((_, i) => i !== index),
         transferType
       );
     },
-    [updateTransfers, transferType, transfers, fieldFrom, id]
+    [updateTransfers, transferType, transfers, fieldFrom, workId]
   );
 
   const handleStratagy = useCallback(

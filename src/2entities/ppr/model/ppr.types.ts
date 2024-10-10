@@ -125,12 +125,14 @@ export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;
 }
 
+export type TWorkingManId = number | string;
+
 export interface IWorkingManYearPlan
   extends TPlanNormTimePeriodsFields,
     TPlanTabelTimePeriodsFields,
     TPlanTimePeriodsFields,
     TFactTimePeriodsFields {
-  id: number | string;
+  id: TWorkingManId;
   full_name: string;
   work_position: string;
   participation: number;
@@ -138,13 +140,15 @@ export interface IWorkingManYearPlan
 
 export type TWorkBranch = "exploitation" | "additional" | "unforeseen";
 
+export type TPprDataWorkId = number | string;
+
 export interface IPprData
   extends TPlanWorkPeriodsFields,
     TWorkPlanTimePeriodsFields,
     TFactWorkPeriodsFields,
     TFactNormTimePeriodsFields,
     TFactTimePeriodsFields {
-  id: number | string;
+  id: TPprDataWorkId;
   common_work_id: number | null;
   is_work_aproved: boolean;
   branch: TWorkBranch;

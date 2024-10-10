@@ -10,6 +10,7 @@ import {
   checkIsPlanWorkField,
   checkIsWorkOrTimeField,
   IPprData,
+  TPprDataWorkId,
   TTransfer,
 } from "@/2entities/ppr";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
@@ -34,7 +35,7 @@ interface IPprTableCellProps extends ITableCellProps {
   pprData: IPprData;
   field: keyof IPprData;
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
-  updatePprTableCell: (id: string | number, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
+  updatePprTableCell: (workId: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({

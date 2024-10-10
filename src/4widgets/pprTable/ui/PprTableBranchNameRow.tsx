@@ -3,12 +3,13 @@ import { ChangeEvent, FC, memo } from "react";
 
 import { IBranchDefaultMeta } from "@/1shared/providers/pprProvider";
 import { translateRuPprBranchName } from "@/1shared/locale/pprBranches";
+import { TPprDataWorkId } from "@/2entities/ppr";
 
 import { useCreateColumns } from "./PprTableColumns";
 
 interface IPprTableBranchNameRow {
   branch: IBranchDefaultMeta;
-  updateSubbranch: (newBranchName: string, workIdsSet: Set<string | number>) => void;
+  updateSubbranch: (newBranchName: string, workIdsSet: Set<TPprDataWorkId>) => void;
 }
 
 export const PprTableBranchNameRow: FC<IPprTableBranchNameRow> = (props) => {

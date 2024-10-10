@@ -5,9 +5,10 @@ import { PlusOutlined } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
 import { useWorkModal } from "@/1shared/providers/workModalProvider";
+import { TPprDataWorkId } from "@/2entities/ppr";
 
 interface IAddWorkButtonProps {
-  nearWorkId?: number | string;
+  nearWorkId?: TPprDataWorkId;
   label?: string;
   size?: SizeType;
   shape?: "default" | "circle" | "round";
