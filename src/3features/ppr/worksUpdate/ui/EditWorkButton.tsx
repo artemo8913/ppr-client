@@ -9,7 +9,7 @@ import { TWorkBranch } from "@/2entities/ppr";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 
 interface IChangeBranchButtonProps {
-  workId?: number | string;
+  workId: number | string;
   branch?: TWorkBranch;
 }
 
@@ -20,9 +20,7 @@ const EditWorkButton: FC<IChangeBranchButtonProps> = (props) => {
 
   const handleClick = useCallback(
     (branch: TWorkBranch) => {
-      if (props.workId) {
-        updatePprData(props.workId, "branch", branch);
-      }
+      updatePprData(props.workId, "branch", branch);
     },
     [updatePprData, props.workId]
   );

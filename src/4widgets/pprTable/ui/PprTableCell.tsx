@@ -106,7 +106,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
         <TableCellWithWorkControl
           {...otherProps}
           onBlur={handleChange}
-          id={pprData.id}
+          workId={pprData.id}
           branch={pprData.branch}
           value={value}
         />

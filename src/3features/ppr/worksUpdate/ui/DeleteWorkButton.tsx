@@ -6,15 +6,15 @@ import { MinusOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IDeleteWorkButtonProps {
-  id?: string | number;
+  workId: string | number;
 }
 
-const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ id }) => {
+const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
   const { deleteWork } = usePpr();
 
   const handleClick = useCallback(() => {
-    id && deleteWork(id);
-  }, [deleteWork, id]);
+    deleteWork(workId);
+  }, [deleteWork, workId]);
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
 };

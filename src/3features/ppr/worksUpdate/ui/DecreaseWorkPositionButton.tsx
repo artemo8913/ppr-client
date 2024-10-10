@@ -6,17 +6,15 @@ import { ArrowUpOutlined } from "@ant-design/icons";
 import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IDecreaseWorkPositionButtonProps {
-  id?: number | string;
+  workId: number | string;
 }
 
-const DecreaseWorkPositionButton: FC<IDecreaseWorkPositionButtonProps> = ({ id }) => {
+const DecreaseWorkPositionButton: FC<IDecreaseWorkPositionButtonProps> = ({ workId }) => {
   const { decreaseWorkPosition } = usePpr();
 
   const handleClick = useCallback(() => {
-    if (id !== undefined) {
-      decreaseWorkPosition(id);
-    }
-  }, [id, decreaseWorkPosition]);
+    decreaseWorkPosition(workId);
+  }, [workId, decreaseWorkPosition]);
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<ArrowUpOutlined />} />;
 };
