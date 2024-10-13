@@ -10,6 +10,7 @@ import {
   checkIsPlanWorkField,
   checkIsWorkOrTimeField,
   IPprData,
+  TPprDataWorkId,
   TTransfer,
 } from "@/2entities/ppr";
 import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
@@ -34,7 +35,8 @@ interface IPprTableCellProps extends ITableCellProps {
   pprData: IPprData;
   field: keyof IPprData;
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
-  updatePprTableCell: (id: string | number, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
+  updatePprTableCell: (workId: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
+  isPprInUserControl?: boolean;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
@@ -42,6 +44,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   field,
   updatePprTableCell,
   planCellRef,
+  isPprInUserControl,
   ...otherProps
 }) => {
   const pprSettings = usePprTableSettings();
@@ -66,7 +69,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     [pprSettings.correctionView]
   );
 
-  let value = getValue(pprData, field, isCorrectedView);
+  let value = getValue(pprData, field, isCorrectedView) || "";
 
   const transfers: TTransfer[] = [];
 
@@ -100,11 +103,11 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
         </div>
-      ) : field === "name" ? (
+      ) : field === "name" && isPprInUserControl ? (
         <TableCellWithWorkControl
           {...otherProps}
           onBlur={handleChange}
-          id={pprData.id}
+          workId={pprData.id}
           branch={pprData.branch}
           value={value}
         />

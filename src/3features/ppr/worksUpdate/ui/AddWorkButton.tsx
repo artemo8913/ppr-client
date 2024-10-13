@@ -5,21 +5,28 @@ import { PlusOutlined } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
 import { useWorkModal } from "@/1shared/providers/workModalProvider";
+import { TPprDataWorkId } from "@/2entities/ppr";
 
 interface IAddWorkButtonProps {
-  workId?: number | string;
+  nearWorkId?: TPprDataWorkId;
   label?: string;
   size?: SizeType;
   shape?: "default" | "circle" | "round";
   type?: "default" | "link" | "text" | "primary" | "dashed";
 }
 
-export const AddWorkButton: FC<IAddWorkButtonProps> = ({ workId, label, type, size = "small", shape = "circle" }) => {
+export const AddWorkButton: FC<IAddWorkButtonProps> = ({
+  nearWorkId,
+  label,
+  type,
+  size = "small",
+  shape = "circle",
+}) => {
   const { openModal } = useWorkModal();
   return (
     <Button
       onClick={() => {
-        openModal(workId);
+        openModal(nearWorkId);
       }}
       type={type}
       size={size}

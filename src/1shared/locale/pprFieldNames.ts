@@ -1,6 +1,6 @@
 import { IPprData, checkIsPprDataField } from "@/2entities/ppr";
 
-export const FIELDS_NAMES_RU: { [key in keyof IPprData]?: string } = {
+const FIELDS_NAMES_RU: { [key in keyof IPprData]?: string } = {
   name: "Наименования и условия выполнения технологических операций, испытаний и измерений",
   location: "Наименование места проведения работ / тип оборудования",
   line_class: "Класс участка / вид технического обслуживания и ремонта",

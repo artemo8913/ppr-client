@@ -4,17 +4,18 @@ import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
+import { TPprDataWorkId } from "@/2entities/ppr";
 
 interface IDeleteWorkButtonProps {
-  id?: string | number;
+  workId: TPprDataWorkId;
 }
 
-const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ id }) => {
+const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
   const { deleteWork } = usePpr();
 
   const handleClick = useCallback(() => {
-    id && deleteWork(id);
-  }, [deleteWork, id]);
+    deleteWork(workId);
+  }, [deleteWork, workId]);
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
 };

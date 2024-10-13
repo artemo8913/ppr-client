@@ -2,16 +2,16 @@
 import React, { FC } from "react";
 import { useSession } from "next-auth/react";
 
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
-import { TPlanWorkPeriodsFields, IPlanWorkValues, getFactWorkFieldByTimePeriod } from "@/2entities/ppr";
+import { TPlanWorkPeriodsFields, IPlanWorkValues, getFactWorkFieldByTimePeriod, TPprDataWorkId } from "@/2entities/ppr";
 
 import { DoneWorksCorrectionItem } from "./DoneWorksCorrectionItem";
 import { PlanCorrectionItem } from "./PlanCorrectionItem";
 
 export interface TCorrectionItem {
-  objectId: string | number;
+  workId: TPprDataWorkId;
   rowIndex: number;
   firstCompareValue: number;
   secondCompareValue: number;
@@ -49,7 +49,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       const correctedValue = plan.handCorrection;
 
       planCorrections.push({
-        objectId,
+        workId: objectId,
         rowIndex,
         plan,
         firstCompareValue: planWorkValue,
@@ -63,7 +63,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
 
     if (planWorkValue > factWorkValue) {
       undoneWorks.push({
-        objectId,
+        workId: objectId,
         rowIndex,
         plan,
         firstCompareValue: planWorkValue,
@@ -71,7 +71,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
       });
     } else if (planWorkValue < factWorkValue) {
       welldoneWorks.push({
-        objectId,
+        workId: objectId,
         rowIndex,
         plan,
         firstCompareValue: planWorkValue,
@@ -116,7 +116,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
             {planCorrections.map((correction) => (
               <PlanCorrectionItem
                 isEditable={isEditablePlanCorrections}
-                key={correction.objectId}
+                key={correction.workId}
                 correction={correction}
                 fieldFrom={fieldFrom}
                 measure={ppr?.data[correction.rowIndex].measure}
@@ -135,7 +135,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
             {undoneWorks.map((correction) => (
               <DoneWorksCorrectionItem
                 isEditable={isEditableDoneWorkCorrections}
-                key={correction.objectId}
+                key={correction.workId}
                 correction={correction}
                 fieldFrom={fieldFrom}
                 measure={ppr?.data[correction.rowIndex].measure}
@@ -154,7 +154,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
             {welldoneWorks.map((correction) => (
               <DoneWorksCorrectionItem
                 isEditable={isEditableDoneWorkCorrections}
-                key={correction.objectId}
+                key={correction.workId}
                 correction={correction}
                 fieldFrom={fieldFrom}
                 measure={ppr?.data[correction.rowIndex].measure}

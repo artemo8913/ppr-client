@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, FC, HTMLInputTypeAttribute, memo, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FC, HTMLInputTypeAttribute, memo, Ref, useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
 import style from "./TableCell.module.scss";
@@ -23,10 +23,20 @@ const TableCell: FC<ITableCellProps> = (props) => {
 
   const [currentValue, setCurrentValue] = useState(value);
 
+  const ref = useRef<HTMLTextAreaElement & HTMLInputElement>(null);
+
   const handleUpdateValue = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setCurrentValue(e.target.value),
     []
   );
+
+  const handleSelect = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => e.target.select(), []);
+
+  const handleKeydown = useCallback((keyboardEvent: KeyboardEvent) => {
+    if (keyboardEvent.key === "Escape" || keyboardEvent.key === "Enter") {
+      ref.current?.blur();
+    }
+  }, []);
 
   const handleBlur = useCallback(() => {
     if (onBlur) {
@@ -38,11 +48,19 @@ const TableCell: FC<ITableCellProps> = (props) => {
     setCurrentValue(value);
   }, [value]);
 
+  useEffect(() => {
+    window?.addEventListener("keydown", handleKeydown);
+
+    return () => window?.removeEventListener("keydown", handleKeydown);
+  }, [handleKeydown]);
+
   return (
     <div className={clsx(style.TableCell, isVertical && style.isVertical, className)}>
       {cellType === "textarea" && (
         <textarea
+          ref={ref}
           value={String(currentValue)}
+          onFocus={handleSelect}
           onChange={handleUpdateValue}
           onBlur={handleBlur}
           className={clsx(style.TextareaCell, !isVertical && style.isNotVertical)}
@@ -51,7 +69,9 @@ const TableCell: FC<ITableCellProps> = (props) => {
       )}
       {cellType === "input" && (
         <input
+          ref={ref}
           value={String(currentValue)}
+          onFocus={handleSelect}
           onChange={handleUpdateValue}
           onBlur={handleBlur}
           className={clsx(style.InputCell, isVertical && style.isVertical)}

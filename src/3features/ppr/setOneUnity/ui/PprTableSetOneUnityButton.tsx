@@ -1,16 +1,22 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { useMemo } from "react";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
+import { useSession } from "next-auth/react";
 import { FormOutlined } from "@ant-design/icons";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
+import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 
 export const PprTableSetOneUnityButton = () => {
-  const { setOneUnityInAllWorks } = usePpr();
-  const { data: session } = useSession();
+  const { ppr, setOneUnityInAllWorks } = usePpr();
+  const { data: credential } = useSession();
 
-  const subdivisionShortName = session?.user.subdivisionShortName;
+  const subdivisionShortName = credential?.user.subdivisionShortName;
+
+  const isPprInUserControl = useMemo(
+    () => checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision,
+    [credential?.user, ppr?.created_by]
+  );
 
   const handleClick = () => {
     subdivisionShortName && setOneUnityInAllWorks(subdivisionShortName);
@@ -19,7 +25,7 @@ export const PprTableSetOneUnityButton = () => {
   return (
     <Tooltip title="Массово заполнить подразделение">
       <Button
-        disabled={!subdivisionShortName}
+        disabled={!subdivisionShortName || !isPprInUserControl}
         icon={<FormOutlined />}
         type="text"
         shape="circle"

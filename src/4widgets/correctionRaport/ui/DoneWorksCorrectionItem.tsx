@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { translateRuTimePeriod } from "@/1shared/lib/date";
+
+import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 
@@ -22,12 +23,11 @@ export const DoneWorksCorrectionItem: FC<IDoneWorksCorrectionItemProps> = ({
 }) => {
   const planWorkValue = correction.firstCompareValue;
   const factWorkValue = correction.secondCompareValue;
-  const objectId = correction.objectId;
   const transfers = correction.plan?.undoneTransfers;
   const isHaveTransfers = Boolean(transfers);
 
   return (
-    <li key={objectId}>
+    <li key={correction.workId}>
       <span>
         {name}: при плане {planWorkValue} {measure} факт составил {factWorkValue}. Разницу{" "}
         {Number(planWorkValue - factWorkValue)} {measure}
@@ -45,7 +45,12 @@ export const DoneWorksCorrectionItem: FC<IDoneWorksCorrectionItemProps> = ({
         </>
       )}
       {isEditable && (
-        <SetPprCorrectionTransfer transferType="undone" transfers={transfers} id={objectId} fieldFrom={fieldFrom} />
+        <SetPprCorrectionTransfer
+          transferType="undone"
+          transfers={transfers}
+          workId={correction.workId}
+          fieldFrom={fieldFrom}
+        />
       )}
     </li>
   );

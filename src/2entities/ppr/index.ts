@@ -2,6 +2,7 @@ export type {
   IPpr,
   TPprShortInfo,
   IPprData,
+  TPprDataWorkId,
   TTotalFieldsValues,
   IPprDataWithRowSpan,
   TAllMonthStatuses,

@@ -6,7 +6,6 @@ export {
   checkIsAllMonthsPprStatusesIsDone,
   checkIsTimePeriodAvailableToSelect,
   checkIsTimePeriodAvailableToTransfer,
-  translateRuMonthStatus,
   findFirstUndonePprPeriod,
 } from "./lib/pprStatusHelper";
 export { checkIsPprInUserControl } from "./lib/isPprInUserControl";

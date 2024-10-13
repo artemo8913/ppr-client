@@ -4,19 +4,18 @@ import Button from "antd/es/button";
 import { ArrowUpOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
+import { TPprDataWorkId } from "@/2entities/ppr";
 
 interface IDecreaseWorkPositionButtonProps {
-  id?: number | string;
+  workId: TPprDataWorkId;
 }
 
-const DecreaseWorkPositionButton: FC<IDecreaseWorkPositionButtonProps> = ({ id }) => {
+const DecreaseWorkPositionButton: FC<IDecreaseWorkPositionButtonProps> = ({ workId }) => {
   const { decreaseWorkPosition } = usePpr();
 
   const handleClick = useCallback(() => {
-    if (id !== undefined) {
-      decreaseWorkPosition(id);
-    }
-  }, [id, decreaseWorkPosition]);
+    decreaseWorkPosition(workId);
+  }, [workId, decreaseWorkPosition]);
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<ArrowUpOutlined />} />;
 };

@@ -14,7 +14,7 @@ interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
 }
 
 export const WorkModal: FC<IWorkModalProps> = ({ data }) => {
-  const { closeModal, isOpen, workId } = useWorkModal();
+  const { closeModal, isOpen, nearWorkId: workId } = useWorkModal();
   return (
     <Modal title="Выберите работу" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
       <Tabs

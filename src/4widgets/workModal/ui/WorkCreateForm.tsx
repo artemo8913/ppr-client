@@ -9,12 +9,12 @@ import Button from "antd/es/button";
 
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { TWorkBranch } from "@/2entities/ppr";
+import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
-  nearWorkId?: string | number | null;
+  nearWorkId?: TPprDataWorkId | null;
 }
 
 interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {

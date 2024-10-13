@@ -1,9 +1,10 @@
 "use server";
 import { eq } from "drizzle-orm";
 
-import { db, directionsTable, distancesTable, subdivisionsTable, usersTable } from "@/1shared/database";
+import { db, usersTable } from "@/1shared/database";
 
 import { IUser } from "..";
+import { getDivisions } from "@/1shared/api/divisions.api";
 
 export async function getUserData(id: number): Promise<IUser> {
   try {
@@ -13,17 +14,7 @@ export async function getUserData(id: number): Promise<IUser> {
       throw new Error(`User with id = ${id} not exist`);
     }
 
-    const directionReq =
-      (user.idDirection && db.query.directionsTable.findFirst({ where: eq(directionsTable.id, user.idDirection) })) ||
-      null;
-    const distanceReq =
-      (user.idDistance && db.query.distancesTable.findFirst({ where: eq(distancesTable.id, user.idDistance) })) || null;
-    const subdivisionReq =
-      (user.idSubdivision &&
-        db.query.subdivisionsTable.findFirst({ where: eq(subdivisionsTable.id, user.idSubdivision) })) ||
-      null;
-
-    const [direction, distance, subdivision] = await Promise.all([directionReq, distanceReq, subdivisionReq]);
+    const { direction, distance, subdivision } = await getDivisions(user);
 
     return {
       ...user,

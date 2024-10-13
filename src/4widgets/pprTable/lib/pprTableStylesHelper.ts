@@ -8,6 +8,7 @@ import {
   PLAN_WORK_FIELDS,
   FACT_WORK_FIELDS,
   FACT_TIME_FIELDS,
+  checkIsWorkOrTimeField,
 } from "@/2entities/ppr";
 
 const EDITABLE_PLAN_FACT_FIELDS = [...PLAN_WORK_FIELDS, ...FACT_WORK_FIELDS, ...FACT_TIME_FIELDS].filter(
@@ -20,29 +21,31 @@ export function getThStyle(key?: keyof IPprData): React.CSSProperties {
       return { width: "10%" };
     case "location":
       return { width: "5%" };
-    case "line_class":
-      return { width: "2%" };
-    case "total_count":
-      return { width: "3%" };
-    case "entry_year":
-      return { width: "2%" };
     case "periodicity_normal":
       return { width: "2%" };
-    case "periodicity_fact":
-      return { width: "3%" };
     case "last_maintenance_year":
-      return { width: "3%" };
-    case "norm_of_time":
-      return { width: "3%" };
-    case "norm_of_time_document":
-      return { width: "3%" };
-    case "measure":
       return { width: "2%" };
-    case "unity":
-      return { width: "3%" };
+    case "norm_of_time_document":
+      return { width: "6%" };
+    case "measure":
+      return { width: "6%" };
     default:
       return {};
   }
+}
+
+export function checkIsFieldVertical(field: keyof IPprData): boolean {
+  return (
+    checkIsWorkOrTimeField(field) ||
+    field === "total_count" ||
+    field === "entry_year" ||
+    field === "last_maintenance_year" ||
+    field === "periodicity_fact" ||
+    field === "periodicity_normal" ||
+    field === "line_class" ||
+    field === "unity" ||
+    field === "norm_of_time"
+  );
 }
 
 export function getColumnSettings(
@@ -51,25 +54,26 @@ export function getColumnSettings(
   timePeriod: TTimePeriod,
   isHaveWorkId?: boolean,
   pprMonthStatuses?: TAllMonthStatuses | null,
-  pprView?: TCorrectionView
+  pprView?: TCorrectionView,
+  isInUserControl?: boolean
 ): ITableCellProps | undefined {
-  if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS") {
+  if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS" || !isInUserControl) {
     return {};
   }
   if (pprYearStatus === "plan_creating" && !isHaveWorkId) {
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       name: { cellType: "textarea" },
       location: { cellType: "textarea" },
-      line_class: { cellType: "textarea" },
+      line_class: { cellType: "input" },
       measure: { cellType: "textarea" },
-      total_count: { cellType: "textarea" },
-      entry_year: { cellType: "textarea" },
-      periodicity_normal: { cellType: "textarea" },
-      periodicity_fact: { cellType: "textarea" },
-      last_maintenance_year: { cellType: "textarea" },
-      norm_of_time: { cellType: "textarea" },
+      total_count: { cellType: "input" },
+      entry_year: { cellType: "input" },
+      periodicity_normal: { cellType: "input" },
+      periodicity_fact: { cellType: "input" },
+      last_maintenance_year: { cellType: "input" },
+      norm_of_time: { cellType: "input" },
       norm_of_time_document: { cellType: "textarea" },
-      unity: { cellType: "textarea" },
+      unity: { cellType: "input" },
     };
     EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input" }));
 
@@ -78,13 +82,13 @@ export function getColumnSettings(
   if (pprYearStatus === "plan_creating" && isHaveWorkId) {
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       location: { cellType: "textarea" },
-      line_class: { cellType: "textarea" },
-      total_count: { cellType: "textarea" },
-      entry_year: { cellType: "textarea" },
-      periodicity_normal: { cellType: "textarea" },
-      periodicity_fact: { cellType: "textarea" },
-      last_maintenance_year: { cellType: "textarea" },
-      unity: { cellType: "textarea" },
+      line_class: { cellType: "input" },
+      total_count: { cellType: "input" },
+      entry_year: { cellType: "input" },
+      periodicity_normal: { cellType: "input" },
+      periodicity_fact: { cellType: "input" },
+      last_maintenance_year: { cellType: "input" },
+      unity: { cellType: "input" },
     };
     EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input" }));
 

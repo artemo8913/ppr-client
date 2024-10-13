@@ -17,6 +17,7 @@ import {
   subdivisionsTable,
   usersTable,
 } from "@/1shared/database";
+import { getDivisions } from "@/1shared/api/divisions.api";
 
 import { IPpr, TPprShortInfo } from "..";
 
@@ -43,6 +44,8 @@ export async function getPprTable(id: number): Promise<IPpr> {
 
     const totalFieldsValues = calculatePprTotalValues(pprData, workingMans);
 
+    const { direction, distance, subdivision } = await getDivisions(pprInfo[0]);
+
     return {
       ...pprInfo[0],
       created_by: user,
@@ -50,6 +53,9 @@ export async function getPprTable(id: number): Promise<IPpr> {
       months_statuses: pprMonthStatuses[0],
       data: pprData,
       total_fields_value: totalFieldsValues,
+      directionShortName: direction?.shortName,
+      distanceShortName: distance?.shortName,
+      subdivisionShortName: subdivision?.shortName,
     };
   } catch (e) {
     throw new Error(`Load ppr data. ${e}`);
@@ -72,9 +78,9 @@ export async function createPprTable(name: string, year: number) {
         created_at: new Date(),
         status: "plan_creating",
         idUserCreatedBy: session.user.id,
-        id_direction: session.user.idDirection,
-        id_distance: session.user.idDistance,
-        id_subdivision: session.user.idSubdivision,
+        idDirection: session.user.idDirection,
+        idDistance: session.user.idDistance,
+        idSubdivision: session.user.idSubdivision,
       })
       .$returningId();
 
@@ -97,26 +103,32 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
 
     if (params.peoples) {
       await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
-      await db.insert(pprWorkingMansTable).values(
-        params.peoples.map((workingMan) => {
-          if (typeof workingMan.id === "string") {
-            return { ...workingMan, id: undefined, idPpr: id };
-          }
-          return { ...workingMan, id: workingMan.id, idPpr: id };
-        })
-      );
+
+      if (params.peoples.length) {
+        await db.insert(pprWorkingMansTable).values(
+          params.peoples.map((workingMan) => {
+            if (typeof workingMan.id === "string") {
+              return { ...workingMan, id: undefined, idPpr: id };
+            }
+            return { ...workingMan, id: workingMan.id, idPpr: id };
+          })
+        );
+      }
     }
 
     if (params.data) {
       await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
-      await db.insert(pprsWorkDataTable).values(
-        params.data.map((pprData, index) => {
-          if (typeof pprData.id === "string") {
-            return { ...pprData, id: undefined, idPpr: id, order: index };
-          }
-          return { ...pprData, id: pprData.id, idPpr: id, order: index };
-        })
-      );
+
+      if (params.data.length) {
+        await db.insert(pprsWorkDataTable).values(
+          params.data.map((pprData, index) => {
+            if (typeof pprData.id === "string") {
+              return { ...pprData, id: undefined, idPpr: id, order: index };
+            }
+            return { ...pprData, id: pprData.id, idPpr: id, order: index };
+          })
+        );
+      }
     }
   } catch (e) {
     throw new Error(`${e}`);
@@ -151,9 +163,9 @@ export async function getManyPprsShortInfo(): Promise<TPprShortInfo[]> {
         created_at: pprsInfoTable.created_at,
         created_by: usersTable,
         months_statuses: pprMonthsStatusesTable,
-        id_direction: pprsInfoTable.id_direction,
-        id_distance: pprsInfoTable.id_distance,
-        id_subdivision: pprsInfoTable.id_subdivision,
+        idDirection: pprsInfoTable.idDirection,
+        idDistance: pprsInfoTable.idDistance,
+        idSubdivision: pprsInfoTable.idSubdivision,
         directionShortName: directionsTable.shortName,
         distanceShortName: distancesTable.shortName,
         subdivisionShortName: subdivisionsTable.shortName,
@@ -161,9 +173,9 @@ export async function getManyPprsShortInfo(): Promise<TPprShortInfo[]> {
       .from(pprsInfoTable)
       .innerJoin(usersTable, eq(pprsInfoTable.idUserCreatedBy, usersTable.id))
       .innerJoin(pprMonthsStatusesTable, eq(pprsInfoTable.id, pprMonthsStatusesTable.idPpr))
-      .innerJoin(directionsTable, eq(pprsInfoTable.id_direction, directionsTable.id))
-      .innerJoin(distancesTable, eq(pprsInfoTable.id_distance, distancesTable.id))
-      .innerJoin(subdivisionsTable, eq(pprsInfoTable.id_subdivision, subdivisionsTable.id));
+      .innerJoin(directionsTable, eq(pprsInfoTable.idDirection, directionsTable.id))
+      .innerJoin(distancesTable, eq(pprsInfoTable.idDistance, distancesTable.id))
+      .innerJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id));
 
     return responce;
   } catch (e) {

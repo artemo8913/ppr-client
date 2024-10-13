@@ -5,11 +5,11 @@ import Select from "antd/es/select";
 import { EditOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { TWorkBranch } from "@/2entities/ppr";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
+import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 interface IChangeBranchButtonProps {
-  workId?: number | string;
+  workId: TPprDataWorkId;
   branch?: TWorkBranch;
 }
 
@@ -20,9 +20,7 @@ const EditWorkButton: FC<IChangeBranchButtonProps> = (props) => {
 
   const handleClick = useCallback(
     (branch: TWorkBranch) => {
-      if (props.workId) {
-        updatePprData(props.workId, "branch", branch);
-      }
+      updatePprData(props.workId, "branch", branch);
     },
     [updatePprData, props.workId]
   );

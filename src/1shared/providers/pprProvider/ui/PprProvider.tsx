@@ -29,6 +29,7 @@ import {
   getFactNormTimeFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
   getPlanTabelTimeFieldByPlanNormTimeField,
+  TPprDataWorkId,
 } from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -36,7 +37,7 @@ import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance"
 import { calculatePprTotalValues } from "../lib/calculatePprTotalValues";
 
 export interface IBranchDefaultMeta {
-  workIds: Set<number | string>;
+  workIds: Set<TPprDataWorkId>;
   name: string;
   orderIndex: string;
   indexToPlaceTitle: number;
@@ -49,27 +50,27 @@ export interface IBranchMeta extends IBranchDefaultMeta {
 
 export interface IPprContext {
   ppr: IPpr | null;
-  addWork: (newWork: Partial<IPprData>, nearWorkId?: number | string | null) => void;
-  copyWork: (id: number | string) => void;
-  deleteWork: (id: number | string) => void;
-  updateNormOfTime: (id: number | string, value: number) => void;
-  updatePlanWork: (id: number | string, field: TPlanWorkPeriods, value: number) => void;
-  updateFactWork: (id: number | string, field: TFactWorkPeriods, value: number) => void;
-  updateFactWorkTime: (id: number | string, field: TFactTimePeriods, value: number) => void;
+  addWork: (newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId | null) => void;
+  copyWork: (id: TPprDataWorkId) => void;
+  deleteWork: (id: TPprDataWorkId) => void;
+  updateNormOfTime: (id: TPprDataWorkId, value: number) => void;
+  updatePlanWork: (id: TPprDataWorkId, field: TPlanWorkPeriods, value: number) => void;
+  updateFactWork: (id: TPprDataWorkId, field: TFactWorkPeriods, value: number) => void;
+  updateFactWorkTime: (id: TPprDataWorkId, field: TFactTimePeriods, value: number) => void;
   copyFactNormTimeToFactTime: (mode: "EVERY" | "NOT_FILLED", month: TMonth) => void;
-  updatePprData: (id: number | string, field: keyof IPprData, value: string | number) => void;
-  updatePlanWorkValueByUser: (id: number | string, field: TPlanWorkPeriods, newValue: number) => void;
-  updatePprTableCell: (id: number | string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
+  updatePprData: (id: TPprDataWorkId, field: keyof IPprData, value: string | number) => void;
+  updatePlanWorkValueByUser: (id: TPprDataWorkId, field: TPlanWorkPeriods, newValue: number) => void;
+  updatePprTableCell: (id: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
   updateTransfers: (
-    id: number | string,
+    id: TPprDataWorkId,
     field: TPlanWorkPeriods,
     newTransfers: TTransfer[] | null,
     type: "plan" | "undone"
   ) => void;
   setOneUnityInAllWorks: (unity: string) => void;
-  increaseWorkPosition: (id: number | string) => void;
-  decreaseWorkPosition: (id: number | string) => void;
-  updateSubbranch: (newSubbranch: string, workIdsSet: Set<number | string>) => void;
+  increaseWorkPosition: (id: TPprDataWorkId) => void;
+  decreaseWorkPosition: (id: TPprDataWorkId) => void;
+  updateSubbranch: (newSubbranch: string, workIdsSet: Set<TPprDataWorkId>) => void;
   addWorkingMan: () => void;
   deleteWorkingMan: (id: number) => void;
   updateWorkingMan: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
@@ -131,7 +132,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   const [ppr, setPpr] = useState<IPpr | null>(null);
 
   /**Добавить работу в ППР */
-  const addWork = useCallback((newWork: Partial<IPprData>, nearWorkId?: number | string | null) => {
+  const addWork = useCallback((newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId | null) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -159,7 +160,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const copyWork = useCallback((id: number | string) => {
+  const copyWork = useCallback((id: TPprDataWorkId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -198,7 +199,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Убрать работу из ППР */
-  const deleteWork = useCallback((id: number | string) => {
+  const deleteWork = useCallback((id: TPprDataWorkId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -211,7 +212,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить значение нормы времени */
-  const updateNormOfTime = useCallback((id: number | string, value: unknown) => {
+  const updateNormOfTime = useCallback((id: TPprDataWorkId, value: unknown) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -249,7 +250,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить значение запланированного объема работ. Функция должна использоваться при создании годового плана или же добавлении новой работы при месячном планировании  */
-  const updatePlanWork = useCallback((id: number | string, field: TPlanWorkPeriods, value: number) => {
+  const updatePlanWork = useCallback((id: TPprDataWorkId, field: TPlanWorkPeriods, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -290,7 +291,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateFactWork = useCallback((id: number | string, field: TFactWorkPeriods, value: number) => {
+  const updateFactWork = useCallback((id: TPprDataWorkId, field: TFactWorkPeriods, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -320,7 +321,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateFactWorkTime = useCallback((id: number | string, field: TFactTimePeriods, value: number) => {
+  const updateFactWorkTime = useCallback((id: TPprDataWorkId, field: TFactTimePeriods, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -380,7 +381,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить данные ППРа. Функция используется для обновления ячеек с простыми типами данных (строки, числа). Функция не подходит для обновления данных планов ППРа*/
-  const updatePprData = useCallback((id: number | string, field: keyof IPprData, value: string | number) => {
+  const updatePprData = useCallback((id: TPprDataWorkId, field: keyof IPprData, value: string | number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -405,7 +406,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Задать вручную новое значение в плане ППРа. Данная функция должна использоваться только на этапе  */
-  const updatePlanWorkValueByUser = useCallback((id: number | string, field: TPlanWorkPeriods, value: number) => {
+  const updatePlanWorkValueByUser = useCallback((id: TPprDataWorkId, field: TPlanWorkPeriods, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -452,7 +453,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * 2. Поскольку можно переносить работы только на будущие периоды и изменение откорректированных должна быть невозможна, то у
    */
   const updateTransfers = useCallback(
-    (id: number | string, field: TPlanWorkPeriods, newTransfers: TTransfer[] | null, type: "plan" | "undone") => {
+    (id: TPprDataWorkId, field: TPlanWorkPeriods, newTransfers: TTransfer[] | null, type: "plan" | "undone") => {
       setPpr((prev) => {
         if (!prev) {
           return prev;
@@ -525,7 +526,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   );
 
   const updatePprTableCell = useCallback(
-    (id: number | string, field: keyof IPprData, value: string, isWorkAproved?: boolean) => {
+    (id: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => {
       if (field === "norm_of_time") {
         updateNormOfTime(id, Number(value));
       } else if (checkIsFactWorkField(field)) {
@@ -543,7 +544,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     [updateFactWork, updateFactWorkTime, updateNormOfTime, updatePlanWork, updatePlanWorkValueByUser, updatePprData]
   );
 
-  const updateSubbranch = useCallback((newSubbranch: string, workIdsSet: Set<number | string>) => {
+  const updateSubbranch = useCallback((newSubbranch: string, workIdsSet: Set<TPprDataWorkId>) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -716,7 +717,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   const getPprDataWithRowSpan = useCallback((data: IPprData[]): IPprDataWithRowSpan[] => {
-    let prevWorkId: number | string = "";
+    let prevWorkId: TPprDataWorkId = "";
     let prevWorkName: string = "";
     let prevWorkIndex: number = 0;
 
@@ -795,7 +796,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const increaseWorkPosition = useCallback((id: number | string) => {
+  const increaseWorkPosition = useCallback((id: TPprDataWorkId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -818,7 +819,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const decreaseWorkPosition = useCallback((id: number | string) => {
+  const decreaseWorkPosition = useCallback((id: TPprDataWorkId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
