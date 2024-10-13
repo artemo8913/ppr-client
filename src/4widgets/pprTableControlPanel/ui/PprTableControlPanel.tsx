@@ -21,7 +21,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
   return (
     <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden">
       Статус: {ppr ? translateRuYearStatus(ppr.status) : ""} Создан: {new Date(ppr?.created_at!).toLocaleDateString()}{" "}
-      Год: {ppr?.year} {ppr?.id_subdivision}-{ppr?.id_distance}-{ppr?.id_direction}
+      Год: {ppr?.year} {ppr?.idSubdivision}-{ppr?.idDistance}-{ppr?.idDirection}
       <PprTableSettingsModal />
       <PprTableSaveButton />
       <PprTableSetOneUnityButton />

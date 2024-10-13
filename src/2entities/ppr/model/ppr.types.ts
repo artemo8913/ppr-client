@@ -108,9 +108,9 @@ export interface IPpr {
   created_at: Date;
   created_by: IUser;
   months_statuses: TAllMonthStatuses;
-  id_direction: number | null;
-  id_distance: number | null;
-  id_subdivision: number | null;
+  idDirection: number | null;
+  idDistance: number | null;
+  idSubdivision: number | null;
   peoples: IWorkingManYearPlan[];
   data: IPprData[];
   total_fields_value: TTotalFieldsValues;

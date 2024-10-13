@@ -89,8 +89,6 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     [pprData, field, updatePprTableCell]
   );
 
-  console.log(field, Boolean(value));
-
   return (
     <td
       className={clsx(

@@ -58,9 +58,9 @@ export const pprsInfoTable = mysqlTable("pprs_info", {
   idUserCreatedBy: int("id_user_created_by")
     .references(() => usersTable.id)
     .notNull(),
-  id_direction: int("id_direction").references(() => directionsTable.id),
-  id_distance: int("id_distance").references(() => distancesTable.id),
-  id_subdivision: int("id_subdivision").references(() => subdivisionsTable.id),
+  idDirection: int("id_direction").references(() => directionsTable.id),
+  idDistance: int("id_distance").references(() => distancesTable.id),
+  idSubdivision: int("id_subdivision").references(() => subdivisionsTable.id),
 });
 
 export const pprMonthsStatusesTable = mysqlTable("ppr_months_statuses", {

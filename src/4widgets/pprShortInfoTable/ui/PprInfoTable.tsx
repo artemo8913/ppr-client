@@ -29,20 +29,20 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
   },
   {
     title: "Подразделение",
-    dataIndex: "id_subdivision",
-    key: "id_subdivision",
+    dataIndex: "idSubdivision",
+    key: "idSubdivision",
     render: (_, data) => data.subdivisionShortName || "-",
   },
   {
     title: "Дистанция",
-    dataIndex: "id_distance",
-    key: "id_distance",
+    dataIndex: "idDistance",
+    key: "idDistance",
     render: (_, data) => data.distanceShortName || "-",
   },
   {
     title: "Дирекция",
-    dataIndex: "id_direction",
-    key: "id_direction",
+    dataIndex: "idDirection",
+    key: "idDirection",
     render: (_, data) => data.directionShortName || "-",
   },
   {
