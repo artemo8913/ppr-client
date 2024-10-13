@@ -1,22 +1,32 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
+import { useSession } from "next-auth/react";
+
+import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { updatePprTable } from "@/2entities/ppr";
-import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface IPprTableUpdateFormProps {}
 
 export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
   const { ppr } = usePpr();
   const [isLoading, setIsLoading] = useState(false);
+
+  const { data: credential } = useSession();
+
+  const isPprInUserControl = useMemo(
+    () => checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision,
+    [credential?.user, ppr?.created_by]
+  );
+
   return (
     <Tooltip title="сохранить">
       <Button
         icon={<SaveOutlined />}
         loading={isLoading}
-        disabled={isLoading}
+        disabled={isLoading || !isPprInUserControl}
         type="text"
         shape="circle"
         onClick={async () => {
