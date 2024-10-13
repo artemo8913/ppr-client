@@ -3,17 +3,29 @@ import { ChangeEvent, FC, useCallback, useMemo, useState } from "react";
 import { Popover } from "antd";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
+import { useSession } from "next-auth/react";
 import { EditOutlined } from "@ant-design/icons";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
+import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 
 interface IFillWorkingManPlanTimeProps {}
 
 export const FillWorkingManPlanTime: FC<IFillWorkingManPlanTimeProps> = () => {
   const { ppr, fillWorkingManPlanTime } = usePpr();
+
   const [value, setValue] = useState(0);
 
-  const isDisabled = useMemo(() => ppr?.status !== "plan_creating", [ppr?.status]);
+  const { data: credential } = useSession();
+
+  const isPprInUserControl = useMemo(
+    () => checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision,
+    [credential?.user, ppr?.created_by]
+  );
+
+  const isDisabled = useMemo(
+    () => ppr?.status !== "plan_creating" || !isPprInUserControl,
+    [isPprInUserControl, ppr?.status]
+  );
 
   const handleClick = useCallback(() => {
     fillWorkingManPlanTime("NOT_FILLED", value);
