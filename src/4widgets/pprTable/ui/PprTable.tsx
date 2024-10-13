@@ -59,7 +59,7 @@ export const PprTable: FC<IPprTableProps> = () => {
     <table
       style={{
         tableLayout: "fixed",
-        width: `${pprSettings.tableWidthPercent}%`,
+        width: `${pprSettings.tableWidthPercent - 0.5}%`,
         fontSize: `${pprSettings.fontSizePx}px`,
         position: "relative",
       }}
