@@ -1,6 +1,7 @@
 "use client";
 import { FC, useState } from "react";
 import { useSession } from "next-auth/react";
+import { Key } from "antd/es/table/interface";
 import { Table as TableAntd, TableProps } from "antd";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
@@ -40,28 +41,32 @@ const columns: TableProps<ICommonWork>["columns"] = [
 ];
 
 export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkId }) => {
+  const { data: credential } = useSession();
+
+  const { addWork, getBranchesMeta } = usePpr();
+
+  const { subbranchesList } = getBranchesMeta();
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  // Без запроса на сервер это стейт не нужен
   const [isLoading, setIsLoading] = useState(false);
+
+  // Преобразовать в один стейт
   const [workId, setWorkId] = useState<number | null>();
   const [branch, setBranch] = useState<TWorkBranch>("exploitation");
   const [subbranch, setSubbranch] = useState<string[]>([]);
 
-  const { addWork, getBranchesMeta } = usePpr();
-  const { subbranchesList } = getBranchesMeta();
-
+  // Обернуть в useMemo
   const subbranchOptions = subbranchesList?.map((subbranch) => {
     return { value: subbranch, label: subbranch };
   });
-
-  const { data: session } = useSession();
-  const user = session?.user;
 
   const handleFinish = async () => {
     setIsLoading(true);
     if (!workId) {
       return;
     }
-
+    // Этот запрос вообще не нужен (можно же всё из имеющегося массива получать)
     const work = await getOneCommonWorkById(workId);
 
     addWork(
@@ -73,7 +78,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
         measure: work.measure,
         norm_of_time: work.normOfTime,
         norm_of_time_document: work.normOfTimeNameFull,
-        unity: user?.subdivisionShortName,
+        unity: credential?.user.subdivisionShortName,
       },
       nearWorkId
     );
@@ -88,7 +93,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkI
       <TableAntd
         rowSelection={{
           type: "radio",
-          onChange: (selectedKeys: React.Key[], selectedRows: ICommonWork[]) => {
+          onChange: (selectedKeys: Key[], selectedRows: ICommonWork[]) => {
             setSelectedRowKeys(selectedKeys);
             setWorkId(selectedRows[0].id);
           },
