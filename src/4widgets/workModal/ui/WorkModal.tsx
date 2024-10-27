@@ -23,7 +23,7 @@ export const WorkModal: FC<IWorkModalProps> = ({ data }) => {
           {
             label: "Выбрать из перечня работ",
             key: "1",
-            children: <WorkSelectTable data={data} onFinish={closeModal} nearWorkId={workId} />,
+            children: <WorkSelectTable data={data} onFinish={closeModal} nearWorkIdToPlaceNewWork={workId} />,
           },
           {
             label: "Добавить самостоятельно",
