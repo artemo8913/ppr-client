@@ -1,23 +1,31 @@
 "use client";
-import { FC, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Key } from "antd/es/table/interface";
+import { FC, useCallback, useMemo, useState } from "react";
+import Search, { SearchProps } from "antd/es/input/Search";
+import { Key, TableRowSelection } from "antd/es/table/interface";
 import { Table as TableAntd, TableProps } from "antd";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
 
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { ICommonWork, getOneCommonWorkById } from "@/2entities/commonWork";
+import { ICommonWork } from "@/2entities/commonWork";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 interface IWorkTableProps {
   data: ICommonWork[];
   onFinish?: () => void;
-  nearWorkId?: TPprDataWorkId | null;
+  nearWorkIdToPlaceNewWork?: TPprDataWorkId | null;
 }
 
-const columns: TableProps<ICommonWork>["columns"] = [
+interface ISelectedWork extends Partial<ICommonWork> {
+  branch: TWorkBranch;
+  subbranch?: string;
+}
+
+const INIT_SELECTED_WORK: ISelectedWork = { branch: "exploitation" };
+
+const COLUMNS: TableProps<ICommonWork>["columns"] = [
   {
     title: "Наименование работы",
     dataIndex: "name",
@@ -40,78 +48,124 @@ const columns: TableProps<ICommonWork>["columns"] = [
   },
 ];
 
-export const WorkSelectTable: FC<IWorkTableProps> = ({ data, onFinish, nearWorkId }) => {
+export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
+  const [dataSource, setDataSource] = useState(props.data);
+
   const { data: credential } = useSession();
 
   const { addWork, getBranchesMeta } = usePpr();
 
   const { subbranchesList } = getBranchesMeta();
 
+  const subbranchOptions = useMemo(
+    () =>
+      subbranchesList?.map((subbranch) => {
+        return { value: subbranch, label: subbranch };
+      }),
+    [subbranchesList]
+  );
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  // Без запроса на сервер это стейт не нужен
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Преобразовать в один стейт
-  const [workId, setWorkId] = useState<number | null>();
-  const [branch, setBranch] = useState<TWorkBranch>("exploitation");
-  const [subbranch, setSubbranch] = useState<string[]>([]);
+  const [selectedWork, setSelectedWork] = useState<ISelectedWork>(INIT_SELECTED_WORK);
 
-  // Обернуть в useMemo
-  const subbranchOptions = subbranchesList?.map((subbranch) => {
-    return { value: subbranch, label: subbranch };
-  });
+  const selectedBranch = useMemo(() => [{ value: selectedWork.branch }], [selectedWork.branch]);
 
-  const handleFinish = async () => {
-    setIsLoading(true);
-    if (!workId) {
+  const handleSelectBranch = useCallback(
+    (values: { value: TWorkBranch }[]) =>
+      setSelectedWork((prev) => {
+        return { ...prev, branch: values[0]?.value };
+      }),
+    []
+  );
+
+  const selectedSubbranch = useMemo(() => [selectedWork.subbranch].filter(Boolean), [selectedWork.subbranch]);
+
+  const handleSelectSubbranch = useCallback(
+    (tags: (string | undefined)[]) =>
+      setSelectedWork((prev) => {
+        return { ...prev, subbranch: tags[0] };
+      }),
+    []
+  );
+
+  const onSearch: SearchProps["onSearch"] = useCallback(
+    (value: string) => {
+      if (value) {
+        setDataSource(props.data.filter((commonWork) => commonWork.name.includes(value)));
+      } else {
+        setDataSource(props.data);
+      }
+    },
+    [props.data]
+  );
+
+  const handleFinish = () => {
+    if (!selectedWork.id || !credential) {
       return;
     }
-    // Этот запрос вообще не нужен (можно же всё из имеющегося массива получать)
-    const work = await getOneCommonWorkById(workId);
 
     addWork(
       {
-        common_work_id: work.id,
-        name: work.name,
-        branch,
-        subbranch: subbranch[0],
-        measure: work.measure,
-        norm_of_time: work.normOfTime,
-        norm_of_time_document: work.normOfTimeNameFull,
-        unity: credential?.user.subdivisionShortName,
+        common_work_id: selectedWork.id,
+        name: selectedWork.name,
+        branch: selectedWork.branch,
+        subbranch: selectedWork.subbranch,
+        measure: selectedWork.measure,
+        norm_of_time: selectedWork.normOfTime,
+        norm_of_time_document: selectedWork.normOfTimeNameFull,
+        unity: credential.user.subdivisionShortName,
       },
-      nearWorkId
+      props.nearWorkIdToPlaceNewWork
     );
     setSelectedRowKeys([]);
-    setWorkId(null);
-    setIsLoading(false);
-    onFinish && onFinish();
+    setSelectedWork(INIT_SELECTED_WORK);
+
+    if (props.onFinish) {
+      props.onFinish();
+    }
   };
 
+  const rowSelectionProp: TableRowSelection<ICommonWork> = useMemo(
+    () => ({
+      type: "radio",
+      onChange: (selectedKeys: Key[], selectedRows: ICommonWork[]) => {
+        setSelectedRowKeys(selectedKeys);
+        setSelectedWork((prev) => ({ ...prev, ...selectedRows[0] }));
+      },
+      selectedRowKeys: selectedRowKeys,
+    }),
+    [selectedRowKeys]
+  );
+
   return (
-    <div className="flex flex-col">
-      <TableAntd
-        rowSelection={{
-          type: "radio",
-          onChange: (selectedKeys: Key[], selectedRows: ICommonWork[]) => {
-            setSelectedRowKeys(selectedKeys);
-            setWorkId(selectedRows[0].id);
-          },
-          selectedRowKeys: selectedRowKeys,
-        }}
-        dataSource={data}
-        columns={columns}
-        rowKey={"id"}
-      />
-      <label className="flex align-center">
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-4 items-center">
         Категория работ:
-        <Select value={branch} onChange={setBranch} options={BRANCH_SELECT_OPTIONS} />
-      </label>
-      <label className="flex align-center">
+        <Select
+          className="flex-1"
+          value={selectedBranch}
+          onChange={handleSelectBranch}
+          options={BRANCH_SELECT_OPTIONS}
+        />
         Подкатегория работ:
-        <Select mode="tags" maxCount={1} value={subbranch} onChange={setSubbranch} options={subbranchOptions} />
-      </label>
-      <Button onClick={handleFinish} type="primary" disabled={!Boolean(workId)} loading={isLoading}>
+        <Select
+          className="flex-1"
+          mode="tags"
+          maxCount={1}
+          value={selectedSubbranch}
+          onChange={handleSelectSubbranch}
+          options={subbranchOptions}
+        />
+      </div>
+      <Search allowClear onSearch={onSearch} placeholder="Найти по наименованию" className="flex-1" />
+      <TableAntd rowSelection={rowSelectionProp} dataSource={dataSource} columns={COLUMNS} rowKey={"id"} />
+      <Button
+        className="m-auto"
+        onClick={handleFinish}
+        type="primary"
+        disabled={!Boolean(selectedWork.id && selectedWork.subbranch)}
+      >
         Добавить
       </Button>
     </div>
