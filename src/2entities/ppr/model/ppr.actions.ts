@@ -1,5 +1,5 @@
 "use server";
-import { eq } from "drizzle-orm";
+import { and, eq, like, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -17,7 +17,7 @@ import {
   subdivisionsTable,
   usersTable,
 } from "@/1shared/database";
-import { getDivisions } from "@/1shared/api/divisions.api";
+import { getDivisionsById } from "@/1shared/api/divisions.api";
 
 import { IPpr, TPprShortInfo } from "..";
 
@@ -44,7 +44,7 @@ export async function getPprTable(id: number): Promise<IPpr> {
 
     const totalFieldsValues = calculatePprTotalValues(pprData, workingMans);
 
-    const { direction, distance, subdivision } = await getDivisions(pprInfo[0]);
+    const { direction, distance, subdivision } = await getDivisionsById(pprInfo[0]);
 
     return {
       ...pprInfo[0],
@@ -152,7 +152,21 @@ export async function deletePprTable(id: number) {
   revalidatePath(ROUTE_PPR);
 }
 
-export async function getManyPprsShortInfo(): Promise<TPprShortInfo[]> {
+export async function getManyPprsShortInfo(params?: {
+  name?: string;
+  year?: number | string;
+  idDirection?: number | string;
+  idDistance?: number | string;
+  idSubdivision?: number | string;
+}): Promise<TPprShortInfo[]> {
+  const filters: SQL[] = [];
+
+  if (params?.name) filters.push(like(pprsInfoTable.name, `%${params.name}%`));
+  if (params?.year) filters.push(eq(pprsInfoTable.year, Number(params.year)));
+  if (params?.idDirection) filters.push(eq(pprsInfoTable.idDirection, Number(params.idDirection)));
+  if (params?.idDistance) filters.push(eq(pprsInfoTable.idDistance, Number(params.idDistance)));
+  if (params?.idSubdivision) filters.push(eq(pprsInfoTable.idSubdivision, Number(params.idSubdivision)));
+
   try {
     const responce = await db
       .select({
@@ -171,6 +185,7 @@ export async function getManyPprsShortInfo(): Promise<TPprShortInfo[]> {
         subdivisionShortName: subdivisionsTable.shortName,
       })
       .from(pprsInfoTable)
+      .where(and(...filters))
       .innerJoin(usersTable, eq(pprsInfoTable.idUserCreatedBy, usersTable.id))
       .innerJoin(pprMonthsStatusesTable, eq(pprsInfoTable.id, pprMonthsStatusesTable.idPpr))
       .innerJoin(directionsTable, eq(pprsInfoTable.idDirection, directionsTable.id))
