@@ -1,7 +1,7 @@
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 
-import { MainLayoutSider } from "@/1shared/ui/siders";
+import { MainLayoutSider } from "./MainLayoutSider";
 
 import style from "./MainLayout.module.scss";
 
