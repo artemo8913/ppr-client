@@ -13,6 +13,7 @@ import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 
 interface IPprInfoProps {
   data: TPprShortInfo[];
+  isLoading?: boolean;
 }
 
 const columns: TableProps<TPprShortInfo>["columns"] = [
@@ -77,6 +78,6 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
   },
 ];
 
-export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
-  return <Table dataSource={data} columns={columns} rowKey="id" />;
+export const PprInfoTable: FC<IPprInfoProps> = ({ data, isLoading }) => {
+  return <Table loading={isLoading} dataSource={data} columns={columns} rowKey="id" />;
 };
