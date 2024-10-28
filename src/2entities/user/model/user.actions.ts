@@ -2,9 +2,9 @@
 import { eq } from "drizzle-orm";
 
 import { db, usersTable } from "@/1shared/database";
+import { getDivisionsById } from "@/1shared/api/divisions.api";
 
 import { IUser } from "..";
-import { getDivisionsById } from "@/1shared/api/divisions.api";
 
 export async function getUserData(id: number): Promise<IUser> {
   try {
