@@ -7,7 +7,7 @@ import { Table as TableAntd, TableProps } from "antd";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
 
-import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
+import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { ICommonWork } from "@/2entities/commonWork";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
@@ -69,12 +69,12 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
 
   const [selectedWork, setSelectedWork] = useState<ISelectedWork>(INIT_SELECTED_WORK);
 
-  const selectedBranch = useMemo(() => [{ value: selectedWork.branch }], [selectedWork.branch]);
+  const selectedBranch = useMemo(() => selectedWork.branch, [selectedWork.branch]);
 
   const handleSelectBranch = useCallback(
-    (values: { value: TWorkBranch }[]) =>
+    (value: TWorkBranch) =>
       setSelectedWork((prev) => {
-        return { ...prev, branch: values[0]?.value };
+        return { ...prev, branch: value };
       }),
     []
   );

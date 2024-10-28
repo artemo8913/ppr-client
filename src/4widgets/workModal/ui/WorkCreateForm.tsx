@@ -7,7 +7,7 @@ import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import Button from "antd/es/button";
 
-import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
+import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
