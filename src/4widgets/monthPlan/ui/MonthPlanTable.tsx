@@ -1,7 +1,7 @@
 "use client";
 import { FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { TTimePeriod } from "@/1shared/lib/date";
+import { TTimePeriod } from "@/1shared/const/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { TPlanWorkPeriodsFields, IPprData, IPlanWorkValues } from "@/2entities/ppr";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";

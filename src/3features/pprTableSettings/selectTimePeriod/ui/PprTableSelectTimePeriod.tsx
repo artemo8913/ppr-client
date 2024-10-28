@@ -3,7 +3,7 @@ import Select, { DefaultOptionType } from "antd/es/select";
 import { FC, useEffect } from "react";
 
 import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { TTimePeriod, TIME_PERIODS } from "@/1shared/lib/date";
+import { TTimePeriod, TIME_PERIODS } from "@/1shared/const/date";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { usePpr, findFirstUndonePprPeriod, checkIsTimePeriodAvailableToSelect } from "@/1shared/providers/pprProvider";
 

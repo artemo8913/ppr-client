@@ -1,7 +1,7 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
 
-import { TMonth } from "@/1shared/lib/date";
+import { TMonth } from "@/1shared/const/date";
 import {
   IPpr,
   IPprData,

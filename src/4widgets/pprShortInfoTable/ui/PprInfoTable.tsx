@@ -3,7 +3,7 @@ import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
 
-import { MONTHS } from "@/1shared/lib/date";
+import { MONTHS } from "@/1shared/const/date";
 import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
 import { TPprShortInfo } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";

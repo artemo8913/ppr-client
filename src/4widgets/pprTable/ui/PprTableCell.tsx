@@ -2,7 +2,7 @@
 import { FC, memo, MutableRefObject, useCallback, useMemo } from "react";
 import clsx from "clsx";
 
-import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
+import { getQuartal, getTimePeriodFromString } from "@/1shared/const/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {

@@ -3,7 +3,7 @@ import {
   TFilterTimePeriodOption,
   usePprTableSettings,
 } from "@/1shared/providers/pprTableSettingsProvider";
-import { TTimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/lib/date";
+import { TTimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/const/date";
 import { IPprData } from "@/2entities/ppr";
 import { useMemo } from "react";
 
