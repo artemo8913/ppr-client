@@ -38,7 +38,7 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
   const idDistance = Number(searchParams.get("idDistance")) || null;
   const idSubdivision = Number(searchParams.get("idSubdivision")) || null;
 
-  const handleSearchName = (e: ChangeEvent<HTMLInputElement>) => handleSearch("name", e.target.value);
+  const handleSearchName = (value: string) => handleSearch("name", value);
   const handleSearchDirection = (value: number) => handleSearch("idDirection", value);
   const handleSearchDistance = (value: number) => handleSearch("idDistance", value);
   const handleSearchSubdivision = (value: number) => handleSearch("idSubdivision", value);
@@ -66,7 +66,7 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
       <Search
         defaultValue={searchParams.get("name")?.toString()}
         placeholder="Поиск по наименованию"
-        onChange={handleSearchName}
+        onSearch={handleSearchName}
         allowClear
       />
       <DatePicker
