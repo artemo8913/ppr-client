@@ -1,5 +1,5 @@
 "use client";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
@@ -12,6 +12,7 @@ interface IPprTableUpdateFormProps {}
 
 export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
   const { ppr } = usePpr();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: credential } = useSession();
@@ -21,6 +22,16 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
     [credential?.user, ppr?.created_by]
   );
 
+  const handleSave = useCallback(async () => {
+    setIsLoading(true);
+
+    if (ppr) {
+      await updatePprTable(ppr.id, { data: ppr.data, peoples: ppr.peoples });
+    }
+
+    setIsLoading(false);
+  }, [ppr]);
+
   return (
     <Tooltip title="сохранить">
       <Button
@@ -29,11 +40,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
         disabled={isLoading || !isPprInUserControl}
         type="text"
         shape="circle"
-        onClick={async () => {
-          setIsLoading(true);
-          ppr && (await updatePprTable(ppr.id, { data: ppr.data, peoples: ppr.peoples }));
-          setIsLoading(false);
-        }}
+        onClick={handleSave}
       />
     </Tooltip>
   );
