@@ -26,7 +26,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
     setIsLoading(true);
 
     if (ppr) {
-      await updatePprTable(ppr.id, { data: ppr.data, peoples: ppr.peoples });
+      await updatePprTable(ppr.id, { data: ppr.data, workingMans: ppr.workingMans });
     }
 
     setIsLoading(false);

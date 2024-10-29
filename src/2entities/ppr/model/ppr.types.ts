@@ -111,7 +111,7 @@ export interface IPpr {
   idDirection: number | null;
   idDistance: number | null;
   idSubdivision: number | null;
-  peoples: IWorkingManYearPlan[];
+  workingMans: IWorkingManYearPlan[];
   data: IPprData[];
   total_fields_value: TTotalFieldsValues;
   directionShortName?: string;
@@ -119,7 +119,7 @@ export interface IPpr {
   subdivisionShortName?: string;
 }
 
-export type TPprShortInfo = Omit<IPpr, "data" | "peoples" | "total_fields_value">;
+export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value">;
 
 export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;

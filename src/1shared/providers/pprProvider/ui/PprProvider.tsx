@@ -570,7 +570,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return {
         ...prev,
-        peoples: prev.peoples.concat(createNewWorkingManInstance()),
+        workingMans: prev.workingMans.concat(createNewWorkingManInstance()),
       };
     });
   }, []);
@@ -583,7 +583,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return {
         ...prev,
-        peoples: prev.peoples.map((man, arrayIndex) => {
+        workingMans: prev.workingMans.map((man, arrayIndex) => {
           if (arrayIndex === rowIndex) {
             return {
               ...man,
@@ -601,7 +601,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       if (!prev) {
         return prev;
       }
-      const correctedWorkingMan = { ...prev.peoples[rowIndex] };
+      const correctedWorkingMan = { ...prev.workingMans[rowIndex] };
       correctedWorkingMan[field] = value;
       correctedWorkingMan.year_plan_norm_time = 0;
       for (const planNormPeriod of PLAN_NORM_TIME_FIELDS) {
@@ -612,7 +612,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return {
         ...prev,
-        peoples: prev.peoples.map((man, index) => {
+        workingMans: prev.workingMans.map((man, index) => {
           if (rowIndex === index) {
             return { ...correctedWorkingMan };
           }
@@ -627,7 +627,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       if (!prev) {
         return prev;
       }
-      const correctedWorkingMan = { ...prev.peoples[rowIndex] };
+      const correctedWorkingMan = { ...prev.workingMans[rowIndex] };
       correctedWorkingMan[field] = value;
       correctedWorkingMan.year_plan_tabel_time = 0;
       for (const planTabelPeriod of PLAN_TABEL_TIME_FIELDS) {
@@ -642,7 +642,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
       return {
         ...prev,
-        peoples: prev.peoples.map((man, index) => {
+        workingMans: prev.workingMans.map((man, index) => {
           if (rowIndex === index) {
             return { ...correctedWorkingMan };
           }
@@ -657,7 +657,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       if (!prev) {
         return prev;
       }
-      const correctedWorkinMan = { ...prev.peoples[rowIndex] };
+      const correctedWorkinMan = { ...prev.workingMans[rowIndex] };
       correctedWorkinMan[field] = value;
       correctedWorkinMan.year_fact_time = 0;
       for (const factPeriod of FACT_TIME_FIELDS) {
@@ -668,7 +668,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return {
         ...prev,
-        peoples: prev.peoples.map((man, index) => {
+        workingMans: prev.workingMans.map((man, index) => {
           if (rowIndex === index) {
             return { ...correctedWorkinMan };
           }
@@ -683,7 +683,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       if (!prev) {
         return prev;
       }
-      const correctedWorkingMan = { ...prev.peoples[rowIndex] };
+      const correctedWorkingMan = { ...prev.workingMans[rowIndex] };
       correctedWorkingMan.participation = value;
 
       for (const planTabelPeriod of PLAN_TABEL_TIME_FIELDS) {
@@ -693,7 +693,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
       return {
         ...prev,
-        peoples: prev.peoples.map((man, index) => {
+        workingMans: prev.workingMans.map((man, index) => {
           if (rowIndex === index) {
             return { ...correctedWorkingMan };
           }
@@ -711,7 +711,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return {
         ...prev,
-        peoples: prev.peoples.filter((man) => man.id !== id),
+        workingMans: prev.workingMans.filter((man) => man.id !== id),
       };
     });
   }, []);
@@ -758,7 +758,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return {
         ...prev,
-        peoples: prev.peoples.map((workingMan) => {
+        workingMans: prev.workingMans.map((workingMan) => {
           const correctedWorkingMan: IWorkingManYearPlan = { ...workingMan };
 
           correctedWorkingMan.year_plan_norm_time = 0;
@@ -927,7 +927,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   //Скорее всего было бы лучше сделать не useEffect, а при вызове функций изменения ячеек сразу же считать сумму по столбцам/
   //Ибо сейчас скорее всего получится, что я делаю перерендеринг из-за перерасчета, из-за useEffect
   useEffect(() => {
-    const totalFieldsValues = calculatePprTotalValues(ppr?.data, ppr?.peoples);
+    const totalFieldsValues = calculatePprTotalValues(ppr?.data, ppr?.workingMans);
 
     setPpr((prev) => {
       if (!prev) {
@@ -935,7 +935,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       }
       return { ...prev, total_fields_value: totalFieldsValues };
     });
-  }, [ppr?.data, ppr?.peoples]);
+  }, [ppr?.data, ppr?.workingMans]);
 
   return (
     <PprContext.Provider

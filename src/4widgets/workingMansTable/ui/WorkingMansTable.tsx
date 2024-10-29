@@ -80,7 +80,7 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
         </tr>
       </thead>
       <tbody>
-        {ppr?.peoples.map((workingMan, rowIndex) => (
+        {ppr?.workingMans.map((workingMan, rowIndex) => (
           <tr key={workingMan.id}>
             {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => (
               <td

@@ -49,7 +49,7 @@ export async function getPprTable(id: number): Promise<IPpr> {
     return {
       ...pprInfo[0],
       created_by: user,
-      peoples: workingMans,
+      workingMans: workingMans,
       months_statuses: pprMonthStatuses[0],
       data: pprData,
       total_fields_value: totalFieldsValues,
@@ -101,12 +101,12 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
         .set({ ...params.months_statuses })
         .where(eq(pprMonthsStatusesTable.idPpr, id)));
 
-    if (params.peoples) {
+    if (params.workingMans) {
       await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
 
-      if (params.peoples.length) {
+      if (params.workingMans.length) {
         await db.insert(pprWorkingMansTable).values(
-          params.peoples.map((workingMan) => {
+          params.workingMans.map((workingMan) => {
             if (typeof workingMan.id === "string") {
               return { ...workingMan, id: undefined, idPpr: id };
             }
