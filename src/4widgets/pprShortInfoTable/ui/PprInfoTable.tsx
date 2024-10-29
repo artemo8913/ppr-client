@@ -3,8 +3,9 @@ import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
 
-import { MONTHS } from "@/1shared/lib/date";
+import { MONTHS } from "@/1shared/const/date";
 import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
+import { usePprSearchTransition } from "@/1shared/providers/pprSearchTransitionProvider";
 import { TPprShortInfo } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprCopyButton } from "@/3features/ppr/copy";
@@ -78,5 +79,7 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
 ];
 
 export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
-  return <Table dataSource={data} columns={columns} rowKey="id" />;
+  const { isLoading } = usePprSearchTransition();
+
+  return <Table loading={isLoading} dataSource={data} columns={columns} rowKey="id" />;
 };

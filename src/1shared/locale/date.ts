@@ -1,4 +1,4 @@
-import { TIME_PERIODS } from "../lib/date";
+import { TIME_PERIODS } from "../const/date";
 
 const TIME_PERIOD_RU = {
   year: "год",

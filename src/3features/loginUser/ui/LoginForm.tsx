@@ -7,24 +7,33 @@ import { useRouter } from "next/navigation";
 
 export function LoginForm() {
   const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState<string>();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setIsLoading(true);
+
     const formData = new FormData(e.currentTarget);
+
     const res = await signIn("credentials", {
       username: formData?.get("username"),
       password: formData?.get("password"),
-      redirect: false
+      redirect: false,
     });
+
     if (res?.error) {
       setErrorMessage("Не верный логин / пароль");
     } else {
       router.refresh();
     }
+
     setIsLoading(false);
   };
+
   return (
     <form className="w-[300px] m-auto flex flex-col gap-4 justify-center" onSubmit={handleSubmit}>
       <Input type="text" name="username" placeholder="Логин" required />

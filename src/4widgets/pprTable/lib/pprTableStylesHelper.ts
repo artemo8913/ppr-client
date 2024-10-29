@@ -1,4 +1,4 @@
-import { TTimePeriod } from "@/1shared/lib/date";
+import { TTimePeriod } from "@/1shared/const/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import { TCorrectionView } from "@/1shared/providers/pprTableSettingsProvider";
 import {

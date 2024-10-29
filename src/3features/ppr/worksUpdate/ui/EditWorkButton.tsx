@@ -5,7 +5,7 @@ import Select from "antd/es/select";
 import { EditOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { BRANCH_SELECT_OPTIONS } from "@/1shared/form/branchSelectOptions";
+import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 interface IChangeBranchButtonProps {

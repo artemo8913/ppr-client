@@ -2,7 +2,7 @@ import { FC } from "react";
 import Badge from "antd/es/badge";
 import Tooltip from "antd/es/tooltip";
 
-import { TMonth } from "@/1shared/lib/date";
+import { TMonth } from "@/1shared/const/date";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { translateRuMonthStatus } from "@/1shared/locale/pprStatus";
 import { TMonthPprStatus } from "@/2entities/ppr";

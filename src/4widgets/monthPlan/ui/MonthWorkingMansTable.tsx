@@ -1,6 +1,6 @@
 "use client";
 import { FC } from "react";
-import { TTimePeriod } from "@/1shared/lib/date";
+import { TTimePeriod } from "@/1shared/const/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IWorkingManYearPlan } from "@/2entities/ppr";

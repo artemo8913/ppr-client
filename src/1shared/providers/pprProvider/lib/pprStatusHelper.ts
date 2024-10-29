@@ -1,4 +1,4 @@
-import { MONTHS, TTimePeriod } from "@/1shared/lib/date";
+import { MONTHS, TTimePeriod } from "@/1shared/const/date";
 import { IPpr, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
 
 export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {

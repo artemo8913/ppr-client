@@ -4,7 +4,14 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { usersTable } from "./users.schema";
 import { credentialsTable } from "./credentials.schema";
 import { commonWorksTable } from "./commonWorks.schema";
-import { directionsTable, distancesTable, subdivisionsTable } from "./divisions.schema";
+import {
+  directionsTable,
+  distancesTable,
+  subdivisionsTable,
+  TSubdivisionDB,
+  TDirectionDB,
+  TDistanceDB,
+} from "./divisions.schema";
 import {
   pprMonthsStatusesTable,
   pprWorkingMansTable,
@@ -51,4 +58,4 @@ export {
   pprsWorkDataTable,
 };
 
-export type { TPprDataDB, TPprInfoDB, TPprMonthsStatusDB, TPprWorkingManDB };
+export type { TPprDataDB, TPprInfoDB, TPprMonthsStatusDB, TPprWorkingManDB, TSubdivisionDB, TDirectionDB, TDistanceDB };

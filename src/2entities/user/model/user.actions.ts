@@ -2,9 +2,9 @@
 import { eq } from "drizzle-orm";
 
 import { db, usersTable } from "@/1shared/database";
+import { getDivisionsById } from "@/1shared/api/divisions.api";
 
 import { IUser } from "..";
-import { getDivisions } from "@/1shared/api/divisions.api";
 
 export async function getUserData(id: number): Promise<IUser> {
   try {
@@ -14,7 +14,7 @@ export async function getUserData(id: number): Promise<IUser> {
       throw new Error(`User with id = ${id} not exist`);
     }
 
-    const { direction, distance, subdivision } = await getDivisions(user);
+    const { direction, distance, subdivision } = await getDivisionsById(user);
 
     return {
       ...user,
