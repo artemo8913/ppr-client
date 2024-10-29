@@ -1,12 +1,12 @@
 import Card from "antd/es/card/Card";
 import { unstable_cache } from "next/cache";
 
+import { PprSearchTransitionProvider } from "@/1shared/providers/pprSearchTransitionProvider";
 import { getManyPprsShortInfo, TPprShortInfo } from "@/2entities/ppr";
 import { getAllDirections, getAllDistances, getAllSubdivision } from "@/2entities/division";
 import { PprSearch } from "@/3features/ppr/search";
 import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
 import { CreatePprModal } from "@/4widgets/createPprModal";
-import { PprSearchTransitionProvider } from "@/1shared/providers/pprSearchTransitionProvider";
 
 interface IPprPageProps {
   searchParams: { [key in keyof TPprShortInfo]?: string };
