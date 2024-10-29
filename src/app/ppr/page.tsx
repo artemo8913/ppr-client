@@ -3,9 +3,10 @@ import { unstable_cache } from "next/cache";
 
 import { getManyPprsShortInfo, TPprShortInfo } from "@/2entities/ppr";
 import { getAllDirections, getAllDistances, getAllSubdivision } from "@/2entities/division";
-import { PprSearchQuery } from "@/3features/ppr/search";
+import { PprSearch } from "@/3features/ppr/search";
 import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
 import { CreatePprModal } from "@/4widgets/createPprModal";
+import { PprSearchTransitionProvider } from "@/1shared/providers/pprSearchTransitionProvider";
 
 interface IPprPageProps {
   searchParams: { [key in keyof TPprShortInfo]?: string };
@@ -36,8 +37,10 @@ export default async function PprPage({ searchParams }: IPprPageProps) {
 
   return (
     <Card size="small">
-      <PprSearchQuery className="mb-4" divisions={divisions} />
-      <PprInfoTable data={pprs} />
+      <PprSearchTransitionProvider>
+        <PprSearch className="mb-4" divisions={divisions} />
+        <PprInfoTable data={pprs} />
+      </PprSearchTransitionProvider>
       <CreatePprModal className="!block ml-auto" />
     </Card>
   );

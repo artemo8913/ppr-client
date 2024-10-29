@@ -1,1 +1,1 @@
-export { PprSearchQuery } from "./ui/PprSearchQuery";
+export { PprSearch } from "./ui/PprSearchQuery";

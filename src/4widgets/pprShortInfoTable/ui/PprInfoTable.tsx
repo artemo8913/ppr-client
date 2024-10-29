@@ -5,6 +5,7 @@ import { Table, TableProps } from "antd";
 
 import { MONTHS } from "@/1shared/const/date";
 import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
+import { usePprSearchTransition } from "@/1shared/providers/pprSearchTransitionProvider";
 import { TPprShortInfo } from "@/2entities/ppr";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprCopyButton } from "@/3features/ppr/copy";
@@ -13,7 +14,6 @@ import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 
 interface IPprInfoProps {
   data: TPprShortInfo[];
-  isLoading?: boolean;
 }
 
 const columns: TableProps<TPprShortInfo>["columns"] = [
@@ -78,6 +78,8 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
   },
 ];
 
-export const PprInfoTable: FC<IPprInfoProps> = ({ data, isLoading }) => {
+export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
+  const { isLoading } = usePprSearchTransition();
+
   return <Table loading={isLoading} dataSource={data} columns={columns} rowKey="id" />;
 };

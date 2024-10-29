@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, FC } from "react";
+import React, { FC } from "react";
 import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
 import Search from "antd/es/input/Search";
@@ -7,6 +7,7 @@ import DatePicker from "antd/es/date-picker";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import { usePprSearchTransition } from "@/1shared/providers/pprSearchTransitionProvider";
 import { TDirectionDB, TDistanceDB, TSubdivisionDB } from "@/1shared/database";
 import { TPprShortInfo } from "@/2entities/ppr";
 
@@ -15,7 +16,9 @@ interface IPprSearchQueryProps {
   className?: string;
 }
 
-export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
+export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
+  const { isLoading, startTransition } = usePprSearchTransition();
+
   const searchParams = useSearchParams();
 
   const pathname = usePathname();
@@ -31,7 +34,7 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
       params.delete(param);
     }
 
-    replace(`${pathname}?${params.toString()}`);
+    startTransition(() => replace(`${pathname}?${params.toString()}`));
   };
 
   const idDirection = Number(searchParams.get("idDirection")) || null;
@@ -67,14 +70,16 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
         defaultValue={searchParams.get("name")?.toString()}
         placeholder="Поиск по наименованию"
         onSearch={handleSearchName}
+        disabled={isLoading}
         allowClear
       />
       <DatePicker
         defaultValue={searchParams.get("year") ? dayjs(searchParams.get("year")) : null}
         onChange={handleSearchYear}
-        allowClear
-        picker="year"
         placeholder="Выберите год"
+        picker="year"
+        disabled={isLoading}
+        allowClear
       />
       <Select
         defaultValue={idDirection}
@@ -83,6 +88,7 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
         options={directionOptions}
         optionFilterProp="label"
         showSearch
+        disabled={isLoading}
         allowClear
       />
       <Select
@@ -92,6 +98,7 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
         options={distanceOptions}
         optionFilterProp="label"
         showSearch
+        disabled={isLoading}
         allowClear
       />
       <Select
@@ -101,6 +108,7 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
         options={subdivisionOptions}
         optionFilterProp="label"
         showSearch
+        disabled={isLoading}
         allowClear
       />
     </div>
