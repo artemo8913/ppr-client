@@ -1,4 +1,4 @@
-import mysql from "mysql2";
+import mysql, { PoolOptions } from "mysql2";
 import { drizzle } from "drizzle-orm/mysql2";
 
 import { usersTable } from "./users.schema";
@@ -23,11 +23,17 @@ import {
   TPprWorkingManDB,
 } from "./ppr.schema";
 
-const connection = mysql.createConnection({
+const connectionConfig: PoolOptions = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-});
+};
+/**
+ * For the built in migrate function with DDL migrations we and drivers strongly encourage you to use single client connection.
+ * For querying purposes feel free to use either client or pool based on your business demands.
+ * https://orm.drizzle.team/docs/get-started-mysql
+ */
+const connection = mysql.createPool(connectionConfig);
 
 export const db = drizzle(connection, {
   mode: "default",
