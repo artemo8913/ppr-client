@@ -1,0 +1,1 @@
+DROP TABLE `pprs_data`;

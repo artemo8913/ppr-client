@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1728180832487,
+      "tag": "0000_glossy_agent_zero",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1728195011129,
+      "tag": "0001_eager_deadpool",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1728195280857,
+      "tag": "0002_dashing_vanisher",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1728195336766,
+      "tag": "0003_dark_korvac",
+      "breakpoints": true
+    }
+  ]
+}

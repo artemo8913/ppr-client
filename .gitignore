@@ -37,6 +37,3 @@ next-env.d.ts
 
 # working files
 /_oldSrc
-
-# drizzle
-/drizzle
