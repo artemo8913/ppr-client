@@ -23,6 +23,7 @@ interface IPprTableSettings {
   fontSizePx: number;
   headerHeightPx: number;
   isUniteSameWorks: boolean;
+  isBacklightCommonWork: boolean;
 }
 
 export interface IPprTableSettingsContext extends IPprTableSettings {
@@ -34,6 +35,7 @@ export interface IPprTableSettingsContext extends IPprTableSettings {
   setFontSizePx: (fontSize: number) => void;
   setHeaderHeightPx: (headerHeightPx: number) => void;
   setIsUniteSameWorks: (isUniteSameWorks: boolean) => void;
+  setIsBacklightCommonWork: (isBacklightCommonWork: boolean) => void;
 }
 
 const INIT_SETTINGS: IPprTableSettings = {
@@ -47,6 +49,7 @@ const INIT_SETTINGS: IPprTableSettings = {
   fontSizePx: 10,
   headerHeightPx: 300,
   isUniteSameWorks: false,
+  isBacklightCommonWork: false,
 };
 
 const INIT_CONTEXT: IPprTableSettingsContext = {
@@ -59,6 +62,7 @@ const INIT_CONTEXT: IPprTableSettingsContext = {
   setFontSizePx: () => {},
   setHeaderHeightPx: () => {},
   setIsUniteSameWorks: () => {},
+  setIsBacklightCommonWork: () => {},
 };
 
 const PprTableSettingsContext = createContext<IPprTableSettingsContext>(INIT_CONTEXT);
@@ -126,6 +130,10 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     setPprTableSettings((prev) => ({ ...prev, isUniteSameWorks }));
   }, []);
 
+  const setIsBacklightCommonWork = useCallback((isBacklightCommonWork: boolean) => {
+    setPprTableSettings((prev) => ({ ...prev, isBacklightCommonWork }));
+  }, []);
+
   return (
     <PprTableSettingsContext.Provider
       value={{
@@ -138,6 +146,7 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
         setFontSizePx,
         setHeaderHeightPx,
         setIsUniteSameWorks,
+        setIsBacklightCommonWork,
       }}
     >
       {children}
