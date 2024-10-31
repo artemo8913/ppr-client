@@ -55,6 +55,9 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   const quartalNumber = getQuartal(getTimePeriodFromString(field));
   const isBgNotTransparent = isPlanWorkPeriodField || isPlanTimePeriodField;
 
+  const hasCommonWorkBacklight =
+    Boolean(pprData.common_work_id) && field === "name" && pprSettings.isBacklightCommonWork;
+
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
   const isCorrectedView = useMemo(
@@ -95,7 +98,8 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
         style.PprTableCell,
         quartalNumber && style[`Q${quartalNumber}`],
         !isBgNotTransparent && style.transparent,
-        isPlanTimeField && style.bottom
+        isPlanTimeField && style.bottom,
+        hasCommonWorkBacklight && style.backlight
       )}
     >
       {isArrowsShow && isPlanWorkPeriodField ? (

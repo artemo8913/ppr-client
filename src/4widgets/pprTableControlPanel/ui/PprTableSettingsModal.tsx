@@ -13,6 +13,7 @@ import { PprTableSelectWidth } from "@/3features/pprTableSettings/selectWidth";
 import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontSize";
 import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
 import { PprTableCombineSameWork } from "@/3features/pprTableSettings/combineWorkWithSameName";
+import { PprTableBacklightCommonWork } from "@/3features/pprTableSettings/backlightCommonWork";
 
 export default function PprTableSettingsModal() {
   const [isOpen, setIsModalOpen] = useState(false);
@@ -49,6 +50,10 @@ export default function PprTableSettingsModal() {
         <div className="flex justify-between items-center mb-4">
           <div>Размер шрифта, px: </div>
           <PprTableSelectFontSize />
+        </div>
+        <div className="flex justify-between items-center mb-4">
+          <div>Подсветить работы, выбранные из общего перечня работ</div>
+          <PprTableBacklightCommonWork />
         </div>
         <div className="flex justify-start gap-2 text-gray-400 cursor-not-allowed">
           <div>Объединять работы с одинаковым наименованием (без возможности добавлять/удалять работы) </div>

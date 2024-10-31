@@ -5,6 +5,10 @@
     vertical-align: bottom;
   }
 
+  &.backlight {
+    box-shadow: 0px 0px 20px inset yellow;
+  }
+
   &.Q1 {
     background-color: var(--FIRST_QUARTER);
   }
