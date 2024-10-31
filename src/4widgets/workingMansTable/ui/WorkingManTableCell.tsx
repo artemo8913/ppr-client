@@ -1,5 +1,6 @@
 "use client";
 import { FC, memo, useCallback } from "react";
+
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
 
