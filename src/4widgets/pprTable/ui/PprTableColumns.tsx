@@ -4,23 +4,8 @@ import {
   usePprTableSettings,
 } from "@/1shared/providers/pprTableSettingsProvider";
 import { TTimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/const/date";
-import { IPprData } from "@/2entities/ppr";
+import { PPR_DATA_BASIC_FIELDS, IPprData } from "@/2entities/ppr";
 import { useMemo } from "react";
-
-const BASIC_COLUMNS: Array<keyof IPprData> = [
-  "name",
-  "location",
-  "line_class",
-  "total_count",
-  "entry_year",
-  "periodicity_normal",
-  "periodicity_fact",
-  "last_maintenance_year",
-  "norm_of_time",
-  "norm_of_time_document",
-  "measure",
-  "unity",
-] as const;
 
 function getTimePeriodsColumns(currentTimePeriod?: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {
   switch (option) {
@@ -88,12 +73,12 @@ export const useCreateColumns = (): {
     [currentTimePeriod, filterColumns.months, filterColumns.planFact]
   );
 
-  const allFields = useMemo(() => BASIC_COLUMNS.concat(planFactFields), [planFactFields]);
+  const allFields = useMemo(() => PPR_DATA_BASIC_FIELDS.concat(planFactFields), [planFactFields]);
 
   const monthColSpan = useMemo(() => getPlanFactColumnsCount(filterColumns.planFact), [filterColumns.planFact]);
 
   return {
-    basicFields: BASIC_COLUMNS,
+    basicFields: PPR_DATA_BASIC_FIELDS,
     allFields,
     timePeriods,
     planFactFields,
