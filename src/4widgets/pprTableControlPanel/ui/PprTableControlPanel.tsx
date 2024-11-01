@@ -1,8 +1,7 @@
 "use client";
-import { FC, useMemo } from "react";
-import { useSession } from "next-auth/react";
+import { FC } from "react";
 
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
+import { usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
 import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
@@ -10,6 +9,7 @@ import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTim
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
 import { FillWorkingManPlanTime } from "@/3features/pprWorkingMans/fillWorkingManPlanTime";
 import { PprTableCopyFactNormTimeToFactTime } from "@/3features/ppr/copyFactNormTimeToFactTime";
+import { PprExportToXslx } from "@/3features/ppr/exportToXslx";
 
 import PprTableSettingsModal from "./PprTableSettingsModal";
 
@@ -27,6 +27,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
       <PprTableSetOneUnityButton />
       <PprTableCopyFactNormTimeToFactTime />
       <FillWorkingManPlanTime />
+      <PprExportToXslx />
       <PprTableSelectTimePeriod />
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
