@@ -33,7 +33,10 @@ const connectionConfig: PoolOptions = {
  * For querying purposes feel free to use either client or pool based on your business demands.
  * https://orm.drizzle.team/docs/get-started-mysql
  */
-const connection = mysql.createPool(connectionConfig);
+const connection =
+  process.env.ENVIRONMENT !== "DEV"
+    ? mysql.createPool(connectionConfig)
+    : mysql.createConnection({ ...connectionConfig });
 
 export const db = drizzle(connection, {
   mode: "default",
