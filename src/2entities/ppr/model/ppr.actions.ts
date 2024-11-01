@@ -192,7 +192,6 @@ export async function getManyPprsShortInfo(params?: {
       .leftJoin(distancesTable, eq(pprsInfoTable.idDistance, distancesTable.id))
       .leftJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id));
 
-    console.log(responce);
     return responce;
   } catch (e) {
     throw new Error(`Get all pprs. ${e}`);
