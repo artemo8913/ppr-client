@@ -25,7 +25,6 @@ import {
   getFactTimeFieldByFactWorkField,
   checkIsFactWorkField,
   checkIsFactTimeField,
-  TWorkBranch,
   getFactNormTimeFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
   getPlanTabelTimeFieldByPlanNormTimeField,
@@ -35,18 +34,7 @@ import {
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 import { calculatePprTotalValues } from "../lib/calculatePprTotalValues";
-
-export interface IBranchDefaultMeta {
-  workIds: Set<TPprDataWorkId>;
-  name: string;
-  orderIndex: string;
-  indexToPlaceTitle: number;
-  type: "branch" | "subbranch";
-}
-
-export interface IBranchMeta extends IBranchDefaultMeta {
-  subbranches: IBranchDefaultMeta[];
-}
+import { createBranchesMeta, IBranchDefaultMeta, IBranchMeta } from "../lib/createBranchesMeta";
 
 export interface IPprContext {
   ppr: IPpr | null;
@@ -847,75 +835,11 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
    */
   const getBranchesMeta = useCallback(() => {
-    const branchesMeta: IBranchMeta[] = [];
-    const branchesAndSubbrunchesOrder: { [indexToPlace: number]: IBranchDefaultMeta[] } = {};
-    const subbranchesSet = new Set<string>();
-
     if (!ppr?.data) {
-      return { branchesMeta, branchesAndSubbrunchesOrder, subbranchesList: [] };
+      return { branchesMeta: [], branchesAndSubbrunchesOrder: {}, subbranchesList: [] };
     }
 
-    let prevBranchMeta: IBranchMeta = {
-      workIds: new Set(),
-      indexToPlaceTitle: 0,
-      name: "",
-      subbranches: [],
-      orderIndex: "",
-      type: "branch",
-    };
-
-    let prevSubbranchMeta: IBranchDefaultMeta = {
-      workIds: new Set(),
-      indexToPlaceTitle: 0,
-      name: "",
-      orderIndex: "",
-      type: "subbranch",
-    };
-
-    function initPrevBranchMeta(branchName: TWorkBranch, index: number) {
-      prevBranchMeta = {
-        workIds: new Set(),
-        indexToPlaceTitle: index,
-        name: branchName,
-        subbranches: [],
-        orderIndex: `${branchesMeta.length + 1}.`,
-        type: "branch",
-      };
-    }
-
-    function initPrevSubbranchMeta(subbranchName: string, index: number, isBranchChange?: boolean) {
-      prevSubbranchMeta = {
-        workIds: new Set(),
-        indexToPlaceTitle: index,
-        name: subbranchName,
-        orderIndex: `${branchesMeta.length + (isBranchChange ? 1 : 0)}.${prevBranchMeta.subbranches.length + 1}.`,
-        type: "subbranch",
-      };
-    }
-
-    ppr.data.forEach((pprData, index) => {
-      if (pprData.branch !== prevBranchMeta.name) {
-        initPrevBranchMeta(pprData.branch, index);
-        initPrevSubbranchMeta(pprData.subbranch, index, true);
-        prevBranchMeta.subbranches.push(prevSubbranchMeta);
-        branchesMeta.push(prevBranchMeta);
-        subbranchesSet.add(prevSubbranchMeta.name);
-        branchesAndSubbrunchesOrder[index] = [prevBranchMeta, prevSubbranchMeta];
-      } else if (pprData.subbranch !== prevSubbranchMeta.name) {
-        initPrevSubbranchMeta(pprData.subbranch, index);
-        prevBranchMeta.subbranches.push(prevSubbranchMeta);
-        subbranchesSet.add(prevSubbranchMeta.name);
-        branchesAndSubbrunchesOrder[index] = [prevSubbranchMeta];
-      }
-      prevBranchMeta.workIds.add(pprData.id);
-      prevSubbranchMeta.workIds.add(pprData.id);
-    });
-
-    return {
-      branchesMeta,
-      branchesAndSubbrunchesOrder,
-      subbranchesList: Array.from(subbranchesSet),
-    };
+    return createBranchesMeta(ppr.data);
   }, [ppr?.data]);
 
   // Если ППР не хранится в контексте, то записать его
