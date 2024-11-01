@@ -188,10 +188,11 @@ export async function getManyPprsShortInfo(params?: {
       .where(and(...filters))
       .innerJoin(usersTable, eq(pprsInfoTable.idUserCreatedBy, usersTable.id))
       .innerJoin(pprMonthsStatusesTable, eq(pprsInfoTable.id, pprMonthsStatusesTable.idPpr))
-      .innerJoin(directionsTable, eq(pprsInfoTable.idDirection, directionsTable.id))
-      .innerJoin(distancesTable, eq(pprsInfoTable.idDistance, distancesTable.id))
-      .innerJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id));
+      .leftJoin(directionsTable, eq(pprsInfoTable.idDirection, directionsTable.id))
+      .leftJoin(distancesTable, eq(pprsInfoTable.idDistance, distancesTable.id))
+      .leftJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id));
 
+    console.log(responce);
     return responce;
   } catch (e) {
     throw new Error(`Get all pprs. ${e}`);

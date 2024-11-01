@@ -114,9 +114,9 @@ export interface IPpr {
   workingMans: IWorkingManYearPlan[];
   data: IPprData[];
   total_fields_value: TTotalFieldsValues;
-  directionShortName?: string;
-  distanceShortName?: string;
-  subdivisionShortName?: string;
+  directionShortName?: string | null;
+  distanceShortName?: string | null;
+  subdivisionShortName?: string | null;
 }
 
 export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value">;
