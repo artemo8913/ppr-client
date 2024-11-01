@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getPprTable } from "@/2entities/ppr";
-import { pprConvertToXlsx } from "@/3features/ppr/exportToXslx";
+import { pprConvertToXlsx } from "@/3features/ppr/convertToXlsx";
 
 interface IParams {
   params: { id?: string };
