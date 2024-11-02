@@ -108,13 +108,18 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
         </div>
       ) : field === "name" && isPprInUserControl ? (
-        <TableCellWithWorkControl
-          {...otherProps}
-          onBlur={handleChange}
-          workId={pprData.id}
-          branch={pprData.branch}
-          value={value}
-        />
+        <>
+          <TableCellWithWorkControl
+            {...otherProps}
+            onBlur={handleChange}
+            workId={pprData.id}
+            branch={pprData.branch}
+            value={value}
+            note={pprData.note}
+            isWorkApproved={pprData.is_work_aproved}
+          />
+          {Boolean(pprData.note) && ` (прим. ${pprData.note})`}
+        </>
       ) : (
         <TableCell {...otherProps} onBlur={handleChange} value={value} />
       )}
