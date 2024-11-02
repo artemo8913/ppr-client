@@ -4,7 +4,8 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/1shared/auth/authConfig";
 import { IPpr } from "@/2entities/ppr";
-import { addYearPlanSheet } from "./createYearPlanSheet";
+import { addYearPlanSheet } from "./addYearPlanSheet";
+import { addTitleSheet } from "./addTitleSheet";
 
 const TITLE_SHEET_NAME = "Титульный лист";
 
@@ -43,9 +44,17 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   workbook.modified = new Date();
   workbook.lastPrinted = new Date();
 
-  const yearPlanSheet = addYearPlanSheet({
-    ppr,
+  addTitleSheet({
     workbook,
+    ppr,
+    session,
+    sheetName: TITLE_SHEET_NAME,
+    sheetOptions: WORKSHEET_OPTIONS,
+  });
+
+  addYearPlanSheet({
+    workbook,
+    ppr,
     sheetName: PPR_YEAR_PLAN_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });

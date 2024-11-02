@@ -16,7 +16,7 @@ import {
 } from "@/2entities/ppr";
 
 import { setBgColorXlsx } from "./setBgColorXlsx";
-import { BLACK_BORDER, CENTER_ALIGNMENT, VERTICAL_ALIGNMENT } from "./xlsxStyles";
+import { BLACK_BORDER_FULL, CENTER_ALIGNMENT_WITH_WRAP, VERTICAL_ALIGNMENT } from "./xlsxStyles";
 
 const MAX_COLUMNS_COUNT = 77;
 
@@ -35,6 +35,11 @@ const MIN_COL_WIDTH = 3;
 const HEADER_HEIGHT = 400;
 
 const COLUMNS_WIDTH: { [key in keyof IPprData]?: number } = {
+  is_work_aproved: 10,
+  common_work_id: 10,
+  id: 10,
+  branch: 15,
+  subbranch: 40,
   name: 40,
   location: 20,
   line_class: 3,
@@ -49,31 +54,14 @@ const COLUMNS_WIDTH: { [key in keyof IPprData]?: number } = {
   unity: 3,
 };
 
-const WORKSHEET_OPTIONS: Partial<ExcelJS.AddWorksheetOptions> = {
-  pageSetup: {
-    paperSize: 9,
-    orientation: "landscape",
-    fitToPage: true,
-    fitToWidth: 1,
-    margins: {
-      left: 0.2,
-      right: 0.1,
-      top: 0.1,
-      bottom: 0.1,
-      header: 0.1,
-      footer: 0.1,
-    },
-  },
-};
-
-interface ICreateYearPlanSheet {
+interface IAddYearPlanSheetArgs {
   workbook: ExcelJS.Workbook;
   ppr: IPpr;
   sheetName?: string;
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
 }
 
-export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: ICreateYearPlanSheet) {
+export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: IAddYearPlanSheetArgs) {
   const yearPlanSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
   const { branchesAndSubbrunchesOrder } = createPprMeta(ppr.data);
@@ -102,7 +90,7 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: ICr
     // Стилизация ячейки
     cell.value = translateRuFieldName(field);
     cell.alignment = VERTICAL_ALIGNMENT;
-    cell.border = BLACK_BORDER;
+    cell.border = BLACK_BORDER_FULL;
 
     // Увеличить lastColIndex
     colIndex++;
@@ -118,8 +106,8 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: ICr
     const cell = yearPlanSheet.getCell(FIRST_ROW_INDEX, colIndex);
     // Стилизация ячейки (месяц)
     cell.value = translateRuTimePeriod(period);
-    cell.alignment = CENTER_ALIGNMENT;
-    cell.border = BLACK_BORDER;
+    cell.alignment = CENTER_ALIGNMENT_WITH_WRAP;
+    cell.border = BLACK_BORDER_FULL;
 
     // Стилизация заголовков столбов план/факт
     [
@@ -132,7 +120,7 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: ICr
       const planFactCell = yearPlanSheet.getCell(SECOND_ROW_INDEX, colIndex);
       planFactCell.value = translateRuFieldName(field);
       planFactCell.alignment = VERTICAL_ALIGNMENT;
-      planFactCell.border = BLACK_BORDER;
+      planFactCell.border = BLACK_BORDER_FULL;
       planFactCell.fill = {
         fgColor: { argb: setBgColorXlsx(field) },
         type: "pattern",
@@ -143,23 +131,25 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: ICr
     });
   });
 
+  let lastRowIndex = START_ROWS_INDEX;
+
   // Добавить данные в таблицу
   ppr.data.map((pprData, index) => {
     // Создание ячеек категорий и подкатегорий
     if (index in branchesAndSubbrunchesOrder) {
       branchesAndSubbrunchesOrder[index].forEach((branch, subIndex) => {
         yearPlanSheet.mergeCells(
-          START_ROWS_INDEX + index + subIndex,
+          lastRowIndex + index + subIndex,
           START_COLUMNS_INDEX,
-          START_ROWS_INDEX + index + subIndex,
+          lastRowIndex + index + subIndex,
           START_COLUMNS_INDEX + MAX_COLUMNS_COUNT - 1
         );
 
-        const branchTitleCell = yearPlanSheet.getCell(START_ROWS_INDEX + index + subIndex, START_COLUMNS_INDEX);
+        const branchTitleCell = yearPlanSheet.getCell(lastRowIndex + index + subIndex, START_COLUMNS_INDEX);
 
         // Стилизация ячеек категорий и подкатегорий
         branchTitleCell.value = `${branch.orderIndex} ${translateRuPprBranchName(branch.name)}`;
-        branchTitleCell.border = BLACK_BORDER;
+        branchTitleCell.border = BLACK_BORDER_FULL;
         branchTitleCell.alignment = { horizontal: "left" };
       });
     }
@@ -171,11 +161,13 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: ICr
 
     const row = yearPlanSheet.addRow(finalData);
 
+    lastRowIndex = row.number;
+
     PPR_DATA_FIELDS.forEach((field) => {
       const cell = row.getCell(field);
 
       // Стилизация ячеек данных
-      cell.border = BLACK_BORDER;
+      cell.border = BLACK_BORDER_FULL;
       cell.alignment = { wrapText: true };
 
       cell.fill = {
