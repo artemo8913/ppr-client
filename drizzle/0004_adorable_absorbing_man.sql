@@ -1,0 +1,1 @@
+ALTER TABLE `pprs_data` ADD `note` varchar(256);
