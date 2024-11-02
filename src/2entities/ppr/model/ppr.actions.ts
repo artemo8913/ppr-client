@@ -19,7 +19,7 @@ import {
 } from "@/1shared/database";
 import { getDivisionsById } from "@/1shared/api/divisions.api";
 
-import { IPpr, TPprShortInfo } from "..";
+import { IPpr, TPprShortInfo, TYearPprStatus } from "..";
 
 export async function getPprTable(id: number): Promise<IPpr> {
   try {
@@ -70,13 +70,17 @@ export async function createPprTable(name: string, year: number) {
       throw new Error(`Session not exist`);
     }
 
+    const isSubdivision = session.user.role === "subdivision";
+
+    const status: TYearPprStatus = isSubdivision ? "plan_creating" : "template";
+
     const newPprId = await db
       .insert(pprsInfoTable)
       .values({
-        name: name,
-        year: year,
+        name,
+        year,
+        status,
         created_at: new Date(),
-        status: "plan_creating",
         idUserCreatedBy: session.user.id,
         idDirection: session.user.idDirection,
         idDistance: session.user.idDistance,
