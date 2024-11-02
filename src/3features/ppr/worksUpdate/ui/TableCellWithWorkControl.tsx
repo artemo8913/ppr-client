@@ -13,22 +13,34 @@ import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 
 interface ITableCellWithWorkControlProps extends ITableCellProps {
   workId: TPprDataWorkId;
+  isWorkApproved?: boolean;
   branch?: TWorkBranch;
+  note?: string | null;
 }
 
-export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({ workId, branch, ...otherProps }) => {
+export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({
+  workId,
+  isWorkApproved,
+  branch,
+  note,
+  ...otherProps
+}) => {
   const [isHide, setIsHide] = useState<boolean>(true);
 
   return (
     <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
       {!isHide && (
         <div className="!absolute -bottom-6 left-0 z-10 flex py-2">
-          <IncreaseWorkPositionButton workId={workId} />
-          <DecreaseWorkPositionButton workId={workId} />
-          <DeleteWorkButton workId={workId} />
+          {!isWorkApproved && (
+            <>
+              <IncreaseWorkPositionButton workId={workId} />
+              <DecreaseWorkPositionButton workId={workId} />
+              <EditWorkButtonMemo workId={workId} branch={branch} note={note} />
+              <DeleteWorkButton workId={workId} />
+            </>
+          )}
           <AddWorkButton nearWorkId={workId} />
           <CopyWorkButton workId={workId} />
-          <EditWorkButtonMemo workId={workId} branch={branch} />
         </div>
       )}
       <TableCell {...otherProps} />
