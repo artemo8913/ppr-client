@@ -17,7 +17,7 @@ export interface IUser {
   idSubdivision: number | null;
   idDistance: number | null;
   idDirection: number | null;
-  directionShortName?: string | null;
-  distanceShortName?: string | null;
-  subdivisionShortName?: string | null;
+  directionShortName?: string;
+  distanceShortName?: string;
+  subdivisionShortName?: string;
 }
