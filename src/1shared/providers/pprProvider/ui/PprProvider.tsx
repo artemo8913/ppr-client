@@ -34,7 +34,7 @@ import {
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 import { calculatePprTotalValues } from "../lib/calculatePprTotalValues";
-import { createBranchesMeta, IBranchDefaultMeta, IBranchMeta } from "../lib/createBranchesMeta";
+import { createPprMeta, IBranchDefaultMeta, IBranchMeta } from "../lib/createPprMeta";
 
 export interface IPprContext {
   ppr: IPpr | null;
@@ -839,7 +839,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       return { branchesMeta: [], branchesAndSubbrunchesOrder: {}, subbranchesList: [] };
     }
 
-    return createBranchesMeta(ppr.data);
+    return createPprMeta(ppr.data);
   }, [ppr?.data]);
 
   // Если ППР не хранится в контексте, то записать его

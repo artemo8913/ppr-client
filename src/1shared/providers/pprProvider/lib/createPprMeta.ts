@@ -12,7 +12,7 @@ export interface IBranchMeta extends IBranchDefaultMeta {
   subbranches: IBranchDefaultMeta[];
 }
 
-export function createBranchesMeta(pprData: IPprData[]): {
+export function createPprMeta(pprData: IPprData[]): {
   branchesMeta: IBranchMeta[];
   branchesAndSubbrunchesOrder: {
     [indexToPlace: number]: IBranchDefaultMeta[];
