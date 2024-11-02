@@ -1,7 +1,8 @@
 "use client";
-import { FC, memo, useCallback, useState } from "react";
+import { ChangeEvent, FC, memo, useCallback, useState } from "react";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
+import Input from "antd/es/input/Input";
 import { EditOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
@@ -11,31 +12,47 @@ import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 interface IChangeBranchButtonProps {
   workId: TPprDataWorkId;
   branch?: TWorkBranch;
+  note?: string | null;
 }
 
 const EditWorkButton: FC<IChangeBranchButtonProps> = (props) => {
   const { updatePprData } = usePpr();
 
+  const [noteValue, setNoteValue] = useState(props.note || "");
+
   const [isHide, setIsHide] = useState<boolean>(true);
 
-  const handleClick = useCallback(
+  const handleSelect = useCallback(
     (branch: TWorkBranch) => {
       updatePprData(props.workId, "branch", branch);
     },
     [updatePprData, props.workId]
   );
 
+  const handleChangeNoteValue = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setNoteValue(e.target.value),
+    []
+  );
+
+  const handleUpdateNoteValue = useCallback(
+    () => updatePprData(props.workId, "note", noteValue),
+    [noteValue, props.workId, updatePprData]
+  );
+
   return (
-    <div className="flex relative w-[110%]" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
+    <div className="relative w-[110%]" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
       <Button size="small" shape="circle" icon={<EditOutlined />} />
-      <Select
-        style={{ visibility: isHide ? "hidden" : "visible" }}
-        size="small"
-        className="relative after:h-4"
-        defaultValue={props.branch}
-        options={BRANCH_SELECT_OPTIONS}
-        onSelect={handleClick}
-      />
+      <div style={{ visibility: isHide ? "hidden" : "visible" }} className="absolute flex flex-col">
+        <Select size="small" defaultValue={props.branch} options={BRANCH_SELECT_OPTIONS} onSelect={handleSelect} />
+        <Input
+          value={noteValue}
+          onChange={handleChangeNoteValue}
+          onMouseLeave={handleUpdateNoteValue}
+          onPressEnter={handleUpdateNoteValue}
+          placeholder="Примечание"
+          size="small"
+        />
+      </div>
     </div>
   );
 };
