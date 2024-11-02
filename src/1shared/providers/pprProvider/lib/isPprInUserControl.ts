@@ -4,6 +4,7 @@ import { IUser } from "@/2entities/user";
 export function checkIsPprInUserControl(ppr_created_by?: IUser, userData?: IUser) {
   if (!ppr_created_by || !userData) {
     return {
+      isPprCreatedByThisUser: false,
       isForSubdivision: false,
       isForEngineer: false,
       isForTimeNorm: false,
@@ -13,20 +14,30 @@ export function checkIsPprInUserControl(ppr_created_by?: IUser, userData?: IUser
     };
   }
 
-  const { idDistance, idSubdivision, idDirection, role } = userData;
+  const { idDistance, idSubdivision, role: userRole } = userData;
 
   // Проверка принадлежности ППР к подразделению/дистанции/дирекции
-  const isMySubdivision = ppr_created_by?.idSubdivision === idSubdivision;
-  const isMyDistance = ppr_created_by?.idDistance === idDistance;
-  const isMyDirection = ppr_created_by?.idDirection === idDirection;
+  const isUserSubdivision = ppr_created_by.idSubdivision === idSubdivision;
+  const isUserDistance = ppr_created_by.idDistance === idDistance;
 
   // Проверка соответствия роли и подразделения/дистанции/дирекции
-  const isForSubdivision = role === "subdivision" && isMySubdivision && isMyDistance && isMyDirection;
-  const isForEngineer = role === "distance_engineer" && isMyDistance && isMyDirection;
-  const isForTimeNorm = role === "distance_time_norm" && isMyDistance && isMyDirection;
-  const isForSecurityEngineer = role === "distance_security_engineer" && isMyDistance && isMyDirection;
-  const isForSubBoss = role === "distance_sub_boss" && isMyDistance && isMyDirection;
-  const isForBoss = role === "distance_boss" && isMyDistance && isMyDirection;
+  const isForSubdivision = userRole === "subdivision" && isUserSubdivision;
+  const isForEngineer = userRole === "distance_engineer" && isUserDistance;
+  const isForTimeNorm = userRole === "distance_time_norm" && isUserDistance;
+  const isForSecurityEngineer = userRole === "distance_security_engineer" && isUserDistance;
+  const isForSubBoss = userRole === "distance_sub_boss" && isUserDistance;
+  const isForBoss = userRole === "distance_boss" && isUserDistance;
 
-  return { isForSubdivision, isForEngineer, isForTimeNorm, isForSecurityEngineer, isForSubBoss, isForBoss };
+  // Создан ли ППР данным пользователем
+  const isPprCreatedByThisUser = ppr_created_by.id === userData.id;
+
+  return {
+    isPprCreatedByThisUser,
+    isForSubdivision,
+    isForEngineer,
+    isForTimeNorm,
+    isForSecurityEngineer,
+    isForSubBoss,
+    isForBoss,
+  };
 }
