@@ -92,7 +92,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
   const onSearch: SearchProps["onSearch"] = useCallback(
     (value: string) => {
       if (value) {
-        setDataSource(props.data.filter((commonWork) => commonWork.name.includes(value)));
+        setDataSource(props.data.filter((commonWork) => commonWork.name.toLowerCase().includes(value.toLowerCase())));
       } else {
         setDataSource(props.data);
       }
@@ -101,7 +101,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
   );
 
   const handleFinish = () => {
-    if (!selectedWork.id || !credential) {
+    if (!selectedWork.id) {
       return;
     }
 
@@ -114,7 +114,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
         measure: selectedWork.measure,
         norm_of_time: selectedWork.normOfTime,
         norm_of_time_document: selectedWork.normOfTimeNameFull,
-        unity: credential.user.subdivisionShortName,
+        unity: credential?.user.subdivisionShortName || "",
       },
       props.nearWorkIdToPlaceNewWork
     );

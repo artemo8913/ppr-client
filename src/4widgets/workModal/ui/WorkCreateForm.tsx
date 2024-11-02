@@ -1,5 +1,6 @@
 "use client";
 import { FC } from "react";
+import { useSession } from "next-auth/react";
 import Input from "antd/es/input";
 import Select from "antd/es/select";
 import Form from "antd/es/form";
@@ -27,6 +28,8 @@ const SELECT_INITIAL_VALUE: TWorkBranch = "exploitation";
 export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, nearWorkId }) => {
   const [form] = Form.useForm<ICommonWorkExtended>();
 
+  const { data: credential } = useSession();
+
   const { addWork, getBranchesMeta } = usePpr();
 
   const { subbranchesList } = getBranchesMeta();
@@ -44,6 +47,7 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
         norm_of_time_document: values.normOfTimeNameFull,
         branch: values.branch,
         subbranch: values.subbranch[0],
+        unity: credential?.user.subdivisionShortName || "",
       },
       nearWorkId
     );
