@@ -23,10 +23,11 @@ export const PprTable: FC<IPprTableProps> = () => {
 
   const { basicFields, timePeriods, planFactFields, monthColSpan, allFields } = useCreateColumns();
 
-  const isPprInUserControl = useMemo(
-    () => checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision,
-    [credential?.user, ppr?.created_by]
-  );
+  const isPprInUserControl = useMemo(() => {
+    const { isForSubdivision, isPprCreatedByThisUser } = checkIsPprInUserControl(ppr?.created_by, credential?.user);
+
+    return isForSubdivision || (isPprCreatedByThisUser && ppr?.status === "template");
+  }, [credential?.user, ppr?.created_by, ppr?.status]);
 
   const pprSettings = usePprTableSettings();
 

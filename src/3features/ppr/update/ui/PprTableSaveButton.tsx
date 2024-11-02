@@ -17,10 +17,11 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
 
   const { data: credential } = useSession();
 
-  const isPprInUserControl = useMemo(
-    () => checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision,
-    [credential?.user, ppr?.created_by]
-  );
+  const isPprInUserControl = useMemo(() => {
+    const { isForSubdivision, isPprCreatedByThisUser } = checkIsPprInUserControl(ppr?.created_by, credential?.user);
+
+    return isForSubdivision || (isPprCreatedByThisUser && ppr?.status === "template");
+  }, [credential?.user, ppr?.created_by, ppr?.status]);
 
   const handleSave = useCallback(async () => {
     setIsLoading(true);
@@ -32,12 +33,14 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
     setIsLoading(false);
   }, [ppr]);
 
+  const isDisabled = isLoading || !isPprInUserControl;
+
   return (
     <Tooltip title="сохранить">
       <Button
         icon={<SaveOutlined />}
         loading={isLoading}
-        disabled={isLoading || !isPprInUserControl}
+        disabled={isDisabled}
         type="text"
         shape="circle"
         onClick={handleSave}

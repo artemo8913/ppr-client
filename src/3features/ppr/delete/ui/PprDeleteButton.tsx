@@ -21,9 +21,12 @@ export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ pprId, created_by, 
   if (!userData) {
     return null;
   }
-  const { isForSubdivision } = checkIsPprInUserControl(created_by, userData.user);
+  const { isPprCreatedByThisUser, isForSubdivision } = checkIsPprInUserControl(created_by, userData.user);
+
   const isStatusCanBeDeleted = pprStatus === "plan_creating" || pprStatus === "template";
-  const isPprCanBeDeleted = isForSubdivision && isStatusCanBeDeleted;
+
+  const isPprCanBeDeleted = (isPprCreatedByThisUser || isForSubdivision) && isStatusCanBeDeleted;
+
   return (
     <Tooltip title="Удалить ППР">
       <Button
