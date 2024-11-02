@@ -60,7 +60,7 @@ export function getColumnSettings(
   if (pprView === "INITIAL_PLAN" || pprView === "INITIAL_PLAN_WITH_ARROWS" || !isInUserControl) {
     return {};
   }
-  if (pprYearStatus === "plan_creating" && !isHaveWorkId) {
+  if ((pprYearStatus === "plan_creating" || pprYearStatus === "template") && !isHaveWorkId) {
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       name: { cellType: "textarea" },
       location: { cellType: "textarea" },
@@ -79,7 +79,7 @@ export function getColumnSettings(
 
     return settings[field];
   }
-  if (pprYearStatus === "plan_creating" && isHaveWorkId) {
+  if ((pprYearStatus === "plan_creating" || pprYearStatus === "template") && isHaveWorkId) {
     const settings: { [key in keyof IPprData]?: ITableCellProps } = {
       location: { cellType: "textarea" },
       line_class: { cellType: "input" },
