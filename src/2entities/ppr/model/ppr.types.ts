@@ -96,6 +96,7 @@ export type TWorkingManFieldsTotalValues = Partial<TPlanNormTimePeriodsFields> &
   Partial<TFactTimePeriodsFields>;
 
 export type TTotalFieldsValues = {
+  //TODO: переименовать в working mans
   peoples: TWorkingManFieldsTotalValues;
   works: TPprDataFieldsTotalValues;
 };
