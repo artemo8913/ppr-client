@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 
 import { IPpr } from "@/2entities/ppr";
 
-import { BLACK_BORDER_BOTTOM, CENTER_ALIGNMENT } from "./xlsxStyles";
+import { BLACK_BORDER_BOTTOM, BOLD, CENTER_ALIGNMENT, createHeaderCell } from "./xlsxStyles";
 
 interface IAddTitleSheetArgs {
   workbook: ExcelJS.Workbook;
@@ -17,8 +17,9 @@ export function addTitleSheet({ workbook, ppr, session, sheetName, sheetOptions 
   const titleSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
   // верхний правый угол
+  titleSheet.mergeCells("F1:J1");
   titleSheet.getCell("F1").value = "Форма ЭУ-132";
-  titleSheet.getCell("F2").value = 'УТВЕРЖДЕНА распоряжением ОПО "РЖД"';
+  titleSheet.getCell("F2").value = 'УТВЕРЖДЕНА распоряжением ОАО "РЖД"';
   titleSheet.getCell("F3").value = "от 16.09.2024 № 2255/р";
 
   // Наименование дирекции
@@ -56,24 +57,13 @@ export function addTitleSheet({ workbook, ppr, session, sheetName, sheetOptions 
   titleSheet.getCell("G18").value = '"____"_____________ 20 ___ г.';
 
   // Заголовок
-  const h1 = titleSheet.getCell("E20");
-  h1.value = "КАЛЕНДАРНЫЙ ПЛАН";
-  h1.font = { bold: true };
-  h1.alignment = CENTER_ALIGNMENT;
-
-  titleSheet.getCell("E21").value = "работ по техническому содержанию";
-  titleSheet.getCell("E21").alignment = CENTER_ALIGNMENT;
-
-  titleSheet.getCell("E22").value = "устройств электрификации и электроснабжения";
-  titleSheet.getCell("E22").alignment = CENTER_ALIGNMENT;
-
-  titleSheet.getCell("D23").value = `на`;
-
-  const yearCell = titleSheet.getCell("E23");
-  yearCell.value = `${ppr?.year}`;
+  createHeaderCell(titleSheet, "E20", "КАЛЕНДАРНЫЙ ПЛАН");
+  createHeaderCell(titleSheet, "E21", "работ по техническому содержанию");
+  createHeaderCell(titleSheet, "E22", "устройств электрификации и электроснабжения");
+  createHeaderCell(titleSheet, "D23", "на");
+  const yearCell = createHeaderCell(titleSheet, "E23", `${ppr?.year}`);
   yearCell.border = BLACK_BORDER_BOTTOM;
+  createHeaderCell(titleSheet, "F23", "год");
 
-  titleSheet.getCell("F23").value = `год`;
-
-  return null;
+  return titleSheet;
 }
