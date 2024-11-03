@@ -4,8 +4,10 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/1shared/auth/authConfig";
 import { IPpr } from "@/2entities/ppr";
+
 import { addYearPlanSheet } from "./addYearPlanSheet";
 import { addTitleSheet } from "./addTitleSheet";
+import { addWorkingMansSheet } from "./addWorkingMansSheet";
 
 const TITLE_SHEET_NAME = "Титульный лист";
 
@@ -49,6 +51,13 @@ export async function pprConvertToXlsx(ppr: IPpr) {
     ppr,
     session,
     sheetName: TITLE_SHEET_NAME,
+    sheetOptions: WORKSHEET_OPTIONS,
+  });
+
+  addWorkingMansSheet({
+    workbook,
+    workingMans: ppr.workingMans,
+    sheetName: PPR_WORKING_MANS_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
 

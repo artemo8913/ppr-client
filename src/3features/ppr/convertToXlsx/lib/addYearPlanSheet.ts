@@ -15,7 +15,7 @@ import {
   PPR_DATA_FIELDS,
 } from "@/2entities/ppr";
 
-import { setBgColorXlsx } from "./setBgColorXlsx";
+import { setBgColorXlsx } from "./xlsxStyles";
 import { BLACK_BORDER_FULL, CENTER_ALIGNMENT_WITH_WRAP, VERTICAL_ALIGNMENT } from "./xlsxStyles";
 
 const MAX_COLUMNS_COUNT = 77;
