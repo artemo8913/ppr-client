@@ -13,7 +13,13 @@ interface IAddTitleSheetArgs {
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
 }
 
-export function addTitleSheet({ workbook, ppr, session, sheetName, sheetOptions }: IAddTitleSheetArgs) {
+export function addTitleSheet({
+  workbook,
+  ppr,
+  session,
+  sheetName,
+  sheetOptions,
+}: IAddTitleSheetArgs): ExcelJS.Worksheet {
   const titleSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
   // верхний правый угол

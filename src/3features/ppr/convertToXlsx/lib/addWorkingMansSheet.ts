@@ -1,6 +1,6 @@
 import ExcelJS from "exceljs";
 
-import { IWorkingManYearPlan } from "@/2entities/ppr";
+import { IWorkingManYearPlan, TWorkingManFieldsTotalValues } from "@/2entities/ppr";
 
 import {
   createHeaderCell,
@@ -34,12 +34,19 @@ const COLUMNS_WIDTH: { [key in TWorkingMansSheetColumns]?: number } = {
 
 interface IAddTitleSheetArgs {
   workbook: ExcelJS.Workbook;
-  workingMans?: IWorkingManYearPlan[];
+  workingMans: IWorkingManYearPlan[];
+  totalValue: TWorkingManFieldsTotalValues;
   sheetName?: string;
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
 }
 
-export function addWorkingMansSheet({ workbook, workingMans, sheetName, sheetOptions }: IAddTitleSheetArgs) {
+export function addWorkingMansSheet({
+  workbook,
+  workingMans,
+  totalValue,
+  sheetName,
+  sheetOptions,
+}: IAddTitleSheetArgs): ExcelJS.Worksheet {
   const workingMansSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
   // Заголовок
@@ -51,17 +58,16 @@ export function addWorkingMansSheet({ workbook, workingMans, sheetName, sheetOpt
     width: COLUMNS_WIDTH[field],
   }));
 
-  workingMansSheet.mergeCells("A3:A4");
-  workingMansSheet.mergeCells("B3:B4");
-  workingMansSheet.mergeCells("C3:D3");
-  workingMansSheet.mergeCells("E3:F3");
-
   // Шапка таблицы
+  workingMansSheet.mergeCells("A3:A4");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "A3", "Должность, профессия, разряд рабочих");
+  workingMansSheet.mergeCells("B3:B4");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "B3", "Фактическая численность, чел.");
+  workingMansSheet.mergeCells("C3:D3");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "C3", "Годовой фонд рабочего времени, чел.-ч");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "C4", "По норме");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "D4", "По табелю");
+  workingMansSheet.mergeCells("E3:F3");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "E3", "Нормированное задание");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "E4", "Доля участия, %");
   createCellWithBorderAndCenterAlignmentAndWrap(workingMansSheet, "F4", "чел.-ч");
@@ -76,7 +82,7 @@ export function addWorkingMansSheet({ workbook, workingMans, sheetName, sheetOpt
     cell.border = BLACK_BORDER_FULL;
   });
 
-  workingMans?.forEach((man) => {
+  workingMans.forEach((man) => {
     const finalData = {
       full_name: `${man.full_name} - ${man.work_position}`,
       people_count: 1,
@@ -100,24 +106,10 @@ export function addWorkingMansSheet({ workbook, workingMans, sheetName, sheetOpt
     });
   });
 
-  const totalValue = {
-    people_count: 0,
-    year_plan_norm_time: 0,
-    year_plan_tabel_time: 0,
-    year_plan_time: 0,
-  };
-
-  workingMans?.forEach((man) => {
-    totalValue.people_count++;
-    totalValue.year_plan_norm_time += man.year_plan_norm_time;
-    totalValue.year_plan_tabel_time += man.year_plan_tabel_time;
-    totalValue.year_plan_time += man.year_plan_time;
-  });
-
   workingMansSheet
     .addRow({
       full_name: "Итого",
-      people_count: totalValue.people_count,
+      people_count: workingMans.length,
       year_plan_norm_time: totalValue.year_plan_norm_time,
       year_plan_tabel_time: totalValue.year_plan_tabel_time,
       year_plan_time: totalValue.year_plan_time,

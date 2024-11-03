@@ -61,7 +61,7 @@ interface IAddYearPlanSheetArgs {
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
 }
 
-export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: IAddYearPlanSheetArgs) {
+export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: IAddYearPlanSheetArgs): ExcelJS.Worksheet {
   const yearPlanSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
   const { branchesAndSubbrunchesOrder } = createPprMeta(ppr.data);

@@ -34,7 +34,7 @@ export function createHeaderCell(sheet: ExcelJS.Worksheet, cellAdress: string, t
 export function createCellWithBorderAndCenterAlignmentAndWrap(
   sheet: ExcelJS.Worksheet,
   cellAdress: string,
-  text?: string
+  text?: string | number
 ): ExcelJS.Cell {
   const cell = sheet.getCell(cellAdress);
   cell.value = text;

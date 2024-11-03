@@ -2,12 +2,14 @@
 import ExcelJS from "exceljs";
 import { getServerSession } from "next-auth";
 
+import { calculatePprTotalValues } from "@/1shared/providers/pprProvider";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { IPpr } from "@/2entities/ppr";
 
 import { addYearPlanSheet } from "./addYearPlanSheet";
 import { addTitleSheet } from "./addTitleSheet";
 import { addWorkingMansSheet } from "./addWorkingMansSheet";
+import { addPprRealizationSheet } from "./addPprRealizationSheet";
 
 const TITLE_SHEET_NAME = "Титульный лист";
 
@@ -46,6 +48,8 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   workbook.modified = new Date();
   workbook.lastPrinted = new Date();
 
+  const totalFieldsValues = calculatePprTotalValues(ppr.data, ppr.workingMans);
+
   addTitleSheet({
     workbook,
     ppr,
@@ -57,7 +61,15 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   addWorkingMansSheet({
     workbook,
     workingMans: ppr.workingMans,
+    totalValue: totalFieldsValues.peoples,
     sheetName: PPR_WORKING_MANS_SHEET_NAME,
+    sheetOptions: WORKSHEET_OPTIONS,
+  });
+
+  addPprRealizationSheet({
+    workbook,
+    totalFieldsValues,
+    sheetName: PPR_REALIZATION_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
 
