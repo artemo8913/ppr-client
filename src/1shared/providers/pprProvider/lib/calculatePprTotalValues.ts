@@ -12,7 +12,10 @@ import {
   PLAN_TABEL_TIME_FIELDS,
 } from "@/2entities/ppr";
 
-export function calculatePprTotalValues(pprData?: IPprData[], peoplesData?: IWorkingManYearPlan[]): TTotalFieldsValues {
+export function calculatePprTotalValues(
+  pprData?: IPprData[],
+  workingMansData?: IWorkingManYearPlan[]
+): TTotalFieldsValues {
   const totalFieldsValues: TTotalFieldsValues = { works: {}, peoples: {} };
 
   function handleWorkPeriod(value: number, field: keyof TPprDataFieldsTotalValues) {
@@ -41,7 +44,7 @@ export function calculatePprTotalValues(pprData?: IPprData[], peoplesData?: IWor
     FACT_TIME_FIELDS.forEach((field) => handleWorkPeriod(pprData[field], field));
   });
 
-  peoplesData?.forEach((workingMan) => {
+  workingMansData?.forEach((workingMan) => {
     PLAN_NORM_TIME_FIELDS.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
     PLAN_TABEL_TIME_FIELDS.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
     PLAN_TIME_FIELDS.forEach((field) => handleWorkingMansPeriod(workingMan[field], field));
