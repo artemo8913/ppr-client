@@ -1,9 +1,9 @@
 import ExcelJS from "exceljs";
 
-import { createPprMeta } from "@/1shared/providers/pprProvider/lib/createPprMeta";
+import { IBranchDefaultMeta, IPprMeta } from "@/1shared/providers/pprProvider";
 import { translateRuPprBranchName } from "@/1shared/locale/pprBranches";
 import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
-import { TIME_PERIODS } from "@/1shared/const/date";
+import { TIME_PERIODS, TTimePeriod } from "@/1shared/const/date";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import {
   checkIsWorkOrTimeField,
@@ -13,6 +13,7 @@ import {
   PLAN_WORK_FIELDS,
   PPR_DATA_BASIC_FIELDS,
   PPR_DATA_FIELDS,
+  TPprDataFieldsTotalValues,
 } from "@/2entities/ppr";
 
 import { setBgColorXlsx } from "./xlsxStyles";
@@ -54,17 +55,48 @@ const COLUMNS_WIDTH: { [key in keyof IPprData]?: number } = {
   unity: 3,
 };
 
+function checkIsFieldVertical(field: keyof IPprData) {
+  return (
+    checkIsWorkOrTimeField(field) ||
+    field === "total_count" ||
+    field === "entry_year" ||
+    field === "last_maintenance_year" ||
+    field === "periodicity_fact" ||
+    field === "periodicity_normal" ||
+    field === "line_class" ||
+    field === "unity" ||
+    field === "norm_of_time"
+  );
+}
+
+function getPlanFactFields(period: TTimePeriod) {
+  return [
+    `${period}_plan_work`,
+    `${period}_plan_time`,
+    `${period}_fact_work`,
+    `${period}_fact_norm_time`,
+    `${period}_fact_time`,
+  ];
+}
+
 interface IAddYearPlanSheetArgs {
   workbook: ExcelJS.Workbook;
   ppr: IPpr;
+  pprMeta: IPprMeta;
   sheetName?: string;
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
 }
 
-export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: IAddYearPlanSheetArgs): ExcelJS.Worksheet {
+export function addYearPlanSheet({
+  ppr,
+  workbook,
+  pprMeta,
+  sheetName,
+  sheetOptions,
+}: IAddYearPlanSheetArgs): ExcelJS.Worksheet {
   const yearPlanSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
-  const { branchesAndSubbrunchesOrder } = createPprMeta(ppr.data);
+  const { branchesMeta, branchesAndSubbrunchesOrder } = pprMeta;
 
   // Задать заголовки таблицы
   yearPlanSheet.columns = PPR_DATA_FIELDS.map((field) => ({
@@ -110,13 +142,7 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: IAd
     cell.border = BLACK_BORDER_FULL;
 
     // Стилизация заголовков столбов план/факт
-    [
-      `${period}_plan_work`,
-      `${period}_plan_time`,
-      `${period}_fact_work`,
-      `${period}_fact_norm_time`,
-      `${period}_fact_time`,
-    ].map((field) => {
+    getPlanFactFields(period).map((field) => {
       const planFactCell = yearPlanSheet.getCell(SECOND_ROW_INDEX, colIndex);
       planFactCell.value = translateRuFieldName(field);
       planFactCell.alignment = VERTICAL_ALIGNMENT;
@@ -133,25 +159,68 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: IAd
 
   let lastRowIndex = START_ROWS_INDEX;
 
+  function createBranchRow(branchOrder: string, branchName: string) {
+    yearPlanSheet.mergeCells(
+      lastRowIndex,
+      START_COLUMNS_INDEX,
+      lastRowIndex,
+      START_COLUMNS_INDEX + MAX_COLUMNS_COUNT - 1
+    );
+
+    const branchTitleCell = yearPlanSheet.getCell(lastRowIndex, START_COLUMNS_INDEX);
+
+    // Стилизация ячеек категорий и подкатегорий
+    branchTitleCell.value = `${branchOrder} ${translateRuPprBranchName(branchName)}`;
+    branchTitleCell.border = BLACK_BORDER_FULL;
+    branchTitleCell.alignment = { horizontal: "left" };
+
+    lastRowIndex++;
+  }
+
+  function createTotalRow(branchDefault: IBranchDefaultMeta, text: string) {
+    const row = yearPlanSheet.getRow(lastRowIndex);
+
+    PPR_DATA_FIELDS.forEach((field) => {
+      const cell = row.getCell(field);
+
+      if (field === "name") {
+        cell.value = text;
+      } else if (field in branchDefault.total) {
+        cell.value = branchDefault.total[field as keyof TPprDataFieldsTotalValues];
+      }
+
+      // Стилизация ячеек данных
+      cell.border = BLACK_BORDER_FULL;
+
+      if (checkIsFieldVertical(field)) {
+        cell.alignment = VERTICAL_ALIGNMENT;
+      }
+    });
+
+    lastRowIndex++;
+  }
+
   // Добавить данные в таблицу
   ppr.data.map((pprData, index) => {
-    // Создание ячеек категорий и подкатегорий
+    // Создание ячеек-заголовков категорий и подкатегорий, а также итоговых значений
     if (index in branchesAndSubbrunchesOrder) {
-      branchesAndSubbrunchesOrder[index].forEach((branch, subIndex) => {
-        yearPlanSheet.mergeCells(
-          lastRowIndex + index + subIndex,
-          START_COLUMNS_INDEX,
-          lastRowIndex + index + subIndex,
-          START_COLUMNS_INDEX + MAX_COLUMNS_COUNT - 1
-        );
+      lastRowIndex++;
 
-        const branchTitleCell = yearPlanSheet.getCell(lastRowIndex + index + subIndex, START_COLUMNS_INDEX);
+      const { branch, subbranch } = branchesAndSubbrunchesOrder[index];
 
-        // Стилизация ячеек категорий и подкатегорий
-        branchTitleCell.value = `${branch.orderIndex} ${translateRuPprBranchName(branch.name)}`;
-        branchTitleCell.border = BLACK_BORDER_FULL;
-        branchTitleCell.alignment = { horizontal: "left" };
-      });
+      if (subbranch.prev) {
+        createTotalRow(subbranch.prev, `Итого по пункту ${subbranch.prev.orderIndex}`);
+      }
+
+      if (branch?.prev) {
+        createTotalRow(branch.prev, `Итого по разделу ${branch.prev.orderIndex}`);
+      }
+
+      if (branch) {
+        createBranchRow(branch.orderIndex, branch.name);
+      }
+
+      createBranchRow(subbranch.orderIndex, subbranch.name);
     }
 
     const finalData: any = { ...pprData };
@@ -176,20 +245,19 @@ export function addYearPlanSheet({ ppr, workbook, sheetName, sheetOptions }: IAd
         pattern: "solid",
       };
 
-      if (
-        checkIsWorkOrTimeField(field) ||
-        field === "total_count" ||
-        field === "entry_year" ||
-        field === "last_maintenance_year" ||
-        field === "periodicity_fact" ||
-        field === "periodicity_normal" ||
-        field === "line_class" ||
-        field === "unity" ||
-        field === "norm_of_time"
-      ) {
+      if (checkIsFieldVertical(field)) {
         cell.alignment = VERTICAL_ALIGNMENT;
       }
     });
+
+    // Если строка последняя, то добавить итого по последним пункту и категории
+    if (index === ppr?.data.length - 1) {
+      lastRowIndex++;
+      const lastBranch = branchesMeta.slice(-1)[0];
+      const lastSubbranch = lastBranch.subbranches.slice(-1)[0];
+      createTotalRow(lastSubbranch, `Итого по пункту ${lastSubbranch.orderIndex}`);
+      createTotalRow(lastBranch, "Итого по разделам 1-3");
+    }
   });
 
   return yearPlanSheet;
