@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 
 import { ROUTE_PPR } from "@/1shared/const/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
-import { calculatePprTotalValues } from "@/1shared/providers/pprProvider";
 import {
   db,
   directionsTable,
@@ -42,8 +41,6 @@ export async function getPprTable(id: number): Promise<IPpr> {
       throw new Error(`User id ${pprInfo[0].idUserCreatedBy} created ppr with id ${id} not exist`);
     }
 
-    const totalFieldsValues = calculatePprTotalValues(pprData, workingMans);
-
     const { direction, distance, subdivision } = await getDivisionsById(pprInfo[0]);
 
     return {
@@ -52,7 +49,6 @@ export async function getPprTable(id: number): Promise<IPpr> {
       workingMans: workingMans,
       months_statuses: pprMonthStatuses[0],
       data: pprData,
-      total_fields_value: totalFieldsValues,
       directionShortName: direction?.shortName,
       distanceShortName: distance?.shortName,
       subdivisionShortName: subdivision?.shortName,
