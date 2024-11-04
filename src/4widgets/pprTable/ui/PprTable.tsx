@@ -6,7 +6,7 @@ import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPprData, SummaryTableFoot, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
+import { IPprData, SummaryTableFoot, SummaryTableRow, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
 import { AddWorkButton } from "@/3features/ppr/worksUpdate";
 
 import HeaderCell from "./HeaderCell";
@@ -18,7 +18,7 @@ import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = () => {
-  const { ppr, updatePprTableCell, getBranchesMeta, updateSubbranch } = usePpr();
+  const { ppr, updatePprTableCell, pprMeta, updateSubbranch } = usePpr();
   const { data: credential } = useSession();
 
   const { basicFields, timePeriods, planFactFields, monthColSpan, allFields } = useCreateColumns();
@@ -54,7 +54,7 @@ export const PprTable: FC<IPprTableProps> = () => {
     return <AddWorkButton shape="default" size="middle" type="primary" label="Добавить работу" />;
   }
 
-  const { branchesAndSubbrunchesOrder } = getBranchesMeta();
+  const { branchesAndSubbrunchesOrder, branchesMeta } = pprMeta;
 
   return (
     <table
@@ -97,14 +97,38 @@ export const PprTable: FC<IPprTableProps> = () => {
       <tbody>
         {ppr?.data.map((pprData, index) => (
           <Fragment key={pprData.id}>
-            {index in branchesAndSubbrunchesOrder &&
-              branchesAndSubbrunchesOrder[index].map((branch) => (
-                <PprTableBranchNameRowMemo
-                  key={branch.name + index}
-                  branch={branch}
-                  updateSubbranch={updateSubbranch}
-                />
-              ))}
+            {index in branchesAndSubbrunchesOrder && (
+              <>
+                {branchesAndSubbrunchesOrder[index].subbranch.prev && (
+                  <SummaryTableRow
+                    fields={planFactFields}
+                    summaryNameColSpan={basicFields.length}
+                    name={`Итого по пункту ${branchesAndSubbrunchesOrder[index].subbranch.prev?.orderIndex}`}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[index].subbranch.prev?.total}
+                  />
+                )}
+                {branchesAndSubbrunchesOrder[index].branch?.prev && (
+                  <SummaryTableRow
+                    fields={planFactFields}
+                    summaryNameColSpan={basicFields.length}
+                    name={`Итого по разделу ${branchesAndSubbrunchesOrder[index].branch?.prev?.orderIndex}`}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[index].branch?.prev?.total}
+                  />
+                )}
+                {branchesAndSubbrunchesOrder[index].branch && (
+                  <PprTableBranchNameRowMemo
+                    branch={branchesAndSubbrunchesOrder[index].branch!}
+                    updateSubbranch={updateSubbranch}
+                  />
+                )}
+                {branchesAndSubbrunchesOrder[index].subbranch && (
+                  <PprTableBranchNameRowMemo
+                    branch={branchesAndSubbrunchesOrder[index].subbranch}
+                    updateSubbranch={updateSubbranch}
+                  />
+                )}
+              </>
+            )}
             <tr key={pprData.id}>
               {allFields.map((field) => (
                 <PprTableCellMemo
@@ -119,14 +143,26 @@ export const PprTable: FC<IPprTableProps> = () => {
                 />
               ))}
             </tr>
+            {index === ppr?.data.length - 1 && (
+              <>
+                <SummaryTableRow
+                  fields={planFactFields}
+                  summaryNameColSpan={basicFields.length}
+                  name={`Итого по пункту ${branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].orderIndex}`}
+                  totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total}
+                />
+                <SummaryTableRow
+                  fields={planFactFields}
+                  summaryNameColSpan={basicFields.length}
+                  name={`Итого по разделу ${branchesMeta.slice(-1)[0].orderIndex}`}
+                  totalFieldsValues={branchesMeta.slice(-1)[0].total}
+                />
+              </>
+            )}
           </Fragment>
         ))}
       </tbody>
-      <SummaryTableFoot
-        fields={planFactFields}
-        summaryNameColSpan={basicFields.length}
-        totalFieldsValues={ppr?.total_fields_value}
-      />
+      <SummaryTableFoot fields={planFactFields} summaryNameColSpan={basicFields.length} />
     </table>
   );
 };

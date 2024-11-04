@@ -1,5 +1,5 @@
 "use client";
-import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
+import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { TMonth } from "@/1shared/const/date";
 import {
@@ -33,8 +33,7 @@ import {
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
-import { calculatePprTotalValues } from "../lib/calculatePprTotalValues";
-import { createPprMeta, IBranchDefaultMeta, IBranchMeta } from "../lib/createPprMeta";
+import { createPprMeta, IPprMeta } from "../lib/createPprMeta";
 
 export interface IPprContext {
   ppr: IPpr | null;
@@ -68,13 +67,7 @@ export interface IPprContext {
   updateWorkingManParticipation: (rowIndex: number, value: number) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   fillWorkingManPlanTime: (mode: "EVERY" | "NOT_FILLED", value: number) => void;
-  getBranchesMeta: () => {
-    branchesMeta: IBranchMeta[];
-    branchesAndSubbrunchesOrder: {
-      [indexToPlace: number]: IBranchDefaultMeta[];
-    };
-    subbranchesList: string[];
-  };
+  pprMeta: IPprMeta;
 }
 
 const PprContext = createContext<IPprContext>({
@@ -104,7 +97,12 @@ const PprContext = createContext<IPprContext>({
   getPprDataWithRowSpan: () => [],
   fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
-  getBranchesMeta: () => ({ branchesMeta: [], branchesAndSubbrunchesOrder: {}, subbranchesList: [] }),
+  pprMeta: {
+    branchesMeta: [],
+    branchesAndSubbrunchesOrder: {},
+    subbranchesList: [],
+    totalValues: { peoples: {}, works: {} },
+  },
 });
 
 //TODO: Сделать функцию, которая округляет после математических операций. Использовать везде (чтобы округлялось норм)
@@ -834,32 +832,23 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * Получить информацию о месте размещения строк категорий. Для этого перебирается массив pprData.data
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
    */
-  const getBranchesMeta = useCallback(() => {
-    if (!ppr?.data) {
-      return { branchesMeta: [], branchesAndSubbrunchesOrder: {}, subbranchesList: [] };
+  const pprMeta = useMemo(() => {
+    if (!ppr) {
+      return {
+        branchesMeta: [],
+        branchesAndSubbrunchesOrder: {},
+        subbranchesList: [],
+        totalValues: { peoples: {}, works: {} },
+      };
     }
 
-    return createPprMeta(ppr.data);
-  }, [ppr?.data]);
+    return createPprMeta({ pprData: ppr.data, workingMansData: ppr.workingMans });
+  }, [ppr]);
 
   // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
     setPpr({ ...pprFromResponce });
   }, [pprFromResponce]);
-
-  //Расчитать и сохранить значения в итоговые значения.
-  //Скорее всего было бы лучше сделать не useEffect, а при вызове функций изменения ячеек сразу же считать сумму по столбцам/
-  //Ибо сейчас скорее всего получится, что я делаю перерендеринг из-за перерасчета, из-за useEffect
-  useEffect(() => {
-    const totalFieldsValues = calculatePprTotalValues(ppr?.data, ppr?.workingMans);
-
-    setPpr((prev) => {
-      if (!prev) {
-        return prev;
-      }
-      return { ...prev, total_fields_value: totalFieldsValues };
-    });
-  }, [ppr?.data, ppr?.workingMans]);
 
   return (
     <PprContext.Provider
@@ -890,7 +879,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateWorkingManParticipation,
         getPprDataWithRowSpan,
         fillWorkingManPlanTime,
-        getBranchesMeta,
+        pprMeta,
       }}
     >
       {children}

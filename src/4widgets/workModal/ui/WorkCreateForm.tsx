@@ -30,9 +30,9 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
 
   const { data: credential } = useSession();
 
-  const { addWork, getBranchesMeta } = usePpr();
+  const { addWork, pprMeta } = usePpr();
 
-  const { subbranchesList } = getBranchesMeta();
+  const { subbranchesList } = pprMeta;
 
   const subbranchOptions = subbranchesList?.map((subbranch) => {
     return { value: subbranch, label: subbranch };
@@ -97,7 +97,7 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
         name="branch"
         rules={[{ required: true, message: "Выберите раздел работ" }]}
       >
-        <Select<TWorkBranch> defaultValue={SELECT_INITIAL_VALUE} options={BRANCH_SELECT_OPTIONS} />
+        <Select<TWorkBranch> options={BRANCH_SELECT_OPTIONS} />
       </FormItem>
       <FormItem<ICommonWorkExtended>
         label="Подраздел ППР (подраздел категории работ)"

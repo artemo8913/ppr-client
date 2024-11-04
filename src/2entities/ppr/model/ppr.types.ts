@@ -96,6 +96,7 @@ export type TWorkingManFieldsTotalValues = Partial<TPlanNormTimePeriodsFields> &
   Partial<TFactTimePeriodsFields>;
 
 export type TTotalFieldsValues = {
+  //TODO: переименовать в working mans
   peoples: TWorkingManFieldsTotalValues;
   works: TPprDataFieldsTotalValues;
 };
@@ -113,7 +114,6 @@ export interface IPpr {
   idSubdivision: number | null;
   workingMans: IWorkingManYearPlan[];
   data: IPprData[];
-  total_fields_value: TTotalFieldsValues;
   directionShortName?: string | null;
   distanceShortName?: string | null;
   subdivisionShortName?: string | null;

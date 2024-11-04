@@ -53,9 +53,9 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
 
   const { data: credential } = useSession();
 
-  const { addWork, getBranchesMeta } = usePpr();
+  const { addWork, pprMeta } = usePpr();
 
-  const { subbranchesList } = getBranchesMeta();
+  const { subbranchesList } = pprMeta;
 
   const subbranchOptions = useMemo(
     () =>

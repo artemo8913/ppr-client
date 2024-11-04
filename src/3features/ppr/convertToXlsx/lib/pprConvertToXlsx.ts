@@ -2,9 +2,14 @@
 import ExcelJS from "exceljs";
 import { getServerSession } from "next-auth";
 
+import { createPprMeta } from "@/1shared/providers/pprProvider";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { IPpr } from "@/2entities/ppr";
-import { addYearPlanSheet } from "./createYearPlanSheet";
+
+import { addYearPlanSheet } from "./addYearPlanSheet";
+import { addTitleSheet } from "./addTitleSheet";
+import { addWorkingMansSheet } from "./addWorkingMansSheet";
+import { addPprRealizationSheet } from "./addPprRealizationSheet";
 
 const TITLE_SHEET_NAME = "Титульный лист";
 
@@ -43,9 +48,38 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   workbook.modified = new Date();
   workbook.lastPrinted = new Date();
 
-  const yearPlanSheet = addYearPlanSheet({
-    ppr,
+  const pprMeta = createPprMeta({
+    pprData: ppr.data,
+    workingMansData: ppr.workingMans,
+  });
+
+  addTitleSheet({
     workbook,
+    ppr,
+    session,
+    sheetName: TITLE_SHEET_NAME,
+    sheetOptions: WORKSHEET_OPTIONS,
+  });
+
+  addWorkingMansSheet({
+    workbook,
+    workingMans: ppr.workingMans,
+    totalValue: pprMeta.totalValues.peoples,
+    sheetName: PPR_WORKING_MANS_SHEET_NAME,
+    sheetOptions: WORKSHEET_OPTIONS,
+  });
+
+  addPprRealizationSheet({
+    workbook,
+    totalFieldsValues: pprMeta.totalValues,
+    sheetName: PPR_REALIZATION_SHEET_NAME,
+    sheetOptions: WORKSHEET_OPTIONS,
+  });
+
+  addYearPlanSheet({
+    workbook,
+    ppr,
+    pprMeta,
     sheetName: PPR_YEAR_PLAN_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });

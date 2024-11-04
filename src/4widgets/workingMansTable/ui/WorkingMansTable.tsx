@@ -101,11 +101,7 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
           </tr>
         ))}
       </tbody>
-      <SummaryTableFoot
-        fields={timePeriodsColumns.flat()}
-        summaryNameColSpan={columnsDefault.length}
-        totalFieldsValues={ppr?.total_fields_value}
-      />
+      <SummaryTableFoot fields={timePeriodsColumns.flat()} summaryNameColSpan={columnsDefault.length} />
     </table>
   );
 };

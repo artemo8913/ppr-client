@@ -75,3 +75,4 @@ export {
 export { getPprTable, createPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";
+export { SummaryTableRow } from "./ui/SummaryTableRow";

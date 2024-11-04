@@ -80,8 +80,6 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = () => {
   const { ppr } = usePpr();
   const { currentTimePeriod } = usePprTableSettings();
 
-  const totalValues = ppr?.total_fields_value;
-
   const table = useReactTable({
     data: ppr?.workingMans || [],
     columns: columns(currentTimePeriod),

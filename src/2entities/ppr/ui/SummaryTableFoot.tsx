@@ -1,41 +1,27 @@
-import { TableCellMemo } from "@/1shared/ui/table";
 import { FC } from "react";
-import { IPprData, IWorkingManYearPlan, TTotalFieldsValues } from "../model/ppr.types";
-import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
 import clsx from "clsx";
 
+import { TableCellMemo } from "@/1shared/ui/table";
+
+import { IPprData, IWorkingManYearPlan } from "../model/ppr.types";
+import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
+import { usePpr } from "@/1shared/providers/pprProvider";
+
 interface ISummaryTableFootProps {
-  totalFieldsValues?: TTotalFieldsValues;
   fields: (keyof IPprData | keyof IWorkingManYearPlan)[];
   summaryNameColSpan: number;
 }
 
-export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({
-  totalFieldsValues = { works: {}, peoples: {} },
-  summaryNameColSpan,
-  fields,
-}) => {
+export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpan, fields }) => {
+  const { pprMeta } = usePpr();
+
+  const { totalValues } = pprMeta;
+
   return (
     <tfoot>
       <tr>
         <td colSpan={summaryNameColSpan} className="border border-black">
-          <TableCellMemo value="Итого настой часов, чел.-ч" />
-        </td>
-        {fields.map((field) => {
-          const isFieldHaveTotalValueByPeoples = checkIsPlanTimeField(field) || checkIsFactTimeField(field);
-          return (
-            <td key={field} className="border border-black">
-              <TableCellMemo
-                isVertical
-                value={isFieldHaveTotalValueByPeoples ? totalFieldsValues.peoples[field]?.toFixed(2) : "-"}
-              />
-            </td>
-          );
-        })}
-      </tr>
-      <tr>
-        <td colSpan={summaryNameColSpan} className="border border-black">
-          <TableCellMemo value="Итого трудозатраты, чел.-ч" />
+          <TableCellMemo value="Итого по разделам 1-3, чел.-ч" />
         </td>
         {fields.map((field) => {
           const isFieldHaveTotalValueByPeoples = checkIsPlanTimeField(field) || checkIsFactTimeField(field);
@@ -46,7 +32,7 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({
 
           if (
             isFieldHaveTotalValueByPeoples &&
-            Math.abs(Number(totalFieldsValues.peoples[field]) - Number(totalFieldsValues.works[field])) > 1
+            Math.abs(Number(totalValues.peoples[field]) - Number(totalValues.works[field])) > 1
           ) {
             isWorkAndPeoplesTimesMatch = false;
           }
@@ -54,7 +40,23 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({
             <td key={field} className={clsx("border border-black", !isWorkAndPeoplesTimesMatch && "bg-red-300")}>
               <TableCellMemo
                 isVertical
-                value={isFieldHaveTotalValueByWorks ? totalFieldsValues.works[field]?.toFixed(2) : "-"}
+                value={isFieldHaveTotalValueByWorks ? totalValues.works[field]?.toFixed(2) : "-"}
+              />
+            </td>
+          );
+        })}
+      </tr>
+      <tr>
+        <td colSpan={summaryNameColSpan} className="border border-black">
+          <TableCellMemo value="Итого настой часов, чел.-ч" />
+        </td>
+        {fields.map((field) => {
+          const isFieldHaveTotalValueByPeoples = checkIsPlanTimeField(field) || checkIsFactTimeField(field);
+          return (
+            <td key={field} className="border border-black">
+              <TableCellMemo
+                isVertical
+                value={isFieldHaveTotalValueByPeoples ? totalValues.peoples[field]?.toFixed(2) : "-"}
               />
             </td>
           );
