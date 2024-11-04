@@ -2,7 +2,7 @@
 import ExcelJS from "exceljs";
 import { getServerSession } from "next-auth";
 
-import { calculatePprTotalValues } from "@/1shared/providers/pprProvider";
+import { createPprMeta } from "@/1shared/providers/pprProvider";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { IPpr } from "@/2entities/ppr";
 
@@ -48,7 +48,10 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   workbook.modified = new Date();
   workbook.lastPrinted = new Date();
 
-  const totalFieldsValues = calculatePprTotalValues(ppr.data, ppr.workingMans);
+  const pprMeta = createPprMeta({
+    pprData: ppr.data,
+    workingMansData: ppr.workingMans,
+  });
 
   addTitleSheet({
     workbook,
@@ -61,14 +64,14 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   addWorkingMansSheet({
     workbook,
     workingMans: ppr.workingMans,
-    totalValue: totalFieldsValues.peoples,
+    totalValue: pprMeta.totalValues.peoples,
     sheetName: PPR_WORKING_MANS_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
 
   addPprRealizationSheet({
     workbook,
-    totalFieldsValues,
+    totalFieldsValues: pprMeta.totalValues,
     sheetName: PPR_REALIZATION_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
@@ -76,6 +79,7 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   addYearPlanSheet({
     workbook,
     ppr,
+    pprMeta,
     sheetName: PPR_YEAR_PLAN_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
