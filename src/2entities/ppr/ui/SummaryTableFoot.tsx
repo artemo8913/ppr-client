@@ -38,10 +38,7 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
           }
           return (
             <td key={field} className={clsx("border border-black", !isWorkAndPeoplesTimesMatch && "bg-red-300")}>
-              <TableCellMemo
-                isVertical
-                value={isFieldHaveTotalValueByWorks ? totalValues.works[field]?.toFixed(2) : "-"}
-              />
+              <TableCellMemo isVertical value={isFieldHaveTotalValueByWorks ? totalValues.works[field] : "-"} />
             </td>
           );
         })}
@@ -54,10 +51,7 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
           const isFieldHaveTotalValueByPeoples = checkIsPlanTimeField(field) || checkIsFactTimeField(field);
           return (
             <td key={field} className="border border-black">
-              <TableCellMemo
-                isVertical
-                value={isFieldHaveTotalValueByPeoples ? totalValues.peoples[field]?.toFixed(2) : "-"}
-              />
+              <TableCellMemo isVertical value={isFieldHaveTotalValueByPeoples ? totalValues.peoples[field] : "-"} />
             </td>
           );
         })}

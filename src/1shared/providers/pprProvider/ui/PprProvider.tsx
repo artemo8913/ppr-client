@@ -2,6 +2,7 @@
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { TMonth } from "@/1shared/const/date";
+import { roundToFixed } from "@/1shared/lib/math";
 import {
   IPpr,
   IPprData,
@@ -104,8 +105,6 @@ const PprContext = createContext<IPprContext>({
     totalValues: { peoples: {}, works: {} },
   },
 });
-
-//TODO: Сделать функцию, которая округляет после математических операций. Использовать везде (чтобы округлялось норм)
 
 export const usePpr = () => useContext(PprContext);
 
@@ -216,17 +215,15 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           for (const planWorkField of PLAN_WORK_FIELDS) {
             const planTimeField = getPlanTimeFieldByPlanWorkField(planWorkField);
-            newPprData[planTimeField].original = Number(
-              (newPprData.norm_of_time * newPprData[planWorkField].original).toFixed(2)
+            newPprData[planTimeField].original = roundToFixed(
+              newPprData.norm_of_time * newPprData[planWorkField].original
             );
-            newPprData[planTimeField].final = Number(
-              (newPprData.norm_of_time * newPprData[planWorkField].final).toFixed(2)
-            );
+            newPprData[planTimeField].final = roundToFixed(newPprData.norm_of_time * newPprData[planWorkField].final);
           }
 
           for (const factWorkField of FACT_WORK_FIELDS) {
             const factTimeField = getFactTimeFieldByFactWorkField(factWorkField);
-            newPprData[factTimeField] = Number((newPprData.norm_of_time * newPprData[factWorkField]).toFixed(2));
+            newPprData[factTimeField] = roundToFixed(newPprData.norm_of_time * newPprData[factWorkField]);
           }
 
           return newPprData;
@@ -264,11 +261,11 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           const planTimeField = getPlanTimeFieldByPlanWorkField(field);
 
-          newPprData[planTimeField].final = newPprData[planTimeField].original = Number(
-            (newPprData.norm_of_time * newPprData[field].original).toFixed(2)
+          newPprData[planTimeField].final = newPprData[planTimeField].original = roundToFixed(
+            newPprData.norm_of_time * newPprData[field].original
           );
-          newPprData.year_plan_time.final = newPprData.year_plan_time.original = Number(
-            (newPprData.norm_of_time * newPprData.year_plan_work.original).toFixed(2)
+          newPprData.year_plan_time.final = newPprData.year_plan_time.original = roundToFixed(
+            newPprData.norm_of_time * newPprData.year_plan_work.original
           );
 
           return newPprData;
@@ -298,8 +295,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           }
 
           const factNormTimeField = getFactTimeFieldByFactWorkField(field);
-          newPprData[factNormTimeField] = Number((newPprData.norm_of_time * newPprData[field]).toFixed(2));
-          newPprData.year_fact_norm_time = Number((newPprData.year_fact_work * newPprData.norm_of_time).toFixed(2));
+          newPprData[factNormTimeField] = roundToFixed(newPprData.norm_of_time * newPprData[field]);
+          newPprData.year_fact_norm_time = roundToFixed(newPprData.year_fact_work * newPprData.norm_of_time);
 
           return newPprData;
         }),
@@ -326,7 +323,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           newPprData.year_fact_time = 0;
 
           for (const periodField of FACT_TIME_FIELDS) {
-            newPprData.year_fact_time += Number(newPprData[periodField]);
+            newPprData.year_fact_time += newPprData[periodField];
           }
 
           return newPprData;
@@ -353,10 +350,11 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           if (mode === "EVERY" || (mode === "NOT_FILLED" && !pprData[factTimePeriod])) {
             newPprData[factTimePeriod] = newPprData[factNormTimePeriod];
+
             newPprData.year_fact_time = 0;
 
             for (const periodField of FACT_TIME_FIELDS) {
-              newPprData.year_fact_time += Number(newPprData[periodField]);
+              newPprData.year_fact_time += newPprData[periodField];
             }
           }
 
@@ -420,10 +418,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
           const planTimeField = getPlanTimeFieldByPlanWorkField(field);
 
-          newPprData[planTimeField].final = Number((newPprData.norm_of_time * newPprData[field].final).toFixed(2));
-          newPprData.year_plan_time.final = Number(
-            (newPprData.norm_of_time * newPprData.year_plan_work.final).toFixed(2)
-          );
+          newPprData[planTimeField].final = roundToFixed(newPprData.norm_of_time * newPprData[field].final);
+          newPprData.year_plan_time.final = roundToFixed(newPprData.norm_of_time * newPprData.year_plan_work.final);
 
           return newPprData;
         }),
@@ -496,12 +492,10 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
               }
 
               const planTimeField = getPlanTimeFieldByPlanWorkField(planWorkField);
-              newPprData[planTimeField].final = Number((newPprData.norm_of_time * planField.final).toFixed(2));
+              newPprData[planTimeField].final = roundToFixed(newPprData.norm_of_time * planField.final);
               newPprData.year_plan_work.final += planField.final;
             }
-            newPprData.year_plan_time.final = Number(
-              (newPprData.norm_of_time * newPprData.year_plan_work.final).toFixed(2)
-            );
+            newPprData.year_plan_time.final = roundToFixed(newPprData.norm_of_time * newPprData.year_plan_work.final);
 
             return newPprData;
           }),
@@ -621,10 +615,16 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           continue;
         }
         correctedWorkingMan.year_plan_tabel_time += correctedWorkingMan[planTabelPeriod];
+
         const planTimePeriod = getPlanTimeFieldByPlanTabelTimeField(planTabelPeriod);
-        correctedWorkingMan[planTimePeriod] = correctedWorkingMan.participation * correctedWorkingMan[planTabelPeriod];
+
+        correctedWorkingMan[planTimePeriod] = roundToFixed(
+          correctedWorkingMan.participation * correctedWorkingMan[planTabelPeriod]
+        );
       }
-      correctedWorkingMan.year_plan_time = correctedWorkingMan.participation * correctedWorkingMan.year_plan_tabel_time;
+      correctedWorkingMan.year_plan_time = roundToFixed(
+        correctedWorkingMan.participation * correctedWorkingMan.year_plan_tabel_time
+      );
 
       return {
         ...prev,
@@ -646,6 +646,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       const correctedWorkinMan = { ...prev.workingMans[rowIndex] };
       correctedWorkinMan[field] = value;
       correctedWorkinMan.year_fact_time = 0;
+      //TODO: проверить везде пропуск годового поля, ноль где-то прибавляю - тоже не верно это
       for (const factPeriod of FACT_TIME_FIELDS) {
         if (factPeriod === "year_fact_time") {
           continue;
@@ -674,7 +675,9 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
       for (const planTabelPeriod of PLAN_TABEL_TIME_FIELDS) {
         const planTimePeriod = getPlanTimeFieldByPlanTabelTimeField(planTabelPeriod);
-        correctedWorkingMan[planTimePeriod] = correctedWorkingMan.participation * correctedWorkingMan[planTabelPeriod];
+        correctedWorkingMan[planTimePeriod] = roundToFixed(
+          correctedWorkingMan.participation * correctedWorkingMan[planTabelPeriod]
+        );
       }
 
       return {
@@ -758,7 +761,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             if (mode === "EVERY" || (mode === "NOT_FILLED" && !correctedWorkingMan[planNormTimeField])) {
               correctedWorkingMan[planNormTimeField] = value;
               correctedWorkingMan[planTabelTimeField] = value;
-              correctedWorkingMan[planTimeField] = Number((value * correctedWorkingMan.participation).toFixed(2));
+              correctedWorkingMan[planTimeField] = roundToFixed(value * correctedWorkingMan.participation);
             }
 
             correctedWorkingMan.year_plan_norm_time += correctedWorkingMan[planNormTimeField];

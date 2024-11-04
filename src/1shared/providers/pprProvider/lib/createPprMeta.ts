@@ -1,3 +1,4 @@
+import { roundToFixed } from "@/1shared/lib/math";
 import {
   FACT_NORM_TIME_FIELDS,
   FACT_TIME_FIELDS,
@@ -20,9 +21,9 @@ function handleWorkPeriod(
   field: keyof TPprDataFieldsTotalValues
 ) {
   if (totalObject[field] !== undefined) {
-    totalObject[field]! += value;
+    totalObject[field] = roundToFixed(value + totalObject[field]);
   } else {
-    totalObject[field] = value;
+    totalObject[field] = roundToFixed(value);
   }
 }
 
@@ -32,9 +33,9 @@ function handleWorkingMansPeriod(
   field: keyof TWorkingManFieldsTotalValues
 ) {
   if (totalObject[field] !== undefined) {
-    totalObject[field]! += value;
+    totalObject[field] = roundToFixed(value + totalObject[field]);
   } else {
-    totalObject[field] = value;
+    totalObject[field] = roundToFixed(value);
   }
 }
 
