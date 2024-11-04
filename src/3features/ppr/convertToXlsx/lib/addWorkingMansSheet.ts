@@ -1,5 +1,6 @@
 import ExcelJS from "exceljs";
 
+import { roundToFixed } from "@/1shared/lib/math";
 import { IWorkingManYearPlan, TWorkingManFieldsTotalValues } from "@/2entities/ppr";
 
 import {
@@ -88,9 +89,10 @@ export function addWorkingMansSheet({
       people_count: 1,
       year_plan_norm_time: man.year_plan_norm_time,
       year_plan_tabel_time: man.year_plan_tabel_time,
-      participation: man.participation,
+      participation: roundToFixed(man.participation * 100),
       year_plan_time: man.year_plan_time,
     };
+
     workingMansSheet.addRow(finalData).eachCell((cell) => {
       cell.border = BLACK_BORDER_FULL;
       cell.alignment = CENTER_ALIGNMENT;

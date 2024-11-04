@@ -71,7 +71,7 @@ export async function pprConvertToXlsx(ppr: IPpr) {
 
   addPprRealizationSheet({
     workbook,
-    totalFieldsValues: pprMeta.totalValues,
+    pprMeta,
     sheetName: PPR_REALIZATION_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
