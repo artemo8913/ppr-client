@@ -1,4 +1,6 @@
-export type { IPprContext, IBranchDefaultMeta, IBranchMeta } from "./ui/PprProvider";
+export type { IPprContext } from "./ui/PprProvider";
+export type { IBranchDefaultMeta, IBranchMeta, IPprMeta } from "./lib/createPprMeta";
+export { createPprMeta } from "./lib/createPprMeta";
 export { PprProvider, usePpr } from "./ui/PprProvider";
 export {
   getNextPprMonthStatus,
@@ -9,4 +11,3 @@ export {
   findFirstUndonePprPeriod,
 } from "./lib/pprStatusHelper";
 export { checkIsPprInUserControl } from "./lib/isPprInUserControl";
-export { calculatePprTotalValues } from "./lib/calculatePprTotalValues";
