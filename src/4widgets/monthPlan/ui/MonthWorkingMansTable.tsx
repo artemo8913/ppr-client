@@ -1,10 +1,11 @@
 "use client";
 import { FC } from "react";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+
 import { TTimePeriod } from "@/1shared/const/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper<
   IWorkingManYearPlan & { expl_plan?: string; expl_fact?: string; expl_per?: string; all_per?: string }

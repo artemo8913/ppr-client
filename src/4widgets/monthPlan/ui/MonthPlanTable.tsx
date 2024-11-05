@@ -1,10 +1,11 @@
 "use client";
 import { FC } from "react";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+
 import { TTimePeriod } from "@/1shared/const/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { TPlanWorkPeriodsFields, IPprData, IPlanWorkValues } from "@/2entities/ppr";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { IPprData } from "@/2entities/ppr";
 
 type TMonthPlanColumns = IPprData;
 
@@ -75,12 +76,15 @@ interface IMonthPlanTableProps {}
 
 export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
   const { ppr } = usePpr();
+
   const { currentTimePeriod } = usePprTableSettings();
+
   const table = useReactTable({
     data: ppr?.data || [],
     columns: useColumns(currentTimePeriod),
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
     <div className="overflow-auto">
       <table className="shadow-lg">
