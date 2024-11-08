@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 import { SessionProvider } from "@/1shared/providers/sessionProvider";
@@ -10,7 +10,7 @@ import { LoginPage } from "@/5pages/loginPage";
 
 import "./globals.scss";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +26,7 @@ export default async function RootLayout(props: IRootLayoutProps) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <AntdRegistry>
           <SessionProvider>{user ? <MainLayout>{props.children}</MainLayout> : <LoginPage />}</SessionProvider>
         </AntdRegistry>
