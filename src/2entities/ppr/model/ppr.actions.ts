@@ -91,6 +91,48 @@ export async function createPprTable(name: string, year: number) {
   revalidatePath(ROUTE_PPR);
 }
 
+export async function copyPprTable(params: {
+  instancePprId: number;
+  name: string;
+  year: number;
+  isCopyPlanWork?: boolean;
+  isCopyPlanWorkingMans?: boolean;
+  isCopyFactWork?: boolean;
+  isCopyFactWorkingMans?: boolean;
+}) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      throw new Error(`Session not exist`);
+    }
+
+    const isSubdivision = session.user.role === "subdivision";
+
+    const status: TYearPprStatus = isSubdivision ? "plan_creating" : "template";
+
+    const newPprId = await db
+      .insert(pprsInfoTable)
+      .values({
+        name: params.name,
+        year: params.year,
+        status,
+        created_at: new Date(),
+        idUserCreatedBy: session.user.id,
+        idDirection: session.user.idDirection,
+        idDistance: session.user.idDistance,
+        idSubdivision: session.user.idSubdivision,
+      })
+      .$returningId();
+
+    const instancePprData = await db.query.pprsWorkDataTable.findMany({
+      where: eq(pprsWorkDataTable.idPpr, params.instancePprId),
+    });
+  } catch (e) {
+    throw new Error(`Create ppr ${params.name} ${params.year} form ppr id = ${params.instancePprId}. ${e}`);
+  }
+}
+
 export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>) {
   try {
     params.status && (await db.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
