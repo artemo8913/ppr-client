@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 // import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 
+import { NotificationProvider } from "@/1shared/providers/notificationProvider";
 import { SessionProvider } from "@/1shared/providers/sessionProvider";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { MainLayout } from "@/4widgets/layouts";
@@ -28,7 +29,11 @@ export default async function RootLayout(props: IRootLayoutProps) {
     <html lang="en">
       <body>
         <AntdRegistry>
-          <SessionProvider>{user ? <MainLayout>{props.children}</MainLayout> : <LoginPage />}</SessionProvider>
+          <SessionProvider>
+            <NotificationProvider>
+              {user ? <MainLayout>{props.children}</MainLayout> : <LoginPage />}
+            </NotificationProvider>
+          </SessionProvider>
         </AntdRegistry>
       </body>
     </html>
