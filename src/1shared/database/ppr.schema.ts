@@ -1,15 +1,4 @@
-import {
-  varchar,
-  int,
-  smallint,
-  mysqlTable,
-  mysqlEnum,
-  date,
-  double,
-  boolean,
-  tinyint,
-  json,
-} from "drizzle-orm/mysql-core";
+import { varchar, int, smallint, mysqlTable, mysqlEnum, date, double, boolean, json } from "drizzle-orm/mysql-core";
 
 import { BRANCHES, MONTH_STATUSES, YEAR_STATUSES } from "@/2entities/ppr/lib/constFields";
 import {
@@ -40,11 +29,20 @@ function createMysqlBigDoubleField(fieldName: string) {
 }
 
 function createMysqlJsonPlanWorkField(fieldName: string) {
-  return json(fieldName).$type<IPlanWorkValues>().notNull();
+  return json(fieldName).$type<IPlanWorkValues>().notNull().default({
+    original: 0,
+    handCorrection: null,
+    planTransfers: null,
+    planTransfersSum: 0,
+    undoneTransfers: null,
+    undoneTransfersSum: 0,
+    outsideCorrectionsSum: 0,
+    final: 0,
+  });
 }
 
 function createMysqlJsonPlanTimeField(fieldName: string) {
-  return json(fieldName).$type<TPlanTimeValues>().notNull();
+  return json(fieldName).$type<TPlanTimeValues>().notNull().default({ final: 0, original: 0 });
 }
 
 export const pprsInfoTable = mysqlTable("pprs_info", {

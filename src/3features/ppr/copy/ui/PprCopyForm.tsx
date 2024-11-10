@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useCallback, useState } from "react";
 import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
 import Input from "antd/es/input/Input";
@@ -7,12 +7,15 @@ import { DatePicker } from "antd";
 import Button from "antd/es/button";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { Dayjs } from "dayjs";
+import { copyPprTable } from "@/2entities/ppr";
 
 type TCopyPprForm = {
   name: string;
   year: Dayjs;
-  isCopyPlanValues?: boolean;
-  isCopyFactValues?: boolean;
+  isCopyPlanWork?: boolean;
+  isCopyFactWork?: boolean;
+  isCopyPlanWorkingMans?: boolean;
+  isCopyFactWorkingMans?: boolean;
 };
 
 interface IPprCopyFormProps {
@@ -21,17 +24,28 @@ interface IPprCopyFormProps {
 }
 
 export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm<TCopyPprForm>();
 
-  const handleFinish = async (values: TCopyPprForm) => {
-    console.log(values);
-    // await createPprTable(values.name, values.year.year());
-    form.resetFields();
+  const handleFinish = useCallback(
+    async (values: TCopyPprForm) => {
+      setIsLoading(true);
 
-    if (onFinish) {
-      onFinish();
-    }
-  };
+      try {
+        await copyPprTable({ ...values, instancePprId: pprId, year: values.year.year() });
+      } catch (e) {
+        console.log(e);
+      }
+
+      form.resetFields();
+
+      if (onFinish) {
+        onFinish();
+      }
+      setIsLoading(false);
+    },
+    [form, onFinish, pprId]
+  );
 
   return (
     <Form
@@ -59,20 +73,22 @@ export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
       </FormItem>
       <FormItem<TCopyPprForm>
         label="Копировать запланированный объем работ"
-        name="isCopyPlanValues"
+        name="isCopyPlanWork"
         valuePropName="checked"
       >
         <Checkbox />
       </FormItem>
-      <FormItem<TCopyPprForm>
-        label="Копировать выполненный объем работ"
-        name="isCopyFactValues"
-        valuePropName="checked"
-      >
+      <FormItem<TCopyPprForm> label="Копировать выполненный объем работ" name="isCopyFactWork" valuePropName="checked">
+        <Checkbox />
+      </FormItem>
+      <FormItem<TCopyPprForm> label="Копировать план трудозатрат" name="isCopyPlanWorkingMans" valuePropName="checked">
+        <Checkbox />
+      </FormItem>
+      <FormItem<TCopyPprForm> label="Копировать факт трудозатрат" name="isCopyFactWorkingMans" valuePropName="checked">
         <Checkbox />
       </FormItem>
       <FormItem<TCopyPprForm> wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled={isLoading}>
           Копировать
         </Button>
       </FormItem>
