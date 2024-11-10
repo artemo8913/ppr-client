@@ -403,12 +403,32 @@ export function getPlanTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanTime
   return `${timePeriod}_plan_time`;
 }
 
+export function getPlanTabelTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanTabelTimePeriods {
+  return `${timePeriod}_plan_tabel_time`;
+}
+
+export function getPlanNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanNormTimePeriods {
+  return `${timePeriod}_plan_norm_time`;
+}
+
 export function getFactTimeFieldByTimePeriod(timePeriod: TTimePeriod): TFactTimePeriods {
   return `${timePeriod}_fact_time`;
 }
 
 export function getFactNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): TFactNormTimePeriods {
   return `${timePeriod}_fact_norm_time`;
+}
+
+export function getPprFieldsByTimePeriod(timePeriod: TTimePeriod) {
+  return {
+    planWorkField: getPlanWorkFieldByTimePeriod(timePeriod),
+    planTimeField: getPlanTimeFieldByTimePeriod(timePeriod),
+    planTabelTimeField: getPlanTabelTimeFieldByTimePeriod(timePeriod),
+    planNormTimeField: getPlanNormTimeFieldByTimePeriod(timePeriod),
+    factWorkField: getFactWorkFieldByTimePeriod(timePeriod),
+    factNormTimeField: getFactNormTimeFieldByTimePeriod(timePeriod),
+    factTimeField: getFactTimeFieldByTimePeriod(timePeriod),
+  };
 }
 
 export function getPlanTimeFieldByPlanWorkField(field: TPlanWorkPeriods): TPlanTimePeriods {
