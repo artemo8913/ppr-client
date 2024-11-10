@@ -15,7 +15,7 @@ interface ISummaryTableRowProps {
 
 export const SummaryTableRow: FC<ISummaryTableRowProps> = (props) => {
   return (
-    <tr>
+    <tr className="font-bold">
       <td colSpan={props.summaryNameColSpan} className="border border-black">
         <TableCellMemo value={props.name} />
       </td>

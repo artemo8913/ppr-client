@@ -6,6 +6,7 @@ import { SaveOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 
 import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
+import { useNotificationProvider } from "@/1shared/providers/notificationProvider";
 import { updatePprTable } from "@/2entities/ppr";
 
 interface IPprTableUpdateFormProps {}
@@ -17,6 +18,8 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
 
   const { data: credential } = useSession();
 
+  const { toast } = useNotificationProvider();
+
   const isPprInUserControl = useMemo(() => {
     const { isForSubdivision, isPprCreatedByThisUser } = checkIsPprInUserControl(ppr?.created_by, credential?.user);
 
@@ -27,11 +30,16 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
     setIsLoading(true);
 
     if (ppr) {
-      await updatePprTable(ppr.id, { data: ppr.data, workingMans: ppr.workingMans });
+      try {
+        await updatePprTable(ppr.id, { data: ppr.data, workingMans: ppr.workingMans });
+        toast({ message: "Данные успешно обновлены" });
+      } catch (e) {
+        toast(e, "error");
+      }
     }
 
     setIsLoading(false);
-  }, [ppr]);
+  }, [ppr, toast]);
 
   const isDisabled = isLoading || !isPprInUserControl;
 

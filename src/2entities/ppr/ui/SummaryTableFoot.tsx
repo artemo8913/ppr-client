@@ -1,11 +1,11 @@
 import { FC } from "react";
 import clsx from "clsx";
 
+import { usePpr } from "@/1shared/providers/pprProvider";
 import { TableCellMemo } from "@/1shared/ui/table";
 
 import { IPprData, IWorkingManYearPlan } from "../model/ppr.types";
 import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
-import { usePpr } from "@/1shared/providers/pprProvider";
 
 interface ISummaryTableFootProps {
   fields: (keyof IPprData | keyof IWorkingManYearPlan)[];
@@ -18,7 +18,7 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
   const { totalValues } = pprMeta;
 
   return (
-    <tfoot>
+    <tfoot className="font-bold">
       <tr>
         <td colSpan={summaryNameColSpan} className="border border-black">
           <TableCellMemo value="Итого по разделам 1-3, чел.-ч" />

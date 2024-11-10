@@ -1,2 +1,2 @@
-export { TableCellWithWorkControl } from "./ui/TableCellWithWorkControl";
+export { PprWorkUpdateControl } from "./ui/PprWorkUpdateControl";
 export { AddWorkButton } from "./ui/AddWorkButton";

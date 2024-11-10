@@ -2,5 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "@/1shared/styles/print.scss";
-@import "@/1shared/styles/colors.scss";
+@import "@/1shared/styles/print";
+@import "@/1shared/styles/colors";
+@import "@/1shared/styles/antdFix";

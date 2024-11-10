@@ -156,13 +156,13 @@ export interface IPprData
   note?: string | null;
   name: string;
   location: string;
-  line_class: number;
+  line_class: string;
   measure: string;
-  total_count: number;
-  entry_year: number;
+  total_count: string;
+  entry_year: string;
   periodicity_normal: string;
   periodicity_fact: string;
-  last_maintenance_year: number;
+  last_maintenance_year: string;
   norm_of_time: number;
   norm_of_time_document: string;
   unity: string;

@@ -135,43 +135,45 @@ export async function copyPprTable(params: {
 
 export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>) {
   try {
-    params.status && (await db.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
+    await db.transaction(async (tx) => {
+      params.status && (await tx.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
 
-    params.months_statuses &&
-      (await db
-        .update(pprMonthsStatusesTable)
-        .set({ ...params.months_statuses })
-        .where(eq(pprMonthsStatusesTable.idPpr, id)));
+      params.months_statuses &&
+        (await tx
+          .update(pprMonthsStatusesTable)
+          .set({ ...params.months_statuses })
+          .where(eq(pprMonthsStatusesTable.idPpr, id)));
 
-    if (params.workingMans) {
-      await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
+      if (params.workingMans) {
+        await tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
 
-      if (params.workingMans.length) {
-        await db.insert(pprWorkingMansTable).values(
-          params.workingMans.map((workingMan) => {
-            if (typeof workingMan.id === "string") {
-              return { ...workingMan, id: undefined, idPpr: id };
-            }
-            return { ...workingMan, id: workingMan.id, idPpr: id };
-          })
-        );
+        if (params.workingMans.length) {
+          await tx.insert(pprWorkingMansTable).values(
+            params.workingMans.map((workingMan) => {
+              if (typeof workingMan.id === "string") {
+                return { ...workingMan, id: undefined, idPpr: id };
+              }
+              return { ...workingMan, id: workingMan.id, idPpr: id };
+            })
+          );
+        }
       }
-    }
 
-    if (params.data) {
-      await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
+      if (params.data) {
+        await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
 
-      if (params.data.length) {
-        await db.insert(pprsWorkDataTable).values(
-          params.data.map((pprData, index) => {
-            if (typeof pprData.id === "string") {
-              return { ...pprData, id: undefined, idPpr: id, order: index };
-            }
-            return { ...pprData, id: pprData.id, idPpr: id, order: index };
-          })
-        );
+        if (params.data.length) {
+          await tx.insert(pprsWorkDataTable).values(
+            params.data.map((pprData, index) => {
+              if (typeof pprData.id === "string") {
+                return { ...pprData, id: undefined, idPpr: id, order: index };
+              }
+              return { ...pprData, id: pprData.id, idPpr: id, order: index };
+            })
+          );
+        }
       }
-    }
+    });
   } catch (e) {
     throw new Error(`${e}`);
   }
@@ -180,14 +182,16 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
 
 export async function deletePprTable(id: number) {
   try {
-    await Promise.all([
-      db.delete(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
-      db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
-      db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
-    ]).catch((e) => {
-      throw new Error(e);
+    await db.transaction(async (tx) => {
+      await Promise.all([
+        tx.delete(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
+        tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
+        tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
+        tx.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
+      ]).catch((e) => {
+        throw new Error(e);
+      });
     });
-    await db.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id));
   } catch (e) {
     throw new Error(`Delete ppr ${id}. ${e}`);
   }
