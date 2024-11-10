@@ -13,7 +13,7 @@ import {
   TPprDataWorkId,
   TTransfer,
 } from "@/2entities/ppr";
-import { TableCellWithWorkControl } from "@/3features/ppr/worksUpdate";
+import { PprWorkUpdateControl } from "@/3features/ppr/worksUpdate";
 
 import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
 
@@ -53,12 +53,15 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   const isPlanTimePeriodField = checkIsPlanTimeField(field);
 
   const quartalNumber = getQuartal(getTimePeriodFromString(field));
+
   const isBgNotTransparent = isPlanWorkPeriodField || isPlanTimePeriodField;
 
   const hasCommonWorkBacklight =
     Boolean(pprData.common_work_id) && field === "name" && pprSettings.isBacklightCommonWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
+
+  const isFieldWithControl = field === "name" && isPprInUserControl;
 
   const isCorrectedView = useMemo(
     () =>
@@ -107,21 +110,19 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
         </div>
-      ) : field === "name" && isPprInUserControl ? (
-        <>
-          <TableCellWithWorkControl
-            {...otherProps}
-            onBlur={handleChange}
-            workId={pprData.id}
-            branch={pprData.branch}
-            value={value}
-            note={pprData.note}
-            isWorkApproved={pprData.is_work_aproved}
-          />
-          {Boolean(pprData.note) && ` (прим. ${pprData.note})`}
-        </>
       ) : (
-        <TableCell {...otherProps} onBlur={handleChange} value={value} />
+        <PprWorkUpdateControl
+          workId={pprData.id}
+          branch={pprData.branch}
+          note={pprData.note}
+          isWorkApproved={pprData.is_work_aproved}
+          isShowControl={isFieldWithControl}
+        >
+          <TableCell {...otherProps} onBlur={handleChange} value={value} />
+          {Boolean(pprData.note && field === "name") && (
+            <span className="font-semibold">{` (прим. ${pprData.note})`}</span>
+          )}
+        </PprWorkUpdateControl>
       )}
     </td>
   );
