@@ -16,7 +16,7 @@ import {
   TPprDataFieldsTotalValues,
 } from "@/2entities/ppr";
 
-import { setBgColorXlsx } from "./xlsxStyles";
+import { BOLD, setBgColorXlsx } from "./xlsxStyles";
 import { BLACK_BORDER_FULL, CENTER_ALIGNMENT_WITH_WRAP, VERTICAL_ALIGNMENT } from "./xlsxStyles";
 
 const MAX_COLUMNS_COUNT = 77;
@@ -25,7 +25,7 @@ const TIME_PERIOD_COL_SPAN = 5;
 
 const START_COLUMNS_INDEX = 6;
 
-const START_ROWS_INDEX = 3;
+const START_ROWS_INDEX = 2;
 
 const FIRST_ROW_INDEX = 1;
 
@@ -173,6 +173,7 @@ export function addYearPlanSheet({
     branchTitleCell.value = `${branchOrder} ${translateRuPprBranchName(branchName)}`;
     branchTitleCell.border = BLACK_BORDER_FULL;
     branchTitleCell.alignment = { horizontal: "left" };
+    branchTitleCell.style.font = BOLD;
 
     lastRowIndex++;
   }
@@ -191,6 +192,7 @@ export function addYearPlanSheet({
 
       // Стилизация ячеек данных
       cell.border = BLACK_BORDER_FULL;
+      cell.style.font = BOLD;
 
       if (checkIsFieldVertical(field)) {
         cell.alignment = VERTICAL_ALIGNMENT;
@@ -230,12 +232,19 @@ export function addYearPlanSheet({
 
     const row = yearPlanSheet.addRow(finalData);
 
+    row.getCell("name").value = {
+      richText: [
+        { text: pprData.name },
+        { text: pprData.note ? `\n(прим. ${pprData.note})` : "", font: { bold: true } },
+      ],
+    };
+
     lastRowIndex = row.number;
 
+    // Стилизация ячеек данных
     PPR_DATA_FIELDS.forEach((field) => {
       const cell = row.getCell(field);
 
-      // Стилизация ячеек данных
       cell.border = BLACK_BORDER_FULL;
       cell.alignment = { wrapText: true };
 
