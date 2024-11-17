@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import Input from "antd/es/input";
 import Select from "antd/es/select";
@@ -8,14 +8,15 @@ import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import Button from "antd/es/button";
 
+import { INearWorkMeta } from "@/1shared/providers/workModalProvider";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
+import { TWorkBranch } from "@/2entities/ppr";
 import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
 
 interface IWorkCreateNewWorkFormProps {
   onFinish?: () => void;
-  nearWorkId?: TPprDataWorkId | null;
+  nearWorkMeta: INearWorkMeta;
 }
 
 interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {
@@ -23,9 +24,9 @@ interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {
   subbranch: string[];
 }
 
-const SELECT_INITIAL_VALUE: TWorkBranch = "exploitation";
+const BRANCH_INITIAL_VALUE: TWorkBranch = "exploitation";
 
-export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, nearWorkId }) => {
+export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, nearWorkMeta }) => {
   const [form] = Form.useForm<ICommonWorkExtended>();
 
   const { data: credential } = useSession();
@@ -49,19 +50,30 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
         subbranch: values.subbranch[0],
         unity: credential?.user.subdivisionShortName || "",
       },
-      nearWorkId
+      nearWorkMeta.workId
     );
 
     form.resetFields();
     onFinish && onFinish();
   };
 
+  const initialValues = useMemo(() => {
+    return {
+      branch: nearWorkMeta.branch || BRANCH_INITIAL_VALUE,
+      subbranch: nearWorkMeta.subbranch ? [nearWorkMeta.subbranch] : [],
+    };
+  }, [nearWorkMeta.branch, nearWorkMeta.subbranch]);
+
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [form, initialValues]);
+
   return (
-    <Form
+    <Form<ICommonWorkExtended>
       form={form}
       name="create_new_work"
       onFinish={handleFinish}
-      initialValues={{ remember: true, branch: SELECT_INITIAL_VALUE }}
+      initialValues={initialValues}
       autoComplete="off"
     >
       <FormItem<ICommonWorkExtended>

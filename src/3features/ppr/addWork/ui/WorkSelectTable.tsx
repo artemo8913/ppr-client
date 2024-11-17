@@ -1,21 +1,22 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import Search, { SearchProps } from "antd/es/input/Search";
 import { Key, TableRowSelection } from "antd/es/table/interface";
 import { Table as TableAntd, TableProps } from "antd";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
 
+import { INearWorkMeta } from "@/1shared/providers/workModalProvider";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { ICommonWork } from "@/2entities/commonWork";
-import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
+import { TWorkBranch } from "@/2entities/ppr";
 
 interface IWorkTableProps {
+  nearWorkMeta: INearWorkMeta;
   data: ICommonWork[];
   onFinish?: () => void;
-  nearWorkIdToPlaceNewWork?: TPprDataWorkId | null;
 }
 
 interface ISelectedWork extends Partial<ICommonWork> {
@@ -23,7 +24,7 @@ interface ISelectedWork extends Partial<ICommonWork> {
   subbranch?: string;
 }
 
-const INIT_SELECTED_WORK: ISelectedWork = { branch: "exploitation" };
+const CLEAN_SELECTED_WORK: ISelectedWork = { branch: "exploitation" };
 
 const COLUMNS: TableProps<ICommonWork>["columns"] = [
   {
@@ -49,6 +50,14 @@ const COLUMNS: TableProps<ICommonWork>["columns"] = [
 ];
 
 export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
+  const initialValues = useMemo(
+    () => ({
+      branch: props.nearWorkMeta.branch || CLEAN_SELECTED_WORK.branch,
+      subbranch: props.nearWorkMeta.subbranch,
+    }),
+    [props.nearWorkMeta.branch, props.nearWorkMeta.subbranch]
+  );
+
   const [dataSource, setDataSource] = useState(props.data);
 
   const { data: credential } = useSession();
@@ -67,7 +76,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
-  const [selectedWork, setSelectedWork] = useState<ISelectedWork>(INIT_SELECTED_WORK);
+  const [selectedWork, setSelectedWork] = useState<ISelectedWork>(initialValues);
 
   const selectedBranch = useMemo(() => selectedWork.branch, [selectedWork.branch]);
 
@@ -116,15 +125,19 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
         norm_of_time_document: selectedWork.normOfTimeNameFull,
         unity: credential?.user.subdivisionShortName || "",
       },
-      props.nearWorkIdToPlaceNewWork
+      props.nearWorkMeta.workId
     );
     setSelectedRowKeys([]);
-    setSelectedWork(INIT_SELECTED_WORK);
+    setSelectedWork(CLEAN_SELECTED_WORK);
 
     if (props.onFinish) {
       props.onFinish();
     }
   };
+
+  useEffect(() => {
+    setSelectedWork(initialValues);
+  }, [initialValues]);
 
   const rowSelectionProp: TableRowSelection<ICommonWork> = useMemo(
     () => ({

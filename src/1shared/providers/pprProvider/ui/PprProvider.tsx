@@ -38,7 +38,7 @@ import { createPprMeta, IPprMeta } from "../lib/createPprMeta";
 
 export interface IPprContext {
   ppr: IPpr | null;
-  addWork: (newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId | null) => void;
+  addWork: (newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId) => void;
   copyWork: (id: TPprDataWorkId) => void;
   deleteWork: (id: TPprDataWorkId) => void;
   updateNormOfTime: (id: TPprDataWorkId, value: number) => void;
@@ -117,7 +117,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   const [ppr, setPpr] = useState<IPpr | null>(null);
 
   /**Добавить работу в ППР */
-  const addWork = useCallback((newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId | null) => {
+  const addWork = useCallback((newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;

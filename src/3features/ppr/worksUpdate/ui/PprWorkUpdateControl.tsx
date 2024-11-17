@@ -1,7 +1,6 @@
 "use client";
 import { FC, ReactNode, useState } from "react";
 
-import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
@@ -14,6 +13,7 @@ import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 interface ITableCellWithWorkControlProps {
   workId: TPprDataWorkId;
   branch?: TWorkBranch;
+  subbranch?: string;
   note?: string | null;
   children?: ReactNode;
   isWorkApproved?: boolean;
@@ -23,6 +23,7 @@ interface ITableCellWithWorkControlProps {
 export const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
   workId,
   branch,
+  subbranch,
   note,
   children,
   isWorkApproved,
@@ -46,7 +47,7 @@ export const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
               <DeleteWorkButton workId={workId} />
             </>
           )}
-          <AddWorkButton nearWorkId={workId} />
+          <AddWorkButton nearWorkMeta={{ branch, subbranch, workId }} />
           <CopyWorkButton workId={workId} />
         </div>
       )}

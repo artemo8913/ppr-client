@@ -114,6 +114,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
         <PprWorkUpdateControl
           workId={pprData.id}
           branch={pprData.branch}
+          subbranch={pprData.subbranch}
           note={pprData.note}
           isWorkApproved={pprData.is_work_aproved}
           isShowControl={isFieldWithControl}

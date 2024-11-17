@@ -1,17 +1,24 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useState } from "react";
 
-import { TPprDataWorkId } from "@/2entities/ppr";
+import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
+
+export interface INearWorkMeta {
+  workId?: TPprDataWorkId;
+  branch?: TWorkBranch;
+  subbranch?: string;
+}
 
 interface IWorkModalProps {
   isOpen: boolean;
-  nearWorkId?: TPprDataWorkId | null;
-  openModal: (nearWorkId?: TPprDataWorkId) => void;
+  nearWorkMeta: INearWorkMeta;
+  openModal: ({ workId, branch, subbranch }: INearWorkMeta) => void;
   closeModal: () => void;
 }
 const DEFAULT_VALUE: boolean = false;
 
 const ModalContext = createContext<IWorkModalProps>({
+  nearWorkMeta: {},
   isOpen: DEFAULT_VALUE,
   openModal: () => {},
   closeModal: () => {},
@@ -22,20 +29,20 @@ interface IWorkModalProviderProps extends PropsWithChildren {}
 export const WorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => {
   const [isOpen, setIsModalOpen] = useState(DEFAULT_VALUE);
 
-  const [nearWorkId, setWorkId] = useState<TPprDataWorkId | null>();
+  const [nearWorkMeta, setNearWorkMeta] = useState<INearWorkMeta>({});
 
-  const openModal = useCallback((nearWorkId?: TPprDataWorkId) => {
-    setWorkId(nearWorkId);
+  const openModal = useCallback((nearWorkMeta: INearWorkMeta) => {
+    setNearWorkMeta(nearWorkMeta);
     setIsModalOpen(true);
   }, []);
 
   const closeModal = useCallback(() => {
-    setWorkId(null);
+    setNearWorkMeta({});
     setIsModalOpen(false);
   }, []);
 
   return (
-    <ModalContext.Provider value={{ nearWorkId, isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>
+    <ModalContext.Provider value={{ nearWorkMeta, isOpen, closeModal, openModal }}>{children}</ModalContext.Provider>
   );
 };
 
