@@ -20,10 +20,10 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
 
   return (
     <div>
-      <p className="float-right">
-        Форма ЭУ-99 0361847.
+      <p className="float-right text-end">
+        Форма ЭУ-99 <span className="border border-black">0361847</span>
         <br />
-        Утверждена ОАО РЖД в 2004 г.
+        Утверждена ОАО РЖД в 2024 г.
       </p>
       <p>Дорога {ppr.directionShortName}</p>
       <p>Предприятие {ppr.distanceShortName}</p>
