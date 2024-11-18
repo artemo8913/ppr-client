@@ -1,7 +1,6 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 
-import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
@@ -11,21 +10,30 @@ import { EditWorkButtonMemo } from "./EditWorkButton";
 import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
 import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 
-interface ITableCellWithWorkControlProps extends ITableCellProps {
+interface ITableCellWithWorkControlProps {
   workId: TPprDataWorkId;
-  isWorkApproved?: boolean;
   branch?: TWorkBranch;
+  subbranch?: string;
   note?: string | null;
+  children?: ReactNode;
+  isWorkApproved?: boolean;
+  isShowControl?: boolean;
 }
 
-export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({
+export const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
   workId,
-  isWorkApproved,
   branch,
+  subbranch,
   note,
-  ...otherProps
+  children,
+  isWorkApproved,
+  isShowControl,
 }) => {
   const [isHide, setIsHide] = useState<boolean>(true);
+
+  if (!isShowControl) {
+    return children;
+  }
 
   return (
     <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
@@ -39,11 +47,11 @@ export const TableCellWithWorkControl: FC<ITableCellWithWorkControlProps> = ({
               <DeleteWorkButton workId={workId} />
             </>
           )}
-          <AddWorkButton nearWorkId={workId} />
+          <AddWorkButton nearWorkMeta={{ branch, subbranch, workId }} />
           <CopyWorkButton workId={workId} />
         </div>
       )}
-      <TableCell {...otherProps} />
+      {children}
     </div>
   );
 };

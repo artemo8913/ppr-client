@@ -18,17 +18,13 @@ const EDITABLE_PLAN_FACT_FIELDS = [...PLAN_WORK_FIELDS, ...FACT_WORK_FIELDS, ...
 export function getThStyle(key?: keyof IPprData): React.CSSProperties {
   switch (key) {
     case "name":
-      return { width: "10%" };
+      return { width: "16%" };
     case "location":
       return { width: "5%" };
-    case "periodicity_normal":
-      return { width: "2%" };
-    case "last_maintenance_year":
-      return { width: "2%" };
     case "norm_of_time_document":
       return { width: "6%" };
     case "measure":
-      return { width: "6%" };
+      return { width: "8%" };
     default:
       return {};
   }

@@ -17,8 +17,22 @@ import {
   usersTable,
 } from "@/1shared/database";
 import { getDivisionsById } from "@/1shared/api/divisions.api";
+import {
+  IPpr,
+  TFactNormTimePeriodsFields,
+  TFactTimePeriodsFields,
+  TFactWorkPeriodsFields,
+  TPlanNormTimePeriodsFields,
+  TPlanTabelTimePeriodsFields,
+  TPlanTimePeriodsFields,
+  TPlanWorkPeriodsFields,
+  TPprShortInfo,
+  TWorkPlanTimePeriodsFields,
+  TYearPprStatus,
+} from "..";
+import { TIME_PERIODS } from "@/1shared/const/date";
 
-import { IPpr, TPprShortInfo, TYearPprStatus } from "..";
+import { getPprFieldsByTimePeriod } from "../lib/constFields";
 
 export async function getPprTable(id: number): Promise<IPpr> {
   try {
@@ -91,45 +105,177 @@ export async function createPprTable(name: string, year: number) {
   revalidatePath(ROUTE_PPR);
 }
 
+export async function copyPprTable(params: {
+  instancePprId: number;
+  name: string;
+  year: number;
+  isCopyPlanWork?: boolean;
+  isCopyFactWork?: boolean;
+  isCopyPlanWorkingMans?: boolean;
+  isCopyFactWorkingMans?: boolean;
+}) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      throw new Error(`Session not exist`);
+    }
+
+    const isSubdivision = session.user.role === "subdivision";
+
+    const status: TYearPprStatus = isSubdivision ? "plan_creating" : "template";
+
+    await db.transaction(async (tx) => {
+      const newPprId = (
+        await tx
+          .insert(pprsInfoTable)
+          .values({
+            name: params.name,
+            year: params.year,
+            status,
+            created_at: new Date(),
+            idUserCreatedBy: session.user.id,
+            idDirection: session.user.idDirection,
+            idDistance: session.user.idDistance,
+            idSubdivision: session.user.idSubdivision,
+          })
+          .$returningId()
+      )[0].id;
+
+      const instancePprWorkData = await tx.query.pprsWorkDataTable.findMany({
+        where: eq(pprsWorkDataTable.idPpr, params.instancePprId),
+      });
+
+      await tx.insert(pprsWorkDataTable).values(
+        instancePprWorkData.map((pprData) => {
+          const planWork: Partial<TPlanWorkPeriodsFields> = {};
+          const planTime: Partial<TWorkPlanTimePeriodsFields> = {};
+          const factWork: Partial<TFactWorkPeriodsFields> = {};
+          const factNormTime: Partial<TFactNormTimePeriodsFields> = {};
+          const factTime: Partial<TFactTimePeriodsFields> = {};
+
+          TIME_PERIODS.forEach((period) => {
+            const { planWorkField, planTimeField, factWorkField, factNormTimeField, factTimeField } =
+              getPprFieldsByTimePeriod(period);
+
+            planWork[planWorkField] = {
+              original: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
+              handCorrection: null,
+              planTransfers: null,
+              planTransfersSum: 0,
+              undoneTransfers: null,
+              undoneTransfersSum: 0,
+              outsideCorrectionsSum: 0,
+              final: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
+            };
+
+            planTime[planTimeField] = {
+              original: params.isCopyPlanWork ? pprData[planTimeField].final : 0,
+              final: params.isCopyPlanWork ? pprData[planTimeField].final : 0,
+            };
+
+            factWork[factWorkField] = params.isCopyFactWork ? pprData[factWorkField] : 0;
+            factNormTime[factNormTimeField] = params.isCopyFactWork ? pprData[factNormTimeField] : 0;
+            factTime[factTimeField] = params.isCopyFactWork ? pprData[factTimeField] : 0;
+          });
+
+          return {
+            ...pprData,
+            idPpr: newPprId,
+            id: undefined,
+            is_work_aproved: false,
+            ...planWork,
+            ...planTime,
+            ...factWork,
+            ...factNormTime,
+            ...factTime,
+          };
+        })
+      );
+
+      const instancePprWorkingManData = await tx.query.pprWorkingMansTable.findMany({
+        where: eq(pprWorkingMansTable.idPpr, params.instancePprId),
+      });
+
+      await tx.insert(pprWorkingMansTable).values(
+        instancePprWorkingManData.map((workingMan) => {
+          const planNormTime: Partial<TPlanNormTimePeriodsFields> = {};
+          const planTabelTime: Partial<TPlanTabelTimePeriodsFields> = {};
+          const planTime: Partial<TPlanTimePeriodsFields> = {};
+          const factTime: Partial<TFactTimePeriodsFields> = {};
+
+          TIME_PERIODS.forEach((period) => {
+            const { planTimeField, planNormTimeField, planTabelTimeField, factTimeField } =
+              getPprFieldsByTimePeriod(period);
+
+            planNormTime[planNormTimeField] = params.isCopyPlanWorkingMans ? workingMan[planNormTimeField] : 0;
+            planTabelTime[planTabelTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTabelTimeField] : 0;
+            planTime[planTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTimeField] : 0;
+            factTime[factTimeField] = params.isCopyPlanWorkingMans ? workingMan[factTimeField] : 0;
+          });
+
+          return {
+            ...workingMan,
+            id: undefined,
+            idPpr: newPprId,
+            ...planNormTime,
+            ...planTabelTime,
+            ...planTime,
+            ...factTime,
+          };
+        })
+      );
+
+      await tx.insert(pprMonthsStatusesTable).values({ idPpr: newPprId });
+
+      revalidatePath(ROUTE_PPR);
+    });
+  } catch (e) {
+    throw new Error(`Create ppr ${params.name} ${params.year} form ppr id = ${params.instancePprId}. ${e}`);
+  }
+}
+
 export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>) {
   try {
-    params.status && (await db.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
+    await db.transaction(async (tx) => {
+      params.status && (await tx.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
 
-    params.months_statuses &&
-      (await db
-        .update(pprMonthsStatusesTable)
-        .set({ ...params.months_statuses })
-        .where(eq(pprMonthsStatusesTable.idPpr, id)));
+      params.months_statuses &&
+        (await tx
+          .update(pprMonthsStatusesTable)
+          .set({ ...params.months_statuses })
+          .where(eq(pprMonthsStatusesTable.idPpr, id)));
 
-    if (params.workingMans) {
-      await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
+      if (params.workingMans) {
+        await tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
 
-      if (params.workingMans.length) {
-        await db.insert(pprWorkingMansTable).values(
-          params.workingMans.map((workingMan) => {
-            if (typeof workingMan.id === "string") {
-              return { ...workingMan, id: undefined, idPpr: id };
-            }
-            return { ...workingMan, id: workingMan.id, idPpr: id };
-          })
-        );
+        if (params.workingMans.length) {
+          await tx.insert(pprWorkingMansTable).values(
+            params.workingMans.map((workingMan) => {
+              if (typeof workingMan.id === "string") {
+                return { ...workingMan, id: undefined, idPpr: id };
+              }
+              return { ...workingMan, id: workingMan.id, idPpr: id };
+            })
+          );
+        }
       }
-    }
 
-    if (params.data) {
-      await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
+      if (params.data) {
+        await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
 
-      if (params.data.length) {
-        await db.insert(pprsWorkDataTable).values(
-          params.data.map((pprData, index) => {
-            if (typeof pprData.id === "string") {
-              return { ...pprData, id: undefined, idPpr: id, order: index };
-            }
-            return { ...pprData, id: pprData.id, idPpr: id, order: index };
-          })
-        );
+        if (params.data.length) {
+          await tx.insert(pprsWorkDataTable).values(
+            params.data.map((pprData, index) => {
+              if (typeof pprData.id === "string") {
+                return { ...pprData, id: undefined, idPpr: id, order: index };
+              }
+              return { ...pprData, id: pprData.id, idPpr: id, order: index };
+            })
+          );
+        }
       }
-    }
+    });
   } catch (e) {
     throw new Error(`${e}`);
   }
@@ -138,14 +284,16 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
 
 export async function deletePprTable(id: number) {
   try {
-    await Promise.all([
-      db.delete(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
-      db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
-      db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
-    ]).catch((e) => {
-      throw new Error(e);
+    await db.transaction(async (tx) => {
+      await Promise.all([
+        tx.delete(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
+        tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
+        tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
+        tx.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
+      ]).catch((e) => {
+        throw new Error(e);
+      });
     });
-    await db.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id));
   } catch (e) {
     throw new Error(`Delete ppr ${id}. ${e}`);
   }

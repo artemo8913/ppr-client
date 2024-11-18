@@ -1,15 +1,4 @@
-import {
-  varchar,
-  int,
-  smallint,
-  mysqlTable,
-  mysqlEnum,
-  date,
-  double,
-  boolean,
-  tinyint,
-  json,
-} from "drizzle-orm/mysql-core";
+import { varchar, int, smallint, mysqlTable, mysqlEnum, date, double, boolean, json } from "drizzle-orm/mysql-core";
 
 import { BRANCHES, MONTH_STATUSES, YEAR_STATUSES } from "@/2entities/ppr/lib/constFields";
 import {
@@ -40,11 +29,20 @@ function createMysqlBigDoubleField(fieldName: string) {
 }
 
 function createMysqlJsonPlanWorkField(fieldName: string) {
-  return json(fieldName).$type<IPlanWorkValues>().notNull();
+  return json(fieldName).$type<IPlanWorkValues>().notNull().default({
+    original: 0,
+    handCorrection: null,
+    planTransfers: null,
+    planTransfersSum: 0,
+    undoneTransfers: null,
+    undoneTransfersSum: 0,
+    outsideCorrectionsSum: 0,
+    final: 0,
+  });
 }
 
 function createMysqlJsonPlanTimeField(fieldName: string) {
-  return json(fieldName).$type<TPlanTimeValues>().notNull();
+  return json(fieldName).$type<TPlanTimeValues>().notNull().default({ final: 0, original: 0 });
 }
 
 export const pprsInfoTable = mysqlTable("pprs_info", {
@@ -163,13 +161,13 @@ export const pprsWorkDataTable = mysqlTable("pprs_data", {
   note: varchar("note", { length: 256 }),
   name: varchar("name", { length: 256 }).notNull(),
   location: varchar("location", { length: 128 }).notNull(),
-  line_class: tinyint("line_class").notNull(),
+  line_class: varchar("line_class", { length: 16 }).notNull(),
   measure: varchar("measure", { length: 128 }).notNull(),
-  total_count: double("total_count", { precision: 10, scale: 3 }).notNull(),
-  entry_year: smallint("entry_year").notNull(),
+  total_count: varchar("total_count", { length: 16 }).notNull(),
+  entry_year: varchar("entry_year", { length: 16 }).notNull(),
   periodicity_normal: varchar("periodicity_normal", { length: 10 }).notNull(),
   periodicity_fact: varchar("periodicity_fact", { length: 10 }).notNull(),
-  last_maintenance_year: smallint("last_maintenance_year").notNull(),
+  last_maintenance_year: varchar("last_maintenance_year", { length: 16 }).notNull(),
   norm_of_time: double("norm_of_time", { precision: 6, scale: 3 }).notNull(),
   norm_of_time_document: varchar("norm_of_time_name_full", { length: 256 }).notNull(),
   unity: varchar("unity", { length: 16 }).notNull(),

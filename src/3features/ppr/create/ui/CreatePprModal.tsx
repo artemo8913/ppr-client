@@ -2,6 +2,7 @@
 import { FC, useCallback, useState } from "react";
 import Button from "antd/es/button";
 import Modal from "antd/es/modal/Modal";
+
 import { CreatePprForm } from "./CreatePprForm";
 
 interface ICreatePprModalProps {
@@ -10,7 +11,9 @@ interface ICreatePprModalProps {
 
 export const CreatePprModal: FC<ICreatePprModalProps> = (props) => {
   const [isOpen, setIsModalOpen] = useState(false);
+
   const openModal = useCallback(() => setIsModalOpen(true), []);
+
   const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   return (

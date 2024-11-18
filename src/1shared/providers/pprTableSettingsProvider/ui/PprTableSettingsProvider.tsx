@@ -46,8 +46,8 @@ const INIT_SETTINGS: IPprTableSettings = {
   currentTimePeriod: "year",
   correctionView: "CORRECTED_PLAN_WITH_ARROWS",
   tableWidthPercent: 100,
-  fontSizePx: 10,
-  headerHeightPx: 300,
+  fontSizePx: 12,
+  headerHeightPx: 350,
   isUniteSameWorks: false,
   isBacklightCommonWork: false,
 };

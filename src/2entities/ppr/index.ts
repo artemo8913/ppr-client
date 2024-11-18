@@ -57,6 +57,9 @@ export {
   getPlanWorkFieldByTimePeriod,
   getPlanTimeFieldByPlanTabelTimeField,
   getPlanTabelTimeFieldByPlanNormTimeField,
+  getPlanNormTimeFieldByTimePeriod,
+  getPlanTabelTimeFieldByTimePeriod,
+  getPprFieldsByTimePeriod,
 } from "./lib/constFields";
 
 export {
@@ -72,7 +75,14 @@ export {
   checkIsPlanTabelTimeField,
 } from "./lib/validateTypes";
 
-export { getPprTable, createPprTable, deletePprTable, getManyPprsShortInfo, updatePprTable } from "./model/ppr.actions";
+export {
+  getPprTable,
+  createPprTable,
+  deletePprTable,
+  getManyPprsShortInfo,
+  updatePprTable,
+  copyPprTable,
+} from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";
 export { SummaryTableRow } from "./ui/SummaryTableRow";

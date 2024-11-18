@@ -84,5 +84,21 @@ export async function pprConvertToXlsx(ppr: IPpr) {
     sheetOptions: WORKSHEET_OPTIONS,
   });
 
+  //Финальная обработка всех ячеек (применяем font)
+  //https://github.com/exceljs/exceljs/issues/572#issuecomment-1170237178
+  workbook.eachSheet(sheet => {
+    sheet.eachRow(row => {
+      row.eachCell(cell => {
+        // default styles
+        if (!cell.font?.size) {
+          cell.font = Object.assign(cell.font || {}, { size: 10 });
+        }
+        if (!cell.font?.name) {
+          cell.font = Object.assign(cell.font || {}, { name: 'Times New Roman' });
+        }
+      });
+    });
+  });
+
   return workbook;
 }

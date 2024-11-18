@@ -21,7 +21,7 @@ function handleWorkPeriod(
   field: keyof TPprDataFieldsTotalValues
 ) {
   if (totalObject[field] !== undefined) {
-    totalObject[field] = roundToFixed(value + totalObject[field]);
+    totalObject[field] = roundToFixed(value + totalObject[field]!);
   } else {
     totalObject[field] = roundToFixed(value);
   }
@@ -33,7 +33,7 @@ function handleWorkingMansPeriod(
   field: keyof TWorkingManFieldsTotalValues
 ) {
   if (totalObject[field] !== undefined) {
-    totalObject[field] = roundToFixed(value + totalObject[field]);
+    totalObject[field] = roundToFixed(value + totalObject[field]!);
   } else {
     totalObject[field] = roundToFixed(value);
   }

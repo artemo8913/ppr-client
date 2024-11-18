@@ -7,7 +7,7 @@ import Button from "antd/es/button";
 import DatePicker from "antd/es/date-picker";
 import { Dayjs } from "dayjs";
 
-import { IPpr, createPprTable } from "@/2entities/ppr";
+import { createPprTable } from "@/2entities/ppr";
 
 interface ICreatePprFormProps {
   onFinish?: () => void;
@@ -30,22 +30,29 @@ export const CreatePprForm: FC<ICreatePprFormProps> = ({ onFinish }) => {
       name="create_ppr"
       onFinish={handleFinish}
       labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
+      wrapperCol={{ span: 8 }}
       initialValues={{ remember: true }}
       autoComplete="off"
     >
-      <FormItem<IPpr> label="Наименование" name="name" rules={[{ required: true, message: "Введите наименование!" }]}>
+      <FormItem<TNewPprForm>
+        label="Наименование"
+        name="name"
+        rules={[{ required: true, message: "Введите наименование!" }]}
+      >
         <Input />
       </FormItem>
-      <Form.Item<IPpr> label="Год" name="year" rules={[{ type: "object", required: true, message: "Выберите год!" }]}>
+      <FormItem<TNewPprForm>
+        label="Год"
+        name="year"
+        rules={[{ type: "object", required: true, message: "Выберите год!" }]}
+      >
         <DatePicker picker="year" />
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+      </FormItem>
+      <FormItem wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
           Добавить
         </Button>
-      </Form.Item>
+      </FormItem>
     </Form>
   );
 };

@@ -164,6 +164,7 @@ export const PPR_DATA_BASIC_FIELDS: Array<keyof IPprData> = [
   "name",
   "location",
   "line_class",
+  "measure",
   "total_count",
   "entry_year",
   "periodicity_normal",
@@ -171,7 +172,6 @@ export const PPR_DATA_BASIC_FIELDS: Array<keyof IPprData> = [
   "last_maintenance_year",
   "norm_of_time",
   "norm_of_time_document",
-  "measure",
   "unity",
 ] as const;
 
@@ -181,18 +181,7 @@ export const PPR_DATA_FIELDS: (keyof IPprData)[] = [
   "is_work_aproved",
   "branch",
   "subbranch",
-  "name",
-  "location",
-  "line_class",
-  "total_count",
-  "entry_year",
-  "periodicity_normal",
-  "periodicity_fact",
-  "last_maintenance_year",
-  "norm_of_time",
-  "norm_of_time_document",
-  "measure",
-  "unity",
+  ...PPR_DATA_BASIC_FIELDS,
   // year
   "year_plan_work",
   "year_plan_time",
@@ -403,12 +392,32 @@ export function getPlanTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanTime
   return `${timePeriod}_plan_time`;
 }
 
+export function getPlanTabelTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanTabelTimePeriods {
+  return `${timePeriod}_plan_tabel_time`;
+}
+
+export function getPlanNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanNormTimePeriods {
+  return `${timePeriod}_plan_norm_time`;
+}
+
 export function getFactTimeFieldByTimePeriod(timePeriod: TTimePeriod): TFactTimePeriods {
   return `${timePeriod}_fact_time`;
 }
 
 export function getFactNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): TFactNormTimePeriods {
   return `${timePeriod}_fact_norm_time`;
+}
+
+export function getPprFieldsByTimePeriod(timePeriod: TTimePeriod) {
+  return {
+    planWorkField: getPlanWorkFieldByTimePeriod(timePeriod),
+    planTimeField: getPlanTimeFieldByTimePeriod(timePeriod),
+    planTabelTimeField: getPlanTabelTimeFieldByTimePeriod(timePeriod),
+    planNormTimeField: getPlanNormTimeFieldByTimePeriod(timePeriod),
+    factWorkField: getFactWorkFieldByTimePeriod(timePeriod),
+    factNormTimeField: getFactNormTimeFieldByTimePeriod(timePeriod),
+    factTimeField: getFactTimeFieldByTimePeriod(timePeriod),
+  };
 }
 
 export function getPlanTimeFieldByPlanWorkField(field: TPlanWorkPeriods): TPlanTimePeriods {
