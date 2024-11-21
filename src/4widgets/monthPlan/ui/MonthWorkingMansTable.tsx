@@ -31,32 +31,26 @@ const columns = (timePeriod: TTimePeriod) => [
     columns: [
       columnHelper.accessor(`${timePeriod}_plan_norm_time`, {
         header: "по норме",
-        footer: "XXX",
       }),
       columnHelper.accessor(`${timePeriod}_plan_tabel_time`, {
         header: "по табелю",
-        footer: "XXX",
       }),
       columnHelper.accessor(`${timePeriod}_plan_time`, {
         header: "нормированное задание",
-        footer: "XXX",
       }),
     ],
   }),
   columnHelper.accessor("expl_plan", {
     header: "Заданно по эксплуатационному плану, чел.-ч",
-    footer: "Итого: - ",
   }),
   columnHelper.group({
     header: "Выполнение эксплуатационного плана",
     columns: [
       columnHelper.accessor("expl_fact", {
         header: "чел.-ч",
-        footer: "Итого: - ",
       }),
       columnHelper.accessor("expl_per", {
         header: "%",
-        footer: "5%",
       }),
     ],
   }),
@@ -79,6 +73,7 @@ interface IMonthWorkingMansTableProps {}
 
 export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = () => {
   const { ppr } = usePpr();
+
   const { currentTimePeriod } = usePprTableSettings();
 
   const table = useReactTable({
@@ -86,6 +81,7 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = () => {
     columns: columns(currentTimePeriod),
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
     <div className="overflow-auto">
       <table className="shadow-lg">
@@ -115,7 +111,7 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = () => {
           {table.getFooterGroups().map((footerGroup) => (
             <tr key={footerGroup.id}>
               {footerGroup.headers.map((header) => (
-                <td className="font-bold text-center" key={header.id} colSpan={header.colSpan}>
+                <td className="border border-black font-bold text-center" key={header.id} colSpan={header.colSpan}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
                 </td>
               ))}
