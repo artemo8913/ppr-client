@@ -7,6 +7,7 @@ declare global {
       ENVIRONMENT?: "PROD" | "DEV";
       DB_NAME?: string;
       DB_USER?: string;
+      DB_HOST?: string;
       DB_PASSWORD?: string;
       DB_PORT?: string;
     }

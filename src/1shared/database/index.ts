@@ -27,6 +27,7 @@ const connectionConfig: PoolOptions = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  host: process.env.DB_HOST,
 };
 /**
  * For the built in migrate function with DDL migrations we and drivers strongly encourage you to use single client connection.
