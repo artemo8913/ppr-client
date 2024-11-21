@@ -12,7 +12,7 @@ export interface INearWorkMeta {
 interface IWorkModalProps {
   isOpen: boolean;
   nearWorkMeta: INearWorkMeta;
-  openModal: ({ workId, branch, subbranch }: INearWorkMeta) => void;
+  openModal: (nearWorkMeta?: INearWorkMeta) => void;
   closeModal: () => void;
 }
 const DEFAULT_VALUE: boolean = false;
@@ -31,8 +31,12 @@ export const WorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => 
 
   const [nearWorkMeta, setNearWorkMeta] = useState<INearWorkMeta>({});
 
-  const openModal = useCallback((nearWorkMeta: INearWorkMeta) => {
-    setNearWorkMeta(nearWorkMeta);
+  const openModal = useCallback((nearWorkMeta?: INearWorkMeta) => {
+    if (nearWorkMeta) {
+      setNearWorkMeta(nearWorkMeta);
+    } else {
+      setNearWorkMeta({});
+    }
     setIsModalOpen(true);
   }, []);
 
