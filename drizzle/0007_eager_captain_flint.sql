@@ -1,0 +1,26 @@
+ALTER TABLE `pprs_data` MODIFY COLUMN `year_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `jan_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `feb_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `mar_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `apr_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `may_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `june_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `july_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `aug_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `sept_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `oct_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `nov_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `dec_plan_work` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `year_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `jan_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `feb_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `mar_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `apr_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `may_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `june_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `july_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `aug_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `sept_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `oct_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `nov_plan_time` json NOT NULL;--> statement-breakpoint
+ALTER TABLE `pprs_data` MODIFY COLUMN `dec_plan_time` json NOT NULL;
