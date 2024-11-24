@@ -1,5 +1,5 @@
 "use client";
-import { FC, memo, useCallback } from "react";
+import { FC } from "react";
 import Button from "antd/es/button";
 import { ArrowUpOutlined } from "@ant-design/icons";
 

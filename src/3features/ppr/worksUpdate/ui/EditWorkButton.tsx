@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, FC, memo, useCallback, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
 import Input from "antd/es/input/Input";

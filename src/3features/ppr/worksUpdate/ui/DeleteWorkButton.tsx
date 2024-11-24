@@ -1,5 +1,5 @@
 "use client";
-import { FC, memo, useCallback } from "react";
+import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
 
