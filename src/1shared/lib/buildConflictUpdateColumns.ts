@@ -7,8 +7,10 @@ export const buildConflictUpdateColumns = <T extends MySqlTable, Q extends keyof
   columns: Q[]
 ) => {
   const cls = getTableColumns(table);
+
   return columns.reduce((acc, column) => {
     acc[column] = sql`values(${cls[column]})`;
+  
     return acc;
   }, {} as Record<Q, SQL>);
 };
