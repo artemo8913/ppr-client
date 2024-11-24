@@ -12,7 +12,9 @@ interface IWorkingManDeleteProps {
 
 export const WorkingManDelete: FC<IWorkingManDeleteProps> = ({ id }) => {
   const { deleteWorkingMan } = usePpr();
+
   const isManCanBeDeleted = true;
+
   return (
     <Tooltip title="Удалить">
       <Button

@@ -10,16 +10,12 @@ interface IDecreaseWorkPositionButtonProps {
   workId: TPprDataWorkId;
 }
 
-const DecreaseWorkPositionButton: FC<IDecreaseWorkPositionButtonProps> = ({ workId }) => {
+export const DecreaseWorkPositionButton: FC<IDecreaseWorkPositionButtonProps> = ({ workId }) => {
   const { decreaseWorkPosition } = usePpr();
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     decreaseWorkPosition(workId);
-  }, [workId, decreaseWorkPosition]);
+  };
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<ArrowUpOutlined />} />;
 };
-
-const DecreaseWorkPositionButtonMemo = memo(DecreaseWorkPositionButton);
-
-export { DecreaseWorkPositionButtonMemo as DecreaseWorkPositionButton };

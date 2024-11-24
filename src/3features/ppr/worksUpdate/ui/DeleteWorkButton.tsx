@@ -10,7 +10,7 @@ interface IDeleteWorkButtonProps {
   workId: TPprDataWorkId;
 }
 
-const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
+export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
   const { deleteWork } = usePpr();
 
   const handleClick = useCallback(() => {
@@ -19,7 +19,3 @@ const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
 };
-
-const DeleteWorkButtonMemo = memo(DeleteWorkButton);
-
-export { DeleteWorkButtonMemo as DeleteWorkButton };
