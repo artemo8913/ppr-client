@@ -56,6 +56,7 @@ export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
       wrapperCol={{ span: 16 }}
       initialValues={{ remember: true }}
       autoComplete="off"
+      disabled={isLoading}
     >
       <FormItem<TCopyPprForm>
         label="Наименование"
@@ -88,7 +89,7 @@ export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
         <Checkbox />
       </FormItem>
       <FormItem<TCopyPprForm> wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit" disabled={isLoading}>
+        <Button type="primary" htmlType="submit" loading={isLoading}>
           Копировать
         </Button>
       </FormItem>
