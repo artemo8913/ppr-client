@@ -1,5 +1,5 @@
 "use client";
-import { FC, memo, useCallback } from "react";
+import { FC } from "react";
 import Button from "antd/es/button";
 import { CopyOutlined } from "@ant-design/icons";
 
@@ -13,9 +13,9 @@ interface ICopyWorkButtonProps {
 export const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ workId }) => {
   const { copyWork } = usePpr();
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     copyWork(workId);
-  }, [copyWork, workId]);
+  };
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<CopyOutlined />} />;
 };

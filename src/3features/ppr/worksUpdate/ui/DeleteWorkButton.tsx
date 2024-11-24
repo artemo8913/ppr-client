@@ -1,5 +1,5 @@
 "use client";
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
 
@@ -13,9 +13,9 @@ interface IDeleteWorkButtonProps {
 export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
   const { deleteWork } = usePpr();
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     deleteWork(workId);
-  }, [deleteWork, workId]);
+  };
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
 };
