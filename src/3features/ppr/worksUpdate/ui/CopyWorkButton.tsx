@@ -10,7 +10,7 @@ interface ICopyWorkButtonProps {
   workId: TPprDataWorkId;
 }
 
-const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ workId }) => {
+export const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ workId }) => {
   const { copyWork } = usePpr();
 
   const handleClick = useCallback(() => {
@@ -19,7 +19,3 @@ const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ workId }) => {
 
   return <Button onClick={handleClick} size="small" shape="circle" icon={<CopyOutlined />} />;
 };
-
-const CopyWorkButtonMemo = memo(CopyWorkButton);
-
-export { CopyWorkButtonMemo as CopyWorkButton };
