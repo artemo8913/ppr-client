@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useState, useTransition } from "react";
 import { useSession } from "next-auth/react";
 import Button from "antd/es/button";
 import Tooltip from "antd/es/tooltip";
@@ -18,27 +18,39 @@ interface IPprDeleteButtonProps {
 export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ pprId, created_by, pprStatus }) => {
   const { data: userData } = useSession();
 
+  const [isLoading, startTransition] = useTransition();
+
   if (!userData) {
-    return null;
+    return (
+      <Tooltip title="Удалить ППР">
+        <Button danger disabled icon={<DeleteTwoTone twoToneColor="red" className="cursor-pointer" />} />
+      </Tooltip>
+    );
   }
+
+  const handleClick = () =>
+    startTransition(async () => {
+      const answer = confirm("Уверены, что хотите удалить ППР");
+
+      if (answer) {
+        await deletePprTable(pprId);
+      }
+    });
+
   const { isPprCreatedByThisUser, isForSubdivision } = checkIsPprInUserControl(created_by, userData.user);
 
   const isStatusCanBeDeleted = pprStatus === "plan_creating" || pprStatus === "template";
 
-  const isPprCanBeDeleted = (isPprCreatedByThisUser || isForSubdivision) && isStatusCanBeDeleted;
+  const isPprCanBeDeleted = (isPprCreatedByThisUser || isForSubdivision) && isStatusCanBeDeleted && !isLoading;
 
   return (
     <Tooltip title="Удалить ППР">
       <Button
         danger
+        loading={isLoading}
         disabled={!isPprCanBeDeleted}
         icon={<DeleteTwoTone twoToneColor="red" className="cursor-pointer" />}
-        onClick={() => {
-          const answer = confirm("Уверены, что хотите удалить ППР");
-          if (answer) {
-            deletePprTable(pprId);
-          }
-        }}
+        onClick={handleClick}
       />
     </Tooltip>
   );
