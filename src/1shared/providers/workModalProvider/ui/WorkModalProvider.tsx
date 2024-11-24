@@ -4,7 +4,7 @@ import { FC, PropsWithChildren, createContext, useCallback, useContext, useState
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 export interface INearWorkMeta {
-  workId?: TPprDataWorkId;
+  id?: TPprDataWorkId;
   branch?: TWorkBranch;
   subbranch?: string;
 }
