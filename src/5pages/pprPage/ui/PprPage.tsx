@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import Tabs from "antd/es/tabs";
 
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
@@ -10,6 +11,18 @@ import { MonthPlan } from "@/4widgets/monthPlan";
 
 export const PprPage = () => {
   const { currentTimePeriod } = usePprTableSettings();
+
+  useEffect(() => {
+    function confirmExitPage(e: BeforeUnloadEvent) {
+      e.preventDefault();
+    }
+
+    window.addEventListener("beforeunload", confirmExitPage);
+
+    return () => {
+      window.removeEventListener("beforeunload", confirmExitPage);
+    };
+  }, []);
 
   return (
     <Tabs
