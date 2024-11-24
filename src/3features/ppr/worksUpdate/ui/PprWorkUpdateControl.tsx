@@ -38,18 +38,20 @@ const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
 
   return (
     <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
-      <div className={clsx("!absolute -bottom-6 left-0 z-10 flex py-2", isHide && "hidden")}>
-        {!isWorkApproved && (
-          <>
-            <IncreaseWorkPositionButton workId={workId} />
-            <DecreaseWorkPositionButton workId={workId} />
-            <EditWorkButton workId={workId} branch={branch} note={note} />
-            <DeleteWorkButton workId={workId} />
-          </>
-        )}
-        <AddWorkButton nearWorkMeta={{ branch, subbranch, id: workId }} />
-        <CopyWorkButton workId={workId} />
-      </div>
+      {!isHide && (
+        <div className="!absolute -bottom-6 left-0 z-10 flex py-2">
+          {!isWorkApproved && (
+            <>
+              <IncreaseWorkPositionButton workId={workId} />
+              <DecreaseWorkPositionButton workId={workId} />
+              <EditWorkButton workId={workId} branch={branch} note={note} />
+              <DeleteWorkButton workId={workId} />
+            </>
+          )}
+          <AddWorkButton nearWorkMeta={{ branch, subbranch, id: workId }} />
+          <CopyWorkButton workId={workId} />
+        </div>
+      )}
       {children}
     </div>
   );
