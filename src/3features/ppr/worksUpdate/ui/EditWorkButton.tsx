@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, FC, memo, useCallback, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import Button from "antd/es/button";
 import Select from "antd/es/select";
 import Input from "antd/es/input/Input";
@@ -15,29 +15,21 @@ interface IChangeBranchButtonProps {
   note?: string | null;
 }
 
-const EditWorkButton: FC<IChangeBranchButtonProps> = (props) => {
+export const EditWorkButton: FC<IChangeBranchButtonProps> = (props) => {
   const { updatePprData } = usePpr();
 
   const [noteValue, setNoteValue] = useState(props.note || "");
 
   const [isHide, setIsHide] = useState<boolean>(true);
 
-  const handleSelect = useCallback(
-    (branch: TWorkBranch) => {
-      updatePprData(props.workId, "branch", branch);
-    },
-    [updatePprData, props.workId]
-  );
+  const handleSelect = (branch: TWorkBranch) => {
+    updatePprData(props.workId, "branch", branch);
+  };
 
-  const handleChangeNoteValue = useCallback(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setNoteValue(e.target.value),
-    []
-  );
+  const handleChangeNoteValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setNoteValue(e.target.value);
 
-  const handleUpdateNoteValue = useCallback(
-    () => updatePprData(props.workId, "note", noteValue),
-    [noteValue, props.workId, updatePprData]
-  );
+  const handleUpdateNoteValue = () => updatePprData(props.workId, "note", noteValue);
 
   return (
     <div className="relative w-[110%]" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
@@ -56,7 +48,3 @@ const EditWorkButton: FC<IChangeBranchButtonProps> = (props) => {
     </div>
   );
 };
-
-const EditWorkButtonMemo = memo(EditWorkButton);
-
-export { EditWorkButtonMemo };

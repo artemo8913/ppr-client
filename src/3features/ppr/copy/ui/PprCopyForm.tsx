@@ -7,6 +7,7 @@ import { DatePicker } from "antd";
 import Button from "antd/es/button";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { Dayjs } from "dayjs";
+
 import { copyPprTable } from "@/2entities/ppr";
 
 type TCopyPprForm = {
@@ -56,6 +57,7 @@ export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
       wrapperCol={{ span: 16 }}
       initialValues={{ remember: true }}
       autoComplete="off"
+      disabled={isLoading}
     >
       <FormItem<TCopyPprForm>
         label="Наименование"
@@ -88,7 +90,7 @@ export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
         <Checkbox />
       </FormItem>
       <FormItem<TCopyPprForm> wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit" disabled={isLoading}>
+        <Button type="primary" htmlType="submit" loading={isLoading}>
           Копировать
         </Button>
       </FormItem>

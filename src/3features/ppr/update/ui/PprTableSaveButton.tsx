@@ -1,5 +1,5 @@
 "use client";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useMemo, useTransition } from "react";
 import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
@@ -14,7 +14,7 @@ interface IPprTableUpdateFormProps {}
 export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
   const { ppr } = usePpr();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, startTransition] = useTransition();
 
   const { data: credential } = useSession();
 
@@ -26,20 +26,17 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
     return isForSubdivision || (isPprCreatedByThisUser && ppr?.status === "template");
   }, [credential?.user, ppr?.created_by, ppr?.status]);
 
-  const handleSave = useCallback(async () => {
-    setIsLoading(true);
-
-    if (ppr) {
-      try {
-        await updatePprTable(ppr.id, { data: ppr.data, workingMans: ppr.workingMans });
-        toast({ message: "Данные успешно обновлены" });
-      } catch (e) {
-        toast(e, "error");
+  const handleSave = () =>
+    startTransition(async () => {
+      if (ppr) {
+        try {
+          await updatePprTable(ppr.id, { data: ppr.data, workingMans: ppr.workingMans });
+          toast({ message: "Данные успешно обновлены" });
+        } catch (e) {
+          toast(e, "error");
+        }
       }
-    }
-
-    setIsLoading(false);
-  }, [ppr, toast]);
+    });
 
   const isDisabled = isLoading || !isPprInUserControl;
 

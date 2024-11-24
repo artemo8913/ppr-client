@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useState } from "react";
 import Input from "antd/es/input";
 import Form from "antd/es/form";
 import FormItem from "antd/es/form/FormItem";
@@ -18,9 +18,13 @@ type TNewPprForm = { name: string; year: Dayjs };
 export const CreatePprForm: FC<ICreatePprFormProps> = ({ onFinish }) => {
   const [form] = Form.useForm<TNewPprForm>();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleFinish = async (values: TNewPprForm) => {
+    setIsLoading(true);
     await createPprTable(values.name, values.year.year());
     form.resetFields();
+    setIsLoading(false);
     onFinish && onFinish();
   };
 
@@ -33,6 +37,7 @@ export const CreatePprForm: FC<ICreatePprFormProps> = ({ onFinish }) => {
       wrapperCol={{ span: 8 }}
       initialValues={{ remember: true }}
       autoComplete="off"
+      disabled={isLoading}
     >
       <FormItem<TNewPprForm>
         label="Наименование"
@@ -49,7 +54,7 @@ export const CreatePprForm: FC<ICreatePprFormProps> = ({ onFinish }) => {
         <DatePicker picker="year" />
       </FormItem>
       <FormItem wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={isLoading}>
           Добавить
         </Button>
       </FormItem>

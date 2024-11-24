@@ -3,6 +3,7 @@ import { and, eq, like, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
+import { buildConflictUpdateColumns } from "@/1shared/lib/buildConflictUpdateColumns";
 import { ROUTE_PPR } from "@/1shared/const/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
 import {
@@ -17,6 +18,8 @@ import {
   usersTable,
 } from "@/1shared/database";
 import { getDivisionsById } from "@/1shared/api/divisions.api";
+import { TIME_PERIODS } from "@/1shared/const/date";
+
 import {
   IPpr,
   TFactNormTimePeriodsFields,
@@ -30,9 +33,17 @@ import {
   TWorkPlanTimePeriodsFields,
   TYearPprStatus,
 } from "..";
-import { TIME_PERIODS } from "@/1shared/const/date";
-
-import { getPprFieldsByTimePeriod } from "../lib/constFields";
+import {
+  getPprFieldsByTimePeriod,
+  FACT_NORM_TIME_FIELDS,
+  FACT_TIME_FIELDS,
+  FACT_WORK_FIELDS,
+  PLAN_NORM_TIME_FIELDS,
+  PLAN_TABEL_TIME_FIELDS,
+  PLAN_TIME_FIELDS,
+  PLAN_WORK_FIELDS,
+  PPR_DATA_BASIC_FIELDS,
+} from "../lib/constFields";
 
 export async function getPprTable(id: number): Promise<IPpr> {
   try {
@@ -102,6 +113,7 @@ export async function createPprTable(name: string, year: number) {
   } catch (e) {
     throw new Error(`Create ppr ${name} ${year}. ${e}`);
   }
+
   revalidatePath(ROUTE_PPR);
 }
 
@@ -241,42 +253,72 @@ export async function copyPprTable(params: {
 export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>) {
   try {
     await db.transaction(async (tx) => {
-      params.status && (await tx.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
+      if (params.status) {
+        await tx.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id));
+      }
 
-      params.months_statuses &&
-        (await tx
+      if (params.months_statuses) {
+        await tx
           .update(pprMonthsStatusesTable)
           .set({ ...params.months_statuses })
-          .where(eq(pprMonthsStatusesTable.idPpr, id)));
+          .where(eq(pprMonthsStatusesTable.idPpr, id));
+      }
 
-      if (params.workingMans) {
-        await tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
-
-        if (params.workingMans.length) {
-          await tx.insert(pprWorkingMansTable).values(
+      if (params.workingMans?.length) {
+        await tx
+          .insert(pprWorkingMansTable)
+          .values(
             params.workingMans.map((workingMan) => {
               if (typeof workingMan.id === "string") {
                 return { ...workingMan, id: undefined, idPpr: id };
               }
               return { ...workingMan, id: workingMan.id, idPpr: id };
             })
-          );
-        }
+          )
+          .onDuplicateKeyUpdate({
+            set: buildConflictUpdateColumns(pprWorkingMansTable, [
+              "full_name",
+              "work_position",
+              "participation",
+              ...PLAN_TIME_FIELDS,
+              ...PLAN_NORM_TIME_FIELDS,
+              ...PLAN_TABEL_TIME_FIELDS,
+              ...FACT_TIME_FIELDS,
+            ]),
+          });
+      } else if (params.workingMans?.length === 0) {
+        await tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
       }
 
-      if (params.data) {
-        await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
-
-        if (params.data.length) {
-          await tx.insert(pprsWorkDataTable).values(
+      if (params.data?.length) {
+        await tx
+          .insert(pprsWorkDataTable)
+          .values(
             params.data.map((pprData, index) => {
               if (typeof pprData.id === "string") {
                 return { ...pprData, id: undefined, idPpr: id, order: index };
               }
               return { ...pprData, id: pprData.id, idPpr: id, order: index };
             })
-          );
-        }
+          )
+          .onDuplicateKeyUpdate({
+            set: buildConflictUpdateColumns(pprsWorkDataTable, [
+              "order",
+              "common_work_id",
+              "is_work_aproved",
+              "branch",
+              "subbranch",
+              "note",
+              ...PPR_DATA_BASIC_FIELDS,
+              ...PLAN_WORK_FIELDS,
+              ...PLAN_TIME_FIELDS,
+              ...FACT_WORK_FIELDS,
+              ...FACT_NORM_TIME_FIELDS,
+              ...FACT_TIME_FIELDS,
+            ]),
+          });
+      } else if (params.data?.length === 0) {
+        await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
       }
     });
   } catch (e) {
