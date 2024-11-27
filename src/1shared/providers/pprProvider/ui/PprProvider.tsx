@@ -30,6 +30,7 @@ import {
   getFactTimeFieldByTimePeriod,
   getPlanTabelTimeFieldByPlanNormTimeField,
   TPprDataWorkId,
+  TWorkingManId,
 } from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -59,8 +60,8 @@ export interface IPprContext {
   increaseWorkPosition: (id: TPprDataWorkId) => void;
   decreaseWorkPosition: (id: TPprDataWorkId) => void;
   updateSubbranch: (newSubbranch: string, workIdsSet: Set<TPprDataWorkId>) => void;
-  addWorkingMan: () => void;
-  deleteWorkingMan: (id: number) => void;
+  addWorkingMan: (nearWorkingManId?: TWorkingManId) => void;
+  deleteWorkingMan: (id: TWorkingManId) => void;
   updateWorkingMan: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
   updateWorkingManPlanNormTime: (rowIndex: number, field: TPlanNormTimePeriods, value: number) => void;
   updateWorkingManPlanTabelTime: (rowIndex: number, field: TPlanTabelTimePeriods, value: number) => void;
@@ -543,14 +544,30 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Добавить рабочего в список людей ППР */
-  const addWorkingMan = useCallback(() => {
+  const addWorkingMan = useCallback((nearWorkingManId?: TWorkingManId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
       }
+      let indexToPlace: number | null = null;
+
+      for (let i = 0; i < prev.workingMans.length; i++) {
+        if (prev.workingMans[i].id !== nearWorkingManId) {
+          continue;
+        }
+        indexToPlace = i;
+        break;
+      }
+
       return {
         ...prev,
-        workingMans: prev.workingMans.concat(createNewWorkingManInstance()),
+        workingMans:
+          indexToPlace !== null
+            ? prev.workingMans
+                .slice(0, indexToPlace + 1)
+                .concat(createNewWorkingManInstance())
+                .concat(prev.workingMans.slice(indexToPlace + 1))
+            : prev.workingMans.concat(createNewWorkingManInstance()),
       };
     });
   }, []);
@@ -693,7 +710,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Убрать рабочего из списка людей ППР */
-  const deleteWorkingMan = useCallback((id: number) => {
+  const deleteWorkingMan = useCallback((id: TWorkingManId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;

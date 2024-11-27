@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Tabs from "antd/es/tabs";
 
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { WorkingManAdd } from "@/3features/pprWorkingMans/add";
 import { PprTable } from "@/4widgets/pprTable";
 import { WorkingMansTable } from "@/4widgets/workingMansTable";
 import { CorrectionRaport } from "@/4widgets/correctionRaport";
@@ -33,12 +32,7 @@ export const PprPage = () => {
         {
           key: "1",
           label: "Настой часов",
-          children: (
-            <div>
-              <WorkingManAdd className="mb-2" />
-              <WorkingMansTable />
-            </div>
-          ),
+          children: <WorkingMansTable />,
         },
         {
           key: "2",
