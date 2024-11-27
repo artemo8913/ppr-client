@@ -1,8 +1,9 @@
 "use client";
-import { FC, useCallback } from "react";
+import { useSession } from "next-auth/react";
+import { FC, useCallback, useMemo } from "react";
 
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { usePpr } from "@/1shared/providers/pprProvider";
+import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCellMemo } from "@/1shared/ui/table";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
@@ -13,6 +14,7 @@ import {
   checkIsPlanNormTimeField,
   checkIsPlanTabelTimeField,
 } from "@/2entities/ppr";
+import { AddWorkingManButton } from "@/3features/pprWorkingMans/workingMansUpdate";
 
 import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
 import { WorkingManTableCellMemo } from "./WorkingManTableCell";
@@ -29,7 +31,11 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
     updateWorkingManPlanNormTime,
     updateWorkingManPlanTabelTime,
   } = usePpr();
+
+  const { data: credential } = useSession();
+
   const { currentTimePeriod } = usePprTableSettings();
+
   const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
 
   const updateWorkingManTableCell = useCallback(
@@ -50,6 +56,16 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  const isPprInUserControl = useMemo(() => {
+    const { isForSubdivision, isPprCreatedByThisUser } = checkIsPprInUserControl(ppr?.created_by, credential?.user);
+
+    return isForSubdivision || (isPprCreatedByThisUser && ppr?.status === "template");
+  }, [credential?.user, ppr?.created_by, ppr?.status]);
+
+  if (!Boolean(ppr?.workingMans.length)) {
+    return <AddWorkingManButton shape="default" size="middle" type="primary" label="Добавить работника" />
+  }
 
   return (
     <table
@@ -90,10 +106,12 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
               >
                 <WorkingManTableCellMemo
                   {...getColumnSettings(field, ppr.status, currentTimePeriod, ppr?.months_statuses)}
+                  id={workingMan.id}
                   rowIndex={rowIndex}
                   field={field}
                   isVertical={field.endsWith("_time") || field === "participation"}
                   updateWorkingManTableCell={updateWorkingManTableCell}
+                  isPprInUserControl={isPprInUserControl}
                   value={workingMan[field]}
                 />
               </td>

@@ -3,6 +3,7 @@ export type {
   TPprShortInfo,
   IPprData,
   TPprDataWorkId,
+  TWorkingManId,
   TTotalFieldsValues,
   IPprDataWithRowSpan,
   TAllMonthStatuses,

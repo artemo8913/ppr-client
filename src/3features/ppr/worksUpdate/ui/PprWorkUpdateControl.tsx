@@ -1,6 +1,7 @@
 "use client";
-import { FC, memo, ReactNode, useState } from "react";
+import { FC, memo, ReactNode } from "react";
 
+import { TableCellControlWrapper } from "@/1shared/ui/table";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
@@ -29,16 +30,11 @@ const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
   isWorkApproved,
   isShowControl,
 }) => {
-  const [isHide, setIsHide] = useState<boolean>(true);
-
-  if (!isShowControl) {
-    return children;
-  }
-
   return (
-    <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
-      {!isHide && (
-        <div className="!absolute -bottom-6 left-0 z-10 flex py-2">
+    <TableCellControlWrapper
+      isShowControl={isShowControl}
+      controlItems={
+        <>
           {!isWorkApproved && (
             <>
               <IncreaseWorkPositionButton workId={workId} />
@@ -49,10 +45,11 @@ const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
           )}
           <AddWorkButton nearWorkMeta={{ branch, subbranch, id: workId }} />
           <CopyWorkButton workId={workId} />
-        </div>
-      )}
+        </>
+      }
+    >
       {children}
-    </div>
+    </TableCellControlWrapper>
   );
 };
 
