@@ -24,9 +24,13 @@ export const DeleteWorkingManButton: FC<IDeleteWorkingManButtonProps> = ({ id })
         const response = await deleteWorkingManFromServer(id);
 
         toast(response, response.type);
-      }
 
-      deleteWorkingMan(id);
+        if (response.type !== "error") {
+          deleteWorkingMan(id);
+        }
+      } else {
+        deleteWorkingMan(id);
+      }
     });
   };
 

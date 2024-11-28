@@ -24,9 +24,13 @@ export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
         const response = await deletePprWorkFromServer(workId);
 
         toast(response, response.type);
-      }
 
-      deleteWork(workId);
+        if (response.type !== "error") {
+          deleteWork(workId);
+        }
+      } else {
+        deleteWork(workId);
+      }
     });
   };
 
