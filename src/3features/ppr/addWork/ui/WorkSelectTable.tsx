@@ -125,7 +125,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
       props.nearWorkMeta.id
     );
     setSelectedRowKeys([]);
-    setSelectedWork(CLEAN_SELECTED_WORK);
+    setSelectedWork({ ...CLEAN_SELECTED_WORK, subbranch: selectedWork.subbranch });
 
     if (props.onFinish) {
       props.onFinish();
