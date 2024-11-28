@@ -15,6 +15,8 @@ import { checkIsFieldVertical, getColumnSettings, getThStyle } from "../lib/pprT
 import { PprTableCellMemo } from "./PprTableCell";
 import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
 
+import style from "./PprTableCell.module.scss";
+
 interface IPprTableProps {}
 
 export const PprTable: FC<IPprTableProps> = () => {
@@ -80,7 +82,12 @@ export const PprTable: FC<IPprTableProps> = () => {
             />
           ))}
           {timePeriods.map((month) => (
-            <HeaderCell key={month} colSpan={monthColSpan} value={translateRuTimePeriod(month)} />
+            <HeaderCell
+              className={style.MonthHeader}
+              key={month}
+              colSpan={monthColSpan}
+              value={translateRuTimePeriod(month)}
+            />
           ))}
         </tr>
         <tr>
