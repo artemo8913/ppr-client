@@ -83,6 +83,8 @@ export {
   getManyPprsShortInfo,
   updatePprTable,
   copyPprTable,
+  deletePprWork,
+  deleteWorkingMan,
 } from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";

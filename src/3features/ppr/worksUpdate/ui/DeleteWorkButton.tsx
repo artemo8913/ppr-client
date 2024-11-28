@@ -1,10 +1,11 @@
 "use client";
-import { FC } from "react";
+import { FC, useTransition } from "react";
 import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { TPprDataWorkId } from "@/2entities/ppr";
+import { useNotificationProvider } from "@/1shared/providers/notificationProvider";
+import { deletePprWork as deletePprWorkFromServer, TPprDataWorkId } from "@/2entities/ppr";
 
 interface IDeleteWorkButtonProps {
   workId: TPprDataWorkId;
@@ -13,9 +14,21 @@ interface IDeleteWorkButtonProps {
 export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
   const { deleteWork } = usePpr();
 
-  const handleClick = () => {
-    deleteWork(workId);
+  const [isLoading, startTransition] = useTransition();
+
+  const { toast } = useNotificationProvider();
+
+  const handleClick = async () => {
+    startTransition(async () => {
+      if (typeof workId === "number") {
+        const response = await deletePprWorkFromServer(workId);
+
+        toast(response, response.type);
+      }
+
+      deleteWork(workId);
+    });
   };
 
-  return <Button onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
+  return <Button loading={isLoading} onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
 };

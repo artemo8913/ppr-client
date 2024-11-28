@@ -3,6 +3,7 @@ import { and, eq, like, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
+import { NotificationType } from "@/1shared/providers/notificationProvider";
 import { buildConflictUpdateColumns } from "@/1shared/lib/buildConflictUpdateColumns";
 import { ROUTE_PPR } from "@/1shared/const/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
@@ -388,5 +389,45 @@ export async function getManyPprsShortInfo(params?: {
     return responce;
   } catch (e) {
     throw new Error(`Get all pprs. ${e}`);
+  }
+}
+
+export async function deletePprWork(id: number) {
+  try {
+    await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.id, id));
+
+    return {
+      type: "success" as NotificationType,
+      code: 200,
+      message: "Работа успешно исключена из планов",
+    };
+  } catch (e) {
+    console.log(e);
+
+    return {
+      type: "error" as NotificationType,
+      code: 500,
+      message: "Произошла ошибка при исключения работы из плана",
+    };
+  }
+}
+
+export async function deleteWorkingMan(id: number) {
+  try {
+    await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.id, id));
+
+    return {
+      type: "success" as NotificationType,
+      code: 200,
+      message: "Работник исключен из планов",
+    };
+  } catch (e) {
+    console.log(e);
+
+    return {
+      type: "error" as NotificationType,
+      code: 500,
+      message: "Произошла ошибка при исключении работника из плана",
+    };
   }
 }
