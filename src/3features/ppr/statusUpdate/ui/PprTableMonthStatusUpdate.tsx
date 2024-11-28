@@ -14,7 +14,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   const { ppr } = usePpr();
   const { currentTimePeriod } = usePprTableSettings();
 
-  const setNextStatus = useCallback(() => {
+  const setNextStatus = () => {
     if (!ppr || currentTimePeriod === "year") {
       return;
     }
@@ -35,7 +35,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
         [currentTimePeriod]: nextStatus,
       },
     });
-  }, [ppr, currentTimePeriod]);
+  };
 
   const rejectPlan = useCallback(() => {
     if (!ppr?.id || currentTimePeriod === "year") {

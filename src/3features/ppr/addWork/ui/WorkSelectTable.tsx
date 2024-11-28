@@ -98,16 +98,13 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
     []
   );
 
-  const onSearch: SearchProps["onSearch"] = useCallback(
-    (value: string) => {
-      if (value) {
-        setDataSource(props.data.filter((commonWork) => commonWork.name.toLowerCase().includes(value.toLowerCase())));
-      } else {
-        setDataSource(props.data);
-      }
-    },
-    [props.data]
-  );
+  const onSearch: SearchProps["onSearch"] = (value: string) => {
+    if (value) {
+      setDataSource(props.data.filter((commonWork) => commonWork.name.toLowerCase().includes(value.toLowerCase())));
+    } else {
+      setDataSource(props.data);
+    }
+  };
 
   const handleFinish = () => {
     if (!selectedWork.id) {

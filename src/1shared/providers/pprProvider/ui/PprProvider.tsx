@@ -852,18 +852,16 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * Получить информацию о месте размещения строк категорий. Для этого перебирается массив pprData.data
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
    */
-  const pprMeta = useMemo(() => {
-    if (!ppr) {
-      return {
-        branchesMeta: [],
-        branchesAndSubbrunchesOrder: {},
-        subbranchesList: [],
-        totalValues: { peoples: {}, works: {} },
-      };
-    }
+  let pprMeta: IPprMeta = {
+    branchesMeta: [],
+    branchesAndSubbrunchesOrder: {},
+    subbranchesList: [],
+    totalValues: { peoples: {}, works: {} },
+  };
 
-    return createPprMeta({ pprData: ppr.data, workingMansData: ppr.workingMans });
-  }, [ppr]);
+  if (ppr) {
+    pprMeta = createPprMeta({ pprData: ppr.data, workingMansData: ppr.workingMans });
+  }
 
   // Если ППР не хранится в контексте, то записать его
   useEffect(() => {
