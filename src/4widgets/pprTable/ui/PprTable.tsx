@@ -11,11 +11,11 @@ import { AddWorkButton } from "@/3features/ppr/worksUpdate";
 
 import HeaderCell from "./HeaderCell";
 import { useCreateColumns } from "./PprTableColumns";
-import { checkIsFieldVertical, getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
-import { PprTableCellMemo } from "./PprTableCell";
 import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
+import { getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
 
 import style from "./PprTableCell.module.scss";
+import { PprTableDataRow, PprTableDataRowMemo } from "./PprTableDataRow";
 
 interface IPprTableProps {}
 
@@ -136,20 +136,15 @@ export const PprTable: FC<IPprTableProps> = () => {
                 )}
               </>
             )}
-            <tr key={pprData.id}>
-              {allFields.map((field) => (
-                <PprTableCellMemo
-                  key={pprData.id + field}
-                  pprData={pprData}
-                  updatePprTableCell={updatePprTableCell}
-                  isVertical={checkIsFieldVertical(field)}
-                  field={field}
-                  planCellRef={planCellRef}
-                  isPprInUserControl={isPprInUserControl}
-                  {...getColumnSettingsForField(field, pprData.common_work_id !== null)}
-                />
-              ))}
-            </tr>
+            <PprTableDataRowMemo
+              pprData={pprData}
+              key={pprData.id}
+              fields={allFields}
+              getColumnSettingsForField={getColumnSettingsForField}
+              isPprInUserControl={isPprInUserControl}
+              planCellRef={planCellRef}
+              updatePprTableCell={updatePprTableCell}
+            />
             {index === ppr?.data.length - 1 && (
               <>
                 <SummaryTableRow

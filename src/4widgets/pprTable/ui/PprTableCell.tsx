@@ -120,5 +120,3 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     </td>
   );
 };
-
-export const PprTableCellMemo = memo(PprTableCell);
