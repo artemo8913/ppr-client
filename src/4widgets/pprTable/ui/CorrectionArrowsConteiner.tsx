@@ -47,7 +47,7 @@ const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCe
   }
 
   return (
-    <div className="relative z-10 opacity-50 hover:opacity-100 hover:z-20 hover:scale-105 transition-transform" style={{ width: basicArrowWidth }}>
+    <div className="relative z-10 opacity-50 hover:opacity-100 hover:z-5 hover:scale-105 transition-transform" style={{ width: basicArrowWidth }}>
       {arrows}
     </div>
   );

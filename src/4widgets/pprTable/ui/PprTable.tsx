@@ -15,7 +15,8 @@ import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
 import { getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
 
 import style from "./PprTableCell.module.scss";
-import { PprTableDataRow, PprTableDataRowMemo } from "./PprTableDataRow";
+import { PprTableDataRowMemo } from "./PprTableDataRow";
+import { PprTableColumnsNumbersRowMemo } from "./PprTableColumnsNumbersRow";
 
 interface IPprTableProps {}
 
@@ -100,6 +101,7 @@ export const PprTable: FC<IPprTableProps> = () => {
             />
           ))}
         </tr>
+        <PprTableColumnsNumbersRowMemo count={allFields.length} />
       </thead>
       <tbody>
         {ppr?.data.map((pprData, index) => (
