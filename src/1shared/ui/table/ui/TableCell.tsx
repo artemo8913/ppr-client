@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, FC, HTMLInputTypeAttribute, memo, Ref, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, HTMLInputTypeAttribute, memo, useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
 import style from "./TableCell.module.scss";
@@ -39,10 +39,18 @@ const TableCell: FC<ITableCellProps> = (props) => {
   }, []);
 
   const handleBlur = useCallback(() => {
-    if (onBlur) {
-      onBlur(String(currentValue));
+    if (!onBlur) {
+      return;
     }
-  }, [currentValue, onBlur]);
+
+    if (type === "number" && /^[0-9]+[.,]?[0-9]*$/.test(String(currentValue))) {
+      onBlur(String(currentValue).replace(",", "."));
+
+      return;
+    }
+
+    onBlur(String(currentValue));
+  }, [currentValue, onBlur, type]);
 
   useEffect(() => {
     setCurrentValue(value);
@@ -53,6 +61,8 @@ const TableCell: FC<ITableCellProps> = (props) => {
 
     return () => window?.removeEventListener("keydown", handleKeydown);
   }, [handleKeydown]);
+
+  const validatePattern = type === "number" ? "^[0-9]+[.]?[0-9]*$" : ".*";
 
   return (
     <div className={clsx(style.TableCell, isVertical && style.isVertical, className)}>
@@ -76,7 +86,7 @@ const TableCell: FC<ITableCellProps> = (props) => {
           onBlur={handleBlur}
           className={clsx(style.InputCell, isVertical && style.isVertical)}
           maxLength={INPUT_BASIC_MAX_LENGTH}
-          type={type}
+          pattern={validatePattern}
         />
       )}
       {cellType === "none" && value}
