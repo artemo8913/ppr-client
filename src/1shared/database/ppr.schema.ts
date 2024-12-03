@@ -21,7 +21,7 @@ function createMysqlPprMonthStatusType(fieldName: string) {
 }
 
 function createMysqlDoubleField(fieldName: string) {
-  return double(fieldName, { precision: 6, scale: 3 }).notNull().default(0);
+  return double(fieldName, { precision: 7, scale: 3 }).notNull().default(0);
 }
 
 function createMysqlBigDoubleField(fieldName: string) {
