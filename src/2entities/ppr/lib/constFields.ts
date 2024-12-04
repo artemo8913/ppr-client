@@ -168,7 +168,7 @@ export const PPR_DATA_BASIC_FIELDS: Array<keyof IPprData> = [
   "total_count",
   "entry_year",
   "periodicity_normal",
-  "periodicity_fact",
+  // "periodicity_fact",
   "last_maintenance_year",
   "norm_of_time",
   "norm_of_time_document",

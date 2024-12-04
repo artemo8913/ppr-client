@@ -63,17 +63,12 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isFieldWithControl = field === "name" && isPprInUserControl;
 
-  const isCorrectedView = useMemo(
-    () =>
-      pprSettings.correctionView === "CORRECTED_PLAN" || pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS",
-    [pprSettings.correctionView]
-  );
-  const isArrowsShow = useMemo(
-    () =>
-      pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS" ||
-      pprSettings.correctionView === "INITIAL_PLAN_WITH_ARROWS",
-    [pprSettings.correctionView]
-  );
+  const isCorrectedView =
+    pprSettings.correctionView === "CORRECTED_PLAN" || pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS";
+
+  const isArrowsShow =
+    pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS" ||
+    pprSettings.correctionView === "INITIAL_PLAN_WITH_ARROWS";
 
   let value = getValue(pprData, field, isCorrectedView) || "";
 
@@ -88,12 +83,9 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     }
   }
 
-  const handleChange = useCallback(
-    (newValue: string) => {
-      updatePprTableCell(pprData.id, field, newValue, pprData.is_work_aproved);
-    },
-    [pprData, field, updatePprTableCell]
-  );
+  const handleChange = (newValue: string) => {
+    updatePprTableCell(pprData.id, field, newValue, pprData.is_work_aproved);
+  };
 
   return (
     <td
@@ -128,5 +120,3 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     </td>
   );
 };
-
-export const PprTableCellMemo = memo(PprTableCell);

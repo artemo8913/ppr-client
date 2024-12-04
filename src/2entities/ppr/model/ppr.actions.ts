@@ -3,6 +3,8 @@ import { and, eq, like, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
+import { NotificationType } from "@/1shared/providers/notificationProvider";
+import { buildConflictUpdateColumns } from "@/1shared/lib/buildConflictUpdateColumns";
 import { ROUTE_PPR } from "@/1shared/const/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
 import {
@@ -17,6 +19,8 @@ import {
   usersTable,
 } from "@/1shared/database";
 import { getDivisionsById } from "@/1shared/api/divisions.api";
+import { TIME_PERIODS } from "@/1shared/const/date";
+
 import {
   IPpr,
   TFactNormTimePeriodsFields,
@@ -30,9 +34,17 @@ import {
   TWorkPlanTimePeriodsFields,
   TYearPprStatus,
 } from "..";
-import { TIME_PERIODS } from "@/1shared/const/date";
-
-import { getPprFieldsByTimePeriod } from "../lib/constFields";
+import {
+  getPprFieldsByTimePeriod,
+  FACT_NORM_TIME_FIELDS,
+  FACT_TIME_FIELDS,
+  FACT_WORK_FIELDS,
+  PLAN_NORM_TIME_FIELDS,
+  PLAN_TABEL_TIME_FIELDS,
+  PLAN_TIME_FIELDS,
+  PLAN_WORK_FIELDS,
+  PPR_DATA_BASIC_FIELDS,
+} from "../lib/constFields";
 
 export async function getPprTable(id: number): Promise<IPpr> {
   try {
@@ -102,6 +114,7 @@ export async function createPprTable(name: string, year: number) {
   } catch (e) {
     throw new Error(`Create ppr ${name} ${year}. ${e}`);
   }
+
   revalidatePath(ROUTE_PPR);
 }
 
@@ -146,86 +159,89 @@ export async function copyPprTable(params: {
         where: eq(pprsWorkDataTable.idPpr, params.instancePprId),
       });
 
-      await tx.insert(pprsWorkDataTable).values(
-        instancePprWorkData.map((pprData) => {
-          const planWork: Partial<TPlanWorkPeriodsFields> = {};
-          const planTime: Partial<TWorkPlanTimePeriodsFields> = {};
-          const factWork: Partial<TFactWorkPeriodsFields> = {};
-          const factNormTime: Partial<TFactNormTimePeriodsFields> = {};
-          const factTime: Partial<TFactTimePeriodsFields> = {};
+      if (instancePprWorkData.length) {
+        await tx.insert(pprsWorkDataTable).values(
+          instancePprWorkData.map((pprData) => {
+            const planWork: Partial<TPlanWorkPeriodsFields> = {};
+            const planTime: Partial<TWorkPlanTimePeriodsFields> = {};
+            const factWork: Partial<TFactWorkPeriodsFields> = {};
+            const factNormTime: Partial<TFactNormTimePeriodsFields> = {};
+            const factTime: Partial<TFactTimePeriodsFields> = {};
 
-          TIME_PERIODS.forEach((period) => {
-            const { planWorkField, planTimeField, factWorkField, factNormTimeField, factTimeField } =
-              getPprFieldsByTimePeriod(period);
+            TIME_PERIODS.forEach((period) => {
+              const { planWorkField, planTimeField, factWorkField, factNormTimeField, factTimeField } =
+                getPprFieldsByTimePeriod(period);
 
-            planWork[planWorkField] = {
-              original: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
-              handCorrection: null,
-              planTransfers: null,
-              planTransfersSum: 0,
-              undoneTransfers: null,
-              undoneTransfersSum: 0,
-              outsideCorrectionsSum: 0,
-              final: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
+              planWork[planWorkField] = {
+                original: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
+                handCorrection: null,
+                planTransfers: null,
+                planTransfersSum: 0,
+                undoneTransfers: null,
+                undoneTransfersSum: 0,
+                outsideCorrectionsSum: 0,
+                final: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
+              };
+
+              planTime[planTimeField] = {
+                original: params.isCopyPlanWork ? pprData[planTimeField].final : 0,
+                final: params.isCopyPlanWork ? pprData[planTimeField].final : 0,
+              };
+
+              factWork[factWorkField] = params.isCopyFactWork ? pprData[factWorkField] : 0;
+              factNormTime[factNormTimeField] = params.isCopyFactWork ? pprData[factNormTimeField] : 0;
+              factTime[factTimeField] = params.isCopyFactWork ? pprData[factTimeField] : 0;
+            });
+
+            return {
+              ...pprData,
+              idPpr: newPprId,
+              id: undefined,
+              is_work_aproved: false,
+              ...planWork,
+              ...planTime,
+              ...factWork,
+              ...factNormTime,
+              ...factTime,
             };
-
-            planTime[planTimeField] = {
-              original: params.isCopyPlanWork ? pprData[planTimeField].final : 0,
-              final: params.isCopyPlanWork ? pprData[planTimeField].final : 0,
-            };
-
-            factWork[factWorkField] = params.isCopyFactWork ? pprData[factWorkField] : 0;
-            factNormTime[factNormTimeField] = params.isCopyFactWork ? pprData[factNormTimeField] : 0;
-            factTime[factTimeField] = params.isCopyFactWork ? pprData[factTimeField] : 0;
-          });
-
-          return {
-            ...pprData,
-            idPpr: newPprId,
-            id: undefined,
-            is_work_aproved: false,
-            ...planWork,
-            ...planTime,
-            ...factWork,
-            ...factNormTime,
-            ...factTime,
-          };
-        })
-      );
+          })
+        );
+      }
 
       const instancePprWorkingManData = await tx.query.pprWorkingMansTable.findMany({
         where: eq(pprWorkingMansTable.idPpr, params.instancePprId),
       });
 
-      await tx.insert(pprWorkingMansTable).values(
-        instancePprWorkingManData.map((workingMan) => {
-          const planNormTime: Partial<TPlanNormTimePeriodsFields> = {};
-          const planTabelTime: Partial<TPlanTabelTimePeriodsFields> = {};
-          const planTime: Partial<TPlanTimePeriodsFields> = {};
-          const factTime: Partial<TFactTimePeriodsFields> = {};
+      if (instancePprWorkingManData.length) {
+        await tx.insert(pprWorkingMansTable).values(
+          instancePprWorkingManData.map((workingMan) => {
+            const planNormTime: Partial<TPlanNormTimePeriodsFields> = {};
+            const planTabelTime: Partial<TPlanTabelTimePeriodsFields> = {};
+            const planTime: Partial<TPlanTimePeriodsFields> = {};
+            const factTime: Partial<TFactTimePeriodsFields> = {};
 
-          TIME_PERIODS.forEach((period) => {
-            const { planTimeField, planNormTimeField, planTabelTimeField, factTimeField } =
-              getPprFieldsByTimePeriod(period);
+            TIME_PERIODS.forEach((period) => {
+              const { planTimeField, planNormTimeField, planTabelTimeField, factTimeField } =
+                getPprFieldsByTimePeriod(period);
 
-            planNormTime[planNormTimeField] = params.isCopyPlanWorkingMans ? workingMan[planNormTimeField] : 0;
-            planTabelTime[planTabelTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTabelTimeField] : 0;
-            planTime[planTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTimeField] : 0;
-            factTime[factTimeField] = params.isCopyPlanWorkingMans ? workingMan[factTimeField] : 0;
-          });
+              planNormTime[planNormTimeField] = params.isCopyPlanWorkingMans ? workingMan[planNormTimeField] : 0;
+              planTabelTime[planTabelTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTabelTimeField] : 0;
+              planTime[planTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTimeField] : 0;
+              factTime[factTimeField] = params.isCopyPlanWorkingMans ? workingMan[factTimeField] : 0;
+            });
 
-          return {
-            ...workingMan,
-            id: undefined,
-            idPpr: newPprId,
-            ...planNormTime,
-            ...planTabelTime,
-            ...planTime,
-            ...factTime,
-          };
-        })
-      );
-
+            return {
+              ...workingMan,
+              id: undefined,
+              idPpr: newPprId,
+              ...planNormTime,
+              ...planTabelTime,
+              ...planTime,
+              ...factTime,
+            };
+          })
+        );
+      }
       await tx.insert(pprMonthsStatusesTable).values({ idPpr: newPprId });
 
       revalidatePath(ROUTE_PPR);
@@ -238,42 +254,72 @@ export async function copyPprTable(params: {
 export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>) {
   try {
     await db.transaction(async (tx) => {
-      params.status && (await tx.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id)));
+      if (params.status) {
+        await tx.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id));
+      }
 
-      params.months_statuses &&
-        (await tx
+      if (params.months_statuses) {
+        await tx
           .update(pprMonthsStatusesTable)
           .set({ ...params.months_statuses })
-          .where(eq(pprMonthsStatusesTable.idPpr, id)));
+          .where(eq(pprMonthsStatusesTable.idPpr, id));
+      }
 
-      if (params.workingMans) {
-        await tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
-
-        if (params.workingMans.length) {
-          await tx.insert(pprWorkingMansTable).values(
+      if (params.workingMans?.length) {
+        await tx
+          .insert(pprWorkingMansTable)
+          .values(
             params.workingMans.map((workingMan) => {
               if (typeof workingMan.id === "string") {
                 return { ...workingMan, id: undefined, idPpr: id };
               }
               return { ...workingMan, id: workingMan.id, idPpr: id };
             })
-          );
-        }
+          )
+          .onDuplicateKeyUpdate({
+            set: buildConflictUpdateColumns(pprWorkingMansTable, [
+              "full_name",
+              "work_position",
+              "participation",
+              ...PLAN_TIME_FIELDS,
+              ...PLAN_NORM_TIME_FIELDS,
+              ...PLAN_TABEL_TIME_FIELDS,
+              ...FACT_TIME_FIELDS,
+            ]),
+          });
+      } else if (params.workingMans?.length === 0) {
+        await tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
       }
 
-      if (params.data) {
-        await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
-
-        if (params.data.length) {
-          await tx.insert(pprsWorkDataTable).values(
+      if (params.data?.length) {
+        await tx
+          .insert(pprsWorkDataTable)
+          .values(
             params.data.map((pprData, index) => {
               if (typeof pprData.id === "string") {
                 return { ...pprData, id: undefined, idPpr: id, order: index };
               }
               return { ...pprData, id: pprData.id, idPpr: id, order: index };
             })
-          );
-        }
+          )
+          .onDuplicateKeyUpdate({
+            set: buildConflictUpdateColumns(pprsWorkDataTable, [
+              "order",
+              "common_work_id",
+              "is_work_aproved",
+              "branch",
+              "subbranch",
+              "note",
+              ...PPR_DATA_BASIC_FIELDS,
+              ...PLAN_WORK_FIELDS,
+              ...PLAN_TIME_FIELDS,
+              ...FACT_WORK_FIELDS,
+              ...FACT_NORM_TIME_FIELDS,
+              ...FACT_TIME_FIELDS,
+            ]),
+          });
+      } else if (params.data?.length === 0) {
+        await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
       }
     });
   } catch (e) {
@@ -343,5 +389,45 @@ export async function getManyPprsShortInfo(params?: {
     return responce;
   } catch (e) {
     throw new Error(`Get all pprs. ${e}`);
+  }
+}
+
+export async function deletePprWork(id: number) {
+  try {
+    await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.id, id));
+
+    return {
+      type: "success" as NotificationType,
+      code: 200,
+      message: "Работа успешно исключена из планов",
+    };
+  } catch (e) {
+    console.log(e);
+
+    return {
+      type: "error" as NotificationType,
+      code: 500,
+      message: "Произошла ошибка при исключения работы из плана",
+    };
+  }
+}
+
+export async function deleteWorkingMan(id: number) {
+  try {
+    await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.id, id));
+
+    return {
+      type: "success" as NotificationType,
+      code: 200,
+      message: "Работник исключен из планов",
+    };
+  } catch (e) {
+    console.log(e);
+
+    return {
+      type: "error" as NotificationType,
+      code: 500,
+      message: "Произошла ошибка при исключении работника из плана",
+    };
   }
 }

@@ -9,11 +9,11 @@ export default defineConfig({
   dialect: "mysql",
   out: "./drizzle",
   dbCredentials: {
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    port: Number(process.env.DB_PORT),
-    host: "localhost",
     url: "db",
+    host: process.env[`DB_HOST_${process.env.DB_LOCATION}`],
+    database: process.env[`DB_NAME_${process.env.DB_LOCATION}`],
+    port: Number(process.env[`DB_PORT_${process.env.DB_LOCATION}`]),
+    user: process.env[`DB_USER_${process.env.DB_LOCATION}`],
+    password: process.env[`DB_PASSWORD_${process.env.DB_LOCATION}`],
   },
 });

@@ -54,5 +54,9 @@
     background-color: white;
     width: var(--cell-width);
     height: auto;
+
+    &:invalid {
+      background-color: pink;
+    }
   }
 }

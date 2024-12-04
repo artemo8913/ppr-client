@@ -17,7 +17,7 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   const { data } = useSession();
   const { ppr } = usePpr();
 
-  const setNextStatus = useCallback(() => {
+  const setNextStatus = () => {
     if (!ppr) {
       return;
     }
@@ -33,7 +33,7 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
     }
 
     updatePprTable(ppr.id, { ...ppr, status: nextStatus });
-  }, [ppr]);
+  };
 
   const rejectPpr = useCallback(() => ppr?.id && updatePprTable(ppr.id, { status: "plan_creating" }), [ppr?.id]);
 

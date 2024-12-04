@@ -71,7 +71,8 @@ export function getColumnSettings(
       norm_of_time_document: { cellType: "textarea" },
       unity: { cellType: "input" },
     };
-    EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input" }));
+
+    EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input", type: "number" }));
 
     return settings[field];
   }
@@ -86,7 +87,8 @@ export function getColumnSettings(
       last_maintenance_year: { cellType: "input" },
       unity: { cellType: "input" },
     };
-    EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input" }));
+
+    EDITABLE_PLAN_FACT_FIELDS.forEach((field) => (settings[field] = { cellType: "input", type: "number" }));
 
     return settings[field];
   }
@@ -94,13 +96,13 @@ export function getColumnSettings(
     return {};
   }
   if (pprMonthStatuses[timePeriod] === "plan_creating" && field === `${timePeriod}_plan_work`) {
-    return { cellType: "input" };
+    return { cellType: "input", type: "number" };
   }
   if (
     pprMonthStatuses[timePeriod] === "fact_filling" &&
     (field === `${timePeriod}_fact_work` || field === `${timePeriod}_fact_time`)
   ) {
-    return { cellType: "input" };
+    return { cellType: "input", type: "number" };
   }
   return {};
 }

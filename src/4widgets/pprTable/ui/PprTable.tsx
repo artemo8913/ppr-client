@@ -11,9 +11,12 @@ import { AddWorkButton } from "@/3features/ppr/worksUpdate";
 
 import HeaderCell from "./HeaderCell";
 import { useCreateColumns } from "./PprTableColumns";
-import { checkIsFieldVertical, getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
-import { PprTableCellMemo } from "./PprTableCell";
 import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
+import { getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
+
+import style from "./PprTableCell.module.scss";
+import { PprTableDataRowMemo } from "./PprTableDataRow";
+import { PprTableColumnsNumbersRowMemo } from "./PprTableColumnsNumbersRow";
 
 interface IPprTableProps {}
 
@@ -80,7 +83,12 @@ export const PprTable: FC<IPprTableProps> = () => {
             />
           ))}
           {timePeriods.map((month) => (
-            <HeaderCell key={month} colSpan={monthColSpan} value={translateRuTimePeriod(month)} />
+            <HeaderCell
+              className={style.MonthHeader}
+              key={month}
+              colSpan={monthColSpan}
+              value={translateRuTimePeriod(month)}
+            />
           ))}
         </tr>
         <tr>
@@ -93,6 +101,7 @@ export const PprTable: FC<IPprTableProps> = () => {
             />
           ))}
         </tr>
+        <PprTableColumnsNumbersRowMemo count={allFields.length} />
       </thead>
       <tbody>
         {ppr?.data.map((pprData, index) => (
@@ -129,20 +138,15 @@ export const PprTable: FC<IPprTableProps> = () => {
                 )}
               </>
             )}
-            <tr key={pprData.id}>
-              {allFields.map((field) => (
-                <PprTableCellMemo
-                  key={pprData.id + field}
-                  pprData={pprData}
-                  updatePprTableCell={updatePprTableCell}
-                  isVertical={checkIsFieldVertical(field)}
-                  field={field}
-                  planCellRef={planCellRef}
-                  isPprInUserControl={isPprInUserControl}
-                  {...getColumnSettingsForField(field, pprData.common_work_id !== null)}
-                />
-              ))}
-            </tr>
+            <PprTableDataRowMemo
+              pprData={pprData}
+              key={pprData.id}
+              fields={allFields}
+              getColumnSettingsForField={getColumnSettingsForField}
+              isPprInUserControl={isPprInUserControl}
+              planCellRef={planCellRef}
+              updatePprTableCell={updatePprTableCell}
+            />
             {index === ppr?.data.length - 1 && (
               <>
                 <SummaryTableRow

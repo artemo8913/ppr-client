@@ -3,6 +3,7 @@ export type {
   TPprShortInfo,
   IPprData,
   TPprDataWorkId,
+  TWorkingManId,
   TTotalFieldsValues,
   IPprDataWithRowSpan,
   TAllMonthStatuses,
@@ -82,6 +83,8 @@ export {
   getManyPprsShortInfo,
   updatePprTable,
   copyPprTable,
+  deletePprWork,
+  deleteWorkingMan,
 } from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";

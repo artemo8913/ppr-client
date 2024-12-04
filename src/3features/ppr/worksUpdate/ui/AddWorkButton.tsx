@@ -7,7 +7,7 @@ import { SizeType } from "antd/es/config-provider/SizeContext";
 import { INearWorkMeta, useWorkModal } from "@/1shared/providers/workModalProvider";
 
 interface IAddWorkButtonProps {
-  nearWorkMeta: INearWorkMeta
+  nearWorkMeta?: INearWorkMeta;
   label?: string;
   size?: SizeType;
   shape?: "default" | "circle" | "round";

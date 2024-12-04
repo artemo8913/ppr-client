@@ -1,12 +1,13 @@
 "use client";
-import { FC, ReactNode, useState } from "react";
+import { FC, memo, ReactNode } from "react";
 
+import { TableCellControlWrapper } from "@/1shared/ui/table";
 import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
 import { CopyWorkButton } from "./CopyWorkButton";
-import { EditWorkButtonMemo } from "./EditWorkButton";
+import { EditWorkButton } from "./EditWorkButton";
 import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
 import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 
@@ -20,7 +21,7 @@ interface ITableCellWithWorkControlProps {
   isShowControl?: boolean;
 }
 
-export const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
+const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
   workId,
   branch,
   subbranch,
@@ -29,29 +30,29 @@ export const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
   isWorkApproved,
   isShowControl,
 }) => {
-  const [isHide, setIsHide] = useState<boolean>(true);
-
-  if (!isShowControl) {
-    return children;
-  }
-
   return (
-    <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
-      {!isHide && (
-        <div className="!absolute -bottom-6 left-0 z-10 flex py-2">
+    <TableCellControlWrapper
+      isShowControl={isShowControl}
+      controlItems={
+        <>
           {!isWorkApproved && (
             <>
               <IncreaseWorkPositionButton workId={workId} />
               <DecreaseWorkPositionButton workId={workId} />
-              <EditWorkButtonMemo workId={workId} branch={branch} note={note} />
+              <EditWorkButton workId={workId} branch={branch} note={note} />
               <DeleteWorkButton workId={workId} />
             </>
           )}
-          <AddWorkButton nearWorkMeta={{ branch, subbranch, workId }} />
+          <AddWorkButton nearWorkMeta={{ branch, subbranch, id: workId }} />
           <CopyWorkButton workId={workId} />
-        </div>
-      )}
+        </>
+      }
+    >
       {children}
-    </div>
+    </TableCellControlWrapper>
   );
 };
+
+const PprWorkUpdateControlMemo = memo(PprWorkUpdateControl);
+
+export { PprWorkUpdateControlMemo as PprWorkUpdateControl };

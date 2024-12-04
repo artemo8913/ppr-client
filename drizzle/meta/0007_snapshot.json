@@ -1,0 +1,1824 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "c8bfb522-894e-42a4-9843-4ee2d3d1881d",
+  "prevId": "49bbe61e-bd87-43ab-8ba1-3db53675b8d0",
+  "tables": {
+    "common_works": {
+      "name": "common_works",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "measure": {
+          "name": "measure",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "norm_of_time": {
+          "name": "norm_of_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "norm_of_time_name_short": {
+          "name": "norm_of_time_name_short",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "norm_of_time_name_full": {
+          "name": "norm_of_time_name_full",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "norm_of_time_document_name": {
+          "name": "norm_of_time_document_name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "common_works_id": {
+          "name": "common_works_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "credentials": {
+      "name": "credentials",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "credentials_id_users_id_fk": {
+          "name": "credentials_id_users_id_fk",
+          "tableFrom": "credentials",
+          "tableTo": "users",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "credentials_username_unique": {
+          "name": "credentials_username_unique",
+          "columns": [
+            "username"
+          ]
+        }
+      }
+    },
+    "directions": {
+      "name": "directions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "short_name": {
+          "name": "short_name",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "directions_id": {
+          "name": "directions_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "distances": {
+      "name": "distances",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "id_direction": {
+          "name": "id_direction",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "short_name": {
+          "name": "short_name",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "distances_id_direction_directions_id_fk": {
+          "name": "distances_id_direction_directions_id_fk",
+          "tableFrom": "distances",
+          "tableTo": "directions",
+          "columnsFrom": [
+            "id_direction"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "distances_id": {
+          "name": "distances_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "subdivisions": {
+      "name": "subdivisions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "id_distance": {
+          "name": "id_distance",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "short_name": {
+          "name": "short_name",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "subdivisions_id_distance_distances_id_fk": {
+          "name": "subdivisions_id_distance_distances_id_fk",
+          "tableFrom": "subdivisions",
+          "tableTo": "distances",
+          "columnsFrom": [
+            "id_distance"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "subdivisions_id": {
+          "name": "subdivisions_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ppr_months_statuses": {
+      "name": "ppr_months_statuses",
+      "columns": {
+        "id_ppr": {
+          "name": "id_ppr",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "jan": {
+          "name": "jan",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "feb": {
+          "name": "feb",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "mar": {
+          "name": "mar",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "apr": {
+          "name": "apr",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "may": {
+          "name": "may",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "june": {
+          "name": "june",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "july": {
+          "name": "july",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "aug": {
+          "name": "aug",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "sept": {
+          "name": "sept",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "oct": {
+          "name": "oct",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "nov": {
+          "name": "nov",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "dec": {
+          "name": "dec",
+          "type": "enum('none','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_aprove','in_process','fact_filling','fact_verification_engineer','fact_verification_time_norm','fact_on_agreement_sub_boss','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ppr_months_statuses_id_ppr_pprs_info_id_fk": {
+          "name": "ppr_months_statuses_id_ppr_pprs_info_id_fk",
+          "tableFrom": "ppr_months_statuses",
+          "tableTo": "pprs_info",
+          "columnsFrom": [
+            "id_ppr"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "ppr_months_statuses_id_ppr_unique": {
+          "name": "ppr_months_statuses_id_ppr_unique",
+          "columns": [
+            "id_ppr"
+          ]
+        }
+      }
+    },
+    "ppr_working_mans": {
+      "name": "ppr_working_mans",
+      "columns": {
+        "id_ppr": {
+          "name": "id_ppr",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "work_position": {
+          "name": "work_position",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "participation": {
+          "name": "participation",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "year_plan_time": {
+          "name": "year_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "jan_plan_time": {
+          "name": "jan_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "feb_plan_time": {
+          "name": "feb_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mar_plan_time": {
+          "name": "mar_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "apr_plan_time": {
+          "name": "apr_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "may_plan_time": {
+          "name": "may_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "june_plan_time": {
+          "name": "june_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "july_plan_time": {
+          "name": "july_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "aug_plan_time": {
+          "name": "aug_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "sept_plan_time": {
+          "name": "sept_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "oct_plan_time": {
+          "name": "oct_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "nov_plan_time": {
+          "name": "nov_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "dec_plan_time": {
+          "name": "dec_plan_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "year_plan_norm_time": {
+          "name": "year_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "jan_plan_norm_time": {
+          "name": "jan_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "feb_plan_norm_time": {
+          "name": "feb_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mar_plan_norm_time": {
+          "name": "mar_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "apr_plan_norm_time": {
+          "name": "apr_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "may_plan_norm_time": {
+          "name": "may_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "june_plan_norm_time": {
+          "name": "june_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "july_plan_norm_time": {
+          "name": "july_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "aug_plan_norm_time": {
+          "name": "aug_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "sept_plan_norm_time": {
+          "name": "sept_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "oct_plan_norm_time": {
+          "name": "oct_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "nov_plan_norm_time": {
+          "name": "nov_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "dec_plan_norm_time": {
+          "name": "dec_plan_norm_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "year_plan_tabel_time": {
+          "name": "year_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "jan_plan_tabel_time": {
+          "name": "jan_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "feb_plan_tabel_time": {
+          "name": "feb_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mar_plan_tabel_time": {
+          "name": "mar_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "apr_plan_tabel_time": {
+          "name": "apr_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "may_plan_tabel_time": {
+          "name": "may_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "june_plan_tabel_time": {
+          "name": "june_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "july_plan_tabel_time": {
+          "name": "july_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "aug_plan_tabel_time": {
+          "name": "aug_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "sept_plan_tabel_time": {
+          "name": "sept_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "oct_plan_tabel_time": {
+          "name": "oct_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "nov_plan_tabel_time": {
+          "name": "nov_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "dec_plan_tabel_time": {
+          "name": "dec_plan_tabel_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "year_fact_time": {
+          "name": "year_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "jan_fact_time": {
+          "name": "jan_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "feb_fact_time": {
+          "name": "feb_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mar_fact_time": {
+          "name": "mar_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "apr_fact_time": {
+          "name": "apr_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "may_fact_time": {
+          "name": "may_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "june_fact_time": {
+          "name": "june_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "july_fact_time": {
+          "name": "july_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "aug_fact_time": {
+          "name": "aug_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "sept_fact_time": {
+          "name": "sept_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "oct_fact_time": {
+          "name": "oct_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "nov_fact_time": {
+          "name": "nov_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "dec_fact_time": {
+          "name": "dec_fact_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ppr_working_mans_id_ppr_pprs_info_id_fk": {
+          "name": "ppr_working_mans_id_ppr_pprs_info_id_fk",
+          "tableFrom": "ppr_working_mans",
+          "tableTo": "pprs_info",
+          "columnsFrom": [
+            "id_ppr"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ppr_working_mans_id": {
+          "name": "ppr_working_mans_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "pprs_info": {
+      "name": "pprs_info",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "year": {
+          "name": "year",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('template','plan_creating','plan_on_agreement_engineer','plan_on_agreement_time_norm','plan_on_agreement_sub_boss','plan_on_aprove','in_process','done')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id_user_created_by": {
+          "name": "id_user_created_by",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id_direction": {
+          "name": "id_direction",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_distance": {
+          "name": "id_distance",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_subdivision": {
+          "name": "id_subdivision",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pprs_info_id_user_created_by_users_id_fk": {
+          "name": "pprs_info_id_user_created_by_users_id_fk",
+          "tableFrom": "pprs_info",
+          "tableTo": "users",
+          "columnsFrom": [
+            "id_user_created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pprs_info_id_direction_directions_id_fk": {
+          "name": "pprs_info_id_direction_directions_id_fk",
+          "tableFrom": "pprs_info",
+          "tableTo": "directions",
+          "columnsFrom": [
+            "id_direction"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pprs_info_id_distance_distances_id_fk": {
+          "name": "pprs_info_id_distance_distances_id_fk",
+          "tableFrom": "pprs_info",
+          "tableTo": "distances",
+          "columnsFrom": [
+            "id_distance"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pprs_info_id_subdivision_subdivisions_id_fk": {
+          "name": "pprs_info_id_subdivision_subdivisions_id_fk",
+          "tableFrom": "pprs_info",
+          "tableTo": "subdivisions",
+          "columnsFrom": [
+            "id_subdivision"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "pprs_info_id": {
+          "name": "pprs_info_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "pprs_data": {
+      "name": "pprs_data",
+      "columns": {
+        "id_ppr": {
+          "name": "id_ppr",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "order": {
+          "name": "order",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "id_common_work": {
+          "name": "id_common_work",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_work_aproved": {
+          "name": "is_work_aproved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "branch": {
+          "name": "branch",
+          "type": "enum('exploitation','additional','unforeseen')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subbranch": {
+          "name": "subbranch",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "note": {
+          "name": "note",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "line_class": {
+          "name": "line_class",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "measure": {
+          "name": "measure",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total_count": {
+          "name": "total_count",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entry_year": {
+          "name": "entry_year",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "periodicity_normal": {
+          "name": "periodicity_normal",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "periodicity_fact": {
+          "name": "periodicity_fact",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_maintenance_year": {
+          "name": "last_maintenance_year",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "norm_of_time": {
+          "name": "norm_of_time",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "norm_of_time_name_full": {
+          "name": "norm_of_time_name_full",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unity": {
+          "name": "unity",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "year_plan_work": {
+          "name": "year_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "jan_plan_work": {
+          "name": "jan_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "feb_plan_work": {
+          "name": "feb_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "mar_plan_work": {
+          "name": "mar_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "apr_plan_work": {
+          "name": "apr_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "may_plan_work": {
+          "name": "may_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "june_plan_work": {
+          "name": "june_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "july_plan_work": {
+          "name": "july_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "aug_plan_work": {
+          "name": "aug_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sept_plan_work": {
+          "name": "sept_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "oct_plan_work": {
+          "name": "oct_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "nov_plan_work": {
+          "name": "nov_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "dec_plan_work": {
+          "name": "dec_plan_work",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "year_plan_time": {
+          "name": "year_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "jan_plan_time": {
+          "name": "jan_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "feb_plan_time": {
+          "name": "feb_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "mar_plan_time": {
+          "name": "mar_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "apr_plan_time": {
+          "name": "apr_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "may_plan_time": {
+          "name": "may_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "june_plan_time": {
+          "name": "june_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "july_plan_time": {
+          "name": "july_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "aug_plan_time": {
+          "name": "aug_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sept_plan_time": {
+          "name": "sept_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "oct_plan_time": {
+          "name": "oct_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "nov_plan_time": {
+          "name": "nov_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "dec_plan_time": {
+          "name": "dec_plan_time",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "year_fact_work": {
+          "name": "year_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "jan_fact_work": {
+          "name": "jan_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "feb_fact_work": {
+          "name": "feb_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mar_fact_work": {
+          "name": "mar_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "apr_fact_work": {
+          "name": "apr_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "may_fact_work": {
+          "name": "may_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "june_fact_work": {
+          "name": "june_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "july_fact_work": {
+          "name": "july_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "aug_fact_work": {
+          "name": "aug_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "sept_fact_work": {
+          "name": "sept_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "oct_fact_work": {
+          "name": "oct_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "nov_fact_work": {
+          "name": "nov_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "dec_fact_work": {
+          "name": "dec_fact_work",
+          "type": "double(6,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "year_fact_norm_time": {
+          "name": "year_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "jan_fact_norm_time": {
+          "name": "jan_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "feb_fact_norm_time": {
+          "name": "feb_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mar_fact_norm_time": {
+          "name": "mar_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "apr_fact_norm_time": {
+          "name": "apr_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "may_fact_norm_time": {
+          "name": "may_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "june_fact_norm_time": {
+          "name": "june_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "july_fact_norm_time": {
+          "name": "july_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "aug_fact_norm_time": {
+          "name": "aug_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "sept_fact_norm_time": {
+          "name": "sept_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "oct_fact_norm_time": {
+          "name": "oct_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "nov_fact_norm_time": {
+          "name": "nov_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "dec_fact_norm_time": {
+          "name": "dec_fact_norm_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "year_fact_time": {
+          "name": "year_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "jan_fact_time": {
+          "name": "jan_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "feb_fact_time": {
+          "name": "feb_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "mar_fact_time": {
+          "name": "mar_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "apr_fact_time": {
+          "name": "apr_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "may_fact_time": {
+          "name": "may_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "june_fact_time": {
+          "name": "june_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "july_fact_time": {
+          "name": "july_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "aug_fact_time": {
+          "name": "aug_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "sept_fact_time": {
+          "name": "sept_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "oct_fact_time": {
+          "name": "oct_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "nov_fact_time": {
+          "name": "nov_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "dec_fact_time": {
+          "name": "dec_fact_time",
+          "type": "double(12,3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pprs_data_id_ppr_pprs_info_id_fk": {
+          "name": "pprs_data_id_ppr_pprs_info_id_fk",
+          "tableFrom": "pprs_data",
+          "tableTo": "pprs_info",
+          "columnsFrom": [
+            "id_ppr"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pprs_data_id_common_work_common_works_id_fk": {
+          "name": "pprs_data_id_common_work_common_works_id_fk",
+          "tableFrom": "pprs_data",
+          "tableTo": "common_works",
+          "columnsFrom": [
+            "id_common_work"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "pprs_data_id": {
+          "name": "pprs_data_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "middle_name": {
+          "name": "middle_name",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "enum('subdivision','distance_engineer','distance_time_norm','distance_security_engineer','distance_sub_boss','distance_boss','direction','transenergo')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id_subdivision": {
+          "name": "id_subdivision",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_distance": {
+          "name": "id_distance",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_direction": {
+          "name": "id_direction",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_id_subdivision_subdivisions_id_fk": {
+          "name": "users_id_subdivision_subdivisions_id_fk",
+          "tableFrom": "users",
+          "tableTo": "subdivisions",
+          "columnsFrom": [
+            "id_subdivision"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "users_id_distance_distances_id_fk": {
+          "name": "users_id_distance_distances_id_fk",
+          "tableFrom": "users",
+          "tableTo": "distances",
+          "columnsFrom": [
+            "id_distance"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "users_id_direction_directions_id_fk": {
+          "name": "users_id_direction_directions_id_fk",
+          "tableFrom": "users",
+          "tableTo": "directions",
+          "columnsFrom": [
+            "id_direction"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "users_id": {
+          "name": "users_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}

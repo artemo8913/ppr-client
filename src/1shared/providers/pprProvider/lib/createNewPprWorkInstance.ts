@@ -1,10 +1,10 @@
 import { IPprData } from "@/2entities/ppr";
 
-export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData => {
+type IPprDataWithoutId = Omit<IPprData, "id">;
+
+export const createNewPprWorkInstance = (newData: Partial<IPprDataWithoutId>): IPprData => {
   return {
-    id: String(new Date().toString() + Math.random()),
     common_work_id: null,
-    is_work_aproved: false,
     branch: "additional",
     subbranch: "",
     name: "",
@@ -202,5 +202,7 @@ export const createNewPprWorkInstance = (newData: Partial<IPprData>): IPprData =
     nov_fact_time: 0,
     dec_fact_time: 0,
     ...newData,
+    id: String(new Date().toString() + Math.random()),
+    is_work_aproved: false,
   };
 };

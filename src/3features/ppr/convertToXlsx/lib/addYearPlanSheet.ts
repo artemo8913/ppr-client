@@ -19,7 +19,7 @@ import {
 import { BOLD, setBgColorXlsx } from "./xlsxStyles";
 import { BLACK_BORDER_FULL, CENTER_ALIGNMENT_WITH_WRAP, VERTICAL_ALIGNMENT } from "./xlsxStyles";
 
-const MAX_COLUMNS_COUNT = 77;
+const MAX_COLUMNS_COUNT = 76;
 
 const TIME_PERIOD_COL_SPAN = 5;
 

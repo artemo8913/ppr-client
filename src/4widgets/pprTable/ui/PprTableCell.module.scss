@@ -1,3 +1,5 @@
+$column-number-cell-height: 20px;
+
 .PprTableCell {
   border: solid 1px black;
 
@@ -36,4 +38,32 @@
       background-color: var(--FOURTH_QUARTER_TRANSPARENT);
     }
   }
+}
+
+.PprTableColumnNumberCell {
+  position: sticky;
+  top: 0px;
+  z-index: 15;
+
+  height: $column-number-cell-height;
+  
+  border: solid 1px black;
+  background-color: rgb(245, 245, 245);
+  outline: black solid 2px;
+  outline-offset: -1px;
+  
+  
+  text-align: center;
+  font-size: var(--sm-text);
+}
+
+.MonthHeader {
+  position: sticky;
+  top: $column-number-cell-height + 1;
+  z-index: 20;
+
+  background-color: rgb(245, 245, 245);
+
+  outline: black solid 2px;
+  outline-offset: -1px;
 }

@@ -98,16 +98,13 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
     []
   );
 
-  const onSearch: SearchProps["onSearch"] = useCallback(
-    (value: string) => {
-      if (value) {
-        setDataSource(props.data.filter((commonWork) => commonWork.name.toLowerCase().includes(value.toLowerCase())));
-      } else {
-        setDataSource(props.data);
-      }
-    },
-    [props.data]
-  );
+  const onSearch: SearchProps["onSearch"] = (value: string) => {
+    if (value) {
+      setDataSource(props.data.filter((commonWork) => commonWork.name.toLowerCase().includes(value.toLowerCase())));
+    } else {
+      setDataSource(props.data);
+    }
+  };
 
   const handleFinish = () => {
     if (!selectedWork.id) {
@@ -125,10 +122,10 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
         norm_of_time_document: selectedWork.normOfTimeNameFull,
         unity: credential?.user.subdivisionShortName || "",
       },
-      props.nearWorkMeta.workId
+      props.nearWorkMeta.id
     );
     setSelectedRowKeys([]);
-    setSelectedWork(CLEAN_SELECTED_WORK);
+    setSelectedWork({ ...CLEAN_SELECTED_WORK, subbranch: selectedWork.subbranch });
 
     if (props.onFinish) {
       props.onFinish();

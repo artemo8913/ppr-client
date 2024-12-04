@@ -50,7 +50,7 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
         subbranch: values.subbranch[0],
         unity: credential?.user.subdivisionShortName || "",
       },
-      nearWorkMeta.workId
+      nearWorkMeta.id
     );
 
     form.resetFields();

@@ -31,19 +31,19 @@ export function addTitleSheet({
   // Наименование дирекции
   titleSheet.getCell("B7").value = "Дирекция по энергообеспечению";
   titleSheet.mergeCells("B8:D8");
-  titleSheet.getCell("B8").value = session?.user.directionShortName;
+  titleSheet.getCell("B8").value = ppr?.directionShortName;
   titleSheet.getCell("B8").border = BLACK_BORDER_BOTTOM;
 
   // Наименование дистанции
   titleSheet.getCell("B9").value = "Дистанция электроснабжения";
   titleSheet.mergeCells("B10:D10");
-  titleSheet.getCell("B10").value = session?.user.distanceShortName;
+  titleSheet.getCell("B10").value = ppr?.distanceShortName;
   titleSheet.getCell("B10").border = BLACK_BORDER_BOTTOM;
 
   // Наименование подразделения
   titleSheet.getCell("B11").value = "Подразделение";
   titleSheet.mergeCells("B12:D12");
-  titleSheet.getCell("B12").value = session?.user.subdivisionShortName;
+  titleSheet.getCell("B12").value = ppr?.subdivisionShortName;
   titleSheet.getCell("B12").border = BLACK_BORDER_BOTTOM;
 
   // Графа "СОГЛАСОВАНО"

@@ -5,14 +5,14 @@ import { MinusOutlined } from "@ant-design/icons";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { useNotificationProvider } from "@/1shared/providers/notificationProvider";
-import { deletePprWork as deletePprWorkFromServer, TPprDataWorkId } from "@/2entities/ppr";
+import { TWorkingManId, deleteWorkingMan as deleteWorkingManFromServer } from "@/2entities/ppr";
 
-interface IDeleteWorkButtonProps {
-  workId: TPprDataWorkId;
+interface IDeleteWorkingManButtonProps {
+  id: TWorkingManId;
 }
 
-export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
-  const { deleteWork } = usePpr();
+export const DeleteWorkingManButton: FC<IDeleteWorkingManButtonProps> = ({ id }) => {
+  const { deleteWorkingMan } = usePpr();
 
   const [isLoading, startTransition] = useTransition();
 
@@ -20,16 +20,16 @@ export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
 
   const handleClick = async () => {
     startTransition(async () => {
-      if (typeof workId === "number") {
-        const response = await deletePprWorkFromServer(workId);
+      if (typeof id === "number") {
+        const response = await deleteWorkingManFromServer(id);
 
         toast(response, response.type);
 
         if (response.type !== "error") {
-          deleteWork(workId);
+          deleteWorkingMan(id);
         }
       } else {
-        deleteWork(workId);
+        deleteWorkingMan(id);
       }
     });
   };

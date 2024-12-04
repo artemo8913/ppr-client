@@ -1,4 +1,5 @@
 import React, { MutableRefObject } from "react";
+import clsx from "clsx";
 
 import { TableCellMemo } from "@/1shared/ui/table";
 
@@ -8,6 +9,7 @@ interface IHeaderCellProps {
   colSpan?: number;
   isVertical?: boolean;
   style?: React.CSSProperties;
+  className?: string;
   cellRef?: MutableRefObject<HTMLTableCellElement | null> | null;
 }
 
@@ -15,7 +17,7 @@ function HeaderCell(props: IHeaderCellProps) {
   return (
     <th
       ref={props.cellRef}
-      className="border border-black"
+      className={clsx("border border-black", props.className)}
       rowSpan={props.rowSpan}
       colSpan={props.colSpan}
       style={props.style}
