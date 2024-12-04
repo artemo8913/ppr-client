@@ -156,10 +156,10 @@ export const pprsWorkDataTable = mysqlTable("pprs_data", {
   measure: varchar("measure", { length: 128 }).notNull(),
   total_count: varchar("total_count", { length: 16 }).notNull(),
   entry_year: varchar("entry_year", { length: 16 }).notNull(),
-  periodicity_normal: varchar("periodicity_normal", { length: 10 }).notNull(),
-  periodicity_fact: varchar("periodicity_fact", { length: 10 }).notNull(),
+  periodicity_normal: varchar("periodicity_normal", { length: 16 }).notNull(),
+  periodicity_fact: varchar("periodicity_fact", { length: 16 }).notNull(),
   last_maintenance_year: varchar("last_maintenance_year", { length: 16 }).notNull(),
-  norm_of_time: double("norm_of_time", { precision: 6, scale: 3 }).notNull(),
+  norm_of_time: double("norm_of_time", { precision: 7, scale: 3 }).notNull(),
   norm_of_time_document: varchar("norm_of_time_name_full", { length: 256 }).notNull(),
   unity: varchar("unity", { length: 16 }).notNull(),
   // Запланированные объемы работ

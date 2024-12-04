@@ -16,7 +16,7 @@ export interface ITableCellProps {
 }
 
 const TEXTAREA_BASIC_ROWS_COUNT = 4;
-const INPUT_BASIC_MAX_LENGTH = 8;
+const INPUT_BASIC_MAX_LENGTH = 12;
 
 const TableCell: FC<ITableCellProps> = (props) => {
   const { cellType = "none", value, type, isVertical = false, onBlur, className } = props;
