@@ -33,18 +33,20 @@ function getValue(pprData: IPprData, field: keyof IPprData, isCorrectedView: boo
 
 interface IPprTableCellProps extends ITableCellProps {
   pprData: IPprData;
+  workOrder?: string;
   field: keyof IPprData;
+  isPprInUserControl?: boolean;
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
   updatePprTableCell: (workId: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
-  isPprInUserControl?: boolean;
 }
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
-  pprData,
   field,
-  updatePprTableCell,
+  pprData,
+  workOrder,
   planCellRef,
   isPprInUserControl,
+  updatePprTableCell,
   ...otherProps
 }) => {
   const pprSettings = usePprTableSettings();
@@ -56,12 +58,14 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isBgNotTransparent = isPlanWorkPeriodField || isPlanTimePeriodField;
 
+  const isWorkNameField = field === "name";
+
   const hasCommonWorkBacklight =
-    Boolean(pprData.common_work_id) && field === "name" && pprSettings.isBacklightCommonWork;
+    Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightCommonWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
-  const isFieldWithControl = field === "name" && isPprInUserControl;
+  const isFieldWithControl = isWorkNameField && isPprInUserControl;
 
   const isCorrectedView =
     pprSettings.correctionView === "CORRECTED_PLAN" || pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS";
@@ -104,16 +108,22 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
         </div>
       ) : (
         <PprWorkUpdateControl
+          note={pprData.note}
           workId={pprData.id}
           branch={pprData.branch}
           subbranch={pprData.subbranch}
-          note={pprData.note}
-          isWorkApproved={pprData.is_work_aproved}
           isShowControl={isFieldWithControl}
+          isWorkApproved={pprData.is_work_aproved}
         >
-          <TableCell {...otherProps} onBlur={handleChange} value={value} />
-          {Boolean(pprData.note && field === "name") && (
-            <span className="font-semibold">{` (прим. ${pprData.note})`}</span>
+          {isWorkNameField && <span className="float-left pr-1">{workOrder}</span>}
+          <TableCell
+            {...otherProps}
+            className={clsx(isWorkNameField && "!inline")}
+            onBlur={handleChange}
+            value={value}
+          />
+          {Boolean(pprData.note && isWorkNameField) && (
+            <span className="font-semibold block">{` (прим. ${pprData.note})`}</span>
           )}
         </PprWorkUpdateControl>
       )}

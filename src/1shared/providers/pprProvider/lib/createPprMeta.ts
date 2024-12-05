@@ -62,6 +62,7 @@ export interface IPprMeta {
       subbranch: IBranchDefaultMeta;
     };
   };
+  worksOrder: string[];
   subbranchesList: string[];
   totalValues: TTotalFieldsValues;
 }
@@ -81,10 +82,14 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   } = {};
   const subbranchesSet = new Set<string>();
 
+  const worksOrder: string[] = [];
+
   const worksTotalValue: TPprDataFieldsTotalValues = {};
   const workingMansTotalValues: TWorkingManFieldsTotalValues = {};
 
   const totalValues: TTotalFieldsValues = { works: worksTotalValue, peoples: workingMansTotalValues };
+
+  let tempWorkOrder = 1;
 
   let tempBranchMeta: IBranchMeta = {
     workIds: new Set(),
@@ -123,6 +128,9 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   }
 
   function updateTempSubbranchMeta(subbranchName: string, index: number, isBranchChange?: boolean) {
+    // Обнуляем счетчик порядкового номера работы внутри подкатегории
+    tempWorkOrder = 1;
+
     tempSubbranchMeta = {
       workIds: new Set(),
       indexToPlaceTitle: index,
@@ -190,6 +198,10 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
     // Добавить id работы в SET подкатегории
     tempSubbranchMeta.workIds.add(pprData.id);
+
+    // Добавить порядковый номер работы в перечень
+    worksOrder.push(`${tempSubbranchMeta.orderIndex}${tempWorkOrder}`);
+    tempWorkOrder++;
   });
 
   // Счиатаем общие чел.-ч по запланированным трудовым ресурсам
@@ -206,6 +218,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     branchesMeta,
     branchesAndSubbrunchesOrder,
     subbranchesList: Array.from(subbranchesSet),
+    worksOrder,
     totalValues,
   };
 }
