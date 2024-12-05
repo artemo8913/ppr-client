@@ -28,6 +28,7 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
       <p>Дорога {ppr.directionShortName}</p>
       <p>Предприятие {ppr.distanceShortName}</p>
       <p>Цех {ppr.subdivisionShortName}</p>
+      <p className="text-center font-bold m-4">УТВЕРЖДАЮ: _______________________ Д.А.Грицак</p>
       <h2 className="text-center font-bold text-xl mb-2">
         ВЕДОМОСТЬ
         <br />

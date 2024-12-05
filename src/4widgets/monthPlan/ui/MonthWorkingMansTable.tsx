@@ -1,73 +1,28 @@
 "use client";
 import { FC } from "react";
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
-import { TTimePeriod } from "@/1shared/const/date";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IWorkingManYearPlan } from "@/2entities/ppr";
+import { TTimePeriod } from "@/1shared/const/date";
+import {
+  getFactTimeFieldByTimePeriod,
+  getFactWorkFieldByTimePeriod,
+  getPlanTimeFieldByTimePeriod,
+  getPlanWorkFieldByTimePeriod,
+  IPprData,
+} from "@/2entities/ppr";
 
-const columnHelper = createColumnHelper<
-  IWorkingManYearPlan & { expl_plan?: string; expl_fact?: string; expl_per?: string; all_per?: string }
->();
-
-const columns = (timePeriod: TTimePeriod) => [
-  columnHelper.group({
-    header: "Данные о работнике",
-    columns: [
-      columnHelper.accessor("full_name", {
-        header: "фамилия, имя, отчество",
-      }),
-      columnHelper.accessor("work_position", {
-        header: "должность, профессия, разряд рабочих, совмещаемые профессии",
-      }),
-      columnHelper.accessor("participation", {
-        header: "доля участия",
-      }),
-    ],
-  }),
-  columnHelper.group({
-    header: "настой часов, чел.-ч",
-    columns: [
-      columnHelper.accessor(`${timePeriod}_plan_norm_time`, {
-        header: "по норме",
-      }),
-      columnHelper.accessor(`${timePeriod}_plan_tabel_time`, {
-        header: "по табелю",
-      }),
-      columnHelper.accessor(`${timePeriod}_plan_time`, {
-        header: "нормированное задание",
-      }),
-    ],
-  }),
-  columnHelper.accessor("expl_plan", {
-    header: "Заданно по эксплуатационному плану, чел.-ч",
-  }),
-  columnHelper.group({
-    header: "Выполнение эксплуатационного плана",
-    columns: [
-      columnHelper.accessor("expl_fact", {
-        header: "чел.-ч",
-      }),
-      columnHelper.accessor("expl_per", {
-        header: "%",
-      }),
-    ],
-  }),
-  columnHelper.group({
-    header: "Выполнение эксплуатационного плана с учетом всех выполненных работ",
-    columns: [
-      columnHelper.accessor(`${timePeriod}_fact_time`, {
-        header: "факт, чел.-ч",
-        footer: "Итого: - ",
-      }),
-      columnHelper.accessor("all_per", {
-        header: "%",
-        footer: "100%",
-      }),
-    ],
-  }),
-];
+function getWorkingMansMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
+  return [
+    "name",
+    "measure",
+    getPlanWorkFieldByTimePeriod(timePeriod),
+    "norm_of_time",
+    getPlanTimeFieldByTimePeriod(timePeriod),
+    getFactWorkFieldByTimePeriod(timePeriod),
+    getFactTimeFieldByTimePeriod(timePeriod),
+  ];
+}
 
 interface IMonthWorkingMansTableProps {}
 
@@ -76,49 +31,51 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = () => {
 
   const { currentTimePeriod } = usePprTableSettings();
 
-  const table = useReactTable({
-    data: ppr?.workingMans || [],
-    columns: columns(currentTimePeriod),
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   return (
-    <div className="overflow-auto">
-      <table className="shadow-lg">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th className="border border-black text-center" key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td className="border border-black text-center" key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <td className="border border-black font-bold text-center" key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
-      </table>
-    </div>
+    <table className="shadow-lg">
+      <thead>
+        <tr className="*:border *:border-black">
+          <th colSpan={3}>Данные о работнике</th>
+          <th colSpan={3}>Настой часов</th>
+          <th rowSpan={2}>Заданно по эксплуатационному плану, чел.-ч</th>
+          <th colSpan={2}>Выполнение эксплуатационного плана</th>
+          <th colSpan={2}>Выполнение эксплуатационного плана с учетом всех выполненных работ</th>
+        </tr>
+        <tr className="*:border *:border-black">
+          <th>фамилия, имя, отчество</th>
+          <th>должность, профессия, разряд рабочих, совмещаемые профессии</th>
+          <th>доля участия</th>
+          <th>по норме</th>
+          <th>по табелю</th>
+          <th>нормированное задание</th>
+          <th>чел.-ч</th>
+          <th>%</th>
+          <th>факт, чел.-ч</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      {/* <tbody>
+        {table.getRowModel().rows.map((row) => (
+          <tr key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <td className="border border-black text-center" key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        {table.getFooterGroups().map((footerGroup) => (
+          <tr key={footerGroup.id}>
+            {footerGroup.headers.map((header) => (
+              <td className="border border-black font-bold text-center" key={header.id} colSpan={header.colSpan}>
+                {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tfoot> */}
+    </table>
   );
 };
