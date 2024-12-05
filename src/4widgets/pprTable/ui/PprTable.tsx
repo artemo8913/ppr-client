@@ -139,13 +139,14 @@ export const PprTable: FC<IPprTableProps> = () => {
               </>
             )}
             <PprTableDataRowMemo
-              pprData={pprData}
               key={pprData.id}
+              pprData={pprData}
               fields={allFields}
-              getColumnSettingsForField={getColumnSettingsForField}
-              isPprInUserControl={isPprInUserControl}
               planCellRef={planCellRef}
+              workOrder={pprMeta.worksOrder[index]}
+              isPprInUserControl={isPprInUserControl}
               updatePprTableCell={updatePprTableCell}
+              getColumnSettingsForField={getColumnSettingsForField}
             />
             {index === ppr?.data.length - 1 && (
               <>

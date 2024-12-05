@@ -234,6 +234,7 @@ export function addYearPlanSheet({
 
     row.getCell("name").value = {
       richText: [
+        { text: `${pprMeta.worksOrder[index]} ` },
         { text: pprData.name },
         { text: pprData.note ? `\n(прим. ${pprData.note})` : "", font: { bold: true } },
       ],

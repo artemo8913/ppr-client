@@ -104,6 +104,7 @@ const PprContext = createContext<IPprContext>({
     branchesAndSubbrunchesOrder: {},
     subbranchesList: [],
     totalValues: { peoples: {}, works: {} },
+    worksOrder: [],
   },
 });
 
@@ -869,6 +870,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     branchesAndSubbrunchesOrder: {},
     subbranchesList: [],
     totalValues: { peoples: {}, works: {} },
+    worksOrder: []
   };
 
   if (ppr) {
