@@ -100,11 +100,13 @@ const PprContext = createContext<IPprContext>({
   fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
   pprMeta: {
-    branchesMeta: [],
-    branchesAndSubbrunchesOrder: {},
-    subbranchesList: [],
-    totalValues: { peoples: {}, works: {} },
     worksOrder: [],
+    worksRowSpan: [],
+    branchesMeta: [],
+    subbranchesList: [],
+    worksOrderForRowSpan: [],
+    branchesAndSubbrunchesOrder: {},
+    totalValues: { peoples: {}, works: {} },
   },
 });
 
@@ -175,6 +177,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
               norm_of_time: pprData?.norm_of_time,
               norm_of_time_document: pprData?.norm_of_time_document,
               unity: pprData?.unity,
+              note: pprData?.note,
             };
             return pprData;
           })
@@ -866,11 +869,13 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
    */
   let pprMeta: IPprMeta = {
+    worksOrder: [],
     branchesMeta: [],
-    branchesAndSubbrunchesOrder: {},
+    worksRowSpan: [],
     subbranchesList: [],
+    worksOrderForRowSpan: [],
+    branchesAndSubbrunchesOrder: {},
     totalValues: { peoples: {}, works: {} },
-    worksOrder: []
   };
 
   if (ppr) {

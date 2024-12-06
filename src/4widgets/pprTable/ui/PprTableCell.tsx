@@ -32,6 +32,7 @@ function getValue(pprData: IPprData, field: keyof IPprData, isCorrectedView: boo
 }
 
 interface IPprTableCellProps extends ITableCellProps {
+  rowSpan?: number;
   pprData: IPprData;
   workOrder?: string;
   field: keyof IPprData;
@@ -42,6 +43,7 @@ interface IPprTableCellProps extends ITableCellProps {
 
 export const PprTableCell: FC<IPprTableCellProps> = ({
   field,
+  rowSpan,
   pprData,
   workOrder,
   planCellRef,
@@ -60,12 +62,14 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isWorkNameField = field === "name";
 
+  const isUniteWorkName = pprSettings.isUniteSameWorks && isWorkNameField;
+
   const hasCommonWorkBacklight =
     Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightCommonWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
-  const isFieldWithControl = isWorkNameField && isPprInUserControl;
+  const isFieldWithControl = isWorkNameField && isPprInUserControl && !pprSettings.isUniteSameWorks;
 
   const isCorrectedView =
     pprSettings.correctionView === "CORRECTED_PLAN" || pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS";
@@ -91,8 +95,13 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     updatePprTableCell(pprData.id, field, newValue, pprData.is_work_aproved);
   };
 
+  if (rowSpan === 0 && isUniteWorkName) {
+    return null;
+  }
+
   return (
     <td
+      rowSpan={isUniteWorkName && rowSpan ? rowSpan : undefined}
       className={clsx(
         style.PprTableCell,
         quartalNumber && style[`Q${quartalNumber}`],
