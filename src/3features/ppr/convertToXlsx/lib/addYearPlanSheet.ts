@@ -202,6 +202,8 @@ export function addYearPlanSheet({
     lastRowIndex++;
   }
 
+  const dataCells: ExcelJS.Cell[] = [];
+
   // Добавить данные в таблицу
   ppr.data.map((pprData, index) => {
     // Создание ячеек-заголовков категорий и подкатегорий, а также итоговых значений
@@ -234,11 +236,13 @@ export function addYearPlanSheet({
 
     row.getCell("name").value = {
       richText: [
-        { text: `${pprMeta.worksOrder[index]} ` },
+        { text: `${pprMeta.worksOrderForRowSpan[index]} ` },
         { text: pprData.name },
         { text: pprData.note ? `\n(прим. ${pprData.note})` : "", font: { bold: true } },
       ],
     };
+
+    dataCells.push(row.getCell("name"));
 
     lastRowIndex = row.number;
 
@@ -267,6 +271,16 @@ export function addYearPlanSheet({
       const lastSubbranch = lastBranch.subbranches.slice(-1)[0];
       createTotalRow(lastSubbranch, `Итого по пункту ${lastSubbranch.orderIndex}`);
       createTotalRow(lastBranch, "Итого по разделам 1-3");
+    }
+  });
+
+  dataCells.forEach((cell, index) => {
+    const rowNumber = Number(cell.row);
+
+    const rowDiff = pprMeta.worksRowSpan[index] - 1;
+
+    if (rowDiff > 0) {
+      yearPlanSheet.mergeCells(`F${rowNumber}:F${rowNumber + rowDiff}`);
     }
   });
 

@@ -8,6 +8,7 @@ import { PprTableCell } from "./PprTableCell";
 import { checkIsFieldVertical } from "../lib/pprTableStylesHelper";
 
 interface IPprTableDataRowProps {
+  rowSpan?: number;
   pprData: IPprData;
   workOrder?: string;
   fields: (keyof IPprData)[];
@@ -23,6 +24,7 @@ export const PprTableDataRow: FC<IPprTableDataRowProps> = (props) => {
       {props.fields.map((field) => (
         <PprTableCell
           field={field}
+          rowSpan={props.rowSpan}
           pprData={props.pprData}
           workOrder={props.workOrder}
           key={props.pprData.id + field}
