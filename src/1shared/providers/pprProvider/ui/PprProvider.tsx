@@ -100,9 +100,12 @@ const PprContext = createContext<IPprContext>({
   fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
   pprMeta: {
+    worksOrder: [],
+    worksRowSpan: [],
     branchesMeta: [],
-    branchesAndSubbrunchesOrder: {},
     subbranchesList: [],
+    worksOrderForRowSpan: [],
+    branchesAndSubbrunchesOrder: {},
     totalValues: { peoples: {}, works: {} },
   },
 });
@@ -174,6 +177,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
               norm_of_time: pprData?.norm_of_time,
               norm_of_time_document: pprData?.norm_of_time_document,
               unity: pprData?.unity,
+              note: pprData?.note,
             };
             return pprData;
           })
@@ -260,6 +264,9 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             newPprData.year_plan_work.final += newPprData[periodField].final;
           }
 
+          newPprData.year_plan_work.original = roundToFixed(newPprData.year_plan_work.original);
+          newPprData.year_plan_work.final = roundToFixed(newPprData.year_plan_work.final);
+
           const planTimeField = getPlanTimeFieldByPlanWorkField(field);
 
           newPprData[planTimeField].final = newPprData[planTimeField].original = roundToFixed(
@@ -295,6 +302,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             newPprData.year_fact_work += newPprData[periodField];
           }
 
+          newPprData.year_fact_work = roundToFixed(newPprData.year_fact_work);
+
           const factNormTimeField = getFactTimeFieldByFactWorkField(field);
           newPprData[factNormTimeField] = roundToFixed(newPprData.norm_of_time * newPprData[field]);
           newPprData.year_fact_norm_time = roundToFixed(newPprData.year_fact_work * newPprData.norm_of_time);
@@ -327,6 +336,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             newPprData.year_fact_time += newPprData[periodField];
           }
 
+          newPprData.year_fact_time = roundToFixed(newPprData.year_fact_time);
+
           return newPprData;
         }),
       };
@@ -357,6 +368,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             for (const periodField of FACT_TIME_FIELDS) {
               newPprData.year_fact_time += newPprData[periodField];
             }
+
+            newPprData.year_fact_time = roundToFixed(newPprData.year_fact_time);
           }
 
           return newPprData;
@@ -417,6 +430,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             newPprData.year_plan_work.final += newPprData[periodField].final;
           }
 
+          newPprData.year_plan_work.final = roundToFixed(newPprData.year_plan_work.final);
+
           const planTimeField = getPlanTimeFieldByPlanWorkField(field);
 
           newPprData[planTimeField].final = roundToFixed(newPprData.norm_of_time * newPprData[field].final);
@@ -471,6 +486,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             newPprData[field][transferSumType] = newTransfers?.reduce((sum, val) => sum + val.value, 0) || 0;
 
             for (const planWorkField of PLAN_WORK_FIELDS) {
+              //TODO: исправить. Если year_plan_work не будет первым, то всё обнулится. Вынести обнуление выше
               if (planWorkField === "year_plan_work") {
                 newPprData.year_plan_work.final = 0;
                 continue;
@@ -853,9 +869,12 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
    */
   let pprMeta: IPprMeta = {
+    worksOrder: [],
     branchesMeta: [],
-    branchesAndSubbrunchesOrder: {},
+    worksRowSpan: [],
     subbranchesList: [],
+    worksOrderForRowSpan: [],
+    branchesAndSubbrunchesOrder: {},
     totalValues: { peoples: {}, works: {} },
   };
 
