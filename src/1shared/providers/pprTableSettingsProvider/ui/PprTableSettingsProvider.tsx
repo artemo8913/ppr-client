@@ -48,7 +48,7 @@ const INIT_SETTINGS: IPprTableSettings = {
   tableWidthPercent: 100,
   fontSizePx: 12,
   headerHeightPx: 350,
-  isUniteSameWorks: false,
+  isUniteSameWorks: true,
   isBacklightCommonWork: false,
 };
 

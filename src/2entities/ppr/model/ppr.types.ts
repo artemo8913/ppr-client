@@ -153,7 +153,7 @@ export interface IPprData
   is_work_aproved: boolean;
   branch: TWorkBranch;
   subbranch: string;
-  note?: string | null;
+  note: string;
   name: string;
   location: string;
   line_class: string;

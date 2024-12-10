@@ -62,14 +62,18 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isWorkNameField = field === "name";
 
-  const isUniteWorkName = pprSettings.isUniteSameWorks && isWorkNameField;
+  const isLocationField = field === "location";
+
+  const isUniteWorkName = pprSettings.isUniteSameWorks;
 
   const hasCommonWorkBacklight =
     Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightCommonWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
-  const isFieldWithControl = isWorkNameField && isPprInUserControl && !pprSettings.isUniteSameWorks;
+  const isFieldWithControl =
+    isPprInUserControl &&
+    ((isWorkNameField && !isUniteWorkName) || (isWorkNameField && isUniteWorkName && rowSpan === 1) || isLocationField);
 
   const isCorrectedView =
     pprSettings.correctionView === "CORRECTED_PLAN" || pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS";
@@ -95,13 +99,13 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     updatePprTableCell(pprData.id, field, newValue, pprData.is_work_aproved);
   };
 
-  if (rowSpan === 0 && isUniteWorkName) {
+  if (rowSpan === 0 && isUniteWorkName && isWorkNameField) {
     return null;
   }
 
   return (
     <td
-      rowSpan={isUniteWorkName && rowSpan ? rowSpan : undefined}
+      rowSpan={isUniteWorkName && isWorkNameField && rowSpan ? rowSpan : undefined}
       className={clsx(
         style.PprTableCell,
         quartalNumber && style[`Q${quartalNumber}`],

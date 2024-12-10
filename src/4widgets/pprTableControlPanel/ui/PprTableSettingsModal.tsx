@@ -55,8 +55,8 @@ export default function PprTableSettingsModal() {
           <div>Подсветить работы, выбранные из общего перечня работ</div>
           <PprTableBacklightCommonWork />
         </div>
-        <div className="flex justify-start gap-2">
-          <div>Объединять работы с одинаковым наименованием (без возможности добавлять/удалять работы) </div>
+        <div className="flex justify-between items-center">
+          <div>Объединять работы с одинаковым наименованием</div>
           <PprTableCombineSameWork />
         </div>
       </Modal>
