@@ -81,5 +81,13 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
 export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
   const { isLoading } = usePprSearchTransition();
 
-  return <Table loading={isLoading} dataSource={data} columns={columns} rowKey="id" />;
+  return (
+    <Table
+      pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: [5, 10, 50, 100] }}
+      loading={isLoading}
+      dataSource={data}
+      columns={columns}
+      rowKey="id"
+    />
+  );
 };
