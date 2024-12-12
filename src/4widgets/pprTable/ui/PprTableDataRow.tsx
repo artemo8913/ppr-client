@@ -20,7 +20,7 @@ interface IPprTableDataRowProps {
 
 export const PprTableDataRow: FC<IPprTableDataRowProps> = (props) => {
   return (
-    <tr>
+    <tr className="hover:shadow-zinc-500 hover:shadow-inner">
       {props.fields.map((field) => (
         <PprTableCell
           field={field}
