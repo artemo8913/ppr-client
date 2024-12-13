@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { FC, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, FC, useCallback, useEffect, useMemo, useState } from "react";
 import Button from "antd/es/button";
 import { Table as TableAntd, TableProps } from "antd";
 import Search, { SearchProps } from "antd/es/input/Search";
@@ -10,6 +10,7 @@ import { Key, TableRowSelection } from "antd/es/table/interface";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { ICommonWork } from "@/2entities/commonWork";
 import { IPprData, TWorkBranch } from "@/2entities/ppr";
+import TextArea from "antd/es/input/TextArea";
 
 interface IInitialValues {
   branch: TWorkBranch;
@@ -27,6 +28,7 @@ interface IWorkTableProps {
 interface ISelectedWork extends Partial<ICommonWork> {
   branch: TWorkBranch;
   subbranch?: string;
+  note?: string;
 }
 
 const CLEAN_SELECTED_WORK: ISelectedWork = { branch: "exploitation" };
@@ -63,6 +65,8 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
 
   const [selectedWork, setSelectedWork] = useState<ISelectedWork>(props.initialValues);
 
+  const [note, setNote] = useState<string>("");
+
   const selectedBranch = useMemo(() => selectedWork.branch, [selectedWork.branch]);
 
   const handleSelectBranch = (value: TWorkBranch) =>
@@ -76,6 +80,8 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
     setSelectedWork((prev) => {
       return { ...prev, subbranch: tags[0] };
     });
+
+  const handleChangeNote = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value), []);
 
   const onSearch: SearchProps["onSearch"] = (value: string) => {
     if (value) {
@@ -91,6 +97,7 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
     }
 
     props.handleAddWork({
+      note,
       name: selectedWork.name,
       branch: selectedWork.branch,
       measure: selectedWork.measure,
@@ -122,6 +129,8 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
 
   return (
     <div className="flex flex-col gap-2">
+      <Search allowClear onSearch={onSearch} placeholder="Найти по наименованию" className="flex-1" />
+      <TableAntd rowSelection={rowSelectionProp} dataSource={dataSource} columns={COLUMNS} rowKey={"id"} />
       <div className="flex gap-4 items-center">
         Категория работ:
         <Select
@@ -140,8 +149,7 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
           options={props.subbranchOptions}
         />
       </div>
-      <Search allowClear onSearch={onSearch} placeholder="Найти по наименованию" className="flex-1" />
-      <TableAntd rowSelection={rowSelectionProp} dataSource={dataSource} columns={COLUMNS} rowKey={"id"} />
+      <TextArea placeholder="Примечание" value={note} onChange={handleChangeNote} />
       <Button
         className="m-auto"
         onClick={handleFinish}

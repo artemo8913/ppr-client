@@ -15,6 +15,7 @@ import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
 interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {
   branch: TWorkBranch;
   subbranch: string[];
+  note: string;
 }
 
 interface IInitialValues extends Partial<Omit<ICommonWork, "id">> {
@@ -37,6 +38,7 @@ export const CreateWorkForm: FC<IWorkCreateNewWorkFormProps> = (props) => {
   const handleFinish = (values: ICommonWorkExtended) => {
     props.handleAddWork({
       name: values.name,
+      note: values.note,
       branch: values.branch,
       measure: values.measure,
       subbranch: values.subbranch[0],
@@ -92,6 +94,9 @@ export const CreateWorkForm: FC<IWorkCreateNewWorkFormProps> = (props) => {
         rules={[{ required: true, message: "Введите документ, регламинтирующий норму времени" }]}
       >
         <Input />
+      </FormItem>
+      <FormItem<ICommonWorkExtended> label="Примечание" name="note">
+        <TextArea />
       </FormItem>
       <FormItem<ICommonWorkExtended>
         label="Раздел ППР (категория работ)"
