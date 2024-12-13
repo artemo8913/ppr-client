@@ -7,13 +7,13 @@ import { SettingOutlined } from "@ant-design/icons";
 import {
   PprTableSelectFilterPlanFact,
   PprTableSelectFilterTimePeriod,
-} from "@/3features/pprTableSettings/selectColumnsFilter";
-import { PprTableSelectCorrectionView } from "@/3features/pprTableSettings/selectCorrectionView";
-import { PprTableSelectWidth } from "@/3features/pprTableSettings/selectWidth";
-import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontSize";
-import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
-import { PprTableCombineSameWork } from "@/3features/pprTableSettings/combineWorkWithSameName";
-import { PprTableBacklightCommonWork } from "@/3features/pprTableSettings/backlightCommonWork";
+  PprTableBacklightCommonWork,
+  PprTableCombineSameWork,
+  PprTableSelectCorrectionView,
+  PprTableSelectFontSize,
+  PprTableSelectHeaderHeight,
+  PprTableSelectWidth,
+} from "@/3features/pprTableSettings";
 
 export default function PprTableSettingsModal() {
   const [isOpen, setIsModalOpen] = useState(false);

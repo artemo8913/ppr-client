@@ -5,7 +5,7 @@ import { usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
 import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
-import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings/selectTimePeriod";
+import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings";
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
 import { FillWorkingManPlanTime } from "@/3features/pprWorkingMans/fillWorkingManPlanTime";
 import { PprTableCopyFactNormTimeToFactTime } from "@/3features/ppr/copyFactNormTimeToFactTime";

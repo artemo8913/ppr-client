@@ -8,8 +8,8 @@ import { useWorkModal } from "@/1shared/providers/pprWorkModalProvider";
 import { ICommonWork } from "@/2entities/commonWork";
 import { IPprData, TWorkBranch } from "@/2entities/ppr";
 
-import { CreateWorkForm } from "./CreateWorkForm";
-import { SelectWorkTable } from "./SelectWorkTable";
+import { CreateWorkForm } from "../form/CreateWorkForm";
+import { SelectWorkTable } from "../form/SelectWorkTable";
 
 const BRANCH_INITIAL_VALUE: TWorkBranch = "exploitation";
 
