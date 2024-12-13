@@ -4,7 +4,7 @@ import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { useWorkModal } from "@/1shared/providers/workModalProvider";
+import { useWorkModal } from "@/1shared/providers/pprWorkModalProvider";
 import { ICommonWork } from "@/2entities/commonWork";
 import { IPprData, TWorkBranch } from "@/2entities/ppr";
 
@@ -18,7 +18,7 @@ interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
 }
 
 export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
-  const { closeModal, isOpen, nearWorkMeta } = useWorkModal();
+  const { closeAddWorkModal, isOpenAddWorkModal, workMeta } = useWorkModal();
 
   const {
     addWork,
@@ -26,7 +26,7 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
   } = usePpr();
 
   const handleAddWork = (newWorkData: Partial<IPprData>) => {
-    addWork(newWorkData, nearWorkMeta.id);
+    addWork(newWorkData, workMeta.id);
   };
 
   const subbranchOptions = subbranchesList?.map((subbranch) => {
@@ -34,8 +34,8 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
   });
 
   const initialSubbranches = {
-    branch: nearWorkMeta.branch || BRANCH_INITIAL_VALUE,
-    subbranch: nearWorkMeta.subbranch ? nearWorkMeta.subbranch : "",
+    branch: workMeta.branch || BRANCH_INITIAL_VALUE,
+    subbranch: workMeta.subbranch ? workMeta.subbranch : "",
   };
 
   const initialValues = {
@@ -43,7 +43,7 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
   };
 
   return (
-    <Modal title="Выберите работу" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
+    <Modal title="Выберите работу" width={1024} open={isOpenAddWorkModal} onCancel={closeAddWorkModal} footer={null}>
       <Tabs
         defaultActiveKey="1"
         items={[
@@ -53,7 +53,7 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
             children: (
               <SelectWorkTable
                 data={data}
-                onFinish={closeModal}
+                onFinish={closeAddWorkModal}
                 handleAddWork={handleAddWork}
                 initialValues={initialSubbranches}
                 subbranchOptions={subbranchOptions}
@@ -65,7 +65,7 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
             key: "2",
             children: (
               <CreateWorkForm
-                onFinish={closeModal}
+                onFinish={closeAddWorkModal}
                 handleAddWork={handleAddWork}
                 initialValues={initialValues}
                 subbranchOptions={subbranchOptions}

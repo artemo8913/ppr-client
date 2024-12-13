@@ -4,7 +4,7 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
-import { useWorkModal } from "@/1shared/providers/workModalProvider";
+import { useWorkModal } from "@/1shared/providers/pprWorkModalProvider";
 import { IPprData } from "@/2entities/ppr";
 
 interface IAddWorkButtonProps {
@@ -16,7 +16,7 @@ interface IAddWorkButtonProps {
 }
 
 export const AddWorkButton: FC<IAddWorkButtonProps> = ({ nearWork, label, type, size = "small", shape = "circle" }) => {
-  const { openModal } = useWorkModal();
+  const { openAddWorkModal: openModal } = useWorkModal();
 
   return (
     <Button
