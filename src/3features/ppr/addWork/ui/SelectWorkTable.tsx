@@ -1,22 +1,27 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import Search, { SearchProps } from "antd/es/input/Search";
-import { Key, TableRowSelection } from "antd/es/table/interface";
-import { Table as TableAntd, TableProps } from "antd";
+import { FC, useEffect, useMemo, useState } from "react";
 import Button from "antd/es/button";
-import Select from "antd/es/select";
+import { Table as TableAntd, TableProps } from "antd";
+import Search, { SearchProps } from "antd/es/input/Search";
+import Select, { DefaultOptionType } from "antd/es/select";
+import { Key, TableRowSelection } from "antd/es/table/interface";
 
-import { INearWorkMeta } from "@/1shared/providers/workModalProvider";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
-import { usePpr } from "@/1shared/providers/pprProvider";
 import { ICommonWork } from "@/2entities/commonWork";
-import { TWorkBranch } from "@/2entities/ppr";
+import { IPprData, TWorkBranch } from "@/2entities/ppr";
+
+interface IInitialValues {
+  branch: TWorkBranch;
+  subbranch: string;
+}
 
 interface IWorkTableProps {
-  nearWorkMeta: INearWorkMeta;
   data: ICommonWork[];
   onFinish?: () => void;
+  initialValues: IInitialValues;
+  subbranchOptions?: DefaultOptionType[];
+  handleAddWork: (newWork: Partial<IPprData>) => void;
 }
 
 interface ISelectedWork extends Partial<ICommonWork> {
@@ -49,54 +54,28 @@ const COLUMNS: TableProps<ICommonWork>["columns"] = [
   },
 ];
 
-export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
-  const initialValues = useMemo(
-    () => ({
-      branch: props.nearWorkMeta.branch || CLEAN_SELECTED_WORK.branch,
-      subbranch: props.nearWorkMeta.subbranch,
-    }),
-    [props.nearWorkMeta.branch, props.nearWorkMeta.subbranch]
-  );
+export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
+  const { data: credential } = useSession();
 
   const [dataSource, setDataSource] = useState(props.data);
 
-  const { data: credential } = useSession();
-
-  const { addWork, pprMeta } = usePpr();
-
-  const { subbranchesList } = pprMeta;
-
-  const subbranchOptions = useMemo(
-    () =>
-      subbranchesList?.map((subbranch) => {
-        return { value: subbranch, label: subbranch };
-      }),
-    [subbranchesList]
-  );
-
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
-  const [selectedWork, setSelectedWork] = useState<ISelectedWork>(initialValues);
+  const [selectedWork, setSelectedWork] = useState<ISelectedWork>(props.initialValues);
 
   const selectedBranch = useMemo(() => selectedWork.branch, [selectedWork.branch]);
 
-  const handleSelectBranch = useCallback(
-    (value: TWorkBranch) =>
-      setSelectedWork((prev) => {
-        return { ...prev, branch: value };
-      }),
-    []
-  );
+  const handleSelectBranch = (value: TWorkBranch) =>
+    setSelectedWork((prev) => {
+      return { ...prev, branch: value };
+    });
 
   const selectedSubbranch = useMemo(() => [selectedWork.subbranch].filter(Boolean), [selectedWork.subbranch]);
 
-  const handleSelectSubbranch = useCallback(
-    (tags: (string | undefined)[]) =>
-      setSelectedWork((prev) => {
-        return { ...prev, subbranch: tags[0] };
-      }),
-    []
-  );
+  const handleSelectSubbranch = (tags: (string | undefined)[]) =>
+    setSelectedWork((prev) => {
+      return { ...prev, subbranch: tags[0] };
+    });
 
   const onSearch: SearchProps["onSearch"] = (value: string) => {
     if (value) {
@@ -111,42 +90,35 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
       return;
     }
 
-    addWork(
-      {
-        common_work_id: selectedWork.id,
-        name: selectedWork.name,
-        branch: selectedWork.branch,
-        subbranch: selectedWork.subbranch,
-        measure: selectedWork.measure,
-        norm_of_time: selectedWork.normOfTime,
-        norm_of_time_document: selectedWork.normOfTimeNameFull,
-        unity: credential?.user.subdivisionShortName || "",
-      },
-      props.nearWorkMeta.id
-    );
+    props.handleAddWork({
+      name: selectedWork.name,
+      branch: selectedWork.branch,
+      measure: selectedWork.measure,
+      common_work_id: selectedWork.id,
+      subbranch: selectedWork.subbranch,
+      norm_of_time: selectedWork.normOfTime,
+      unity: credential?.user.subdivisionShortName || "",
+      norm_of_time_document: selectedWork.normOfTimeNameFull,
+    });
+
     setSelectedRowKeys([]);
     setSelectedWork({ ...CLEAN_SELECTED_WORK, subbranch: selectedWork.subbranch });
 
-    if (props.onFinish) {
-      props.onFinish();
-    }
+    props.onFinish && props.onFinish();
+  };
+
+  const rowSelectionProp: TableRowSelection<ICommonWork> = {
+    type: "radio",
+    onChange: (selectedKeys: Key[], selectedRows: ICommonWork[]) => {
+      setSelectedRowKeys(selectedKeys);
+      setSelectedWork((prev) => ({ ...prev, ...selectedRows[0] }));
+    },
+    selectedRowKeys: selectedRowKeys,
   };
 
   useEffect(() => {
-    setSelectedWork(initialValues);
-  }, [initialValues]);
-
-  const rowSelectionProp: TableRowSelection<ICommonWork> = useMemo(
-    () => ({
-      type: "radio",
-      onChange: (selectedKeys: Key[], selectedRows: ICommonWork[]) => {
-        setSelectedRowKeys(selectedKeys);
-        setSelectedWork((prev) => ({ ...prev, ...selectedRows[0] }));
-      },
-      selectedRowKeys: selectedRowKeys,
-    }),
-    [selectedRowKeys]
-  );
+    setSelectedWork(props.initialValues);
+  }, [props.initialValues]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -165,7 +137,7 @@ export const WorkSelectTable: FC<IWorkTableProps> = (props) => {
           maxCount={1}
           value={selectedSubbranch}
           onChange={handleSelectSubbranch}
-          options={subbranchOptions}
+          options={props.subbranchOptions}
         />
       </div>
       <Search allowClear onSearch={onSearch} placeholder="Найти по наименованию" className="flex-1" />

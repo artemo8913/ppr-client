@@ -1,80 +1,69 @@
 "use client";
 import { FC, useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
-import Input from "antd/es/input";
-import Select from "antd/es/select";
 import Form from "antd/es/form";
+import Input from "antd/es/input";
+import Button from "antd/es/button";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
-import Button from "antd/es/button";
+import Select, { DefaultOptionType } from "antd/es/select";
 
-import { INearWorkMeta } from "@/1shared/providers/workModalProvider";
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { TWorkBranch } from "@/2entities/ppr";
+import { IPprData, TWorkBranch } from "@/2entities/ppr";
 import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
-
-interface IWorkCreateNewWorkFormProps {
-  onFinish?: () => void;
-  nearWorkMeta: INearWorkMeta;
-}
 
 interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {
   branch: TWorkBranch;
   subbranch: string[];
 }
 
-const BRANCH_INITIAL_VALUE: TWorkBranch = "exploitation";
+interface IInitialValues extends Partial<Omit<ICommonWork, "id">> {
+  branch: TWorkBranch;
+  subbranch: string;
+}
 
-export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, nearWorkMeta }) => {
+interface IWorkCreateNewWorkFormProps {
+  onFinish?: () => void;
+  initialValues: IInitialValues;
+  subbranchOptions?: DefaultOptionType[];
+  handleAddWork: (newWork: Partial<IPprData>) => void;
+}
+
+export const CreateWorkForm: FC<IWorkCreateNewWorkFormProps> = (props) => {
   const [form] = Form.useForm<ICommonWorkExtended>();
 
   const { data: credential } = useSession();
 
-  const { addWork, pprMeta } = usePpr();
-
-  const { subbranchesList } = pprMeta;
-
-  const subbranchOptions = subbranchesList?.map((subbranch) => {
-    return { value: subbranch, label: subbranch };
-  });
-
   const handleFinish = (values: ICommonWorkExtended) => {
-    addWork(
-      {
-        name: values.name,
-        measure: values.measure,
-        norm_of_time: values.normOfTime,
-        norm_of_time_document: values.normOfTimeNameFull,
-        branch: values.branch,
-        subbranch: values.subbranch[0],
-        unity: credential?.user.subdivisionShortName || "",
-      },
-      nearWorkMeta.id
-    );
+    props.handleAddWork({
+      name: values.name,
+      branch: values.branch,
+      measure: values.measure,
+      subbranch: values.subbranch[0],
+      norm_of_time: values.normOfTime,
+      norm_of_time_document: values.normOfTimeNameFull,
+      unity: credential?.user.subdivisionShortName || "",
+    });
 
     form.resetFields();
-    onFinish && onFinish();
+
+    props.onFinish && props.onFinish();
   };
 
-  const initialValues = useMemo(() => {
-    return {
-      branch: nearWorkMeta.branch || BRANCH_INITIAL_VALUE,
-      subbranch: nearWorkMeta.subbranch ? [nearWorkMeta.subbranch] : [],
-    };
-  }, [nearWorkMeta.branch, nearWorkMeta.subbranch]);
-
   useEffect(() => {
-    form.setFieldsValue(initialValues);
-  }, [form, initialValues]);
+    form.setFieldsValue({
+      ...props.initialValues,
+      subbranch: props.initialValues.subbranch ? [props.initialValues.subbranch] : [],
+    });
+  }, [form, props.initialValues]);
 
   return (
     <Form<ICommonWorkExtended>
       form={form}
+      autoComplete="off"
       name="create_new_work"
       onFinish={handleFinish}
-      initialValues={initialValues}
-      autoComplete="off"
+      initialValues={props.initialValues}
     >
       <FormItem<ICommonWorkExtended>
         label="Наименование"
@@ -116,7 +105,7 @@ export const WorkCreateForm: FC<IWorkCreateNewWorkFormProps> = ({ onFinish, near
         name="subbranch"
         rules={[{ required: true, message: "Выберите подраздел работ" }]}
       >
-        <Select<string> mode="tags" maxCount={1} options={subbranchOptions} />
+        <Select<string> mode="tags" maxCount={1} options={props.subbranchOptions} />
       </FormItem>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
