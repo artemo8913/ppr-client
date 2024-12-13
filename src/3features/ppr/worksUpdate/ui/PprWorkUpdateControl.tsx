@@ -2,7 +2,7 @@
 import { FC, memo, ReactNode } from "react";
 
 import { TableCellControlWrapper } from "@/1shared/ui/table";
-import { TPprDataWorkId, TWorkBranch } from "@/2entities/ppr";
+import { IPprData } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
@@ -12,39 +12,27 @@ import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
 import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
 
 interface ITableCellWithWorkControlProps {
-  workId: TPprDataWorkId;
-  branch?: TWorkBranch;
-  subbranch?: string;
-  note?: string | null;
+  work: IPprData;
   children?: ReactNode;
-  isWorkApproved?: boolean;
   isShowControl?: boolean;
 }
 
-const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({
-  workId,
-  branch,
-  subbranch,
-  note,
-  children,
-  isWorkApproved,
-  isShowControl,
-}) => {
+const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({ work, children, isShowControl }) => {
   return (
     <TableCellControlWrapper
       isShowControl={isShowControl}
       controlItems={
         <>
-          {!isWorkApproved && (
+          {!work.is_work_aproved && (
             <>
-              <IncreaseWorkPositionButton workId={workId} />
-              <DecreaseWorkPositionButton workId={workId} />
-              <EditWorkButton workId={workId} branch={branch} note={note} />
-              <DeleteWorkButton workId={workId} />
+              <IncreaseWorkPositionButton workId={work.id} />
+              <DecreaseWorkPositionButton workId={work.id} />
+              <EditWorkButton workId={work.id} branch={work.branch} note={work.note} />
+              <DeleteWorkButton workId={work.id} />
             </>
           )}
-          <AddWorkButton nearWorkMeta={{ branch, subbranch, id: workId }} />
-          <CopyWorkButton workId={workId} />
+          <AddWorkButton nearWork={work} />
+          <CopyWorkButton workId={work.id} />
         </>
       }
     >

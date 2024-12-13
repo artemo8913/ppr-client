@@ -4,29 +4,24 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
-import { INearWorkMeta, useWorkModal } from "@/1shared/providers/workModalProvider";
+import { useWorkModal } from "@/1shared/providers/workModalProvider";
+import { IPprData } from "@/2entities/ppr";
 
 interface IAddWorkButtonProps {
-  nearWorkMeta?: INearWorkMeta;
+  nearWork?: Partial<IPprData>;
   label?: string;
   size?: SizeType;
   shape?: "default" | "circle" | "round";
   type?: "default" | "link" | "text" | "primary" | "dashed";
 }
 
-export const AddWorkButton: FC<IAddWorkButtonProps> = ({
-  nearWorkMeta,
-  label,
-  type,
-  size = "small",
-  shape = "circle",
-}) => {
+export const AddWorkButton: FC<IAddWorkButtonProps> = ({ nearWork, label, type, size = "small", shape = "circle" }) => {
   const { openModal } = useWorkModal();
 
   return (
     <Button
       onClick={() => {
-        openModal(nearWorkMeta);
+        openModal(nearWork);
       }}
       type={type}
       size={size}

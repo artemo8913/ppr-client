@@ -1,1 +1,1 @@
-export { WorkModal } from "./ui/WorkModal";
+export { AddWorkModal } from "./ui/AddWorkModal";

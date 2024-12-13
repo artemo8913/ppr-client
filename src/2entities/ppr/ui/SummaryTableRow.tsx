@@ -1,5 +1,4 @@
 import { FC } from "react";
-import clsx from "clsx";
 
 import { TableCellMemo } from "@/1shared/ui/table";
 
