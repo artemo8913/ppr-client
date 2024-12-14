@@ -5,38 +5,55 @@ import { IPprData } from "@/2entities/ppr";
 
 interface IWorkModalProps {
   isOpenAddWorkModal: boolean;
-  workMeta: Partial<IPprData>;
-  openAddWorkModal: (nearWork?: Partial<IPprData>) => void;
+  isOpenEditWorkModal: boolean;
+  workMeta: IPprData | null;
   closeAddWorkModal: () => void;
+  closeEditWorkModal: () => void;
+  openAddWorkModal: (nearWork?: IPprData) => void;
+  openEditWorkModal: (work: IPprData) => void;
 }
-const DEFAULT_VALUE: boolean = false;
 
 const ModalContext = createContext<IWorkModalProps>({
-  workMeta: {},
-  isOpenAddWorkModal: DEFAULT_VALUE,
+  workMeta: null,
+  isOpenAddWorkModal: false,
+  isOpenEditWorkModal: false,
   openAddWorkModal: () => {},
   closeAddWorkModal: () => {},
+  openEditWorkModal: () => {},
+  closeEditWorkModal: () => {},
 });
 
 interface IWorkModalProviderProps extends PropsWithChildren {}
 
 export const PprWorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) => {
-  const [isOpenAddWorkModal, setIsOpenAddWorkModal] = useState(DEFAULT_VALUE);
+  const [isOpenAddWorkModal, setIsOpenAddWorkModal] = useState(false);
 
-  const [workMeta, setWorkMeta] = useState<Partial<IPprData>>({});
+  const [isOpenEditWorkModal, setIsOpenEditWorkModal] = useState(false);
 
-  const openAddWorkModal = useCallback((nearWorkMeta?: Partial<IPprData>) => {
+  const [workMeta, setWorkMeta] = useState<IPprData | null>(null);
+
+  const openAddWorkModal = useCallback((nearWorkMeta?: IPprData) => {
     if (nearWorkMeta) {
       setWorkMeta(nearWorkMeta);
     } else {
-      setWorkMeta({});
+      setWorkMeta(null);
     }
     setIsOpenAddWorkModal(true);
   }, []);
 
   const closeAddWorkModal = useCallback(() => {
-    setWorkMeta({});
+    setWorkMeta(null);
     setIsOpenAddWorkModal(false);
+  }, []);
+
+  const openEditWorkModal = useCallback((workMeta: IPprData) => {
+    setWorkMeta(workMeta);
+    setIsOpenEditWorkModal(true);
+  }, []);
+
+  const closeEditWorkModal = useCallback(() => {
+    setWorkMeta(null);
+    setIsOpenEditWorkModal(false);
   }, []);
 
   return (
@@ -44,8 +61,11 @@ export const PprWorkModalProvider: FC<IWorkModalProviderProps> = ({ children }) 
       value={{
         workMeta,
         isOpenAddWorkModal,
-        closeAddWorkModal,
+        isOpenEditWorkModal,
         openAddWorkModal,
+        closeAddWorkModal,
+        openEditWorkModal,
+        closeEditWorkModal,
       }}
     >
       {children}
