@@ -3,7 +3,7 @@ import { PprTableSettingsProvider } from "@/1shared/providers/pprTableSettingsPr
 import { PprWorkModalProvider } from "@/1shared/providers/pprWorkModalProvider";
 import { getPprTable } from "@/2entities/ppr";
 import { getCommonWorks } from "@/2entities/commonWork";
-import { AddWorkModal } from "@/3features/ppr/worksUpdate";
+import { AddWorkModal, EditWorkModal } from "@/3features/ppr/worksUpdate";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { PprPage } from "@/5pages/pprPage";
 
@@ -22,6 +22,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
           <PprTableControlPanel />
           <PprPage />
           <AddWorkModal data={works} />
+          <EditWorkModal data={works} />
         </PprProvider>
       </PprWorkModalProvider>
     </PprTableSettingsProvider>

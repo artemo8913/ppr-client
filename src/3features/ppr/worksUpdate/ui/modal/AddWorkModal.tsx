@@ -2,22 +2,21 @@
 import { FC } from "react";
 import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
+import { useSession } from "next-auth/react";
 
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { useWorkModal } from "@/1shared/providers/pprWorkModalProvider";
 import { ICommonWork } from "@/2entities/commonWork";
-import { IPprData, TWorkBranch } from "@/2entities/ppr";
+import { IPprBasicData } from "@/2entities/ppr";
 
-import { CreateWorkForm } from "../form/CreateWorkForm";
+import { EditWorkForm } from "../form/EditWorkForm";
 import { SelectWorkTable } from "../form/SelectWorkTable";
 
-const BRANCH_INITIAL_VALUE: TWorkBranch = "exploitation";
-
-interface IWorkModalProps extends React.ComponentProps<typeof Modal> {
+interface IAddWorkModalProps extends React.ComponentProps<typeof Modal> {
   data: ICommonWork[];
 }
 
-export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
+export const AddWorkModal: FC<IAddWorkModalProps> = ({ data }) => {
   const { closeAddWorkModal, isOpenAddWorkModal, workMeta } = useWorkModal();
 
   const {
@@ -25,21 +24,19 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
     pprMeta: { subbranchesList },
   } = usePpr();
 
-  const handleAddWork = (newWorkData: Partial<IPprData>) => {
-    addWork(newWorkData, workMeta.id);
+  const { data: credential } = useSession();
+
+  const handleAddWork = (newWorkData: Partial<IPprBasicData>) => {
+    addWork({ ...newWorkData, unity: credential?.user.subdivisionShortName || "" }, workMeta?.id);
   };
 
   const subbranchOptions = subbranchesList?.map((subbranch) => {
     return { value: subbranch, label: subbranch };
   });
 
-  const initialSubbranches = {
-    branch: workMeta.branch || BRANCH_INITIAL_VALUE,
-    subbranch: workMeta.subbranch ? workMeta.subbranch : "",
-  };
-
   const initialValues = {
-    ...initialSubbranches,
+    branch: workMeta?.branch || "exploitation",
+    subbranch: workMeta?.subbranch ? workMeta.subbranch : "",
   };
 
   return (
@@ -54,8 +51,8 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
               <SelectWorkTable
                 data={data}
                 onFinish={closeAddWorkModal}
-                handleAddWork={handleAddWork}
-                initialValues={initialSubbranches}
+                handleSubmit={handleAddWork}
+                initialValues={initialValues}
                 subbranchOptions={subbranchOptions}
               />
             ),
@@ -64,7 +61,7 @@ export const AddWorkModal: FC<IWorkModalProps> = ({ data }) => {
             label: "Добавить самостоятельно",
             key: "2",
             children: (
-              <CreateWorkForm
+              <EditWorkForm
                 onFinish={closeAddWorkModal}
                 handleAddWork={handleAddWork}
                 initialValues={initialValues}

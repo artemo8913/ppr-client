@@ -1,6 +1,5 @@
 "use client";
-import { FC, useEffect, useMemo } from "react";
-import { useSession } from "next-auth/react";
+import { FC, useEffect } from "react";
 import Form from "antd/es/form";
 import Input from "antd/es/input";
 import Button from "antd/es/button";
@@ -9,42 +8,42 @@ import TextArea from "antd/es/input/TextArea";
 import Select, { DefaultOptionType } from "antd/es/select";
 
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
-import { IPprData, TWorkBranch } from "@/2entities/ppr";
+import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
 
-interface ICommonWorkExtended extends Omit<ICommonWork, "id"> {
+export interface IEditWorkFormInitialValues extends Partial<Omit<ICommonWork, "id">> {
+  branch?: TWorkBranch;
+  subbranch?: string;
+  note?: string;
+}
+
+interface IEditWorkForm extends Omit<ICommonWork, "id"> {
   branch: TWorkBranch;
   subbranch: string[];
   note: string;
 }
 
-interface IInitialValues extends Partial<Omit<ICommonWork, "id">> {
-  branch: TWorkBranch;
-  subbranch: string;
-}
-
-interface IWorkCreateNewWorkFormProps {
+interface IEditWorkFormProps {
+  buttonLabel?: string;
   onFinish?: () => void;
-  initialValues: IInitialValues;
+  initialValues: IEditWorkFormInitialValues;
   subbranchOptions?: DefaultOptionType[];
-  handleAddWork: (newWork: Partial<IPprData>) => void;
+  handleAddWork: (newWork: Partial<IPprBasicData>) => void;
 }
 
-export const CreateWorkForm: FC<IWorkCreateNewWorkFormProps> = (props) => {
-  const [form] = Form.useForm<ICommonWorkExtended>();
+export const EditWorkForm: FC<IEditWorkFormProps> = (props) => {
+  const [form] = Form.useForm<IEditWorkForm>();
 
-  const { data: credential } = useSession();
-
-  const handleFinish = (values: ICommonWorkExtended) => {
+  const handleFinish = (values: IEditWorkForm) => {
     props.handleAddWork({
       name: values.name,
       note: values.note,
+      common_work_id: null,
       branch: values.branch,
       measure: values.measure,
       subbranch: values.subbranch[0],
       norm_of_time: values.normOfTime,
       norm_of_time_document: values.normOfTimeNameFull,
-      unity: credential?.user.subdivisionShortName || "",
     });
 
     form.resetFields();
@@ -55,57 +54,52 @@ export const CreateWorkForm: FC<IWorkCreateNewWorkFormProps> = (props) => {
   useEffect(() => {
     form.setFieldsValue({
       ...props.initialValues,
+      branch: props.initialValues.branch || "unforeseen",
       subbranch: props.initialValues.subbranch ? [props.initialValues.subbranch] : [],
     });
   }, [form, props.initialValues]);
 
   return (
-    <Form<ICommonWorkExtended>
-      form={form}
-      autoComplete="off"
-      name="create_new_work"
-      onFinish={handleFinish}
-      initialValues={props.initialValues}
-    >
-      <FormItem<ICommonWorkExtended>
+    <Form<IEditWorkForm> form={form} autoComplete="off" onFinish={handleFinish} initialValues={props.initialValues}>
+      <FormItem<IEditWorkForm>
         label="Наименование"
         name="name"
         rules={[{ required: true, message: "Введите наименование" }]}
       >
         <TextArea />
       </FormItem>
-      <FormItem<ICommonWorkExtended>
+      <FormItem<IEditWorkForm>
         label="Единица измерения"
         name="measure"
         rules={[{ required: true, message: "Введите единицу измерения" }]}
       >
         <Input />
       </FormItem>
-      <FormItem<ICommonWorkExtended>
+      <FormItem<IEditWorkForm>
         label="Норма времени"
         name="normOfTime"
         rules={[{ required: true, message: "Введите норму времени" }]}
       >
         <Input type="number" />
       </FormItem>
-      <FormItem<ICommonWorkExtended>
+      <FormItem<IEditWorkForm>
         label="Обоснование нормы времени"
         name="normOfTimeNameFull"
         rules={[{ required: true, message: "Введите документ, регламинтирующий норму времени" }]}
       >
         <Input />
       </FormItem>
-      <FormItem<ICommonWorkExtended> label="Примечание" name="note">
+      <FormItem<IEditWorkForm> label="Примечание" name="note">
         <TextArea />
       </FormItem>
-      <FormItem<ICommonWorkExtended>
+      <FormItem<IEditWorkForm>
         label="Раздел ППР (категория работ)"
         name="branch"
         rules={[{ required: true, message: "Выберите раздел работ" }]}
       >
         <Select<TWorkBranch> options={BRANCH_SELECT_OPTIONS} />
       </FormItem>
-      <FormItem<ICommonWorkExtended>
+      <FormItem<IEditWorkForm>
         label="Подраздел ППР (подраздел категории работ)"
         name="subbranch"
         rules={[{ required: true, message: "Выберите подраздел работ" }]}
@@ -114,7 +108,7 @@ export const CreateWorkForm: FC<IWorkCreateNewWorkFormProps> = (props) => {
       </FormItem>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
-          Добавить
+          {props.buttonLabel || "Добавить"}
         </Button>
       </Form.Item>
     </Form>

@@ -106,10 +106,14 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   let tempWorkRowSpan: {
     name: string;
     note?: string | null;
+    branch?: TWorkBranch;
+    subbranch?: string;
     indexStart: number;
   } = {
     name: "",
     note: "",
+    branch: "additional",
+    subbranch: "",
     indexStart: 0,
   };
 
@@ -163,10 +167,9 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     };
   }
 
-  function resetTempWorkCombine(indexStart: number, name: string, note?: string | null) {
+  function resetTempWorkCombine(indexStart: number, pprData: IPprData) {
     tempWorkRowSpan = {
-      name,
-      note,
+      ...pprData,
       indexStart,
     };
   }
@@ -207,8 +210,14 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     worksOrderForRowSpan.push(`${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`);
     tempWorkOrder++;
 
-    if (pprData.name !== tempWorkRowSpan.name || pprData.note !== tempWorkRowSpan.note) {
-      resetTempWorkCombine(index, pprData.name, pprData.note);
+    // Расчитать rowSpan для наименования
+    if (
+      pprData.name !== tempWorkRowSpan.name ||
+      pprData.note !== tempWorkRowSpan.note ||
+      pprData.branch !== tempWorkRowSpan.branch ||
+      pprData.subbranch !== tempWorkRowSpan.subbranch
+    ) {
+      resetTempWorkCombine(index, pprData);
       worksRowSpan[index] = 1;
       tempWorkOrderForRowSpan++;
     } else {
