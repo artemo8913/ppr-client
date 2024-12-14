@@ -1,6 +1,7 @@
 export type {
   IPpr,
   TPprShortInfo,
+  IPprBasicData,
   IPprData,
   TPprDataWorkId,
   TWorkingManId,
