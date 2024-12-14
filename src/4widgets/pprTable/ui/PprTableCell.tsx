@@ -113,7 +113,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
         !isBgNotTransparent && style.transparent,
         isPlanTimeField && style.bottom,
         hasWorkBacklight && style.backlight,
-        "hover:shadow-purple-400 hover:shadow-inner",
+        pprSettings.isBacklightRowAndCellOnHover && "hover:shadow-purple-400 hover:shadow-inner",
         isPlanOrFactWorkPeriodField && "font-bold"
       )}
     >

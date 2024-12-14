@@ -52,7 +52,7 @@ const INIT_SETTINGS: IPprTableSettings = {
   headerHeightPx: 350,
   isUniteSameWorks: true,
   isBacklightNotCommonWork: false,
-  isBacklightRowAndCellOnHover: false,
+  isBacklightRowAndCellOnHover: true,
 };
 
 const INIT_CONTEXT: IPprTableSettingsContext = {
