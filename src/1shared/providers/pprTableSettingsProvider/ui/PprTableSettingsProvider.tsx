@@ -23,7 +23,8 @@ interface IPprTableSettings {
   fontSizePx: number;
   headerHeightPx: number;
   isUniteSameWorks: boolean;
-  isBacklightCommonWork: boolean;
+  isBacklightNotCommonWork: boolean;
+  isBacklightRowAndCellOnHover: boolean;
 }
 
 export interface IPprTableSettingsContext extends IPprTableSettings {
@@ -35,7 +36,8 @@ export interface IPprTableSettingsContext extends IPprTableSettings {
   setFontSizePx: (fontSize: number) => void;
   setHeaderHeightPx: (headerHeightPx: number) => void;
   setIsUniteSameWorks: (isUniteSameWorks: boolean) => void;
-  setIsBacklightCommonWork: (isBacklightCommonWork: boolean) => void;
+  setIsBacklightNotCommonWork: (isBacklightNotCommonWork: boolean) => void;
+  setIsBacklightRowAndCellOnHover: (isBacklightRowAndCellOnHover: boolean) => void;
 }
 
 const INIT_SETTINGS: IPprTableSettings = {
@@ -49,7 +51,8 @@ const INIT_SETTINGS: IPprTableSettings = {
   fontSizePx: 12,
   headerHeightPx: 350,
   isUniteSameWorks: true,
-  isBacklightCommonWork: false,
+  isBacklightNotCommonWork: false,
+  isBacklightRowAndCellOnHover: false,
 };
 
 const INIT_CONTEXT: IPprTableSettingsContext = {
@@ -62,7 +65,8 @@ const INIT_CONTEXT: IPprTableSettingsContext = {
   setFontSizePx: () => {},
   setHeaderHeightPx: () => {},
   setIsUniteSameWorks: () => {},
-  setIsBacklightCommonWork: () => {},
+  setIsBacklightNotCommonWork: () => {},
+  setIsBacklightRowAndCellOnHover: () => {},
 };
 
 const PprTableSettingsContext = createContext<IPprTableSettingsContext>(INIT_CONTEXT);
@@ -130,8 +134,12 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     setPprTableSettings((prev) => ({ ...prev, isUniteSameWorks }));
   }, []);
 
-  const setIsBacklightCommonWork = useCallback((isBacklightCommonWork: boolean) => {
-    setPprTableSettings((prev) => ({ ...prev, isBacklightCommonWork }));
+  const setIsBacklightNotCommonWork = useCallback((isBacklightNotCommonWork: boolean) => {
+    setPprTableSettings((prev) => ({ ...prev, isBacklightNotCommonWork }));
+  }, []);
+
+  const setIsBacklightRowAndCellOnHover = useCallback((isBacklightRowAndCellOnHover: boolean) => {
+    setPprTableSettings((prev) => ({ ...prev, isBacklightRowAndCellOnHover }));
   }, []);
 
   return (
@@ -146,7 +154,8 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
         setFontSizePx,
         setHeaderHeightPx,
         setIsUniteSameWorks,
-        setIsBacklightCommonWork,
+        setIsBacklightNotCommonWork,
+        setIsBacklightRowAndCellOnHover,
       }}
     >
       {children}

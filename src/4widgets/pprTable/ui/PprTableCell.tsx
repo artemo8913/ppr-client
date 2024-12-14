@@ -1,11 +1,12 @@
 "use client";
-import { FC, memo, MutableRefObject, useCallback, useMemo } from "react";
+import { FC, MutableRefObject } from "react";
 import clsx from "clsx";
 
 import { getQuartal, getTimePeriodFromString } from "@/1shared/const/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {
+  checkIsPlanOrFactWorkField,
   checkIsPlanTimeField,
   checkIsPlanWorkField,
   checkIsWorkOrTimeField,
@@ -55,6 +56,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isPlanWorkPeriodField = checkIsPlanWorkField(field);
   const isPlanTimePeriodField = checkIsPlanTimeField(field);
+  const isPlanOrFactWorkPeriodField = checkIsPlanOrFactWorkField(field);
 
   const quartalNumber = getQuartal(getTimePeriodFromString(field));
 
@@ -66,8 +68,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isUniteWorkName = pprSettings.isUniteSameWorks;
 
-  const hasCommonWorkBacklight =
-    Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightCommonWork;
+  const hasWorkBacklight = !Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightNotCommonWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
@@ -111,7 +112,9 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
         quartalNumber && style[`Q${quartalNumber}`],
         !isBgNotTransparent && style.transparent,
         isPlanTimeField && style.bottom,
-        hasCommonWorkBacklight && style.backlight
+        hasWorkBacklight && style.backlight,
+        "hover:shadow-purple-400 hover:shadow-inner",
+        isPlanOrFactWorkPeriodField && "font-bold"
       )}
     >
       {isArrowsShow && isPlanWorkPeriodField ? (

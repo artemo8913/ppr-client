@@ -52,8 +52,12 @@ export default function PprTableSettingsModal() {
           <PprTableSelectFontSize />
         </div>
         <div className="flex justify-between items-center mb-4">
-          <div>Подсветить работы, выбранные из общего перечня работ</div>
+          <div>Подсветить работы, добавленные самостоятельно</div>
           <PprTableBacklightCommonWork />
+        </div>
+        <div className="flex justify-between items-center mb-4">
+          <div>Подсвечивать строку при наведении курсора</div>
+          {/* <PprTableBacklightCommonWork /> */}
         </div>
         <div className="flex justify-between items-center">
           <div>Объединять работы с одинаковым наименованием</div>
