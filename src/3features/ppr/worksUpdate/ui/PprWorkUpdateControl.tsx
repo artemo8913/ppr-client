@@ -7,9 +7,9 @@ import { IPprData } from "@/2entities/ppr";
 import { AddWorkButton } from "./AddWorkButton";
 import { DeleteWorkButton } from "./DeleteWorkButton";
 import { CopyWorkButton } from "./CopyWorkButton";
-import { EditWorkButton } from "./EditWorkButton";
 import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
 import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
+import { EditWorkButton } from "./EditWorkButton";
 
 interface ITableCellWithWorkControlProps {
   work: IPprData;
@@ -27,7 +27,7 @@ const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({ work, childr
             <>
               <IncreaseWorkPositionButton workId={work.id} />
               <DecreaseWorkPositionButton workId={work.id} />
-              <EditWorkButton workId={work.id} branch={work.branch} note={work.note} />
+              <EditWorkButton work={work} />
               <DeleteWorkButton workId={work.id} />
             </>
           )}

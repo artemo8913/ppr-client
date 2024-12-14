@@ -8,7 +8,7 @@ import { useWorkModal } from "@/1shared/providers/pprWorkModalProvider";
 import { IPprData } from "@/2entities/ppr";
 
 interface IAddWorkButtonProps {
-  nearWork?: Partial<IPprData>;
+  nearWork?: IPprData;
   label?: string;
   size?: SizeType;
   shape?: "default" | "circle" | "round";
@@ -16,12 +16,12 @@ interface IAddWorkButtonProps {
 }
 
 export const AddWorkButton: FC<IAddWorkButtonProps> = ({ nearWork, label, type, size = "small", shape = "circle" }) => {
-  const { openAddWorkModal: openModal } = useWorkModal();
+  const { openAddWorkModal } = useWorkModal();
 
   return (
     <Button
       onClick={() => {
-        openModal(nearWork);
+        openAddWorkModal(nearWork);
       }}
       type={type}
       size={size}
