@@ -1,9 +1,9 @@
 import { PprProvider } from "@/1shared/providers/pprProvider";
 import { PprTableSettingsProvider } from "@/1shared/providers/pprTableSettingsProvider";
-import { WorkModalProvider } from "@/1shared/providers/workModalProvider";
+import { PprWorkModalProvider } from "@/1shared/providers/pprWorkModalProvider";
 import { getPprTable } from "@/2entities/ppr";
 import { getCommonWorks } from "@/2entities/commonWork";
-import { WorkModal } from "@/3features/ppr/addWork";
+import { AddWorkModal, EditWorkModal } from "@/3features/ppr/worksUpdate";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { PprPage } from "@/5pages/pprPage";
 
@@ -17,13 +17,14 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
 
   return (
     <PprTableSettingsProvider>
-      <WorkModalProvider>
+      <PprWorkModalProvider>
         <PprProvider pprFromResponce={ppr}>
           <PprTableControlPanel />
           <PprPage />
-          <WorkModal data={works} />
+          <AddWorkModal data={works} />
+          <EditWorkModal data={works} />
         </PprProvider>
-      </WorkModalProvider>
+      </PprWorkModalProvider>
     </PprTableSettingsProvider>
   );
 }

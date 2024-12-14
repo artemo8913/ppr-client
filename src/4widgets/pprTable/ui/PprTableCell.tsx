@@ -1,6 +1,6 @@
 "use client";
-import { FC, MutableRefObject } from "react";
 import clsx from "clsx";
+import { FC, MutableRefObject } from "react";
 
 import { getQuartal, getTimePeriodFromString } from "@/1shared/const/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
@@ -123,14 +123,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
         </div>
       ) : (
-        <PprWorkUpdateControl
-          note={pprData.note}
-          workId={pprData.id}
-          branch={pprData.branch}
-          subbranch={pprData.subbranch}
-          isShowControl={isFieldWithControl}
-          isWorkApproved={pprData.is_work_aproved}
-        >
+        <PprWorkUpdateControl work={pprData} isShowControl={isFieldWithControl}>
           {isWorkNameField && <span className="float-left pr-1">{workOrder}</span>}
           <TableCell
             {...otherProps}

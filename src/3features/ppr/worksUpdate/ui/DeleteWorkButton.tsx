@@ -20,6 +20,12 @@ export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
 
   const handleClick = async () => {
     startTransition(async () => {
+      const answer = confirm("Вы уверены, что хотите удалить работу?");
+
+      if (!answer) {
+        return;
+      }
+
       if (typeof workId === "number") {
         const response = await deletePprWorkFromServer(workId);
 
