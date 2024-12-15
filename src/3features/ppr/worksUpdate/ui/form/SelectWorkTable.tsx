@@ -73,9 +73,25 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
 
   const handleChangeNote = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value), []);
 
-  const onSearch: SearchProps["onSearch"] = (value: string) => {
-    if (value) {
-      setDataSource(props.data.filter((commonWork) => commonWork.name.toLowerCase().includes(value.toLowerCase())));
+  const onSearch: SearchProps["onSearch"] = (searchValue: string) => {
+    if (searchValue) {
+      setDataSource(
+        props.data.filter((commonWork) => {
+          let result = false;
+          const manyPhrases = searchValue.toLowerCase().split(" ");
+
+          for (const onePhrase of manyPhrases) {
+            if (commonWork.name.toLowerCase().includes(onePhrase)) {
+              result = true;
+            } else {
+              result = false;
+              break;
+            }
+          }
+
+          return result;
+        })
+      );
     } else {
       setDataSource(props.data);
     }
@@ -126,7 +142,7 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <Search allowClear onSearch={onSearch} placeholder="Найти по наименованию" className="flex-1" />
+      <Search allowClear onSearch={onSearch} placeholder="Найти по наименованию" />
       <TableAntd
         pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: [5, 10, 50, 100] }}
         rowSelection={rowSelectionProp}
@@ -152,7 +168,14 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
           options={props.subbranchOptions}
         />
       </div>
-      <TextArea placeholder="Примечание" value={note} onChange={handleChangeNote} />
+      <TextArea
+        showCount
+        maxLength={256}
+        placeholder="Примечание"
+        allowClear
+        value={note}
+        onChange={handleChangeNote}
+      />
       <Button
         className="m-auto"
         onClick={handleFinish}
