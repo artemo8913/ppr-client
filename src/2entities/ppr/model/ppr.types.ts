@@ -142,28 +142,31 @@ export type TWorkBranch = "exploitation" | "additional" | "unforeseen";
 
 export type TPprDataWorkId = number | string;
 
-export interface IPprData
-  extends TPlanWorkPeriodsFields,
-    TWorkPlanTimePeriodsFields,
-    TFactWorkPeriodsFields,
-    TFactNormTimePeriodsFields,
-    TFactTimePeriodsFields {
+export interface IPprBasicData {
   id: TPprDataWorkId;
   common_work_id: number | null;
   is_work_aproved: boolean;
   branch: TWorkBranch;
   subbranch: string;
-  note?: string | null;
+  note: string;
   name: string;
-  location: string;
-  line_class: string;
   measure: string;
-  total_count: string;
-  entry_year: string;
   periodicity_normal: string;
   periodicity_fact: string;
-  last_maintenance_year: string;
   norm_of_time: number;
   norm_of_time_document: string;
+  location: string;
+  line_class: string;
+  total_count: string;
+  entry_year: string;
+  last_maintenance_year: string;
   unity: string;
 }
+
+export interface IPprData
+  extends IPprBasicData,
+    TPlanWorkPeriodsFields,
+    TWorkPlanTimePeriodsFields,
+    TFactWorkPeriodsFields,
+    TFactNormTimePeriodsFields,
+    TFactTimePeriodsFields {}

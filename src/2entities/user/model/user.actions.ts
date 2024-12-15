@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { db, usersTable } from "@/1shared/database";
 import { getDivisionsById } from "@/1shared/api/divisions.api";
 
-import { IUser } from "..";
+import { IUser } from "./user.types";
 
 export async function getUserData(id: number): Promise<IUser> {
   try {

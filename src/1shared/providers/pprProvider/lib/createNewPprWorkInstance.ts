@@ -19,6 +19,7 @@ export const createNewPprWorkInstance = (newData: Partial<IPprDataWithoutId>): I
     norm_of_time: 0,
     norm_of_time_document: "",
     unity: "",
+    note: "",
     year_plan_work: {
       original: 0,
       handCorrection: null,

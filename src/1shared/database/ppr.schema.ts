@@ -149,7 +149,7 @@ export const pprsWorkDataTable = mysqlTable("pprs_data", {
     .$type<TWorkBranch>()
     .notNull(),
   subbranch: varchar("subbranch", { length: 128 }).notNull(),
-  note: varchar("note", { length: 256 }),
+  note: varchar("note", { length: 256 }).notNull().default(""),
   name: varchar("name", { length: 256 }).notNull(),
   location: varchar("location", { length: 128 }).notNull(),
   line_class: varchar("line_class", { length: 16 }).notNull(),

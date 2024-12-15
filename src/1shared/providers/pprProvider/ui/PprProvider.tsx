@@ -1,5 +1,5 @@
 "use client";
-import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
 
 import { TMonth } from "@/1shared/const/date";
 import { roundToFixed } from "@/1shared/lib/math";
@@ -31,6 +31,7 @@ import {
   getPlanTabelTimeFieldByPlanNormTimeField,
   TPprDataWorkId,
   TWorkingManId,
+  IPprBasicData,
 } from "@/2entities/ppr";
 
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
@@ -42,6 +43,7 @@ export interface IPprContext {
   addWork: (newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId) => void;
   copyWork: (id: TPprDataWorkId) => void;
   deleteWork: (id: TPprDataWorkId) => void;
+  editWork: (workData: Partial<IPprBasicData>) => void;
   updateNormOfTime: (id: TPprDataWorkId, value: number) => void;
   updatePlanWork: (id: TPprDataWorkId, field: TPlanWorkPeriods, value: number) => void;
   updateFactWork: (id: TPprDataWorkId, field: TFactWorkPeriods, value: number) => void;
@@ -77,6 +79,7 @@ const PprContext = createContext<IPprContext>({
   addWork: () => {},
   copyWork: () => {},
   deleteWork: () => {},
+  editWork: () => {},
   updatePprData: () => {},
   updateNormOfTime: () => {},
   updatePlanWork: () => {},
@@ -184,6 +187,40 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           .slice(0, rowIndex + 1)
           .concat(createNewPprWorkInstance(newWork))
           .concat(prev.data.slice(rowIndex + 1)),
+      };
+    });
+  }, []);
+
+  const editWork = useCallback((workData: Partial<IPprBasicData>) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return {
+        ...prev,
+        data: prev.data.map((pprData) => {
+          if (pprData.id !== workData?.id) {
+            return pprData;
+          }
+
+          const newPprData = { ...pprData, ...workData };
+
+          //TODO: вынести в отдельную функцию расчет чел.-ч
+          for (const planWorkField of PLAN_WORK_FIELDS) {
+            const planTimeField = getPlanTimeFieldByPlanWorkField(planWorkField);
+            newPprData[planTimeField].original = roundToFixed(
+              newPprData.norm_of_time * newPprData[planWorkField].original
+            );
+            newPprData[planTimeField].final = roundToFixed(newPprData.norm_of_time * newPprData[planWorkField].final);
+          }
+
+          for (const factWorkField of FACT_WORK_FIELDS) {
+            const factTimeField = getFactTimeFieldByFactWorkField(factWorkField);
+            newPprData[factTimeField] = roundToFixed(newPprData.norm_of_time * newPprData[factWorkField]);
+          }
+
+          return newPprData;
+        }),
       };
     });
   }, []);
@@ -891,9 +928,10 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     <PprContext.Provider
       value={{
         ppr,
-        deleteWork,
         addWork,
         copyWork,
+        deleteWork,
+        editWork,
         updatePprData,
         updateNormOfTime,
         updatePlanWork,

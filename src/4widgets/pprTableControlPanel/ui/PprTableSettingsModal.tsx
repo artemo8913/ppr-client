@@ -7,13 +7,15 @@ import { SettingOutlined } from "@ant-design/icons";
 import {
   PprTableSelectFilterPlanFact,
   PprTableSelectFilterTimePeriod,
-} from "@/3features/pprTableSettings/selectColumnsFilter";
-import { PprTableSelectCorrectionView } from "@/3features/pprTableSettings/selectCorrectionView";
-import { PprTableSelectWidth } from "@/3features/pprTableSettings/selectWidth";
-import { PprTableSelectFontSize } from "@/3features/pprTableSettings/selectFontSize";
-import { PprTableSelectHeaderHeight } from "@/3features/pprTableSettings/selectHeaderHeight";
-import { PprTableCombineSameWork } from "@/3features/pprTableSettings/combineWorkWithSameName";
-import { PprTableBacklightCommonWork } from "@/3features/pprTableSettings/backlightCommonWork";
+  PprTableBacklightNotCommonWork,
+  PprTableCombineSameWork,
+  PprTableSelectCorrectionView,
+  PprTableSelectFontSize,
+  PprTableSelectHeaderHeight,
+  PprTableSelectWidth,
+  PprTableBacklightRowAndCellOnHover,
+  PprTableBacklightNotApprovedWork,
+} from "@/3features/pprTableSettings";
 
 export default function PprTableSettingsModal() {
   const [isOpen, setIsModalOpen] = useState(false);
@@ -52,11 +54,19 @@ export default function PprTableSettingsModal() {
           <PprTableSelectFontSize />
         </div>
         <div className="flex justify-between items-center mb-4">
-          <div>Подсветить работы, выбранные из общего перечня работ</div>
-          <PprTableBacklightCommonWork />
+          <div>Подсветить работы, добавленные самостоятельно</div>
+          <PprTableBacklightNotCommonWork />
         </div>
-        <div className="flex justify-start gap-2">
-          <div>Объединять работы с одинаковым наименованием (без возможности добавлять/удалять работы) </div>
+        <div className="flex justify-between items-center mb-4">
+          <div>Подсветить неутвержденные работы</div>
+          <PprTableBacklightNotApprovedWork />
+        </div>
+        <div className="flex justify-between items-center mb-4">
+          <div>Подсвечивать строку при наведении курсора</div>
+          <PprTableBacklightRowAndCellOnHover />
+        </div>
+        <div className="flex justify-between items-center">
+          <div>Объединять работы с одинаковым наименованием</div>
           <PprTableCombineSameWork />
         </div>
       </Modal>

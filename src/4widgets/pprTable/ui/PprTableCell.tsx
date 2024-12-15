@@ -1,11 +1,12 @@
 "use client";
-import { FC, memo, MutableRefObject, useCallback, useMemo } from "react";
 import clsx from "clsx";
+import { FC, MutableRefObject } from "react";
 
 import { getQuartal, getTimePeriodFromString } from "@/1shared/const/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {
+  checkIsPlanOrFactWorkField,
   checkIsPlanTimeField,
   checkIsPlanWorkField,
   checkIsWorkOrTimeField,
@@ -55,6 +56,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isPlanWorkPeriodField = checkIsPlanWorkField(field);
   const isPlanTimePeriodField = checkIsPlanTimeField(field);
+  const isPlanOrFactWorkPeriodField = checkIsPlanOrFactWorkField(field);
 
   const quartalNumber = getQuartal(getTimePeriodFromString(field));
 
@@ -62,14 +64,21 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isWorkNameField = field === "name";
 
-  const isUniteWorkName = pprSettings.isUniteSameWorks && isWorkNameField;
+  const isLocationField = field === "location";
 
-  const hasCommonWorkBacklight =
-    Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightCommonWork;
+  const isUniteWorkName = pprSettings.isUniteSameWorks;
+
+  const hasNotCommonWorkBacklight =
+    !Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightNotCommonWork;
+
+  const hasNotApprovedWorkBacklight =
+    !Boolean(pprData.is_work_aproved) && isWorkNameField && pprSettings.isBacklightNotApprovedWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
-  const isFieldWithControl = isWorkNameField && isPprInUserControl && !pprSettings.isUniteSameWorks;
+  const isFieldWithControl =
+    isPprInUserControl &&
+    ((isWorkNameField && !isUniteWorkName) || (isWorkNameField && isUniteWorkName && rowSpan === 1) || isLocationField);
 
   const isCorrectedView =
     pprSettings.correctionView === "CORRECTED_PLAN" || pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS";
@@ -95,19 +104,22 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     updatePprTableCell(pprData.id, field, newValue, pprData.is_work_aproved);
   };
 
-  if (rowSpan === 0 && isUniteWorkName) {
+  if (rowSpan === 0 && isUniteWorkName && isWorkNameField) {
     return null;
   }
 
   return (
     <td
-      rowSpan={isUniteWorkName && rowSpan ? rowSpan : undefined}
+      rowSpan={isUniteWorkName && isWorkNameField && rowSpan ? rowSpan : undefined}
       className={clsx(
         style.PprTableCell,
         quartalNumber && style[`Q${quartalNumber}`],
         !isBgNotTransparent && style.transparent,
         isPlanTimeField && style.bottom,
-        hasCommonWorkBacklight && style.backlight
+        hasNotCommonWorkBacklight && style.backlightNotCommonWork,
+        hasNotApprovedWorkBacklight && style.backlightNotApprovedWork,
+        pprSettings.isBacklightRowAndCellOnHover && "hover:shadow-purple-400 hover:shadow-inner",
+        isPlanOrFactWorkPeriodField && "font-bold"
       )}
     >
       {isArrowsShow && isPlanWorkPeriodField ? (
@@ -116,14 +128,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
           <TableCell {...otherProps} onBlur={handleChange} value={value} />
         </div>
       ) : (
-        <PprWorkUpdateControl
-          note={pprData.note}
-          workId={pprData.id}
-          branch={pprData.branch}
-          subbranch={pprData.subbranch}
-          isShowControl={isFieldWithControl}
-          isWorkApproved={pprData.is_work_aproved}
-        >
+        <PprWorkUpdateControl work={pprData} isShowControl={isFieldWithControl}>
           {isWorkNameField && <span className="float-left pr-1">{workOrder}</span>}
           <TableCell
             {...otherProps}

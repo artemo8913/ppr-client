@@ -1,0 +1,1 @@
+ALTER TABLE `pprs_data` MODIFY COLUMN `note` varchar(256) NOT NULL DEFAULT '';

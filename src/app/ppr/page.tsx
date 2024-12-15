@@ -36,12 +36,12 @@ export default async function PprPage({ searchParams }: IPprPageProps) {
   );
 
   return (
-    <Card size="small">
+    <Card className="overflow-auto">
       <PprSearchTransitionProvider>
         <PprSearch className="mb-4" divisions={divisions} />
         <PprInfoTable data={pprs} />
+        <CreatePprModal className="!block ml-auto" />
       </PprSearchTransitionProvider>
-      <CreatePprModal className="!block ml-auto" />
     </Card>
   );
 }
