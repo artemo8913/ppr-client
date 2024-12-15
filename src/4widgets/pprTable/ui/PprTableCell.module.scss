@@ -7,8 +7,16 @@ $column-number-cell-height: 20px;
     vertical-align: bottom;
   }
 
-  &.backlight {
+  &.backlightNotCommonWork {
     box-shadow: 0px 0px 20px inset yellow;
+
+    &.backlightNotApprovedWork {
+      box-shadow: 0px 0px 20px inset red;
+    }
+  }
+
+  &.backlightNotApprovedWork {
+    box-shadow: 0px 0px 20px inset pink;
   }
 
   &.Q1 {
@@ -46,13 +54,12 @@ $column-number-cell-height: 20px;
   z-index: 15;
 
   height: $column-number-cell-height;
-  
+
   border: solid 1px black;
   background-color: rgb(245, 245, 245);
   outline: black solid 2px;
   outline-offset: -1px;
-  
-  
+
   text-align: center;
   font-size: var(--sm-text);
 }

@@ -24,6 +24,7 @@ interface IPprTableSettings {
   headerHeightPx: number;
   isUniteSameWorks: boolean;
   isBacklightNotCommonWork: boolean;
+  isBacklightNotApprovedWork: boolean;
   isBacklightRowAndCellOnHover: boolean;
 }
 
@@ -37,6 +38,7 @@ export interface IPprTableSettingsContext extends IPprTableSettings {
   setHeaderHeightPx: (headerHeightPx: number) => void;
   setIsUniteSameWorks: (isUniteSameWorks: boolean) => void;
   setIsBacklightNotCommonWork: (isBacklightNotCommonWork: boolean) => void;
+  setIsBacklightNotApprovedWork: (isBacklightNotApprovedWork: boolean) => void;
   setIsBacklightRowAndCellOnHover: (isBacklightRowAndCellOnHover: boolean) => void;
 }
 
@@ -52,6 +54,7 @@ const INIT_SETTINGS: IPprTableSettings = {
   headerHeightPx: 350,
   isUniteSameWorks: true,
   isBacklightNotCommonWork: false,
+  isBacklightNotApprovedWork: false,
   isBacklightRowAndCellOnHover: true,
 };
 
@@ -66,6 +69,7 @@ const INIT_CONTEXT: IPprTableSettingsContext = {
   setHeaderHeightPx: () => {},
   setIsUniteSameWorks: () => {},
   setIsBacklightNotCommonWork: () => {},
+  setIsBacklightNotApprovedWork: () => {},
   setIsBacklightRowAndCellOnHover: () => {},
 };
 
@@ -138,6 +142,10 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     setPprTableSettings((prev) => ({ ...prev, isBacklightNotCommonWork }));
   }, []);
 
+  const setIsBacklightNotApprovedWork = useCallback((isBacklightNotApprovedWork: boolean) => {
+    setPprTableSettings((prev) => ({ ...prev, isBacklightNotApprovedWork }));
+  }, []);
+
   const setIsBacklightRowAndCellOnHover = useCallback((isBacklightRowAndCellOnHover: boolean) => {
     setPprTableSettings((prev) => ({ ...prev, isBacklightRowAndCellOnHover }));
   }, []);
@@ -155,6 +163,7 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
         setHeaderHeightPx,
         setIsUniteSameWorks,
         setIsBacklightNotCommonWork,
+        setIsBacklightNotApprovedWork,
         setIsBacklightRowAndCellOnHover,
       }}
     >
