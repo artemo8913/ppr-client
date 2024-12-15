@@ -5,6 +5,7 @@ import Input from "antd/es/input";
 import Button from "antd/es/button";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
+import TypedInputNumber from "antd/es/input-number";
 import Select, { DefaultOptionType } from "antd/es/select";
 
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
@@ -64,45 +65,45 @@ export const EditWorkForm: FC<IEditWorkFormProps> = (props) => {
       <FormItem<IEditWorkForm>
         label="Наименование"
         name="name"
-        rules={[{ required: true, message: "Введите наименование" }]}
+        rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >
-        <TextArea />
+        <TextArea showCount maxLength={256} />
       </FormItem>
       <FormItem<IEditWorkForm>
         label="Единица измерения"
         name="measure"
-        rules={[{ required: true, message: "Введите единицу измерения" }]}
+        rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >
-        <Input />
+        <Input showCount maxLength={128} />
       </FormItem>
       <FormItem<IEditWorkForm>
         label="Норма времени"
         name="normOfTime"
-        rules={[{ required: true, message: "Введите норму времени" }]}
+        rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >
-        <Input type="number" />
+        <TypedInputNumber style={{ width: "100%" }} min={0} max={9999.99} />
       </FormItem>
       <FormItem<IEditWorkForm>
         label="Обоснование нормы времени"
         name="normOfTimeNameFull"
-        rules={[{ required: true, message: "Введите документ, регламинтирующий норму времени" }]}
+        rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >
-        <Input />
+        <TextArea showCount maxLength={256} />
       </FormItem>
       <FormItem<IEditWorkForm> label="Примечание" name="note">
-        <TextArea />
+        <TextArea showCount maxLength={256} />
       </FormItem>
       <FormItem<IEditWorkForm>
         label="Раздел ППР (категория работ)"
         name="branch"
-        rules={[{ required: true, message: "Выберите раздел работ" }]}
+        rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >
         <Select<TWorkBranch> options={BRANCH_SELECT_OPTIONS} />
       </FormItem>
       <FormItem<IEditWorkForm>
         label="Подраздел ППР (подраздел категории работ)"
         name="subbranch"
-        rules={[{ required: true, message: "Выберите подраздел работ" }]}
+        rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >
         <Select<string> mode="tags" maxCount={1} options={props.subbranchOptions} />
       </FormItem>
