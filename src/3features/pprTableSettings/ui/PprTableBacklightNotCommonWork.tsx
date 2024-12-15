@@ -6,7 +6,7 @@ import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvide
 
 interface IPprTableBacklightCommonWorkProps {}
 
-export const PprTableBacklightCommonWork: FC<IPprTableBacklightCommonWorkProps> = () => {
+export const PprTableBacklightNotCommonWork: FC<IPprTableBacklightCommonWorkProps> = () => {
   const { isBacklightNotCommonWork, setIsBacklightNotCommonWork } = usePprTableSettings();
 
   const handleChange: CheckboxProps["onChange"] = (e) => {

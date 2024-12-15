@@ -68,7 +68,11 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isUniteWorkName = pprSettings.isUniteSameWorks;
 
-  const hasWorkBacklight = !Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightNotCommonWork;
+  const hasNotCommonWorkBacklight =
+    !Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightNotCommonWork;
+
+  const hasNotApprovedWorkBacklight =
+    !Boolean(pprData.is_work_aproved) && isWorkNameField && pprSettings.isBacklightNotApprovedWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
@@ -112,7 +116,8 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
         quartalNumber && style[`Q${quartalNumber}`],
         !isBgNotTransparent && style.transparent,
         isPlanTimeField && style.bottom,
-        hasWorkBacklight && style.backlight,
+        hasNotCommonWorkBacklight && style.backlightNotCommonWork,
+        hasNotApprovedWorkBacklight && style.backlightNotApprovedWork,
         pprSettings.isBacklightRowAndCellOnHover && "hover:shadow-purple-400 hover:shadow-inner",
         isPlanOrFactWorkPeriodField && "font-bold"
       )}

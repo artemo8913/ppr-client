@@ -7,14 +7,15 @@ import { SettingOutlined } from "@ant-design/icons";
 import {
   PprTableSelectFilterPlanFact,
   PprTableSelectFilterTimePeriod,
-  PprTableBacklightCommonWork,
+  PprTableBacklightNotCommonWork,
   PprTableCombineSameWork,
   PprTableSelectCorrectionView,
   PprTableSelectFontSize,
   PprTableSelectHeaderHeight,
   PprTableSelectWidth,
+  PprTableBacklightRowAndCellOnHover,
+  PprTableBacklightNotApprovedWork,
 } from "@/3features/pprTableSettings";
-import { PprTableBacklightRowAndCellOnHover } from "@/3features/pprTableSettings/ui/PprTableBacklightRowAndCellOnHover";
 
 export default function PprTableSettingsModal() {
   const [isOpen, setIsModalOpen] = useState(false);
@@ -54,7 +55,11 @@ export default function PprTableSettingsModal() {
         </div>
         <div className="flex justify-between items-center mb-4">
           <div>Подсветить работы, добавленные самостоятельно</div>
-          <PprTableBacklightCommonWork />
+          <PprTableBacklightNotCommonWork />
+        </div>
+        <div className="flex justify-between items-center mb-4">
+          <div>Подсветить неутвержденные работы</div>
+          <PprTableBacklightNotApprovedWork />
         </div>
         <div className="flex justify-between items-center mb-4">
           <div>Подсвечивать строку при наведении курсора</div>
