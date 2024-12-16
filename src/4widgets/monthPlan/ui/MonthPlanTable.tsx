@@ -68,7 +68,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
               {index in pprMeta.branchesAndSubbrunchesOrder &&
                 "branch" in pprMeta.branchesAndSubbrunchesOrder[index] && (
                   <tr>
-                    <td colSpan={columns.length} className="border font-bold border-black cursor-default">
+                    <td colSpan={10} className="border font-bold border-black cursor-default">
                       {pprMeta.branchesAndSubbrunchesOrder[index].branch!.orderIndex}{" "}
                       {translateRuPprBranchName(pprMeta.branchesAndSubbrunchesOrder[index].branch!.name)}
                     </td>
@@ -77,7 +77,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
               {index in pprMeta.branchesAndSubbrunchesOrder &&
                 "subbranch" in pprMeta.branchesAndSubbrunchesOrder[index] && (
                   <tr>
-                    <td colSpan={columns.length} className="border font-bold border-black cursor-default">
+                    <td colSpan={10} className="border font-bold border-black cursor-default">
                       {pprMeta.branchesAndSubbrunchesOrder[index].subbranch?.orderIndex}{" "}
                       {pprMeta.branchesAndSubbrunchesOrder[index].subbranch?.name}
                     </td>
@@ -95,13 +95,13 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
                   const showValue = value && typeof value === "object" ? value.final : value;
                   const note = field === "name" && pprData.note ? ` (прим. ${pprData.note})` : null;
 
-                  if (pprMeta.worksRowSpan[index] === 0) {
+                  if (field === "name" && pprMeta.worksRowSpan[index] === 0) {
                     return null;
                   }
 
                   return (
                     <td
-                      rowSpan={pprMeta.worksRowSpan[index]}
+                      rowSpan={field === "name" ? pprMeta.worksRowSpan[index] : undefined}
                       className="border border-black text-center"
                       key={pprData.id + field}
                     >
