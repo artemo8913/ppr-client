@@ -18,9 +18,12 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
   const { totalValues } = pprMeta;
 
   return (
-    <tfoot className="font-bold">
+    <tfoot className="font-bold sticky bottom-0 z-20 bg-neutral-100">
       <tr>
-        <td colSpan={summaryNameColSpan} className="border border-black">
+        <td
+          colSpan={summaryNameColSpan}
+          className={clsx("border border-black", "outline-black outline-1 outline outline-offset-[-1px] z-20")}
+        >
           <TableCellMemo value="Итого по разделам 1-3, чел.-ч" />
         </td>
         {fields.map((field) => {
@@ -37,20 +40,33 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
             isWorkAndPeoplesTimesMatch = false;
           }
           return (
-            <td key={field} className={clsx("border border-black", !isWorkAndPeoplesTimesMatch && "bg-red-300")}>
+            <td
+              key={field}
+              className={clsx(
+                "border border-black",
+                "outline-black outline-1 outline outline-offset-[-1px] z-20",
+                !isWorkAndPeoplesTimesMatch && "bg-red-300"
+              )}
+            >
               <TableCellMemo isVertical value={isFieldHaveTotalValueByWorks ? totalValues.works[field] : "-"} />
             </td>
           );
         })}
       </tr>
       <tr>
-        <td colSpan={summaryNameColSpan} className="border border-black">
+        <td
+          colSpan={summaryNameColSpan}
+          className={clsx("border border-black", "outline-black outline-1 outline outline-offset-[-1px] z-20")}
+        >
           <TableCellMemo value="Итого настой часов, чел.-ч" />
         </td>
         {fields.map((field) => {
           const isFieldHaveTotalValueByPeoples = checkIsPlanTimeField(field) || checkIsFactTimeField(field);
           return (
-            <td key={field} className="border border-black">
+            <td
+              key={field}
+              className={clsx("border border-black", "outline-black outline-1 outline outline-offset-[-1px] z-20")}
+            >
               <TableCellMemo isVertical value={isFieldHaveTotalValueByPeoples ? totalValues.peoples[field] : "-"} />
             </td>
           );
