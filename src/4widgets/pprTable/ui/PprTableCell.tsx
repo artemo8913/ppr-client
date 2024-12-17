@@ -87,7 +87,11 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS" ||
     pprSettings.correctionView === "INITIAL_PLAN_WITH_ARROWS";
 
-  let value = getValue(pprData, field, isCorrectedView) || "";
+  let value = getValue(pprData, field, isCorrectedView);
+
+  if (value === 0) {
+    value = "";
+  }
 
   const transfers: TTransfer[] = [];
 
@@ -106,6 +110,10 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   if (rowSpan === 0 && isUniteWorkName && isWorkNameField) {
     return null;
+  }
+
+  if (field === "jan_fact_work") {
+    debugger;
   }
 
   return (
