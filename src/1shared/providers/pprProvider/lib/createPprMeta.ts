@@ -54,14 +54,14 @@ export interface IBranchMeta extends IBranchDefaultMeta {
 }
 
 export interface IPprMeta {
-  worksOrder: string[];
+  worksOrder: { [id: TPprDataWorkId]: string };
+  worksOrderForRowSpan: { [id: TPprDataWorkId]: string };
   worksRowSpan: number[];
-  worksOrderForRowSpan: string[];
   subbranchesList: string[];
   branchesMeta: IBranchMeta[];
   totalValues: TTotalFieldsValues;
   branchesAndSubbrunchesOrder: {
-    [indexToPlace: number]: {
+    [id: TPprDataWorkId]: {
       branch?: IBranchMeta;
       subbranch: IBranchDefaultMeta;
     };
@@ -77,7 +77,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   const branchesMeta: IBranchMeta[] = [];
 
   const branchesAndSubbrunchesOrder: {
-    [indexToPlace: number]: {
+    [id: TPprDataWorkId]: {
       branch?: IBranchMeta;
       subbranch: IBranchDefaultMeta;
     };
@@ -85,9 +85,9 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   const subbranchesSet = new Set<string>();
 
-  const worksOrder: string[] = [];
+  const worksOrder: { [id: TPprDataWorkId]: string } = {};
 
-  const worksOrderForRowSpan: string[] = [];
+  const worksOrderForRowSpan: { [id: TPprDataWorkId]: string } = {};
 
   const worksRowSpan: number[] = [];
 
@@ -190,7 +190,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       subbranchesSet.add(tempSubbranchMeta.name);
 
       // Добавляем ссылки на категорию и подкатегорию работ в индексированный список
-      branchesAndSubbrunchesOrder[index] = { branch: tempBranchMeta, subbranch: tempSubbranchMeta };
+      branchesAndSubbrunchesOrder[pprData.id] = { branch: tempBranchMeta, subbranch: tempSubbranchMeta };
     } else if (pprData.subbranch !== tempSubbranchMeta.name) {
       // Инициируем новую сслыку на значения подкатегории работ
       updateTempSubbranchMeta(pprData.subbranch, index);
@@ -202,12 +202,12 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       subbranchesSet.add(tempSubbranchMeta.name);
 
       // Добавляем ссылку на подкатегорию работ в индексированный список
-      branchesAndSubbrunchesOrder[index] = { subbranch: tempSubbranchMeta };
+      branchesAndSubbrunchesOrder[pprData.id] = { subbranch: tempSubbranchMeta };
     }
 
     // Добавить порядковый номер работы в перечень
-    worksOrder.push(`${tempSubbranchMeta.orderIndex}${tempWorkOrder}`);
-    worksOrderForRowSpan.push(`${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`);
+    worksOrder[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrder}`;
+    worksOrderForRowSpan[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`;
     tempWorkOrder++;
 
     // Расчитать rowSpan для наименования

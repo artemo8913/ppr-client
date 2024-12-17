@@ -207,10 +207,10 @@ export function addYearPlanSheet({
   // Добавить данные в таблицу
   ppr.data.map((pprData, index) => {
     // Создание ячеек-заголовков категорий и подкатегорий, а также итоговых значений
-    if (index in branchesAndSubbrunchesOrder) {
+    if (pprData.id in branchesAndSubbrunchesOrder) {
       lastRowIndex++;
 
-      const { branch, subbranch } = branchesAndSubbrunchesOrder[index];
+      const { branch, subbranch } = branchesAndSubbrunchesOrder[pprData.id];
 
       if (subbranch.prev) {
         createTotalRow(subbranch.prev, `Итого по пункту ${subbranch.prev.orderIndex}`);
@@ -236,7 +236,7 @@ export function addYearPlanSheet({
 
     row.getCell("name").value = {
       richText: [
-        { text: `${pprMeta.worksOrderForRowSpan[index]} ` },
+        { text: `${pprMeta.worksOrderForRowSpan[pprData.id]} ` },
         { text: pprData.name },
         { text: pprData.note ? `\n(прим. ${pprData.note})` : "", font: { bold: true } },
       ],
