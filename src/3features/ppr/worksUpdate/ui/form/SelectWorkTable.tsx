@@ -14,7 +14,7 @@ import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 export interface ISelectedWork extends Partial<Omit<ICommonWork, "id">> {
   note?: string;
   id?: number | null;
-  branch?: TWorkBranch;
+  branch: TWorkBranch;
   subbranch?: string;
 }
 
@@ -59,6 +59,8 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
 
   const [note, setNote] = useState<string>(props.initialValues.note || "");
 
+  const [searchValue, setSearchValue] = useState<string>(props.initialValues.note || "");
+
   const handleSelectBranch = (value: TWorkBranch) =>
     setSelectedWork((prev) => {
       return { ...prev, branch: value };
@@ -73,7 +75,9 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
 
   const handleChangeNote = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value), []);
 
-  const onSearch: SearchProps["onSearch"] = (searchValue: string) => {
+  const handleSearchValue = useCallback((e: ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value), []);
+
+  const handleSearch: SearchProps["onSearch"] = (searchValue: string) => {
     if (searchValue) {
       setDataSource(
         props.data.filter((commonWork) => {
@@ -116,6 +120,7 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
     setSelectedRowKeys([]);
     setSelectedWork({ branch: selectedWork.branch, subbranch: selectedWork.subbranch });
     setNote("");
+    setSearchValue("");
 
     props.onFinish && props.onFinish();
   };
@@ -135,14 +140,28 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
 
     if (props.initialValues.id) {
       setSelectedRowKeys([props.initialValues.id]);
+      if (props.initialValues.name) {
+        setSearchValue(props.initialValues.name);
+        handleSearch(props.initialValues.name);
+      }
     } else {
       setSelectedRowKeys([]);
+      setSearchValue("");
+      handleSearch("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.initialValues]);
 
   return (
     <div className="flex flex-col gap-2">
-      <Search allowClear onSearch={onSearch} placeholder="Найти по наименованию" />
+      <Search
+        placeholder="Найти по наименованию"
+        allowClear
+        value={searchValue}
+        defaultValue={searchValue}
+        onSearch={handleSearch}
+        onChange={handleSearchValue}
+      />
       <TableAntd
         pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: [5, 10, 50, 100] }}
         rowSelection={rowSelectionProp}
@@ -168,6 +187,7 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
           options={props.subbranchOptions}
         />
       </div>
+      Примечание:
       <TextArea
         showCount
         maxLength={256}

@@ -112,10 +112,6 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     return null;
   }
 
-  if (field === "jan_fact_work") {
-    debugger;
-  }
-
   return (
     <td
       rowSpan={isUniteWorkName && isWorkNameField && rowSpan ? rowSpan : undefined}

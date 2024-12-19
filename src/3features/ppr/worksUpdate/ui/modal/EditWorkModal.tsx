@@ -38,7 +38,7 @@ export const EditWorkModal: FC<IEditModalProps> = ({ data }) => {
     id: workMeta?.common_work_id,
     normOfTime: workMeta?.norm_of_time,
     normOfTimeNameFull: workMeta?.norm_of_time_document,
-    branch: workMeta?.branch,
+    branch: workMeta?.branch || "exploitation",
     measure: workMeta?.measure,
     name: workMeta?.name,
     note: workMeta?.note,
@@ -46,7 +46,7 @@ export const EditWorkModal: FC<IEditModalProps> = ({ data }) => {
   };
 
   const initialValuesForEditByUser: IEditWorkFormInitialValues = {
-    branch: workMeta?.branch,
+    branch: workMeta?.branch || "exploitation",
     note: workMeta?.note,
     subbranch: workMeta?.subbranch,
     measure: workMeta?.measure,
