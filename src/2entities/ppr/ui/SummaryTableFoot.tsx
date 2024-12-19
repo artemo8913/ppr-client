@@ -31,21 +31,25 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
           const isFieldHaveTotalValueByWorks =
             checkIsPlanTimeField(field) || checkIsFactNormTimeField(field) || checkIsFactTimeField(field);
 
-          let isWorkAndPeoplesTimesMatch = true;
+          let isWorkPlanLessThenCould = false;
 
-          if (
-            isFieldHaveTotalValueByPeoples &&
-            Math.abs(Number(totalValues.peoples[field]) - Number(totalValues.works[field])) > 1
-          ) {
-            isWorkAndPeoplesTimesMatch = false;
+          let isWorkPlanMoreThenCould = false;
+
+          if (!isFieldHaveTotalValueByPeoples) {
+          } else if (Number(totalValues.peoples[field]) - Number(totalValues.works[field]) > 1) {
+            isWorkPlanLessThenCould = true;
+          } else if (Number(totalValues.peoples[field]) - Number(totalValues.works[field]) < -1) {
+            isWorkPlanMoreThenCould = true;
           }
+
           return (
             <td
               key={field}
               className={clsx(
                 "border border-black",
                 "outline-black outline-1 outline outline-offset-[-1px] z-20",
-                !isWorkAndPeoplesTimesMatch && "bg-red-300"
+                isWorkPlanLessThenCould && "bg-red-200",
+                isWorkPlanMoreThenCould && "bg-red-400"
               )}
             >
               <TableCellMemo isVertical value={isFieldHaveTotalValueByWorks ? totalValues.works[field] : "-"} />
