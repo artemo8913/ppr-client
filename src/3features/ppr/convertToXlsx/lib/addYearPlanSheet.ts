@@ -25,15 +25,17 @@ const TIME_PERIOD_COL_SPAN = 5;
 
 const START_COLUMNS_INDEX = 6;
 
-const START_ROWS_INDEX = 2;
+const DATA_START_ROW_INDEX = 3;
 
 const FIRST_ROW_INDEX = 1;
 
 const SECOND_ROW_INDEX = 2;
 
+const THIRD_ROW_INDEX = 3;
+
 const MIN_COL_WIDTH = 3;
 
-const HEADER_HEIGHT = 400;
+const HEADER_HEIGHT = 250;
 
 const COLUMNS_WIDTH: { [key in keyof IPprData]?: number } = {
   is_work_aproved: 10,
@@ -96,7 +98,7 @@ export function addYearPlanSheet({
 }: IAddYearPlanSheetArgs): ExcelJS.Worksheet {
   const yearPlanSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
-  const { branchesMeta, branchesAndSubbrunchesOrder } = pprMeta;
+  const { branchesMeta, branchesAndSubbrunchesOrder, totalValues } = pprMeta;
 
   // Задать заголовки таблицы
   yearPlanSheet.columns = PPR_DATA_FIELDS.map((field) => ({
@@ -109,6 +111,9 @@ export function addYearPlanSheet({
       field === "branch" ||
       field === "subbranch",
   }));
+
+  // TODO: переписать на обычный цикл for(){}; Мне кажется он более читабелен будет, восприниматься также будет лучше. colIndex будет не нужен???
+  // TODO: перенести стилизацию ячеек в соответствующие функции в файл xlsxStyles
 
   // Счетчик столбцов (для построения шапки таблицы)
   let colIndex = START_COLUMNS_INDEX;
@@ -157,7 +162,16 @@ export function addYearPlanSheet({
     });
   });
 
-  let lastRowIndex = START_ROWS_INDEX;
+  // Строка с нумерацией столбцов
+  for (let index = 1; index <= MAX_COLUMNS_COUNT; index++) {
+    const cell = yearPlanSheet.getCell(THIRD_ROW_INDEX, START_COLUMNS_INDEX + index - 1);
+
+    cell.value = index;
+    cell.border = BLACK_BORDER_FULL;
+    cell.alignment = { horizontal: "center" };
+  }
+
+  let lastRowIndex = DATA_START_ROW_INDEX;
 
   function createBranchRow(branchOrder: string, branchName: string) {
     yearPlanSheet.mergeCells(
@@ -178,7 +192,7 @@ export function addYearPlanSheet({
     lastRowIndex++;
   }
 
-  function createTotalRow(branchDefault: IBranchDefaultMeta, text: string) {
+  function createTotalRow(branchDefault: Partial<IBranchDefaultMeta>, text: string) {
     const row = yearPlanSheet.getRow(lastRowIndex);
 
     PPR_DATA_FIELDS.forEach((field) => {
@@ -186,8 +200,8 @@ export function addYearPlanSheet({
 
       if (field === "name") {
         cell.value = text;
-      } else if (field in branchDefault.total) {
-        cell.value = branchDefault.total[field as keyof TPprDataFieldsTotalValues];
+      } else if (branchDefault?.total && field in branchDefault?.total) {
+        cell.value = branchDefault?.total[field as keyof TPprDataFieldsTotalValues];
       }
 
       // Стилизация ячеек данных
@@ -238,7 +252,10 @@ export function addYearPlanSheet({
       richText: [
         { text: `${pprMeta.worksOrderForRowSpan[pprData.id]} ` },
         { text: pprData.name },
-        { text: pprData.note ? `\n(прим. ${pprData.note})` : "", font: { bold: true } },
+        {
+          text: pprData.note ? `\n(прим. ${pprData.note})` : "",
+          font: { bold: true, name: "Times New Roman", size: 10 },
+        },
       ],
     };
 
@@ -251,7 +268,7 @@ export function addYearPlanSheet({
       const cell = row.getCell(field);
 
       cell.border = BLACK_BORDER_FULL;
-      cell.alignment = { wrapText: true };
+      cell.alignment = { horizontal: "left", vertical: "middle", wrapText: true };
 
       cell.fill = {
         fgColor: { argb: setBgColorXlsx(field) },
@@ -270,7 +287,8 @@ export function addYearPlanSheet({
       const lastBranch = branchesMeta.slice(-1)[0];
       const lastSubbranch = lastBranch.subbranches.slice(-1)[0];
       createTotalRow(lastSubbranch, `Итого по пункту ${lastSubbranch.orderIndex}`);
-      createTotalRow(lastBranch, "Итого по разделам 1-3");
+      createTotalRow(lastBranch, `Итого по разделу ${lastBranch.orderIndex}`);
+      createTotalRow({ total: totalValues.works }, "Итого по разделам 1-3");
     }
   });
 

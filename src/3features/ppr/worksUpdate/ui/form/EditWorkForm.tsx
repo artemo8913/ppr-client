@@ -13,7 +13,7 @@ import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
 
 export interface IEditWorkFormInitialValues extends Partial<Omit<ICommonWork, "id">> {
-  branch?: TWorkBranch;
+  branch: TWorkBranch;
   subbranch?: string;
   note?: string;
 }
@@ -55,7 +55,7 @@ export const EditWorkForm: FC<IEditWorkFormProps> = (props) => {
   useEffect(() => {
     form.setFieldsValue({
       ...props.initialValues,
-      branch: props.initialValues.branch || "unforeseen",
+      branch: props.initialValues.branch,
       subbranch: props.initialValues.subbranch ? [props.initialValues.subbranch] : [],
     });
   }, [form, props.initialValues]);

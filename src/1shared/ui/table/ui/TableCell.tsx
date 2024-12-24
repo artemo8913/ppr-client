@@ -64,8 +64,10 @@ const TableCell: FC<ITableCellProps> = (props) => {
 
   const validatePattern = type === "number" ? "^[0-9]+[.]?[0-9]*$" : ".*";
 
+  const hasError = type === "number" && isNaN(Number(value));
+
   return (
-    <div className={clsx(style.TableCell, isVertical && style.isVertical, className)}>
+    <div className={clsx(style.TableCell, isVertical && style.isVertical, hasError && style.hasError, className)}>
       {cellType === "textarea" && (
         <textarea
           ref={ref}

@@ -20,6 +20,10 @@
       transform: rotate(0deg);
     }
   }
+
+  &.hasError {
+    background-color: pink;
+  }
 }
 
 .TextareaCell {

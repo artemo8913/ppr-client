@@ -1,5 +1,6 @@
 import { IUser } from "@/2entities/user";
 
+//TODO: вынести в usePpr и брать результат функции из хука (не вызывать везде и постоянно) 
 /**Подходит ли данный ППР для определенных ролей (начальника цеха, инженера, заместителя начальника дистанции, начальника дистанции и т.п.) */
 export function checkIsPprInUserControl(ppr_created_by?: IUser, userData?: IUser) {
   if (!ppr_created_by || !userData) {
