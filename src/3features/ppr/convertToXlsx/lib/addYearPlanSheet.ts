@@ -279,6 +279,11 @@ export function addYearPlanSheet({
       if (checkIsFieldVertical(field)) {
         cell.alignment = VERTICAL_ALIGNMENT;
       }
+
+      // Убрать ячейки с 0 значением. Не строгое равенство специально стоит
+      if (checkIsWorkOrTimeField(field) && Number(cell.value) === 0) {
+        cell.value = "";
+      }
     });
 
     // Если строка последняя, то добавить итого по последним пункту и категории

@@ -1,24 +1,25 @@
 import ExcelJS from "exceljs";
-import { Session } from "next-auth";
 
 import { IPpr } from "@/2entities/ppr";
 
-import { BLACK_BORDER_BOTTOM, BOLD, CENTER_ALIGNMENT, createHeaderCell } from "./xlsxStyles";
+import { IGetDivisionsResponce } from "@/1shared/api/divisions.api";
+
+import { BLACK_BORDER_BOTTOM, createHeaderCell } from "./xlsxStyles";
 
 interface IAddTitleSheetArgs {
   workbook: ExcelJS.Workbook;
   ppr?: IPpr;
-  session?: Session | null;
   sheetName?: string;
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
+  divisions?: IGetDivisionsResponce;
 }
 
 export function addTitleSheet({
   workbook,
   ppr,
-  session,
   sheetName,
   sheetOptions,
+  divisions,
 }: IAddTitleSheetArgs): ExcelJS.Worksheet {
   const titleSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
@@ -30,20 +31,17 @@ export function addTitleSheet({
 
   // Наименование дирекции
   titleSheet.getCell("B7").value = "Дирекция по энергообеспечению";
-  titleSheet.mergeCells("B8:D8");
-  titleSheet.getCell("B8").value = ppr?.directionShortName;
+  titleSheet.getCell("B8").value = divisions?.direction?.name;
   titleSheet.getCell("B8").border = BLACK_BORDER_BOTTOM;
 
   // Наименование дистанции
   titleSheet.getCell("B9").value = "Дистанция электроснабжения";
-  titleSheet.mergeCells("B10:D10");
-  titleSheet.getCell("B10").value = ppr?.distanceShortName;
+  titleSheet.getCell("B10").value = divisions?.distance?.name;
   titleSheet.getCell("B10").border = BLACK_BORDER_BOTTOM;
 
   // Наименование подразделения
   titleSheet.getCell("B11").value = "Подразделение";
-  titleSheet.mergeCells("B12:D12");
-  titleSheet.getCell("B12").value = ppr?.subdivisionShortName;
+  titleSheet.getCell("B12").value = divisions?.subdivision?.name;
   titleSheet.getCell("B12").border = BLACK_BORDER_BOTTOM;
 
   // Графа "СОГЛАСОВАНО"

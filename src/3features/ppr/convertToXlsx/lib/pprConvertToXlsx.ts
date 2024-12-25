@@ -2,6 +2,7 @@
 import ExcelJS from "exceljs";
 import { getServerSession } from "next-auth";
 
+import { getDivisionsById } from "@/1shared/api/divisions.api";
 import { createPprMeta } from "@/1shared/providers/pprProvider";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { IPpr } from "@/2entities/ppr";
@@ -33,6 +34,7 @@ const WORKSHEET_OPTIONS: Partial<ExcelJS.AddWorksheetOptions> = {
       header: 0.1,
       footer: 0.1,
     },
+    horizontalCentered: true,
   },
 };
 
@@ -53,10 +55,16 @@ export async function pprConvertToXlsx(ppr: IPpr) {
     workingMansData: ppr.workingMans,
   });
 
+  const divisions = await getDivisionsById({
+    idDirection: ppr.idDirection,
+    idDistance: ppr.idDistance,
+    idSubdivision: ppr.idSubdivision,
+  });
+
   addTitleSheet({
-    workbook,
     ppr,
-    session,
+    workbook,
+    divisions,
     sheetName: TITLE_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
@@ -86,15 +94,15 @@ export async function pprConvertToXlsx(ppr: IPpr) {
 
   //Финальная обработка всех ячеек (применяем font)
   //https://github.com/exceljs/exceljs/issues/572#issuecomment-1170237178
-  workbook.eachSheet(sheet => {
-    sheet.eachRow(row => {
-      row.eachCell(cell => {
+  workbook.eachSheet((sheet) => {
+    sheet.eachRow((row) => {
+      row.eachCell((cell) => {
         // default styles
         if (!cell.font?.size) {
           cell.font = Object.assign(cell.font || {}, { size: 10 });
         }
         if (!cell.font?.name) {
-          cell.font = Object.assign(cell.font || {}, { name: 'Times New Roman' });
+          cell.font = Object.assign(cell.font || {}, { name: "Times New Roman" });
         }
       });
     });

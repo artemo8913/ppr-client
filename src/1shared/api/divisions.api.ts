@@ -1,6 +1,14 @@
 import { eq } from "drizzle-orm";
 
-import { db, directionsTable, distancesTable, subdivisionsTable } from "../database";
+import {
+  db,
+  directionsTable,
+  distancesTable,
+  subdivisionsTable,
+  TDirectionDB,
+  TDistanceDB,
+  TSubdivisionDB,
+} from "../database";
 
 interface IDivisionsIds {
   idDirection: number | null;
@@ -8,7 +16,17 @@ interface IDivisionsIds {
   idSubdivision: number | null;
 }
 
-export async function getDivisionsById({ idDirection, idDistance, idSubdivision }: IDivisionsIds) {
+export interface IGetDivisionsResponce {
+  direction?: TDirectionDB | null;
+  distance?: TDistanceDB | null;
+  subdivision?: TSubdivisionDB | null;
+}
+
+export async function getDivisionsById({
+  idDirection,
+  idDistance,
+  idSubdivision,
+}: IDivisionsIds): Promise<IGetDivisionsResponce> {
   try {
     const directionReq =
       (idDirection && db.query.directionsTable.findFirst({ where: eq(directionsTable.id, idDirection) })) || null;
