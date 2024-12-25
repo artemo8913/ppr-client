@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { transliterateRuToEn } from "@/1shared/locale/transliterateRuToEn";
 import { getPprTable } from "@/2entities/ppr";
 import { pprConvertToXlsx } from "@/3features/ppr/convertToXlsx";
 
@@ -19,11 +20,15 @@ export async function GET(_request: NextRequest, { params }: IParams) {
 
     const buffer = await workbook.xlsx.writeBuffer();
 
+    const date = new Date().toLocaleDateString("ru");
+
+    const fileName = `1203_${transliterateRuToEn(ppr.subdivisionShortName || "")}_${ppr.year}_P ${date}`;
+
     return new NextResponse(buffer, {
       status: 200,
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename="PPR ${ppr.year}-${ppr.idDirection}-${ppr.idDistance}-${ppr.idSubdivision}.xlsx"`,
+        "Content-Disposition": `attachment; filename="${fileName}.xlsx"`,
       },
     });
   } catch (e) {
