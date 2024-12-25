@@ -129,7 +129,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
               )}
               {columns.map((field) => {
                 const value = pprData[field];
-                const showValue = value && typeof value === "object" ? value.final : value;
+                const displayValue = value && typeof value === "object" ? value.final : value || "";
                 const note = field === "name" && pprData.note ? ` (прим. ${pprData.note})` : null;
 
                 if (field === "name" && worksRowSpan[index] === 0) {
@@ -142,8 +142,8 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
                     className="border border-black text-center"
                     key={pprData.id + field}
                   >
-                    {showValue}
-                    {note}
+                    {displayValue}
+                    <span className="block">{note}</span>
                   </td>
                 );
               })}
