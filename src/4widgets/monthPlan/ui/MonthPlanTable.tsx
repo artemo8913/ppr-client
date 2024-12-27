@@ -2,9 +2,9 @@
 import { FC, Fragment } from "react";
 
 import { TTimePeriod } from "@/1shared/const/date";
-import { createPprMeta, usePpr } from "@/1shared/providers/pprProvider";
+import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { IPprMeta } from "@/1shared/providers/pprProvider";
 import { translateRuPprBranchName } from "@/1shared/locale/pprBranches";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   getFactTimeFieldByTimePeriod,
   getFactWorkFieldByTimePeriod,
@@ -13,6 +13,8 @@ import {
   IPprData,
   SummaryTableRow,
 } from "@/2entities/ppr";
+
+import style from "./MonthPlan.module.scss";
 
 function getMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
   return [
@@ -30,47 +32,50 @@ function getMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
 function getMonthPlanFieldsForTotalRow(timePeriod: TTimePeriod): Array<keyof IPprData> {
   return [
     "name",
+    "entry_year",
     getPlanTimeFieldByTimePeriod(timePeriod),
     getFactWorkFieldByTimePeriod(timePeriod),
     getFactTimeFieldByTimePeriod(timePeriod),
-    "measure",
-    "measure",
+    "location",
   ];
 }
 
-interface IMonthPlanTableProps {}
+const SUMMARY_ROW_NAME_COL_SPAN = 4;
 
-export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
-  const {
-    ppr,
-    pprMeta: { worksOrderForRowSpan, branchesAndSubbrunchesOrder, totalValues },
-  } = usePpr();
+const TITLE_BRANCHES_COL_SPAN = 10;
 
-  const { currentTimePeriod } = usePprTableSettings();
+interface IMonthPlanTableProps {
+  monthPprMeta: IPprMeta;
+  globalPprMeta: IPprMeta;
+  filteredPprData: IPprData[];
+  currentTimePeriod: TTimePeriod;
+}
 
-  const columns = getMonthPlanFields(currentTimePeriod);
+export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
+  monthPprMeta,
+  globalPprMeta,
+  filteredPprData,
+  currentTimePeriod,
+}) => {
+  const { worksOrderForRowSpan } = globalPprMeta;
+  const { worksRowSpan, branchesAndSubbrunchesOrder, totalValues, branchesMeta } = monthPprMeta;
 
   const columnsForTotalValues = getMonthPlanFieldsForTotalRow(currentTimePeriod);
 
-  const monthPlanData = ppr?.data.filter((pprData) => {
-    const planValue = pprData[`${currentTimePeriod}_plan_work`].final;
-
-    return Boolean(Number(pprData[`${currentTimePeriod}_fact_work`])) || Boolean(planValue);
-  });
-
-  const { worksRowSpan } = createPprMeta({ pprData: monthPlanData });
+  const planWorkField = getPlanWorkFieldByTimePeriod(currentTimePeriod);
+  const planTimeField = getPlanTimeFieldByTimePeriod(currentTimePeriod);
 
   return (
-    <table className="w-full">
+    <table className={style.table}>
       <thead>
-        <tr className="*:border *:border-black *:">
+        <tr>
           <th rowSpan={2}>№ п.п</th>
           <th colSpan={3}>Работа</th>
           <th colSpan={3}>План</th>
           <th colSpan={2}>Выполнение</th>
           <th rowSpan={2}>Примечание</th>
         </tr>
-        <tr className="*:border *:border-black">
+        <tr>
           <th className="w-2/3">Наименование работ</th>
           <th>Место работ (тип оборудования)</th>
           <th>Измеритель</th>
@@ -82,85 +87,116 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = () => {
         </tr>
       </thead>
       <tbody>
-        {monthPlanData?.map((pprData, index) => (
-          <Fragment key={pprData.id}>
-            {pprData.id in branchesAndSubbrunchesOrder && (
-              <>
-                {branchesAndSubbrunchesOrder[pprData.id].subbranch.prev && (
-                  <SummaryTableRow
-                    fields={columnsForTotalValues}
-                    summaryNameColSpan={4}
-                    isVertical={false}
-                    name={`Итого по пункту ${branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.orderIndex}`}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total}
-                  />
-                )}
-                {branchesAndSubbrunchesOrder[pprData.id].branch?.prev && (
-                  <SummaryTableRow
-                    fields={columnsForTotalValues}
-                    summaryNameColSpan={4}
-                    isVertical={false}
-                    name={`Итого по разделу ${branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.orderIndex}`}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total}
-                  />
-                )}
-                {branchesAndSubbrunchesOrder[pprData.id].branch && (
+        {filteredPprData?.map((pprData, index, data) => {
+          const [branchOrder, subbranchOrder] = worksOrderForRowSpan[pprData.id].split(".");
+
+          const [prevBranchOrder, prevSubbranchOrder] = data[index - 1]?.id
+            ? worksOrderForRowSpan[data[index - 1].id].split(".")
+            : ["-", "-"];
+
+          return (
+            <Fragment key={pprData.id}>
+              {pprData.id in branchesAndSubbrunchesOrder && (
+                <>
+                  {branchesAndSubbrunchesOrder[pprData.id].subbranch.prev && (
+                    <SummaryTableRow
+                      isVertical={false}
+                      fields={columnsForTotalValues}
+                      summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
+                      name={`Итого по пункту ${prevBranchOrder}.${prevSubbranchOrder}`}
+                      totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total}
+                    />
+                  )}
+                  {branchesAndSubbrunchesOrder[pprData.id].branch?.prev && (
+                    <SummaryTableRow
+                      isVertical={false}
+                      fields={columnsForTotalValues}
+                      name={`Итого по разделу ${prevBranchOrder}`}
+                      summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
+                      totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total}
+                    />
+                  )}
+                  {branchesAndSubbrunchesOrder[pprData.id].branch && (
+                    <tr>
+                      <td colSpan={TITLE_BRANCHES_COL_SPAN}>
+                        {`${branchOrder}. `}
+                        {translateRuPprBranchName(branchesAndSubbrunchesOrder[pprData.id].branch?.name || "")}
+                      </td>
+                    </tr>
+                  )}
                   <tr>
-                    <td colSpan={10} className="border font-bold border-black cursor-default">
-                      {branchesAndSubbrunchesOrder[pprData.id].branch?.orderIndex}{" "}
-                      {translateRuPprBranchName(branchesAndSubbrunchesOrder[pprData.id].branch?.name || "")}
+                    <td colSpan={TITLE_BRANCHES_COL_SPAN}>
+                      {`${branchOrder}.${subbranchOrder}. `}
+                      {branchesAndSubbrunchesOrder[pprData.id].subbranch?.name}
                     </td>
                   </tr>
-                )}
-                <tr>
-                  <td colSpan={10} className="border font-bold border-black cursor-default">
-                    {branchesAndSubbrunchesOrder[pprData.id].subbranch?.orderIndex}{" "}
-                    {branchesAndSubbrunchesOrder[pprData.id].subbranch?.name}
-                  </td>
-                </tr>
-              </>
-            )}
-            <tr>
-              {/* TODO: Когда научусь считать номера пунктов работ, то буду их писать вместо индекса */}
-              {worksRowSpan[index] === 0 ? null : (
-                <td rowSpan={worksRowSpan[index]} className="border border-black text-center">
-                  {worksOrderForRowSpan[pprData.id]}
-                </td>
+                </>
               )}
-              {columns.map((field) => {
-                const value = pprData[field];
-                const displayValue = value && typeof value === "object" ? value.final : value || "";
-                const note = field === "name" && pprData.note ? ` (прим. ${pprData.note})` : null;
+              <tr>
+                {worksRowSpan[index] === 0 ? null : (
+                  <td rowSpan={worksRowSpan[index]}>{worksOrderForRowSpan[pprData.id]}</td>
+                )}
+                {getMonthPlanFields(currentTimePeriod).map((field) => {
+                  let displayValue;
 
-                if (field === "name" && worksRowSpan[index] === 0) {
-                  return null;
-                }
+                  if (field === planWorkField) {
+                    displayValue = pprData[planWorkField].final;
+                  } else if (field === planTimeField) {
+                    displayValue = pprData[planTimeField].final;
+                  } else {
+                    displayValue = String(pprData[field]);
+                  }
 
-                return (
-                  <td
-                    rowSpan={field === "name" ? worksRowSpan[index] : undefined}
-                    className="border border-black text-center"
-                    key={pprData.id + field}
-                  >
-                    {displayValue}
-                    <span className="block">{note}</span>
-                  </td>
-                );
-              })}
-              <td className="border border-black text-center" />
-            </tr>
-          </Fragment>
-        ))}
-      </tbody>
-      <tfoot>
+                  const note = field === "name" && pprData.note ? ` (прим. ${pprData.note})` : null;
+
+                  if (field === "name" && worksRowSpan[index] === 0) {
+                    return null;
+                  }
+
+                  return (
+                    <td rowSpan={field === "name" ? worksRowSpan[index] : undefined} key={pprData.id + field}>
+                      {displayValue}
+                      {note && <span className="block font-semibold">{note}</span>}
+                    </td>
+                  );
+                })}
+                <td>
+                  {pprData[planWorkField].undoneTransfers?.map((transfer, index) => {
+                    const month = translateRuTimePeriod(transfer.fieldTo);
+                    const text = transfer.value >= 0 ? `${transfer.value} на ${month}` : `${transfer.value} с ${month}`;
+                    return <div key={index}>{text}</div>;
+                  })}
+                </td>
+              </tr>
+              {index === data.length - 1 && (
+                <>
+                  <SummaryTableRow
+                    isVertical={false}
+                    fields={columnsForTotalValues}
+                    summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
+                    name={`Итого по пункту ${branchOrder}.${subbranchOrder}.`}
+                    totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total}
+                  />
+                  <SummaryTableRow
+                    isVertical={false}
+                    fields={columnsForTotalValues}
+                    name={`Итого по разделу ${branchOrder}.`}
+                    summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
+                    totalFieldsValues={branchesMeta.slice(-1)[0].total}
+                  />
+                </>
+              )}
+            </Fragment>
+          );
+        })}
         <SummaryTableRow
-          fields={columnsForTotalValues}
-          summaryNameColSpan={4}
           isVertical={false}
+          fields={columnsForTotalValues}
           name={`Итого по разделам 1-3`}
           totalFieldsValues={totalValues.works}
+          summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
         />
-      </tfoot>
+      </tbody>
     </table>
   );
 };

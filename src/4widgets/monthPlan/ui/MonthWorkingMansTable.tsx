@@ -1,47 +1,90 @@
 "use client";
 import { FC } from "react";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { roundToFixed } from "@/1shared/lib/math";
 import { TTimePeriod } from "@/1shared/const/date";
+import { IPprMeta } from "@/1shared/providers/pprProvider";
 import {
   getFactTimeFieldByTimePeriod,
-  getFactWorkFieldByTimePeriod,
+  getPlanNormTimeFieldByTimePeriod,
+  getPlanTabelTimeFieldByTimePeriod,
   getPlanTimeFieldByTimePeriod,
-  getPlanWorkFieldByTimePeriod,
-  IPprData,
+  IWorkingManYearPlan,
 } from "@/2entities/ppr";
 
-function getWorkingMansMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
+import style from "./MonthPlan.module.scss";
+
+function getWorkingMansMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IWorkingManYearPlan | null> {
   return [
-    "name",
-    "measure",
-    getPlanWorkFieldByTimePeriod(timePeriod),
-    "norm_of_time",
+    "full_name",
+    "work_position",
+    "participation",
+    getPlanNormTimeFieldByTimePeriod(timePeriod),
+    getPlanTabelTimeFieldByTimePeriod(timePeriod),
     getPlanTimeFieldByTimePeriod(timePeriod),
-    getFactWorkFieldByTimePeriod(timePeriod),
+    null,
+    null,
+    null,
     getFactTimeFieldByTimePeriod(timePeriod),
+    null,
   ];
 }
 
-interface IMonthWorkingMansTableProps {}
+interface IMonthWorkingMansTableProps {
+  monthPprMeta: IPprMeta;
+  globalPprMeta: IPprMeta;
+  currentTimePeriod: TTimePeriod;
+  workingMans: IWorkingManYearPlan[];
+}
 
-export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = () => {
-  const { ppr } = usePpr();
+export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
+  workingMans,
+  monthPprMeta,
+  globalPprMeta,
+  currentTimePeriod,
+}) => {
+  const totalMansPlanNormTime = globalPprMeta.totalValues.peoples[getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
 
-  const { currentTimePeriod } = usePprTableSettings();
+  const totalMansPlanTabelTime =
+    globalPprMeta.totalValues.peoples[getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
+
+  const totalMansPlanTime = globalPprMeta.totalValues.peoples[getPlanTimeFieldByTimePeriod(currentTimePeriod)];
+
+  const planTimeExploitationTotal = monthPprMeta.branchesMeta.reduce((sum, val) => {
+    if (val.type === "branch" && val.name === "exploitation") {
+      return sum + (val.total[getPlanTimeFieldByTimePeriod(currentTimePeriod)] || 0);
+    }
+    return sum;
+  }, 0);
+
+  const factTimeExploitationTotal = monthPprMeta.branchesMeta.reduce((sum, val) => {
+    if (val.type === "branch" && val.name === "exploitation") {
+      return sum + (val.total[getFactTimeFieldByTimePeriod(currentTimePeriod)] || 0);
+    }
+    return sum;
+  }, 0);
+
+  const exploitationPercent =
+    factTimeExploitationTotal && planTimeExploitationTotal
+      ? `${roundToFixed((factTimeExploitationTotal / planTimeExploitationTotal) * 100, 0)}%`
+      : "-";
+
+  const totalFactTime = monthPprMeta.totalValues.works[getFactTimeFieldByTimePeriod(currentTimePeriod)];
+
+  const totalFactTimePercent =
+    totalFactTime && totalMansPlanTime ? `${roundToFixed((totalFactTime / totalMansPlanTime) * 100, 0)}%` : "-";
 
   return (
-    <table className="shadow-lg">
+    <table className={style.table}>
       <thead>
-        <tr className="*:border *:border-black">
+        <tr>
           <th colSpan={3}>Данные о работнике</th>
           <th colSpan={3}>Настой часов</th>
           <th rowSpan={2}>Заданно по эксплуатационному плану, чел.-ч</th>
           <th colSpan={2}>Выполнение эксплуатационного плана</th>
           <th colSpan={2}>Выполнение эксплуатационного плана с учетом всех выполненных работ</th>
         </tr>
-        <tr className="*:border *:border-black">
+        <tr>
           <th>фамилия, имя, отчество</th>
           <th>должность, профессия, разряд рабочих, совмещаемые профессии</th>
           <th>доля участия</th>
@@ -54,28 +97,30 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = () => {
           <th>%</th>
         </tr>
       </thead>
-      {/* <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td className="border border-black text-center" key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
+      <tbody>
+        {workingMans.map((man) => {
+          return (
+            <tr key={man.id}>
+              {getWorkingMansMonthPlanFields(currentTimePeriod).map((field, index) => {
+                return <td key={man.id + String(index)}>{field && man[field] ? man[field] : ""}</td>;
+              })}
+            </tr>
+          );
+        })}
       </tbody>
       <tfoot>
-        {table.getFooterGroups().map((footerGroup) => (
-          <tr key={footerGroup.id}>
-            {footerGroup.headers.map((header) => (
-              <td className="border border-black font-bold text-center" key={header.id} colSpan={header.colSpan}>
-                {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tfoot> */}
+        <tr className="font-bold">
+          <td colSpan={3}>ИТОГО</td>
+          <td>{totalMansPlanNormTime}</td>
+          <td>{totalMansPlanTabelTime}</td>
+          <td>{totalMansPlanTime}</td>
+          <td>{planTimeExploitationTotal}</td>
+          <td>{factTimeExploitationTotal}</td>
+          <td>{exploitationPercent}</td>
+          <td>{totalFactTime}</td>
+          <td>{totalFactTimePercent}</td>
+        </tr>
+      </tfoot>
     </table>
   );
 };
