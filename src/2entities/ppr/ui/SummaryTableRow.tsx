@@ -6,19 +6,19 @@ import { IPprData, TPprDataFieldsTotalValues } from "../model/ppr.types";
 import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
 
 interface ISummaryTableRowProps {
-  fields: (keyof IPprData)[];
-  isVertical?: boolean;
-  summaryNameColSpan?: number;
   name?: string;
+  isVertical?: boolean;
+  fields: (keyof IPprData)[];
+  summaryNameColSpan?: number;
   totalFieldsValues?: TPprDataFieldsTotalValues;
 }
 
 export const SummaryTableRow: FC<ISummaryTableRowProps> = ({
-  fields,
-  isVertical = true,
   name,
-  summaryNameColSpan,
+  fields,
   totalFieldsValues,
+  isVertical = true,
+  summaryNameColSpan,
 }) => {
   return (
     <tr className="font-bold">
@@ -28,6 +28,7 @@ export const SummaryTableRow: FC<ISummaryTableRowProps> = ({
       {fields.map((field) => {
         const isFieldHaveTotalValueByWorks =
           checkIsPlanTimeField(field) || checkIsFactNormTimeField(field) || checkIsFactTimeField(field);
+
         return (
           <td key={field} className="border border-black">
             <TableCellMemo

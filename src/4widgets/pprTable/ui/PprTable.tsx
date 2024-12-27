@@ -112,30 +112,25 @@ export const PprTable: FC<IPprTableProps> = () => {
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    name={`Итого по пункту ${branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.orderIndex}`}
                     totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total}
+                    name={`Итого по пункту ${branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.orderIndex}`}
                   />
                 )}
                 {branchesAndSubbrunchesOrder[pprData.id].branch?.prev && (
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    name={`Итого по разделу ${branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.orderIndex}`}
                     totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total}
+                    name={`Итого по разделу ${branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.orderIndex}`}
                   />
                 )}
                 {branchesAndSubbrunchesOrder[pprData.id].branch && (
-                  <PprTableBranchNameRowMemo
-                    branch={branchesAndSubbrunchesOrder[pprData.id].branch!}
-                    updateSubbranch={updateSubbranch}
-                  />
+                  <PprTableBranchNameRowMemo branch={branchesAndSubbrunchesOrder[pprData.id].branch} />
                 )}
-                {branchesAndSubbrunchesOrder[pprData.id].subbranch && (
-                  <PprTableBranchNameRowMemo
-                    branch={branchesAndSubbrunchesOrder[pprData.id].subbranch}
-                    updateSubbranch={updateSubbranch}
-                  />
-                )}
+                <PprTableBranchNameRowMemo
+                  branch={branchesAndSubbrunchesOrder[pprData.id].subbranch}
+                  updateSubbranch={updateSubbranch}
+                />
               </>
             )}
             <PprTableDataRowMemo

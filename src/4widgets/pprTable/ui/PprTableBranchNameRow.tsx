@@ -8,18 +8,25 @@ import { TPprDataWorkId } from "@/2entities/ppr";
 import { useCreateColumns } from "./PprTableColumns";
 
 interface IPprTableBranchNameRow {
-  branch: IBranchDefaultMeta;
-  updateSubbranch: (newBranchName: string, workIdsSet: Set<TPprDataWorkId>) => void;
+  branch?: IBranchDefaultMeta | null;
+  updateSubbranch?: (newBranchName: string, workIdsSet: Set<TPprDataWorkId>) => void;
 }
 
 export const PprTableBranchNameRow: FC<IPprTableBranchNameRow> = (props) => {
   const { allFields } = useCreateColumns();
 
-  const isEditable = props.branch.type !== "branch";
+  if (!props.branch) {
+    return null;
+  }
+
+  const isEditable = props.branch.type === "subbranch" && props.updateSubbranch;
 
   const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    props.updateSubbranch(e.target.value, props.branch.workIds);
+
+    if (props.branch && props.updateSubbranch) {
+      props.updateSubbranch(e.target.value, props.branch.workIds);
+    }
   };
 
   return (
@@ -28,7 +35,11 @@ export const PprTableBranchNameRow: FC<IPprTableBranchNameRow> = (props) => {
         {isEditable ? (
           <div className="flex">
             {props.branch.orderIndex}
-            <input className="bg-transparent flex-1" defaultValue={props.branch.name} onBlur={handleBlur} />
+            <input
+              className="bg-transparent flex-1 cursor-pointer"
+              defaultValue={props.branch.name}
+              onBlur={handleBlur}
+            />
           </div>
         ) : (
           `${props.branch.orderIndex}${translateRuPprBranchName(props.branch.name)}`
