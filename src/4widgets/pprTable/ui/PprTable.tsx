@@ -106,36 +106,31 @@ export const PprTable: FC<IPprTableProps> = () => {
       <tbody>
         {ppr?.data.map((pprData, index) => (
           <Fragment key={pprData.id}>
-            {index in branchesAndSubbrunchesOrder && (
+            {pprData.id in branchesAndSubbrunchesOrder && (
               <>
-                {branchesAndSubbrunchesOrder[index].subbranch.prev && (
+                {branchesAndSubbrunchesOrder[pprData.id].subbranch.prev && (
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    name={`Итого по пункту ${branchesAndSubbrunchesOrder[index].subbranch.prev?.orderIndex}`}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[index].subbranch.prev?.total}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total}
+                    name={`Итого по пункту ${branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.orderIndex}`}
                   />
                 )}
-                {branchesAndSubbrunchesOrder[index].branch?.prev && (
+                {branchesAndSubbrunchesOrder[pprData.id].branch?.prev && (
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    name={`Итого по разделу ${branchesAndSubbrunchesOrder[index].branch?.prev?.orderIndex}`}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[index].branch?.prev?.total}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total}
+                    name={`Итого по разделу ${branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.orderIndex}`}
                   />
                 )}
-                {branchesAndSubbrunchesOrder[index].branch && (
-                  <PprTableBranchNameRowMemo
-                    branch={branchesAndSubbrunchesOrder[index].branch!}
-                    updateSubbranch={updateSubbranch}
-                  />
+                {branchesAndSubbrunchesOrder[pprData.id].branch && (
+                  <PprTableBranchNameRowMemo branch={branchesAndSubbrunchesOrder[pprData.id].branch} />
                 )}
-                {branchesAndSubbrunchesOrder[index].subbranch && (
-                  <PprTableBranchNameRowMemo
-                    branch={branchesAndSubbrunchesOrder[index].subbranch}
-                    updateSubbranch={updateSubbranch}
-                  />
-                )}
+                <PprTableBranchNameRowMemo
+                  branch={branchesAndSubbrunchesOrder[pprData.id].subbranch}
+                  updateSubbranch={updateSubbranch}
+                />
               </>
             )}
             <PprTableDataRowMemo
@@ -144,7 +139,7 @@ export const PprTable: FC<IPprTableProps> = () => {
               fields={allFields}
               planCellRef={planCellRef}
               rowSpan={worksRowSpan[index]}
-              workOrder={pprSettings.isUniteSameWorks ? worksOrderForRowSpan[index] : worksOrder[index]}
+              workOrder={pprSettings.isUniteSameWorks ? worksOrderForRowSpan[pprData.id] : worksOrder[pprData.id]}
               isPprInUserControl={isPprInUserControl}
               updatePprTableCell={updatePprTableCell}
               getColumnSettingsForField={getColumnSettingsForField}

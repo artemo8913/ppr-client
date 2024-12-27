@@ -103,11 +103,11 @@ const PprContext = createContext<IPprContext>({
   fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
   pprMeta: {
-    worksOrder: [],
+    worksOrder: {},
     worksRowSpan: [],
     branchesMeta: [],
     subbranchesList: [],
-    worksOrderForRowSpan: [],
+    worksOrderForRowSpan: {},
     branchesAndSubbrunchesOrder: {},
     totalValues: { peoples: {}, works: {} },
   },
@@ -906,11 +906,11 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
    */
   let pprMeta: IPprMeta = {
-    worksOrder: [],
+    worksOrder: {},
     branchesMeta: [],
     worksRowSpan: [],
     subbranchesList: [],
-    worksOrderForRowSpan: [],
+    worksOrderForRowSpan: {},
     branchesAndSubbrunchesOrder: {},
     totalValues: { peoples: {}, works: {} },
   };

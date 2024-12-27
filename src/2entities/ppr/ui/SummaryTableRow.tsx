@@ -6,26 +6,34 @@ import { IPprData, TPprDataFieldsTotalValues } from "../model/ppr.types";
 import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
 
 interface ISummaryTableRowProps {
-  fields: (keyof IPprData)[];
-  summaryNameColSpan: number;
   name?: string;
+  isVertical?: boolean;
+  fields: (keyof IPprData)[];
+  summaryNameColSpan?: number;
   totalFieldsValues?: TPprDataFieldsTotalValues;
 }
 
-export const SummaryTableRow: FC<ISummaryTableRowProps> = (props) => {
+export const SummaryTableRow: FC<ISummaryTableRowProps> = ({
+  name,
+  fields,
+  totalFieldsValues,
+  isVertical = true,
+  summaryNameColSpan,
+}) => {
   return (
     <tr className="font-bold">
-      <td colSpan={props.summaryNameColSpan} className="border border-black">
-        <TableCellMemo value={props.name} />
+      <td colSpan={summaryNameColSpan} className="border border-black">
+        <TableCellMemo value={name} />
       </td>
-      {props.fields.map((field) => {
+      {fields.map((field) => {
         const isFieldHaveTotalValueByWorks =
           checkIsPlanTimeField(field) || checkIsFactNormTimeField(field) || checkIsFactTimeField(field);
+
         return (
           <td key={field} className="border border-black">
             <TableCellMemo
-              isVertical
-              value={isFieldHaveTotalValueByWorks && props.totalFieldsValues ? props.totalFieldsValues[field] : "-"}
+              isVertical={isVertical}
+              value={isFieldHaveTotalValueByWorks && totalFieldsValues ? totalFieldsValues[field] : "-"}
             />
           </td>
         );

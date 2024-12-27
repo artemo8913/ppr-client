@@ -42,7 +42,6 @@ function handleWorkingMansPeriod(
 export interface IBranchDefaultMeta {
   name: string;
   orderIndex: string;
-  indexToPlaceTitle: number;
   workIds: Set<TPprDataWorkId>;
   type: "branch" | "subbranch";
   prev: IBranchDefaultMeta | null;
@@ -54,14 +53,14 @@ export interface IBranchMeta extends IBranchDefaultMeta {
 }
 
 export interface IPprMeta {
-  worksOrder: string[];
+  worksOrder: { [id: TPprDataWorkId]: string };
+  worksOrderForRowSpan: { [id: TPprDataWorkId]: string };
   worksRowSpan: number[];
-  worksOrderForRowSpan: string[];
   subbranchesList: string[];
   branchesMeta: IBranchMeta[];
   totalValues: TTotalFieldsValues;
   branchesAndSubbrunchesOrder: {
-    [indexToPlace: number]: {
+    [id: TPprDataWorkId]: {
       branch?: IBranchMeta;
       subbranch: IBranchDefaultMeta;
     };
@@ -77,7 +76,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   const branchesMeta: IBranchMeta[] = [];
 
   const branchesAndSubbrunchesOrder: {
-    [indexToPlace: number]: {
+    [id: TPprDataWorkId]: {
       branch?: IBranchMeta;
       subbranch: IBranchDefaultMeta;
     };
@@ -85,9 +84,9 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   const subbranchesSet = new Set<string>();
 
-  const worksOrder: string[] = [];
+  const worksOrder: { [id: TPprDataWorkId]: string } = {};
 
-  const worksOrderForRowSpan: string[] = [];
+  const worksOrderForRowSpan: { [id: TPprDataWorkId]: string } = {};
 
   const worksRowSpan: number[] = [];
 
@@ -99,9 +98,9 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   let isInit = true;
 
-  let tempWorkOrder = 1;
+  let tempWorkOrder = 0;
 
-  let tempWorkOrderForRowSpan = 1;
+  let tempWorkOrderForRowSpan = 0;
 
   let tempWorkRowSpan: {
     name: string;
@@ -119,7 +118,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   let tempBranchMeta: IBranchMeta = {
     workIds: new Set(),
-    indexToPlaceTitle: 0,
     name: "",
     subbranches: [],
     orderIndex: "",
@@ -130,7 +128,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   let tempSubbranchMeta: IBranchDefaultMeta = {
     workIds: new Set(),
-    indexToPlaceTitle: 0,
     name: "",
     orderIndex: "",
     type: "subbranch",
@@ -141,7 +138,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   function updateTempBranchMeta(branchName: TWorkBranch, index: number) {
     tempBranchMeta = {
       workIds: new Set(),
-      indexToPlaceTitle: index,
       name: branchName,
       subbranches: [],
       orderIndex: `${branchesMeta.length + 1}.`,
@@ -153,12 +149,11 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   function updateTempSubbranchMeta(subbranchName: string, index: number, isBranchChange?: boolean) {
     // Обнуляем счетчик порядкового номера работы внутри подкатегории
-    tempWorkOrder = 1;
-    tempWorkOrderForRowSpan = 1;
+    tempWorkOrder = 0;
+    tempWorkOrderForRowSpan = 0;
 
     tempSubbranchMeta = {
       workIds: new Set(),
-      indexToPlaceTitle: index,
       name: subbranchName,
       orderIndex: `${branchesMeta.length + (isBranchChange ? 1 : 0)}.${tempBranchMeta.subbranches.length + 1}.`,
       type: "subbranch",
@@ -169,8 +164,11 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   function resetTempWorkCombine(indexStart: number, pprData: IPprData) {
     tempWorkRowSpan = {
-      ...pprData,
       indexStart,
+      name: pprData.name,
+      branch: pprData.branch,
+      note: pprData.note,
+      subbranch: pprData.subbranch,
     };
   }
 
@@ -190,7 +188,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       subbranchesSet.add(tempSubbranchMeta.name);
 
       // Добавляем ссылки на категорию и подкатегорию работ в индексированный список
-      branchesAndSubbrunchesOrder[index] = { branch: tempBranchMeta, subbranch: tempSubbranchMeta };
+      branchesAndSubbrunchesOrder[pprData.id] = { branch: tempBranchMeta, subbranch: tempSubbranchMeta };
     } else if (pprData.subbranch !== tempSubbranchMeta.name) {
       // Инициируем новую сслыку на значения подкатегории работ
       updateTempSubbranchMeta(pprData.subbranch, index);
@@ -202,28 +200,29 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       subbranchesSet.add(tempSubbranchMeta.name);
 
       // Добавляем ссылку на подкатегорию работ в индексированный список
-      branchesAndSubbrunchesOrder[index] = { subbranch: tempSubbranchMeta };
+      branchesAndSubbrunchesOrder[pprData.id] = { subbranch: tempSubbranchMeta };
     }
 
-    // Добавить порядковый номер работы в перечень
-    worksOrder.push(`${tempSubbranchMeta.orderIndex}${tempWorkOrder}`);
-    worksOrderForRowSpan.push(`${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`);
+    // Расчитать rowSpan для наименования и обновить tempWorkOrder и tempWorkOrderForRowSpan
     tempWorkOrder++;
 
-    // Расчитать rowSpan для наименования
     if (
       pprData.name !== tempWorkRowSpan.name ||
       pprData.note !== tempWorkRowSpan.note ||
       pprData.branch !== tempWorkRowSpan.branch ||
       pprData.subbranch !== tempWorkRowSpan.subbranch
     ) {
-      resetTempWorkCombine(index, pprData);
-      worksRowSpan[index] = 1;
       tempWorkOrderForRowSpan++;
+      worksRowSpan[index] = 1;
+      resetTempWorkCombine(index, pprData);
     } else {
       worksRowSpan[tempWorkRowSpan.indexStart] += 1;
       worksRowSpan[index] = 0;
     }
+
+    // Добавить порядковый номер работы в перечень
+    worksOrder[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrder}`;
+    worksOrderForRowSpan[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`;
 
     if (isInit) {
       isInit = false;
