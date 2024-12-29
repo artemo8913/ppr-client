@@ -1,29 +1,40 @@
 "use client";
-import React, { FC } from "react";
+import clsx from "clsx";
+import { Switch } from "antd";
+import React, { FC, useState } from "react";
 import { useSession } from "next-auth/react";
 
+import { roundToFixed } from "@/1shared/lib/math";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TPlanWorkPeriodsFields, IPlanWorkValues, getFactWorkFieldByTimePeriod, TPprDataWorkId } from "@/2entities/ppr";
+import { TPlanWorkPeriodsFields, getFactWorkFieldByTimePeriod, IPprData } from "@/2entities/ppr";
 
-import { DoneWorksCorrectionItem } from "./DoneWorksCorrectionItem";
-import { PlanCorrectionItem } from "./PlanCorrectionItem";
+import { CorrectionText } from "./CorrectionText";
+import { PlanCorrectionsTable } from "./PlanCorrectionsTable";
+import { DoneWorkCorrectionsTable } from "./DoneWorkCorrectionsTable";
 
 export interface TCorrectionItem {
-  workId: TPprDataWorkId;
-  rowIndex: number;
+  pprData: IPprData;
   firstCompareValue: number;
   secondCompareValue: number;
-  plan: IPlanWorkValues | null;
+}
+
+export interface ICorrectionSummary {
+  plan: number;
+  fact: number;
 }
 
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { ppr } = usePpr();
+  const { ppr, pprMeta } = usePpr();
+
   const { currentTimePeriod } = usePprTableSettings();
+
   const { data: credential } = useSession();
+
+  const [isShowTextRaport, setIsShowTextRaport] = useState(false);
 
   if (!credential?.user) {
     return "Не авторизирован пользователь";
@@ -40,130 +51,177 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   const welldoneWorks: TCorrectionItem[] = [];
   const planCorrections: TCorrectionItem[] = [];
 
-  ppr?.data.forEach((pprData, rowIndex) => {
+  const planCorrectionsSummary: ICorrectionSummary = { fact: 0, plan: 0 };
+  const undoneWorksSummary: ICorrectionSummary = { fact: 0, plan: 0 };
+  const welldoneWorksSummary: ICorrectionSummary = { fact: 0, plan: 0 };
+
+  ppr?.data.forEach((pprData) => {
     const plan = pprData[fieldFrom];
-    const objectId = pprData.id;
 
-    if (plan.handCorrection !== null) {
-      const planWorkValue = plan.original + plan.outsideCorrectionsSum;
-      const correctedValue = plan.handCorrection;
+    const originalPlanWorkValue = plan.original + plan.outsideCorrectionsSum;
 
-      planCorrections.push({
-        workId: objectId,
-        rowIndex,
-        plan,
-        firstCompareValue: planWorkValue,
-        secondCompareValue: correctedValue,
-      });
-    }
+    const correctedByUserValue = plan.handCorrection;
 
-    const planWorkValue =
-      plan.handCorrection !== null ? plan.handCorrection : plan.original + plan.outsideCorrectionsSum;
+    const planWorkValue = plan.handCorrection !== null ? plan.handCorrection : originalPlanWorkValue;
+
     const factWorkValue = pprData[getFactWorkFieldByTimePeriod(currentTimePeriod)];
 
-    if (planWorkValue > factWorkValue) {
+    if (correctedByUserValue !== null && (correctedByUserValue !== originalPlanWorkValue || plan.planTransfers)) {
+      planCorrections.push({
+        pprData,
+        firstCompareValue: originalPlanWorkValue,
+        secondCompareValue: correctedByUserValue,
+      });
+
+      planCorrectionsSummary.plan = roundToFixed(
+        originalPlanWorkValue * pprData.norm_of_time + planCorrectionsSummary.plan
+      );
+      planCorrectionsSummary.fact = roundToFixed(
+        correctedByUserValue * pprData.norm_of_time + planCorrectionsSummary.fact
+      );
+    }
+
+    if (planWorkValue > factWorkValue || (plan.undoneTransfers && planWorkValue === factWorkValue)) {
       undoneWorks.push({
-        workId: objectId,
-        rowIndex,
-        plan,
+        pprData,
         firstCompareValue: planWorkValue,
         secondCompareValue: factWorkValue,
       });
+
+      undoneWorksSummary.plan = roundToFixed(planWorkValue * pprData.norm_of_time + undoneWorksSummary.plan);
+      undoneWorksSummary.fact = roundToFixed(factWorkValue * pprData.norm_of_time + undoneWorksSummary.fact);
     } else if (planWorkValue < factWorkValue) {
       welldoneWorks.push({
-        workId: objectId,
-        rowIndex,
-        plan,
+        pprData,
         firstCompareValue: planWorkValue,
         secondCompareValue: factWorkValue,
       });
+
+      welldoneWorksSummary.plan = roundToFixed(planWorkValue * pprData.norm_of_time + welldoneWorksSummary.plan);
+      welldoneWorksSummary.fact = roundToFixed(factWorkValue * pprData.norm_of_time + welldoneWorksSummary.fact);
     }
   });
 
   const isPprUnderControl = checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision;
   const isEditablePlanCorrections = monthStatus === "plan_creating" && isPprUnderControl;
   const isEditableDoneWorkCorrections = monthStatus === "fact_filling" && isPprUnderControl;
-  const isShowPlanCorrections = planCorrections.length > 0;
+  const hasPlanCorrections = planCorrections.length > 0;
   const isShowDoneWorkCorrections =
     monthStatus === "fact_filling" ||
     monthStatus === "fact_on_agreement_sub_boss" ||
     monthStatus === "fact_verification_time_norm" ||
     monthStatus === "fact_verification_engineer" ||
     monthStatus === "done";
-  const isShowUndoneCorrections = undoneWorks.length > 0 && isShowDoneWorkCorrections;
-  const isShowWellDoneCorrections = welldoneWorks.length > 0 && isShowDoneWorkCorrections;
+  const hasUndoneCorrections = undoneWorks.length > 0 && isShowDoneWorkCorrections;
+  const hasWellDoneCorrections = welldoneWorks.length > 0 && isShowDoneWorkCorrections;
+
+  const isMonthPlanFullDone = !hasPlanCorrections && !hasUndoneCorrections && !hasWellDoneCorrections;
 
   return (
     <div>
-      <p className="text-right">
-        Начальнику {ppr?.distanceShortName}
-        <br />
-        XXX
-        <br />
-        начальника {ppr?.subdivisionShortName}
-        <br />
-        ХХХ
-      </p>
-      <h2 className="text-center font-bold">Рапорт</h2>
-      {isShowPlanCorrections && (
-        <>
-          <p className="font-bold indent-4 text-justify">
-            При планировании ведомости выполненных работ (форма ЭУ-99) на {translateRuTimePeriod(currentTimePeriod)}{" "}
-            месяц {ppr?.year} г. возникла необходимости корректировки годового плана технического обслуживания и
-            ремонта:
-          </p>
-          <ol className="list-decimal pl-[revert]">
-            {planCorrections.map((correction) => (
-              <PlanCorrectionItem
+      <div className="print:hidden ml-auto mb-4">
+        Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
+      </div>
+      <div
+        className={clsx(
+          "rounded-3xl bg-white flex flex-col gap-8 p-4 pt-8",
+          isShowTextRaport && "text-justify mx-20 print:ml-0"
+        )}
+      >
+        <p className="ml-[70%] text-left">
+          Начальнику {ppr?.distanceShortName}
+          <br />
+          ____________
+          <br />
+          начальника {ppr?.subdivisionShortName}
+          <br />
+          ____________
+        </p>
+        <h2 className="text-center font-bold">РАПОРТ</h2>
+        {hasPlanCorrections && (
+          <div>
+            <p className="font-bold text-justify">
+              I. При планировании ведомости выполненных работ (форма ЭУ-99) на{" "}
+              {translateRuTimePeriod(currentTimePeriod)} месяц {ppr?.year} г. возникла необходимости корректировки
+              годового плана технического обслуживания и ремонта:
+            </p>
+            {isShowTextRaport ? (
+              <CorrectionText
+                corrections={planCorrections}
+                summary={planCorrectionsSummary}
+                fieldFrom={fieldFrom}
+                type="plan"
+              />
+            ) : (
+              <PlanCorrectionsTable
+                pprMeta={pprMeta}
+                fieldFrom={fieldFrom}
+                summary={planCorrectionsSummary}
+                planCorrections={planCorrections}
                 isEditable={isEditablePlanCorrections}
-                key={correction.workId}
-                correction={correction}
-                fieldFrom={fieldFrom}
-                measure={ppr?.data[correction.rowIndex].measure}
-                name={ppr?.data[correction.rowIndex].name}
               />
-            ))}
-          </ol>
-        </>
-      )}
-      {isShowUndoneCorrections && (
-        <>
-          <p className="font-bold indent-4 text-justify">
-            За {translateRuTimePeriod(currentTimePeriod)} месяц не в полном объеме выполнены следующие работы:
-          </p>
-          <ol className="list-decimal pl-[revert] indent-4 text-justify">
-            {undoneWorks.map((correction) => (
-              <DoneWorksCorrectionItem
+            )}
+          </div>
+        )}
+        {hasUndoneCorrections && (
+          <div>
+            <p className="font-bold text-justify">
+              II. За {translateRuTimePeriod(currentTimePeriod)} месяц не в полном объеме выполнены следующие работы:
+            </p>
+            {isShowTextRaport ? (
+              <CorrectionText
+                corrections={undoneWorks}
+                summary={undoneWorksSummary}
+                fieldFrom={fieldFrom}
+                type="undone"
+              />
+            ) : (
+              <DoneWorkCorrectionsTable
+                pprMeta={pprMeta}
+                fieldFrom={fieldFrom}
+                summary={undoneWorksSummary}
+                planCorrections={undoneWorks}
                 isEditable={isEditableDoneWorkCorrections}
-                key={correction.workId}
-                correction={correction}
-                fieldFrom={fieldFrom}
-                measure={ppr?.data[correction.rowIndex].measure}
-                name={ppr?.data[correction.rowIndex].name}
               />
-            ))}
-          </ol>
-        </>
-      )}
-      {isShowWellDoneCorrections && (
-        <>
-          <p className="font-bold indent-4 text-justify">
-            В тоже время были выполнены (перевыполнены) следующие работы:
-          </p>
-          <ol className="list-decimal pl-[revert] indent-4 text-justify">
-            {welldoneWorks.map((correction) => (
-              <DoneWorksCorrectionItem
+            )}
+          </div>
+        )}
+        {hasWellDoneCorrections && (
+          <div>
+            <p className="font-bold text-justify">
+              III. В тоже время были выполнены следующие работы, возникли следующие отвлечения:
+            </p>
+            {isShowTextRaport ? (
+              <CorrectionText
+                corrections={welldoneWorks}
+                summary={welldoneWorksSummary}
+                fieldFrom={fieldFrom}
+                type="undone"
+              />
+            ) : (
+              <DoneWorkCorrectionsTable
+                pprMeta={pprMeta}
+                fieldFrom={fieldFrom}
+                summary={welldoneWorksSummary}
+                planCorrections={welldoneWorks}
                 isEditable={isEditableDoneWorkCorrections}
-                key={correction.workId}
-                correction={correction}
-                fieldFrom={fieldFrom}
-                measure={ppr?.data[correction.rowIndex].measure}
-                name={ppr?.data[correction.rowIndex].name}
               />
-            ))}
-          </ol>
-        </>
-      )}
+            )}
+          </div>
+        )}
+        {isMonthPlanFullDone && (
+          <span>
+            Техническое обслуживание и ремонт выполнено согласно утвержденным плнам на{" "}
+            {translateRuTimePeriod(currentTimePeriod)} месяц.
+          </span>
+        )}
+        {!isMonthPlanFullDone && (
+          <span>
+            Прошу откорректировать план технического обслуживания и ремонта с сохранением премиальной оплаты труда.
+          </span>
+        )}
+        <span className="text-center">{ppr?.subdivisionShortName}________________________</span>
+      </div>
     </div>
   );
 };
