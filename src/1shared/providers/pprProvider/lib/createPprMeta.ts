@@ -53,7 +53,6 @@ export interface IBranchMeta extends IBranchDefaultMeta {
 }
 
 export interface IPprMeta {
-  worksOrder: { [id: TPprDataWorkId]: string };
   worksOrderForRowSpan: { [id: TPprDataWorkId]: string };
   worksRowSpan: number[];
   subbranchesList: string[];
@@ -83,8 +82,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   } = {};
 
   const subbranchesSet = new Set<string>();
-
-  const worksOrder: { [id: TPprDataWorkId]: string } = {};
 
   const worksOrderForRowSpan: { [id: TPprDataWorkId]: string } = {};
 
@@ -221,7 +218,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     }
 
     // Добавить порядковый номер работы в перечень
-    worksOrder[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrder}`;
     worksOrderForRowSpan[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`;
 
     if (isInit) {
@@ -267,7 +263,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   });
 
   return {
-    worksOrder,
     totalValues,
     worksRowSpan,
     branchesMeta,
