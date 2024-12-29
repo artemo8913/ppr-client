@@ -1,8 +1,9 @@
-import Input from "antd/es/input";
+import { ReactElement } from "react";
 import Button from "antd/es/button";
-import Select, { DefaultOptionType } from "antd/es/select";
-import { ChangeEvent, ReactElement } from "react";
+import { InputNumberProps } from "antd";
+import TypedInputNumber from "antd/es/input-number";
 import { CloseCircleOutlined } from "@ant-design/icons";
+import Select, { DefaultOptionType } from "antd/es/select";
 
 export type TOption<T> = { value: T } & DefaultOptionType;
 
@@ -22,17 +23,20 @@ export const SelectTransferParams: <T>(props: ISelectTransferParamsProps<T>) => 
   handleChange,
   handleDeleteTransfer,
 }) => {
+  const handleValueUpdate: InputNumberProps["onChange"] = (value) => {
+    const newValue = Number(value);
+    handleChange(fieldTo, newValue);
+  };
+
   return (
     <div className="flex border">
-      <Input
-        value={value}
-        type="number"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          const newValue = Number(e.target.value);
-          handleChange(fieldTo, newValue);
-        }}
+      <TypedInputNumber className="w-full" value={value} onChange={handleValueUpdate} />
+      <Select
+        className="flex-1"
+        value={fieldTo}
+        options={options}
+        onChange={(fieldTo) => handleChange(fieldTo, value)}
       />
-      <Select value={fieldTo} options={options} onChange={(fieldTo) => handleChange(fieldTo, value)} />
       {Boolean(handleDeleteTransfer) && (
         <Button icon={<CloseCircleOutlined />} onClick={() => handleDeleteTransfer && handleDeleteTransfer()} />
       )}
