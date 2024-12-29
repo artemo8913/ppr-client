@@ -23,11 +23,7 @@ const items: MenuItem[] = [
   getItem(<Link href={ROUTE_PPR}>Годовые планы</Link>, "year", <TableOutlined />),
   getItem(<Link href={ROUTE_AGREEMENT}>На согласовании / утверждении</Link>, "agreement", <AuditOutlined />),
   getItem(<Link href={ROUTE_REPORTS}>Отчеты</Link>, "reports", <BarChartOutlined />),
-  getItem(
-    <a onClick={() => signOut({ redirect: true, callbackUrl: ROUTE_ROOT })}>Выйти</a>,
-    "logout",
-    <LogoutOutlined />
-  ),
+  getItem(<a onClick={() => signOut({ callbackUrl: ROUTE_ROOT })}>Выйти</a>, "logout", <LogoutOutlined />),
 ];
 
 export const MainLayoutSider = ({ className }: { className: string }) => {

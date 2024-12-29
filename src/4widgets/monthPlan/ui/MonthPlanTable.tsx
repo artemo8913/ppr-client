@@ -117,14 +117,14 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
                     />
                   )}
                   {branchesAndSubbrunchesOrder[pprData.id].branch && (
-                    <tr>
+                    <tr className={style.titleRow}>
                       <td colSpan={TITLE_BRANCHES_COL_SPAN}>
                         {`${branchOrder}. `}
                         {translateRuPprBranchName(branchesAndSubbrunchesOrder[pprData.id].branch?.name || "")}
                       </td>
                     </tr>
                   )}
-                  <tr>
+                  <tr className={style.titleRow}>
                     <td colSpan={TITLE_BRANCHES_COL_SPAN}>
                       {`${branchOrder}.${subbranchOrder}. `}
                       {branchesAndSubbrunchesOrder[pprData.id].subbranch?.name}

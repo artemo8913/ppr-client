@@ -69,10 +69,10 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   const isUniteWorkName = pprSettings.isUniteSameWorks;
 
   const hasNotCommonWorkBacklight =
-    !Boolean(pprData.common_work_id) && isWorkNameField && pprSettings.isBacklightNotCommonWork;
+    !Boolean(pprData.common_work_id) && (isWorkNameField || isLocationField) && pprSettings.isBacklightNotCommonWork;
 
   const hasNotApprovedWorkBacklight =
-    !Boolean(pprData.is_work_aproved) && isWorkNameField && pprSettings.isBacklightNotApprovedWork;
+    !Boolean(pprData.is_work_aproved) && (isWorkNameField || isLocationField) && pprSettings.isBacklightNotApprovedWork;
 
   const isPlanTimeField = checkIsWorkOrTimeField(field);
 
