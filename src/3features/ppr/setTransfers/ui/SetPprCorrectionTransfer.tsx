@@ -90,7 +90,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
     [updateTransfers, transferType, transfers, fieldFrom, workId]
   );
 
-  const handleStratagy = useCallback(
+  const handleStrategy = useCallback(
     (strategy: TTransferStrategyOption) => {
       if (strategy === "NULL") {
         handleTransfersChange(null);
@@ -102,8 +102,8 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
   );
 
   return (
-    <div className="inline-flex flex-wrap gap-4">
-      <SelectTransferStrategy defaultValue={!transfers ? "NULL" : "PERIOD"} handleChange={handleStratagy} />
+    <div className="flex-wrap gap-2">
+      <SelectTransferStrategy defaultValue={!transfers ? "NULL" : "PERIOD"} handleChange={handleStrategy} />
       {transfers?.map((oneTransfer, transferIndex) => (
         <SelectTransferParams
           key={oneTransfer.fieldTo + transferIndex}
