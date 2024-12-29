@@ -103,7 +103,6 @@ const PprContext = createContext<IPprContext>({
   fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
   pprMeta: {
-    worksOrder: {},
     worksRowSpan: [],
     branchesMeta: [],
     subbranchesList: [],
@@ -332,7 +331,9 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           }
 
           const newPprData: IPprData = { ...pprData };
+
           newPprData[field] = value;
+
           newPprData.year_fact_work = 0;
 
           for (const periodField of FACT_WORK_FIELDS) {
@@ -462,7 +463,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           };
 
           newPprData.year_plan_work.final = 0;
-
+          // TODO: может попасться year_plan_work, если не будет первым! Вдруг итог по году перенести надо будет в конец таблицы?
           for (const periodField of PLAN_WORK_FIELDS) {
             newPprData.year_plan_work.final += newPprData[periodField].final;
           }
@@ -906,7 +907,6 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
    */
   let pprMeta: IPprMeta = {
-    worksOrder: {},
     branchesMeta: [],
     worksRowSpan: [],
     subbranchesList: [],
