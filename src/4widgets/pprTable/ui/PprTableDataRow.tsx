@@ -1,42 +1,55 @@
 "use client";
-import { FC, memo, MutableRefObject } from "react";
+import clsx from "clsx";
+import { FC, memo, MutableRefObject, useCallback, useMemo } from "react";
 
-import { ITableCellProps } from "@/1shared/ui/table";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { IPprData, TPprDataWorkId } from "@/2entities/ppr";
 
 import { PprTableCell } from "./PprTableCell";
-import { checkIsFieldVertical } from "../lib/pprTableStylesHelper";
-import clsx from "clsx";
+import { editableFieldsSettings, TPprFieldSettings } from "../lib/pprTableFieldsHelper";
 
 interface IPprTableDataRowProps {
   rowSpan?: number;
   pprData: IPprData;
   workOrder?: string;
+  isEditable?: boolean;
   fields: (keyof IPprData)[];
   isPprInUserControl: boolean;
+  getEditableDataFields: () => TPprFieldSettings;
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
   updatePprTableCell: (workId: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
-  getColumnSettingsForField: (field: keyof IPprData, isHaveWorkId: boolean) => ITableCellProps | undefined;
 }
 
 export const PprTableDataRow: FC<IPprTableDataRowProps> = (props) => {
   const pprSettings = usePprTableSettings();
 
+  const getEditablePlanFactFields = useCallback((): TPprFieldSettings => {
+    if (!props.isEditable || props.pprData.is_work_aproved) {
+      return {};
+    }
+
+    if (props.pprData.common_work_id) {
+      return editableFieldsSettings.commonWork;
+    } else {
+      return editableFieldsSettings.notCommonWork;
+    }
+  }, [props.isEditable, props.pprData.common_work_id, props.pprData.is_work_aproved]);
+
   return (
     <tr className={clsx(pprSettings.isBacklightRowAndCellOnHover && "hover:shadow-purple-300 hover:shadow-inner")}>
       {props.fields.map((field) => (
         <PprTableCell
+          {...props.getEditableDataFields()[field]}
+          {...getEditablePlanFactFields()[field]}
           field={field}
           rowSpan={props.rowSpan}
           pprData={props.pprData}
+          pprSettings={pprSettings}
           workOrder={props.workOrder}
           key={props.pprData.id + field}
           planCellRef={props.planCellRef}
-          isVertical={checkIsFieldVertical(field)}
           updatePprTableCell={props.updatePprTableCell}
           isPprInUserControl={props.isPprInUserControl}
-          {...props.getColumnSettingsForField(field, props.pprData.common_work_id !== null)}
         />
       ))}
     </tr>

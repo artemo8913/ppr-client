@@ -4,7 +4,7 @@ import { FC, MutableRefObject } from "react";
 
 import { getQuartal, getTimePeriodFromString } from "@/1shared/const/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { IPprTableSettingsContext, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   checkIsPlanOrFactWorkField,
   checkIsPlanTimeField,
@@ -19,6 +19,7 @@ import { PprWorkUpdateControl } from "@/3features/ppr/worksUpdate";
 import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
 
 import style from "./PprTableCell.module.scss";
+import { checkIsFieldVertical } from "../lib/pprTableFieldsHelper";
 
 function getValue(pprData: IPprData, field: keyof IPprData, isCorrectedView: boolean) {
   if (checkIsPlanWorkField(field) || checkIsPlanTimeField(field)) {
@@ -38,6 +39,7 @@ interface IPprTableCellProps extends ITableCellProps {
   workOrder?: string;
   field: keyof IPprData;
   isPprInUserControl?: boolean;
+  pprSettings: IPprTableSettingsContext;
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
   updatePprTableCell: (workId: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
 }
@@ -48,12 +50,11 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   pprData,
   workOrder,
   planCellRef,
+  pprSettings,
   isPprInUserControl,
   updatePprTableCell,
   ...otherProps
 }) => {
-  const pprSettings = usePprTableSettings();
-
   const isPlanWorkPeriodField = checkIsPlanWorkField(field);
   const isPlanTimePeriodField = checkIsPlanTimeField(field);
   const isPlanOrFactWorkPeriodField = checkIsPlanOrFactWorkField(field);
@@ -87,6 +88,8 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS" ||
     pprSettings.correctionView === "INITIAL_PLAN_WITH_ARROWS";
 
+  const isVertical = checkIsFieldVertical(field);
+
   let value = getValue(pprData, field, isCorrectedView);
 
   if (value === 0) {
@@ -117,32 +120,35 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
       rowSpan={isUniteWorkName && isWorkNameField && rowSpan ? rowSpan : undefined}
       className={clsx(
         style.PprTableCell,
-        quartalNumber && style[`Q${quartalNumber}`],
-        !isBgNotTransparent && style.transparent,
         isPlanTimeField && style.bottom,
+        !isBgNotTransparent && style.transparent,
+        isPlanOrFactWorkPeriodField && "font-bold",
+        quartalNumber && style[`Q${quartalNumber}`],
         hasNotCommonWorkBacklight && style.backlightNotCommonWork,
         hasNotApprovedWorkBacklight && style.backlightNotApprovedWork,
-        pprSettings.isBacklightRowAndCellOnHover && "hover:shadow-purple-400 hover:shadow-inner",
-        isPlanOrFactWorkPeriodField && "font-bold"
+        pprSettings.isBacklightRowAndCellOnHover && "hover:shadow-purple-400 hover:shadow-inner"
       )}
     >
       {isArrowsShow && isPlanWorkPeriodField ? (
         <div className="flex flex-col justify-between gap-6">
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
-          <TableCell {...otherProps} onBlur={handleChange} value={value} />
+          <TableCell {...otherProps} isVertical={isVertical} onBlur={handleChange} value={value} />
         </div>
       ) : (
         <PprWorkUpdateControl work={pprData} isShowControl={isFieldWithControl}>
-          {isWorkNameField && <span className="float-left pr-1">{workOrder}</span>}
-          <TableCell
-            {...otherProps}
-            className={clsx(isWorkNameField && "!inline")}
-            onBlur={handleChange}
-            value={value}
-          />
-          {Boolean(pprData.note && isWorkNameField) && (
-            <span className="font-semibold block">{` (прим. ${pprData.note})`}</span>
-          )}
+          <div>
+            {isWorkNameField && <span className="float-left pr-1">{workOrder}</span>}
+            <TableCell
+              {...otherProps}
+              value={value}
+              onBlur={handleChange}
+              isVertical={isVertical}
+              className={clsx(isWorkNameField && "!inline")}
+            />
+            {Boolean(pprData.note && isWorkNameField) && (
+              <span className="font-semibold block">{` (прим. ${pprData.note})`}</span>
+            )}
+          </div>
         </PprWorkUpdateControl>
       )}
     </td>
