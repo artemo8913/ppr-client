@@ -1,3 +1,5 @@
+$cell-width: 80px;
+
 .TableCell {
   display: flex;
   justify-content: center;
@@ -9,6 +11,7 @@
   &:focus-within {
     position: relative;
     z-index: 10;
+    min-height: $cell-width;
   }
 
   &.isVertical {
@@ -42,13 +45,11 @@
 }
 
 .InputCell {
-  --cell-width: 80px;
-
   cursor: pointer;
   background-color: transparent;
   border-style: none;
   width: 100%;
-  height: var(--cell-width);
+  height: $cell-width;
 
   :focus {
     cursor: text;
@@ -56,7 +57,7 @@
 
   &.isVertical:focus-within {
     background-color: white;
-    width: var(--cell-width);
+    width: $cell-width;
     height: auto;
 
     &:invalid {
