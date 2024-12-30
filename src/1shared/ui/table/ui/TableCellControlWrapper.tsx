@@ -19,7 +19,7 @@ export const TableCellControlWrapper: FC<ITableCellControlWrapperProps> = ({
   }
 
   return (
-    <div className="relative" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
+    <div className="relative min-h-20 flex flex-col justify-center" onMouseEnter={() => setIsHide(false)} onMouseLeave={() => setIsHide(true)}>
       {!isHide && <div className="!absolute -bottom-6 left-0 z-10 flex py-2 min-h-12">{controlItems}</div>}
       {children}
     </div>
