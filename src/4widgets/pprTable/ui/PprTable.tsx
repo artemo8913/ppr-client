@@ -60,6 +60,8 @@ export const PprTable: FC<IPprTableProps> = () => {
     [ppr?.months_statuses, pprSettings.currentTimePeriod]
   );
 
+  const isSubbranchEditable = useMemo(() => isEditable && isCreatingPpr, [isCreatingPpr, isEditable]);
+
   const getEditableDataFields = useCallback((): TPprFieldSettings => {
     if (!isEditable) {
       return {};
@@ -153,8 +155,9 @@ export const PprTable: FC<IPprTableProps> = () => {
                   <PprTableBranchNameRowMemo branch={branchesAndSubbrunchesOrder[pprData.id].branch} />
                 )}
                 <PprTableBranchNameRowMemo
-                  branch={branchesAndSubbrunchesOrder[pprData.id].subbranch}
+                  isEditable={isSubbranchEditable}
                   updateSubbranch={updateSubbranch}
+                  branch={branchesAndSubbrunchesOrder[pprData.id].subbranch}
                 />
               </>
             )}
