@@ -1,10 +1,10 @@
 "use client";
 import clsx from "clsx";
-import { FC, MutableRefObject } from "react";
+import { FC, MutableRefObject, useRef } from "react";
 
 import { getQuartal, getTimePeriodFromString } from "@/1shared/const/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
-import { IPprTableSettingsContext, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { IPprTableSettingsContext } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   checkIsPlanOrFactWorkField,
   checkIsPlanTimeField,
@@ -55,6 +55,8 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   updatePprTableCell,
   ...otherProps
 }) => {
+  const tdRef = useRef<HTMLTableCellElement>(null);
+
   const isPlanWorkPeriodField = checkIsPlanWorkField(field);
   const isPlanTimePeriodField = checkIsPlanTimeField(field);
   const isPlanOrFactWorkPeriodField = checkIsPlanOrFactWorkField(field);
@@ -90,6 +92,8 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   const isVertical = checkIsFieldVertical(field);
 
+  const isEditable = otherProps?.cellType === "input" || otherProps?.cellType === "textarea";
+
   let value = getValue(pprData, field, isCorrectedView);
 
   if (value === 0) {
@@ -117,9 +121,12 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 
   return (
     <td
+      ref={tdRef}
+      tabIndex={-1}
       rowSpan={isUniteWorkName && isWorkNameField && rowSpan ? rowSpan : undefined}
       className={clsx(
         style.PprTableCell,
+        isEditable && style.isEditable,
         isPlanTimeField && style.bottom,
         !isBgNotTransparent && style.transparent,
         isPlanOrFactWorkPeriodField && "font-bold",
@@ -132,7 +139,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
       {isArrowsShow && isPlanWorkPeriodField ? (
         <div className="flex flex-col justify-between gap-6">
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
-          <TableCell {...otherProps} isVertical={isVertical} onBlur={handleChange} value={value} />
+          <TableCell {...otherProps} tdRef={tdRef} isVertical={isVertical} onBlur={handleChange} value={value} />
         </div>
       ) : (
         <PprWorkUpdateControl work={pprData} isShowControl={isFieldWithControl}>
@@ -140,6 +147,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
             {isWorkNameField && <span className="float-left pr-1">{workOrder}</span>}
             <TableCell
               {...otherProps}
+              tdRef={tdRef}
               value={value}
               onBlur={handleChange}
               isVertical={isVertical}
