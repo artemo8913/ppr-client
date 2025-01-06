@@ -1,0 +1,1 @@
+ALTER TABLE `ppr_working_mans` ADD `is_working_man_aproved` boolean DEFAULT false NOT NULL;

@@ -136,6 +136,7 @@ export interface IWorkingManYearPlan
   full_name: string;
   work_position: string;
   participation: number;
+  is_working_man_aproved: boolean;
 }
 
 export type TWorkBranch = "exploitation" | "additional" | "unforeseen";

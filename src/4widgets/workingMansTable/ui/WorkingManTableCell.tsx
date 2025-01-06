@@ -2,23 +2,23 @@
 import { FC, memo, useCallback } from "react";
 
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
-import { IWorkingManYearPlan, TWorkingManId } from "@/2entities/ppr";
+import { IWorkingManYearPlan } from "@/2entities/ppr";
 import { PprWorkingManUpdateControl } from "@/3features/pprWorkingMans/workingMansUpdate";
 
 interface IWorkingManTableCellProps extends ITableCellProps {
-  id: TWorkingManId;
+  workingMan: IWorkingManYearPlan;
   rowIndex: number;
   field: keyof IWorkingManYearPlan;
-  isPprInUserControl?: boolean;
+  isEditable?: boolean;
   updateWorkingManTableCell: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
 }
 
 const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
-  id,
-  rowIndex,
   field,
+  rowIndex,
+  workingMan,
+  isEditable,
   updateWorkingManTableCell,
-  isPprInUserControl,
   ...otherProps
 }) => {
   const handleChange = useCallback(
@@ -28,10 +28,10 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
     [rowIndex, field, updateWorkingManTableCell]
   );
 
-  const isShowControl = field === "full_name" && isPprInUserControl;
+  const isShowControl = field === "full_name" && isEditable;
 
   return (
-    <PprWorkingManUpdateControl workingManId={id} isShowControl={isShowControl}>
+    <PprWorkingManUpdateControl workingMan={workingMan} isShowControl={isShowControl}>
       <TableCell {...otherProps} onBlur={handleChange} />
     </PprWorkingManUpdateControl>
   );

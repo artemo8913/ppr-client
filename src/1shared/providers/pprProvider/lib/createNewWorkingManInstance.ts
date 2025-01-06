@@ -5,6 +5,7 @@ export function createNewWorkingManInstance(): IWorkingManYearPlan {
     id: String(new Date().toString() + Math.random()),
     full_name: "Иванов И.И.",
     work_position: "мкс",
+    is_working_man_aproved: false,
     participation: 1,
     year_plan_time: 0,
     jan_plan_time: 0,
