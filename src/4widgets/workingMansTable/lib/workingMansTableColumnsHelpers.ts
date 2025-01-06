@@ -1,6 +1,13 @@
 import { TTimePeriod } from "@/1shared/const/date";
 import { ITableCellProps } from "@/1shared/ui/table";
-import { IWorkingManYearPlan, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
+import {
+  getFactTimeFieldByTimePeriod,
+  getPlanNormTimeFieldByTimePeriod,
+  getPlanTabelTimeFieldByTimePeriod,
+  IWorkingManYearPlan,
+  TAllMonthStatuses,
+  TYearPprStatus,
+} from "@/2entities/ppr";
 import { TFactTimePeriodsFields, TPlanNormTimePeriodsFields, TPlanTabelTimePeriodsFields } from "@/2entities/ppr";
 
 const WORKING_MAN_TABLE_FIELDS_TITLES_RU: { [key in keyof IWorkingManYearPlan | string]?: string } = {
@@ -34,7 +41,7 @@ export function getThStyle(column: keyof IWorkingManYearPlan): React.CSSProperti
   return {};
 }
 
-const allEditableSettings: { [column in keyof IWorkingManYearPlan]?: ITableCellProps } = {
+const ALL_EDITABLE_SETTINGS: { [column in keyof IWorkingManYearPlan]?: ITableCellProps } = {
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
   participation: { cellType: "input", type: "number" },
@@ -103,24 +110,21 @@ export function getColumnSettings(
   pprMonthStatuses?: TAllMonthStatuses
 ): ITableCellProps {
   if (pprYearStatus === "plan_creating") {
-    return allEditableSettings[field] || {};
+    return ALL_EDITABLE_SETTINGS[field] || {};
   }
   if (timePeriod === "year" || !pprMonthStatuses) {
     return {};
   }
 
-  const planNormField: keyof TPlanNormTimePeriodsFields = `${timePeriod}_plan_norm_time`;
-  const planTabelField: keyof TPlanTabelTimePeriodsFields = `${timePeriod}_plan_tabel_time`;
-  const factField: keyof TFactTimePeriodsFields = `${timePeriod}_fact_time`;
-
-  const planEditableSettings = getPlanEditableSettings(planNormField, planTabelField);
-  const factEditableSettings = getFactEditableSettings(factField);
+  const planNormField = getPlanNormTimeFieldByTimePeriod(timePeriod);
+  const planTabelField = getPlanTabelTimeFieldByTimePeriod(timePeriod);
+  const factTimeField = getFactTimeFieldByTimePeriod(timePeriod);
 
   if (pprMonthStatuses[timePeriod] === "plan_creating") {
-    return planEditableSettings[field] || {};
+    return getPlanEditableSettings(planNormField, planTabelField)[field] || {};
   }
   if (pprMonthStatuses[timePeriod] === "fact_filling") {
-    return factEditableSettings[field] || {};
+    return getFactEditableSettings(factTimeField)[field] || {};
   }
   return {};
 }

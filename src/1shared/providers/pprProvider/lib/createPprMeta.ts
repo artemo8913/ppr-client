@@ -45,7 +45,7 @@ export interface IBranchDefaultMeta {
   workIds: Set<TPprDataWorkId>;
   type: "branch" | "subbranch";
   prev: IBranchDefaultMeta | null;
-  total: TPprDataFieldsTotalValues;
+  total: { final: TPprDataFieldsTotalValues; original: TPprDataFieldsTotalValues };
 }
 
 export interface IBranchMeta extends IBranchDefaultMeta {
@@ -57,7 +57,7 @@ export interface IPprMeta {
   worksRowSpan: number[];
   subbranchesList: string[];
   branchesMeta: IBranchMeta[];
-  totalValues: TTotalFieldsValues;
+  totalValues: { final: TTotalFieldsValues; original: TTotalFieldsValues };
   branchesAndSubbrunchesOrder: {
     [id: TPprDataWorkId]: {
       branch?: IBranchMeta;
@@ -87,11 +87,15 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   const worksRowSpan: number[] = [];
 
-  const worksTotalValue: TPprDataFieldsTotalValues = {};
+  const worksTotalFinalValue: TPprDataFieldsTotalValues = {};
+
+  const worksTotalOriginalValue: TPprDataFieldsTotalValues = {};
 
   const workingMansTotalValues: TWorkingManFieldsTotalValues = {};
 
-  const totalValues: TTotalFieldsValues = { works: worksTotalValue, peoples: workingMansTotalValues };
+  const totalFinalValues: TTotalFieldsValues = { works: worksTotalFinalValue, peoples: workingMansTotalValues };
+
+  const totalOriginalValues: TTotalFieldsValues = { works: worksTotalOriginalValue, peoples: workingMansTotalValues };
 
   let isInit = true;
 
@@ -119,7 +123,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     subbranches: [],
     orderIndex: "",
     type: "branch",
-    total: {},
+    total: { final: {}, original: {} },
     prev: null,
   };
 
@@ -128,7 +132,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     name: "",
     orderIndex: "",
     type: "subbranch",
-    total: {},
+    total: { final: {}, original: {} },
     prev: null,
   };
 
@@ -139,7 +143,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       subbranches: [],
       orderIndex: `${branchesMeta.length + 1}.`,
       type: "branch",
-      total: {},
+      total: { final: {}, original: {} },
       prev: isInit ? null : tempBranchMeta,
     };
   }
@@ -154,7 +158,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       name: subbranchName,
       orderIndex: `${branchesMeta.length + (isBranchChange ? 1 : 0)}.${tempBranchMeta.subbranches.length + 1}.`,
       type: "subbranch",
-      total: {},
+      total: { final: {}, original: {} },
       prev: isInit ? null : tempSubbranchMeta,
     };
   }
@@ -229,23 +233,33 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
     // Счиатаем общие чел.-ч по запланированным работам
     PLAN_TIME_FIELDS.forEach((field) => {
-      const planWorkField = getPlanWorkFieldByPlanTimeField(field);
-      const value = pprData[planWorkField].final * pprData.norm_of_time;
-      handleWorkPeriod(tempBranchMeta.total, value, field);
-      handleWorkPeriod(tempSubbranchMeta.total, value, field);
-      handleWorkPeriod(worksTotalValue, value, field);
+      handleWorkPeriod(tempBranchMeta.total.final, pprData[field].final, field);
+      handleWorkPeriod(tempSubbranchMeta.total.final, pprData[field].final, field);
+      handleWorkPeriod(worksTotalFinalValue, pprData[field].final, field);
+
+      handleWorkPeriod(tempBranchMeta.total.original, pprData[field].original, field);
+      handleWorkPeriod(tempSubbranchMeta.total.original, pprData[field].original, field);
+      handleWorkPeriod(worksTotalOriginalValue, pprData[field].original, field);
     });
 
     FACT_NORM_TIME_FIELDS.forEach((field) => {
-      handleWorkPeriod(tempBranchMeta.total, pprData[field], field);
-      handleWorkPeriod(tempSubbranchMeta.total, pprData[field], field);
-      handleWorkPeriod(worksTotalValue, pprData[field], field);
+      handleWorkPeriod(tempBranchMeta.total.final, pprData[field], field);
+      handleWorkPeriod(tempSubbranchMeta.total.final, pprData[field], field);
+      handleWorkPeriod(worksTotalFinalValue, pprData[field], field);
+
+      handleWorkPeriod(tempBranchMeta.total.original, pprData[field], field);
+      handleWorkPeriod(tempSubbranchMeta.total.original, pprData[field], field);
+      handleWorkPeriod(worksTotalOriginalValue, pprData[field], field);
     });
 
     FACT_TIME_FIELDS.forEach((field) => {
-      handleWorkPeriod(tempBranchMeta.total, pprData[field], field);
-      handleWorkPeriod(tempSubbranchMeta.total, pprData[field], field);
-      handleWorkPeriod(worksTotalValue, pprData[field], field);
+      handleWorkPeriod(tempBranchMeta.total.final, pprData[field], field);
+      handleWorkPeriod(tempSubbranchMeta.total.final, pprData[field], field);
+      handleWorkPeriod(worksTotalFinalValue, pprData[field], field);
+
+      handleWorkPeriod(tempBranchMeta.total.original, pprData[field], field);
+      handleWorkPeriod(tempSubbranchMeta.total.original, pprData[field], field);
+      handleWorkPeriod(worksTotalOriginalValue, pprData[field], field);
     });
 
     // Добавить id работы в SET подкатегории
@@ -263,7 +277,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   });
 
   return {
-    totalValues,
+    totalValues: { final: totalFinalValues, original: totalOriginalValues },
     worksRowSpan,
     branchesMeta,
     worksOrderForRowSpan,

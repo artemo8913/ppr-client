@@ -1,8 +1,9 @@
 import { FC } from "react";
 import clsx from "clsx";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
 import { TableCellMemo } from "@/1shared/ui/table";
+import { usePpr } from "@/1shared/providers/pprProvider";
+import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 import { IPprData, IWorkingManYearPlan } from "../model/ppr.types";
 import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
@@ -15,7 +16,13 @@ interface ISummaryTableFootProps {
 export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpan, fields }) => {
   const { pprMeta } = usePpr();
 
+  const { pprView } = usePprTableSettings();
+
   const { totalValues } = pprMeta;
+
+  const isCorrectedView = pprView === "CORRECTED_PLAN" || pprView === "CORRECTED_PLAN_WITH_ARROWS";
+
+  const pprDataView: "original" | "final" = isCorrectedView ? "final" : "original";
 
   return (
     <tfoot className="font-bold sticky bottom-0 z-20 bg-neutral-100">
@@ -36,9 +43,15 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
           let isWorkPlanMoreThenCould = false;
 
           if (!isFieldHaveTotalValueByPeoples) {
-          } else if (Number(totalValues.peoples[field]) - Number(totalValues.works[field]) > 1) {
+          } else if (
+            Number(totalValues[pprDataView].peoples[field]) - Number(totalValues[pprDataView].works[field]) >
+            1
+          ) {
             isWorkPlanLessThenCould = true;
-          } else if (Number(totalValues.peoples[field]) - Number(totalValues.works[field]) < -1) {
+          } else if (
+            Number(totalValues[pprDataView].peoples[field]) - Number(totalValues[pprDataView].works[field]) <
+            -1
+          ) {
             isWorkPlanMoreThenCould = true;
           }
 
@@ -52,7 +65,10 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
                 isWorkPlanMoreThenCould && "bg-red-400"
               )}
             >
-              <TableCellMemo isVertical value={isFieldHaveTotalValueByWorks ? totalValues.works[field] : "-"} />
+              <TableCellMemo
+                isVertical
+                value={isFieldHaveTotalValueByWorks ? totalValues[pprDataView].works[field] : "-"}
+              />
             </td>
           );
         })}
@@ -71,7 +87,10 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
               key={field}
               className={clsx("border border-black", "outline-black outline-1 outline outline-offset-[-1px] z-20")}
             >
-              <TableCellMemo isVertical value={isFieldHaveTotalValueByPeoples ? totalValues.peoples[field] : "-"} />
+              <TableCellMemo
+                isVertical
+                value={isFieldHaveTotalValueByPeoples ? totalValues[pprDataView].peoples[field] : "-"}
+              />
             </td>
           );
         })}

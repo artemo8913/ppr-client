@@ -7,6 +7,10 @@ $column-number-cell-height: 20px;
     vertical-align: bottom;
   }
 
+  &.isEditable {
+    cursor: pointer;
+  }
+
   &.backlightNotCommonWork {
     box-shadow: 0px 0px 20px inset yellow;
 

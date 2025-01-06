@@ -1,5 +1,15 @@
 "use client";
-import { ChangeEvent, FC, HTMLInputTypeAttribute, memo, useCallback, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  memo,
+  useRef,
+  useState,
+  RefObject,
+  useEffect,
+  useCallback,
+  ChangeEvent,
+  HTMLInputTypeAttribute,
+} from "react";
 import clsx from "clsx";
 
 import style from "./TableCell.module.scss";
@@ -8,18 +18,19 @@ type TCell = "none" | "input" | "textarea";
 
 export interface ITableCellProps {
   cellType?: TCell;
-  value?: string | number | boolean | null;
-  type?: HTMLInputTypeAttribute;
-  isVertical?: boolean;
-  onBlur?: (value: string) => void;
   className?: string;
+  isVertical?: boolean;
+  type?: HTMLInputTypeAttribute;
+  onBlur?: (value: string) => void;
+  tdRef?: RefObject<HTMLTableCellElement>;
+  value?: string | number | boolean | null;
 }
 
 const TEXTAREA_BASIC_ROWS_COUNT = 4;
 const INPUT_BASIC_MAX_LENGTH = 12;
 
 const TableCell: FC<ITableCellProps> = (props) => {
-  const { cellType = "none", value, type, isVertical = false, onBlur, className } = props;
+  const { cellType = "none", value, type, isVertical = false, onBlur, tdRef, className } = props;
 
   const [currentValue, setCurrentValue] = useState(value);
 
@@ -66,8 +77,24 @@ const TableCell: FC<ITableCellProps> = (props) => {
 
   const hasError = type === "number" && isNaN(Number(value));
 
+  useEffect(() => {
+    const td = tdRef?.current;
+
+    const handleFocusIn = (e: FocusEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      ref?.current?.focus();
+    };
+
+    td?.addEventListener("focus", handleFocusIn);
+
+    return () => {
+      td?.removeEventListener("focus", handleFocusIn);
+    };
+  }, [tdRef]);
+
   return (
-    <div className={clsx(style.TableCell, isVertical && style.isVertical, hasError && style.hasError, className)}>
+    <div className={clsx(style.TableCell, hasError && style.hasError, isVertical && style.isVertical, className)}>
       {cellType === "textarea" && (
         <textarea
           ref={ref}

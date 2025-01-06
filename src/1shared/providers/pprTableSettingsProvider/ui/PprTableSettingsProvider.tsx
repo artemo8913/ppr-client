@@ -9,16 +9,12 @@ export interface TFilterColumns {
   months: TFilterTimePeriodOption;
   planFact: TFilterPlanFactOption;
 }
-export type TCorrectionView =
-  | "INITIAL_PLAN"
-  | "INITIAL_PLAN_WITH_ARROWS"
-  | "CORRECTED_PLAN"
-  | "CORRECTED_PLAN_WITH_ARROWS";
+export type TPprView = "INITIAL_PLAN" | "INITIAL_PLAN_WITH_ARROWS" | "CORRECTED_PLAN" | "CORRECTED_PLAN_WITH_ARROWS";
 
 interface IPprTableSettings {
   filterColumns: TFilterColumns;
   currentTimePeriod: TTimePeriod;
-  correctionView: TCorrectionView;
+  pprView: TPprView;
   tableWidthPercent: number;
   fontSizePx: number;
   headerHeightPx: number;
@@ -32,7 +28,7 @@ export interface IPprTableSettingsContext extends IPprTableSettings {
   setFilterMonths: (state: TFilterTimePeriodOption) => void;
   setFilterPlanFact: (state: TFilterPlanFactOption) => void;
   setTimePeriod: (timePeriod: TTimePeriod) => void;
-  setCorrectionView: (correctionView: TCorrectionView) => void;
+  setPprView: (correctionView: TPprView) => void;
   setTableWidthPercent: (tableWidthPercent: number) => void;
   setFontSizePx: (fontSize: number) => void;
   setHeaderHeightPx: (headerHeightPx: number) => void;
@@ -48,7 +44,7 @@ const INIT_SETTINGS: IPprTableSettings = {
     planFact: "SHOW_ALL",
   },
   currentTimePeriod: "year",
-  correctionView: "CORRECTED_PLAN_WITH_ARROWS",
+  pprView: "CORRECTED_PLAN_WITH_ARROWS",
   tableWidthPercent: 100,
   fontSizePx: 12,
   headerHeightPx: 350,
@@ -63,7 +59,7 @@ const INIT_CONTEXT: IPprTableSettingsContext = {
   setFilterMonths: () => {},
   setFilterPlanFact: () => {},
   setTimePeriod: () => {},
-  setCorrectionView: () => {},
+  setPprView: () => {},
   setTableWidthPercent: () => {},
   setFontSizePx: () => {},
   setHeaderHeightPx: () => {},
@@ -113,11 +109,11 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     []
   );
 
-  const setCorrectionView = useCallback(
-    (correctionView: TCorrectionView) =>
+  const setPprView = useCallback(
+    (correctionView: TPprView) =>
       setPprTableSettings((prev) => ({
         ...prev,
-        correctionView,
+        pprView: correctionView,
       })),
     []
   );
@@ -154,7 +150,7 @@ export const PprTableSettingsProvider: FC<PropsWithChildren> = ({ children }) =>
     <PprTableSettingsContext.Provider
       value={{
         ...pprTableSettings,
-        setCorrectionView,
+        setPprView,
         setFilterMonths,
         setFilterPlanFact,
         setTimePeriod,

@@ -108,7 +108,7 @@ const PprContext = createContext<IPprContext>({
     subbranchesList: [],
     worksOrderForRowSpan: {},
     branchesAndSubbrunchesOrder: {},
-    totalValues: { peoples: {}, works: {} },
+    totalValues: { final: { peoples: {}, works: {} }, original: { peoples: {}, works: {} } },
   },
 });
 
@@ -912,7 +912,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     subbranchesList: [],
     worksOrderForRowSpan: {},
     branchesAndSubbrunchesOrder: {},
-    totalValues: { peoples: {}, works: {} },
+    totalValues: { final: { peoples: {}, works: {} }, original: { peoples: {}, works: {} } },
   };
 
   if (ppr) {

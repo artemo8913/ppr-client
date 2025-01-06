@@ -43,23 +43,23 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
   globalPprMeta,
   currentTimePeriod,
 }) => {
-  const totalMansPlanNormTime = globalPprMeta.totalValues.peoples[getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
+  const totalMansPlanNormTime = globalPprMeta.totalValues.final.peoples[getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalMansPlanTabelTime =
-    globalPprMeta.totalValues.peoples[getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
+    globalPprMeta.totalValues.final.peoples[getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
 
-  const totalMansPlanTime = globalPprMeta.totalValues.peoples[getPlanTimeFieldByTimePeriod(currentTimePeriod)];
+  const totalMansPlanTime = globalPprMeta.totalValues.final.peoples[getPlanTimeFieldByTimePeriod(currentTimePeriod)];
 
   const planTimeExploitationTotal = monthPprMeta.branchesMeta.reduce((sum, val) => {
     if (val.type === "branch" && val.name === "exploitation") {
-      return sum + (val.total[getPlanTimeFieldByTimePeriod(currentTimePeriod)] || 0);
+      return sum + (val.total.final[getPlanTimeFieldByTimePeriod(currentTimePeriod)] || 0);
     }
     return sum;
   }, 0);
 
   const factTimeExploitationTotal = monthPprMeta.branchesMeta.reduce((sum, val) => {
     if (val.type === "branch" && val.name === "exploitation") {
-      return sum + (val.total[getFactTimeFieldByTimePeriod(currentTimePeriod)] || 0);
+      return sum + (val.total.final[getFactTimeFieldByTimePeriod(currentTimePeriod)] || 0);
     }
     return sum;
   }, 0);
@@ -69,7 +69,7 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
       ? `${roundToFixed((factTimeExploitationTotal / planTimeExploitationTotal) * 100, 0)}%`
       : "-";
 
-  const totalFactTime = monthPprMeta.totalValues.works[getFactTimeFieldByTimePeriod(currentTimePeriod)];
+  const totalFactTime = monthPprMeta.totalValues.final.works[getFactTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalFactTimePercent =
     totalFactTime && totalMansPlanTime ? `${roundToFixed((totalFactTime / totalMansPlanTime) * 100, 0)}%` : "-";

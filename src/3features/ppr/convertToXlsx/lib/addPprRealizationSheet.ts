@@ -7,6 +7,7 @@ interface IAddPprRealizationSheetArgs {
   workbook: ExcelJS.Workbook;
   pprMeta: IPprMeta;
   sheetName?: string;
+  pprDataView?: "original" | "final";
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
 }
 
@@ -15,6 +16,7 @@ export function addPprRealizationSheet({
   pprMeta,
   sheetName,
   sheetOptions,
+  pprDataView = "original",
 }: IAddPprRealizationSheetArgs): ExcelJS.Worksheet {
   const pprRealizationSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
@@ -57,26 +59,44 @@ export function addPprRealizationSheet({
 
   // Данные таблицы
   const pprRealizationPercent =
-    totalValues.works.year_fact_norm_time !== undefined && totalValues.peoples.year_plan_time
-      ? roundToFixed((totalValues.works.year_fact_norm_time / totalValues.peoples.year_plan_time) * 100)
+    totalValues[pprDataView].works.year_fact_norm_time !== undefined && totalValues[pprDataView].peoples.year_plan_time
+      ? roundToFixed(
+          (totalValues[pprDataView].works.year_fact_norm_time! / totalValues[pprDataView].peoples.year_plan_time!) * 100
+        )
       : "-";
 
   const pprRealizationExploitationPercent =
-    totalValues.works.year_plan_time !== undefined && totalValues.works.year_fact_norm_time
-      ? roundToFixed((totalValues.works.year_plan_time / totalValues.works.year_fact_norm_time) * 100)
+    totalValues[pprDataView].works.year_plan_time !== undefined && totalValues[pprDataView].works.year_fact_norm_time
+      ? roundToFixed(
+          (totalValues[pprDataView].works.year_plan_time! / totalValues[pprDataView].works.year_fact_norm_time!) * 100
+        )
       : "-";
 
   let exploitationBranchFactTime = 0;
 
   branchesMeta.forEach((branch) => {
-    if (branch.type === "branch" && branch.name === "exploitation" && branch.total.year_fact_norm_time) {
-      exploitationBranchFactTime = roundToFixed(branch.total.year_fact_norm_time + exploitationBranchFactTime);
+    if (branch.type === "branch" && branch.name === "exploitation" && branch.total[pprDataView].year_fact_norm_time) {
+      exploitationBranchFactTime = roundToFixed(
+        branch.total[pprDataView].year_fact_norm_time! + exploitationBranchFactTime
+      );
     }
   });
 
-  createCellWithBorderAndCenterAlignmentAndWrap(pprRealizationSheet, "A6", totalValues.peoples.year_plan_time);
-  createCellWithBorderAndCenterAlignmentAndWrap(pprRealizationSheet, "B6", totalValues.works.year_plan_time);
-  createCellWithBorderAndCenterAlignmentAndWrap(pprRealizationSheet, "C6", totalValues.works.year_fact_norm_time);
+  createCellWithBorderAndCenterAlignmentAndWrap(
+    pprRealizationSheet,
+    "A6",
+    totalValues[pprDataView].peoples.year_plan_time
+  );
+  createCellWithBorderAndCenterAlignmentAndWrap(
+    pprRealizationSheet,
+    "B6",
+    totalValues[pprDataView].works.year_plan_time
+  );
+  createCellWithBorderAndCenterAlignmentAndWrap(
+    pprRealizationSheet,
+    "C6",
+    totalValues[pprDataView].works.year_fact_norm_time
+  );
   createCellWithBorderAndCenterAlignmentAndWrap(pprRealizationSheet, "D6", `${pprRealizationPercent}%`);
   createCellWithBorderAndCenterAlignmentAndWrap(pprRealizationSheet, "E6", exploitationBranchFactTime);
   createCellWithBorderAndCenterAlignmentAndWrap(pprRealizationSheet, "F6", `${pprRealizationExploitationPercent}%`);

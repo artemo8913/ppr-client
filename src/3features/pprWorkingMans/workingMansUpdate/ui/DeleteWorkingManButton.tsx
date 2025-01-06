@@ -20,6 +20,12 @@ export const DeleteWorkingManButton: FC<IDeleteWorkingManButtonProps> = ({ id })
 
   const handleClick = async () => {
     startTransition(async () => {
+      const answer = confirm("Вы уверены, что хотите удалить данные о работнике?");
+
+      if (!answer) {
+        return;
+      }
+
       if (typeof id === "number") {
         const response = await deleteWorkingManFromServer(id);
 

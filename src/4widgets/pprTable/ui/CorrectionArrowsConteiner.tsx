@@ -1,5 +1,5 @@
 "use client";
-import { FC, MutableRefObject, memo, useEffect, useState } from "react";
+import { FC, FocusEventHandler, MutableRefObject, memo, useEffect, useState } from "react";
 import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { Arrow } from "@/1shared/ui/arrow";
 import { TPlanWorkPeriodsFields, TTransfer, checkIsPlanWorkField, PLAN_WORK_FIELDS } from "@/2entities/ppr";
@@ -47,7 +47,10 @@ const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCe
   }
 
   return (
-    <div className="relative z-10 opacity-50 hover:opacity-100 hover:z-5 hover:scale-105 transition-transform" style={{ width: basicArrowWidth }}>
+    <div
+      className="relative z-10 opacity-50 hover:opacity-100 hover:z-5 hover:scale-105 transition-transform cursor-default"
+      style={{ width: basicArrowWidth }}
+    >
       {arrows}
     </div>
   );

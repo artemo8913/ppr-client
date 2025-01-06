@@ -10,6 +10,7 @@ import { useCreateColumns } from "./PprTableColumns";
 interface IPprTableBranchNameRow {
   branch?: IBranchDefaultMeta | null;
   updateSubbranch?: (newBranchName: string, workIdsSet: Set<TPprDataWorkId>) => void;
+  isEditable?: boolean;
 }
 
 export const PprTableBranchNameRow: FC<IPprTableBranchNameRow> = (props) => {
@@ -19,7 +20,7 @@ export const PprTableBranchNameRow: FC<IPprTableBranchNameRow> = (props) => {
     return null;
   }
 
-  const isEditable = props.branch.type === "subbranch" && props.updateSubbranch;
+  const isSubbranchEditable = props.branch.type === "subbranch" && props.updateSubbranch && props.isEditable;
 
   const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ export const PprTableBranchNameRow: FC<IPprTableBranchNameRow> = (props) => {
   return (
     <tr>
       <td className="border font-bold border-black cursor-default" colSpan={allFields.length}>
-        {isEditable ? (
+        {isSubbranchEditable ? (
           <div className="flex">
             {props.branch.orderIndex}
             <input

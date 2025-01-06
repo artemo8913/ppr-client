@@ -1,14 +1,16 @@
 "use client";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC } from "react";
-import { TCorrectionView, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+
+import { TPprView, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
 interface IPprTableSelectCorrectionViewProps {}
 
 export const PprTableSelectCorrectionView: FC<IPprTableSelectCorrectionViewProps> = () => {
-  const { correctionView, setCorrectionView } = usePprTableSettings();
+  const { pprView, setPprView } = usePprTableSettings();
+
   return (
-    <Select<TCorrectionView, { value: TCorrectionView } & DefaultOptionType>
+    <Select<TPprView, { value: TPprView } & DefaultOptionType>
       className="min-w-24"
       options={[
         { value: "INITIAL_PLAN", label: "Исходный план" },
@@ -16,8 +18,8 @@ export const PprTableSelectCorrectionView: FC<IPprTableSelectCorrectionViewProps
         { value: "CORRECTED_PLAN", label: "Откорректированный план" },
         { value: "CORRECTED_PLAN_WITH_ARROWS", label: "Откорректированный план со стрелками" },
       ]}
-      value={correctionView}
-      onChange={setCorrectionView}
+      value={pprView}
+      onChange={setPprView}
     />
   );
 };

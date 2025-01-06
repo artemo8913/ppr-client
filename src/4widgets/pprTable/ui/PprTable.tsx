@@ -6,13 +6,13 @@ import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPprData, SummaryTableFoot, SummaryTableRow, TAllMonthStatuses, TYearPprStatus } from "@/2entities/ppr";
+import { IPprData, SummaryTableFoot, SummaryTableRow } from "@/2entities/ppr";
 import { AddWorkButton } from "@/3features/ppr/worksUpdate";
 
 import HeaderCell from "./HeaderCell";
 import { useCreateColumns } from "./PprTableColumns";
 import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
-import { getColumnSettings, getThStyle } from "../lib/pprTableStylesHelper";
+import { editableFieldsSettings, getThStyle, TPprFieldSettings } from "../lib/pprTableFieldsHelper";
 
 import style from "./PprTableCell.module.scss";
 import { PprTableDataRowMemo } from "./PprTableDataRow";
@@ -34,24 +34,55 @@ export const PprTable: FC<IPprTableProps> = () => {
 
   const pprSettings = usePprTableSettings();
 
-  const pprYearStatus: TYearPprStatus = ppr?.status || "template";
-  const pprMonthsStatuses: TAllMonthStatuses | null = ppr?.months_statuses || null;
+  const pprView = useMemo(() => pprSettings.pprView, [pprSettings.pprView]);
+
+  const isCorrectedView = useMemo(
+    () => pprView === "CORRECTED_PLAN" || pprView === "CORRECTED_PLAN_WITH_ARROWS",
+    [pprView]
+  );
+
+  const pprDataView: "original" | "final" = useMemo(() => (isCorrectedView ? "final" : "original"), [isCorrectedView]);
+
+  const isEditable = useMemo(() => isPprInUserControl && isCorrectedView, [isCorrectedView, isPprInUserControl]);
+
+  const isCreatingPpr = useMemo(
+    () => pprSettings.currentTimePeriod === "year" && (ppr?.status === "plan_creating" || ppr?.status === "template"),
+    [ppr?.status, pprSettings.currentTimePeriod]
+  );
+
+  const isMonthPlanCreating = useMemo(
+    () =>
+      pprSettings.currentTimePeriod !== "year" &&
+      ppr?.months_statuses[pprSettings.currentTimePeriod] === "plan_creating",
+    [ppr?.months_statuses, pprSettings.currentTimePeriod]
+  );
+
+  const isMonthFactFilling = useMemo(
+    () =>
+      pprSettings.currentTimePeriod !== "year" &&
+      ppr?.months_statuses[pprSettings.currentTimePeriod] === "fact_filling",
+    [ppr?.months_statuses, pprSettings.currentTimePeriod]
+  );
+
+  const isSubbranchEditable = useMemo(() => isEditable && isCreatingPpr, [isCreatingPpr, isEditable]);
+
+  const getEditableDataFields = useCallback((): TPprFieldSettings => {
+    if (!isEditable) {
+      return {};
+    }
+
+    if (isCreatingPpr) {
+      return editableFieldsSettings.timePeriod.year.plan;
+    } else if (isMonthPlanCreating && pprSettings.currentTimePeriod !== "year") {
+      return editableFieldsSettings.timePeriod[pprSettings.currentTimePeriod].plan;
+    } else if (isMonthFactFilling && pprSettings.currentTimePeriod !== "year") {
+      return editableFieldsSettings.timePeriod[pprSettings.currentTimePeriod].fact;
+    }
+
+    return {};
+  }, [isCreatingPpr, isEditable, isMonthFactFilling, isMonthPlanCreating, pprSettings.currentTimePeriod]);
 
   const planCellRef = useRef<HTMLTableCellElement | null>(null);
-
-  const getColumnSettingsForField = useCallback(
-    (field: keyof IPprData, isHaveWorkId: boolean) =>
-      getColumnSettings(
-        field,
-        pprYearStatus,
-        pprSettings.currentTimePeriod,
-        isHaveWorkId,
-        pprMonthsStatuses,
-        pprSettings.correctionView,
-        isPprInUserControl
-      ),
-    [pprMonthsStatuses, pprSettings.correctionView, pprSettings.currentTimePeriod, pprYearStatus, isPprInUserControl]
-  );
 
   if (!Boolean(ppr?.data.length)) {
     return <AddWorkButton shape="default" size="middle" type="primary" label="Добавить работу" />;
@@ -112,7 +143,7 @@ export const PprTable: FC<IPprTableProps> = () => {
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total[pprDataView]}
                     name={`Итого по пункту ${branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.orderIndex}`}
                   />
                 )}
@@ -120,7 +151,7 @@ export const PprTable: FC<IPprTableProps> = () => {
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total[pprDataView]}
                     name={`Итого по разделу ${branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.orderIndex}`}
                   />
                 )}
@@ -128,8 +159,9 @@ export const PprTable: FC<IPprTableProps> = () => {
                   <PprTableBranchNameRowMemo branch={branchesAndSubbrunchesOrder[pprData.id].branch} />
                 )}
                 <PprTableBranchNameRowMemo
-                  branch={branchesAndSubbrunchesOrder[pprData.id].subbranch}
+                  isEditable={isSubbranchEditable}
                   updateSubbranch={updateSubbranch}
+                  branch={branchesAndSubbrunchesOrder[pprData.id].subbranch}
                 />
               </>
             )}
@@ -137,12 +169,13 @@ export const PprTable: FC<IPprTableProps> = () => {
               key={pprData.id}
               pprData={pprData}
               fields={allFields}
+              isEditable={isEditable}
               planCellRef={planCellRef}
               rowSpan={worksRowSpan[index]}
-              workOrder={worksOrderForRowSpan[pprData.id]}
               isPprInUserControl={isPprInUserControl}
               updatePprTableCell={updatePprTableCell}
-              getColumnSettingsForField={getColumnSettingsForField}
+              getEditableDataFields={getEditableDataFields}
+              workOrder={worksOrderForRowSpan[pprData.id]}
             />
             {index === ppr?.data.length - 1 && (
               <>
@@ -150,13 +183,13 @@ export const PprTable: FC<IPprTableProps> = () => {
                   fields={planFactFields}
                   summaryNameColSpan={basicFields.length}
                   name={`Итого по пункту ${branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].orderIndex}`}
-                  totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total}
+                  totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total[pprDataView]}
                 />
                 <SummaryTableRow
                   fields={planFactFields}
                   summaryNameColSpan={basicFields.length}
                   name={`Итого по разделу ${branchesMeta.slice(-1)[0].orderIndex}`}
-                  totalFieldsValues={branchesMeta.slice(-1)[0].total}
+                  totalFieldsValues={branchesMeta.slice(-1)[0].total[pprDataView]}
                 />
               </>
             )}
