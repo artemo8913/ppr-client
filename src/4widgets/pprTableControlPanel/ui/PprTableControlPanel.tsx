@@ -7,7 +7,6 @@ import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings";
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
-import { FillWorkingManPlanTime } from "@/3features/pprWorkingMans/fillWorkingManPlanTime";
 import { PprTableCopyFactNormTimeToFactTime } from "@/3features/ppr/copyFactNormTimeToFactTime";
 import { PprExportToXslx } from "@/3features/ppr/exportToXslx";
 
@@ -27,7 +26,6 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
       <PprTableSaveButton />
       <PprTableSetOneUnityButton />
       <PprTableCopyFactNormTimeToFactTime />
-      <FillWorkingManPlanTime />
       <PprExportToXslx />
       <PprTableSelectTimePeriod />
       <PprTableYearStatusUpdate />
