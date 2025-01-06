@@ -25,7 +25,7 @@ export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
 
   const { replace } = useRouter();
 
-  const handleSearch = (param: keyof TPprShortInfo, value: number | string | undefined) => {
+  const updateUrlSearchParam = (param: keyof TPprShortInfo, value: number | string | undefined) => {
     const params = new URLSearchParams(searchParams);
 
     if (value) {
@@ -41,12 +41,12 @@ export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
   const idDistance = Number(searchParams.get("idDistance")) || null;
   const idSubdivision = Number(searchParams.get("idSubdivision")) || null;
 
-  const handleSearchName = (value: string) => handleSearch("name", value);
-  const handleSearchDirection = (value: number) => handleSearch("idDirection", value);
-  const handleSearchDistance = (value: number) => handleSearch("idDistance", value);
-  const handleSearchSubdivision = (value: number) => handleSearch("idSubdivision", value);
+  const handleSearchName = (value: string) => updateUrlSearchParam("name", value);
+  const handleSearchDirection = (value: number) => updateUrlSearchParam("idDirection", value);
+  const handleSearchDistance = (value: number) => updateUrlSearchParam("idDistance", value);
+  const handleSearchSubdivision = (value: number) => updateUrlSearchParam("idSubdivision", value);
   const handleSearchYear = (_date: Dayjs, dateString: string | string[]) =>
-    typeof dateString === "string" && handleSearch("year", dateString);
+    typeof dateString === "string" && updateUrlSearchParam("year", dateString);
 
   const subdivisionOptions: DefaultOptionType[] = props.divisions.subdivisions
     .filter((subdivision) => (idDistance ? subdivision.idDistance === idDistance : true))
@@ -67,14 +67,14 @@ export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
   return (
     <div className={clsx("flex gap-2 *:flex-1", props.className)}>
       <Search
-        defaultValue={searchParams.get("name")?.toString()}
+        value={searchParams.get("name")?.toString()}
         placeholder="Поиск по наименованию"
         onSearch={handleSearchName}
         disabled={isLoading}
         allowClear
       />
       <DatePicker
-        defaultValue={searchParams.get("year") ? dayjs(searchParams.get("year")) : null}
+        value={searchParams.get("year") ? dayjs(searchParams.get("year")) : null}
         onChange={handleSearchYear}
         placeholder="Выберите год"
         picker="year"
@@ -82,7 +82,7 @@ export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
         allowClear
       />
       <Select
-        defaultValue={idDirection}
+        value={idDirection}
         placeholder="Выберите дирекцию"
         onChange={handleSearchDirection}
         options={directionOptions}
@@ -92,7 +92,7 @@ export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
         allowClear
       />
       <Select
-        defaultValue={idDistance}
+        value={idDistance}
         placeholder="Выберите дистанцию"
         onChange={handleSearchDistance}
         options={distanceOptions}
@@ -102,7 +102,7 @@ export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
         allowClear
       />
       <Select
-        defaultValue={idSubdivision}
+        value={idSubdivision}
         placeholder="Выберите подразделение"
         onChange={handleSearchSubdivision}
         options={subdivisionOptions}
