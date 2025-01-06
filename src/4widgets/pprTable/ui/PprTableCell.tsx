@@ -84,11 +84,11 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     ((isWorkNameField && !isUniteWorkName) || (isWorkNameField && isUniteWorkName && rowSpan === 1) || isLocationField);
 
   const isCorrectedView =
-    pprSettings.correctionView === "CORRECTED_PLAN" || pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS";
+    pprSettings.pprView === "CORRECTED_PLAN" || pprSettings.pprView === "CORRECTED_PLAN_WITH_ARROWS";
 
   const isArrowsShow =
-    pprSettings.correctionView === "CORRECTED_PLAN_WITH_ARROWS" ||
-    pprSettings.correctionView === "INITIAL_PLAN_WITH_ARROWS";
+    pprSettings.pprView === "CORRECTED_PLAN_WITH_ARROWS" ||
+    pprSettings.pprView === "INITIAL_PLAN_WITH_ARROWS";
 
   const isVertical = checkIsFieldVertical(field);
 

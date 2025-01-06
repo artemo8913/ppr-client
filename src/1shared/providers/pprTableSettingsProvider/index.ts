@@ -2,7 +2,7 @@ export type {
   IPprTableSettingsContext,
   TFilterTimePeriodOption,
   TFilterPlanFactOption,
-  TCorrectionView,
+  TPprView,
   TFilterColumns,
 } from "./ui/PprTableSettingsProvider";
 

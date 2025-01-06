@@ -18,7 +18,9 @@ const PPR_WORKING_MANS_SHEET_NAME = "Таблица 1";
 
 const PPR_REALIZATION_SHEET_NAME = "Таблица 2";
 
-const PPR_YEAR_PLAN_SHEET_NAME = "Таблица 3";
+const PPR_YEAR_PLAN_FINAL_SHEET_NAME = "Таблица 3";
+
+const PPR_YEAR_PLAN_ORIGINAL_SHEET_NAME = "Таб.3 (без корректировок)";
 
 const WORKSHEET_OPTIONS: Partial<ExcelJS.AddWorksheetOptions> = {
   pageSetup: {
@@ -72,7 +74,7 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   addWorkingMansSheet({
     workbook,
     workingMans: ppr.workingMans,
-    totalValue: pprMeta.totalValues.peoples,
+    totalValue: pprMeta.totalValues.final.peoples,
     sheetName: PPR_WORKING_MANS_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });
@@ -88,8 +90,17 @@ export async function pprConvertToXlsx(ppr: IPpr) {
     workbook,
     ppr,
     pprMeta,
-    sheetName: PPR_YEAR_PLAN_SHEET_NAME,
+    sheetName: PPR_YEAR_PLAN_FINAL_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
+  });
+
+  addYearPlanSheet({
+    workbook,
+    ppr,
+    pprMeta,
+    sheetName: PPR_YEAR_PLAN_ORIGINAL_SHEET_NAME,
+    sheetOptions: WORKSHEET_OPTIONS,
+    pprDataView: "original",
   });
 
   //Финальная обработка всех ячеек (применяем font)

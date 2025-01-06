@@ -87,6 +87,7 @@ interface IAddYearPlanSheetArgs {
   pprMeta: IPprMeta;
   sheetName?: string;
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
+  pprDataView?: "original" | "final";
 }
 
 export function addYearPlanSheet({
@@ -95,6 +96,7 @@ export function addYearPlanSheet({
   pprMeta,
   sheetName,
   sheetOptions,
+  pprDataView = "final",
 }: IAddYearPlanSheetArgs): ExcelJS.Worksheet {
   const yearPlanSheet = workbook.addWorksheet(sheetName, sheetOptions);
 
@@ -200,8 +202,8 @@ export function addYearPlanSheet({
 
       if (field === "name") {
         cell.value = text;
-      } else if (branchDefault?.total && field in branchDefault?.total) {
-        cell.value = branchDefault?.total[field as keyof TPprDataFieldsTotalValues];
+      } else if (branchDefault?.total && field in branchDefault?.total[pprDataView]) {
+        cell.value = branchDefault?.total[pprDataView][field as keyof TPprDataFieldsTotalValues];
       }
 
       // Стилизация ячеек данных
@@ -243,8 +245,13 @@ export function addYearPlanSheet({
 
     const finalData: any = { ...pprData };
 
-    PLAN_WORK_FIELDS.map((field) => (finalData[field] = finalData[field].final));
-    PLAN_TIME_FIELDS.map((field) => (finalData[field] = finalData[field].final));
+    if (pprDataView === "final") {
+      PLAN_WORK_FIELDS.map((field) => (finalData[field] = pprData[field].final));
+      PLAN_TIME_FIELDS.map((field) => (finalData[field] = pprData[field].final));
+    } else {
+      PLAN_WORK_FIELDS.map((field) => (finalData[field] = pprData[field].original));
+      PLAN_TIME_FIELDS.map((field) => (finalData[field] = pprData[field].original));
+    }
 
     const row = yearPlanSheet.addRow(finalData);
 
@@ -292,7 +299,10 @@ export function addYearPlanSheet({
       const lastSubbranch = lastBranch.subbranches.slice(-1)[0];
       createTotalRow(lastSubbranch, `Итого по пункту ${lastSubbranch.orderIndex}`);
       createTotalRow(lastBranch, `Итого по разделу ${lastBranch.orderIndex}`);
-      createTotalRow({ total: totalValues.works }, "Итого по разделам 1-3");
+      createTotalRow(
+        { total: { final: totalValues.final.works, original: totalValues.original.works } },
+        "Итого по разделам 1-3"
+      );
     }
   });
 

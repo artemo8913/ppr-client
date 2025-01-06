@@ -42,7 +42,8 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
         planWork.handCorrection !== null ? planWork.handCorrection : planWork.original + planWork.outsideCorrectionsSum;
 
       const planTimeValue = roundToFixed(planWorkValue * pprData.norm_of_time);
-      // Меняю final только потому, что расчеты в createPprMeta ведется по finalValue
+      // Меняю final так как расчеты в createPprMeta ведутся по finalValue,
+      // в дальнейшем в таблице месячного планирования также берутся значения finalValue
       newPprData[planWorkField].final = planWorkValue;
       newPprData[planTimeField].final = planTimeValue;
 

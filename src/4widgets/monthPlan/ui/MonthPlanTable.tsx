@@ -104,7 +104,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
                       fields={columnsForTotalValues}
                       summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
                       name={`Итого по пункту ${prevBranchOrder}.${prevSubbranchOrder}`}
-                      totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total}
+                      totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total.final}
                     />
                   )}
                   {branchesAndSubbrunchesOrder[pprData.id].branch?.prev && (
@@ -113,7 +113,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
                       fields={columnsForTotalValues}
                       name={`Итого по разделу ${prevBranchOrder}`}
                       summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
-                      totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total}
+                      totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total.final}
                     />
                   )}
                   {branchesAndSubbrunchesOrder[pprData.id].branch && (
@@ -175,14 +175,14 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
                     fields={columnsForTotalValues}
                     summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
                     name={`Итого по пункту ${branchOrder}.${subbranchOrder}.`}
-                    totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total}
+                    totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total.final}
                   />
                   <SummaryTableRow
                     isVertical={false}
                     fields={columnsForTotalValues}
                     name={`Итого по разделу ${branchOrder}.`}
                     summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
-                    totalFieldsValues={branchesMeta.slice(-1)[0].total}
+                    totalFieldsValues={branchesMeta.slice(-1)[0].total.final}
                   />
                 </>
               )}
@@ -193,7 +193,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
           isVertical={false}
           fields={columnsForTotalValues}
           name={`Итого по разделам 1-3`}
-          totalFieldsValues={totalValues.works}
+          totalFieldsValues={totalValues.final.works}
           summaryNameColSpan={SUMMARY_ROW_NAME_COL_SPAN}
         />
       </tbody>

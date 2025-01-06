@@ -34,12 +34,16 @@ export const PprTable: FC<IPprTableProps> = () => {
 
   const pprSettings = usePprTableSettings();
 
-  const correctionView = useMemo(() => pprSettings.correctionView, [pprSettings.correctionView]);
+  const pprView = useMemo(() => pprSettings.pprView, [pprSettings.pprView]);
 
-  const isEditable = useMemo(
-    () => isPprInUserControl && correctionView !== "INITIAL_PLAN" && correctionView !== "INITIAL_PLAN_WITH_ARROWS",
-    [correctionView, isPprInUserControl]
+  const isCorrectedView = useMemo(
+    () => pprView === "CORRECTED_PLAN" || pprView === "CORRECTED_PLAN_WITH_ARROWS",
+    [pprView]
   );
+
+  const pprDataView: "original" | "final" = useMemo(() => (isCorrectedView ? "final" : "original"), [isCorrectedView]);
+
+  const isEditable = useMemo(() => isPprInUserControl && isCorrectedView, [isCorrectedView, isPprInUserControl]);
 
   const isCreatingPpr = useMemo(
     () => pprSettings.currentTimePeriod === "year" && (ppr?.status === "plan_creating" || ppr?.status === "template"),
@@ -139,7 +143,7 @@ export const PprTable: FC<IPprTableProps> = () => {
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.total[pprDataView]}
                     name={`Итого по пункту ${branchesAndSubbrunchesOrder[pprData.id].subbranch.prev?.orderIndex}`}
                   />
                 )}
@@ -147,7 +151,7 @@ export const PprTable: FC<IPprTableProps> = () => {
                   <SummaryTableRow
                     fields={planFactFields}
                     summaryNameColSpan={basicFields.length}
-                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total}
+                    totalFieldsValues={branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.total[pprDataView]}
                     name={`Итого по разделу ${branchesAndSubbrunchesOrder[pprData.id].branch?.prev?.orderIndex}`}
                   />
                 )}
@@ -179,13 +183,13 @@ export const PprTable: FC<IPprTableProps> = () => {
                   fields={planFactFields}
                   summaryNameColSpan={basicFields.length}
                   name={`Итого по пункту ${branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].orderIndex}`}
-                  totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total}
+                  totalFieldsValues={branchesMeta.slice(-1)[0].subbranches.slice(-1)[0].total[pprDataView]}
                 />
                 <SummaryTableRow
                   fields={planFactFields}
                   summaryNameColSpan={basicFields.length}
                   name={`Итого по разделу ${branchesMeta.slice(-1)[0].orderIndex}`}
-                  totalFieldsValues={branchesMeta.slice(-1)[0].total}
+                  totalFieldsValues={branchesMeta.slice(-1)[0].total[pprDataView]}
                 />
               </>
             )}
