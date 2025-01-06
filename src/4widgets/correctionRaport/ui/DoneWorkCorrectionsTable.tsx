@@ -41,7 +41,8 @@ export const DoneWorkCorrectionsTable: FC<IDoneWorkCorrectionsTableProps> = ({
           </th>
           <th colSpan={2}>План</th>
           <th colSpan={2}>Факт</th>
-          <th rowSpan={2}>+/-</th>
+          <th rowSpan={2}>+/-, ед.изм</th>
+          <th rowSpan={2}>+/-, чел.-ч</th>
           <th className={style.correction} rowSpan={2}>
             Корректировка
           </th>
@@ -68,6 +69,12 @@ export const DoneWorkCorrectionsTable: FC<IDoneWorkCorrectionsTableProps> = ({
               <td>{correction.secondCompareValue}</td>
               <td>{roundToFixed(correction.secondCompareValue * correction.pprData.norm_of_time)}</td>
               <td>{correction.firstCompareValue - correction.secondCompareValue}</td>
+              <td>
+                {roundToFixed(
+                  correction.firstCompareValue * correction.pprData.norm_of_time -
+                    correction.secondCompareValue * correction.pprData.norm_of_time
+                )}
+              </td>
               <td>
                 {isEditable ? (
                   <SetPprCorrectionTransfer
@@ -98,7 +105,8 @@ export const DoneWorkCorrectionsTable: FC<IDoneWorkCorrectionsTableProps> = ({
           <td>{summary.plan}</td>
           <td>-</td>
           <td>{summary.fact}</td>
-          <td>{roundToFixed(summary.fact - summary.plan)} чел.-ч</td>
+          <td>-</td>
+          <td>{roundToFixed(summary.fact - summary.plan)}</td>
           <td>-</td>
         </tr>
       </tfoot>
