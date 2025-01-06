@@ -103,12 +103,22 @@ const getFactEditableSettings = (
   [factField]: { cellType: "input", type: "number" },
 });
 
-export function getColumnSettings(
-  field: keyof IWorkingManYearPlan,
-  pprYearStatus: TYearPprStatus,
-  timePeriod: TTimePeriod,
-  pprMonthStatuses?: TAllMonthStatuses
-): ITableCellProps {
+export function getColumnSettings({
+  field,
+  pprYearStatus,
+  timePeriod,
+  isPprInUserControl,
+  pprMonthStatuses,
+}: {
+  field: keyof IWorkingManYearPlan;
+  pprYearStatus: TYearPprStatus;
+  timePeriod: TTimePeriod;
+  isPprInUserControl?: boolean;
+  pprMonthStatuses?: TAllMonthStatuses;
+}): ITableCellProps {
+  if (!isPprInUserControl) {
+    return {};
+  }
   if (pprYearStatus === "plan_creating") {
     return ALL_EDITABLE_SETTINGS[field] || {};
   }

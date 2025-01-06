@@ -2,29 +2,25 @@
 import { FC, memo, ReactNode } from "react";
 
 import { TableCellControlWrapper } from "@/1shared/ui/table";
-import { TWorkingManId } from "@/2entities/ppr";
+import { IWorkingManYearPlan } from "@/2entities/ppr";
 
 import { AddWorkingManButton } from "./AddWorkingManButton";
 import { DeleteWorkingManButton } from "./DeleteWorkingManButton";
 
 interface IPprWorkingManUpdateControlProps {
-  workingManId: TWorkingManId;
+  workingMan: IWorkingManYearPlan;
   children?: ReactNode;
   isShowControl?: boolean;
 }
 
-const PprWorkingManUpdateControl: FC<IPprWorkingManUpdateControlProps> = ({
-  workingManId,
-  isShowControl,
-  children,
-}) => {
+const PprWorkingManUpdateControl: FC<IPprWorkingManUpdateControlProps> = ({ workingMan, isShowControl, children }) => {
   return (
     <TableCellControlWrapper
       isShowControl={isShowControl}
       controlItems={
         <>
-          <DeleteWorkingManButton id={workingManId} />
-          <AddWorkingManButton nearWorkingManId={workingManId} />
+          {!workingMan.is_working_man_aproved && <DeleteWorkingManButton id={workingMan.id} />}
+          <AddWorkingManButton nearWorkingManId={workingMan.id} />
         </>
       }
     >

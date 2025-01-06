@@ -34,10 +34,10 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
 
   const { data: credential } = useSession();
 
-  const { currentTimePeriod } = usePprTableSettings();
+  const pprSettings = usePprTableSettings();
 
   const { columnsDefault, timePeriods, timePeriodsColumns } = useCreateColumns();
-
+  //TODO: вынести в ppr provider
   const updateWorkingManTableCell = useCallback(
     (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => {
       if (field === "participation") {
@@ -57,14 +57,38 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
     []
   );
 
+  const isCreatingPpr = useMemo(
+    () => pprSettings.currentTimePeriod === "year" && (ppr?.status === "plan_creating" || ppr?.status === "template"),
+    [ppr?.status, pprSettings.currentTimePeriod]
+  );
+
+  const isMonthPlanCreating = useMemo(
+    () =>
+      pprSettings.currentTimePeriod !== "year" &&
+      ppr?.months_statuses[pprSettings.currentTimePeriod] === "plan_creating",
+    [ppr?.months_statuses, pprSettings.currentTimePeriod]
+  );
+
+  const isMonthFactFilling = useMemo(
+    () =>
+      pprSettings.currentTimePeriod !== "year" &&
+      ppr?.months_statuses[pprSettings.currentTimePeriod] === "fact_filling",
+    [ppr?.months_statuses, pprSettings.currentTimePeriod]
+  );
+
   const isPprInUserControl = useMemo(() => {
     const { isForSubdivision, isPprCreatedByThisUser } = checkIsPprInUserControl(ppr?.created_by, credential?.user);
 
     return isForSubdivision || (isPprCreatedByThisUser && ppr?.status === "template");
   }, [credential?.user, ppr?.created_by, ppr?.status]);
 
+  const isEditable = useMemo(
+    () => isPprInUserControl && (isCreatingPpr || isMonthPlanCreating || isMonthFactFilling),
+    [isCreatingPpr, isMonthFactFilling, isMonthPlanCreating, isPprInUserControl]
+  );
+
   if (!Boolean(ppr?.workingMans.length)) {
-    return <AddWorkingManButton shape="default" size="middle" type="primary" label="Добавить работника" />
+    return <AddWorkingManButton shape="default" size="middle" type="primary" label="Добавить работника" />;
   }
 
   return (
@@ -105,14 +129,20 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
                 style={{ backgroundColor: setBgColor(field) }}
               >
                 <WorkingManTableCellMemo
-                  {...getColumnSettings(field, ppr.status, currentTimePeriod, ppr?.months_statuses)}
-                  id={workingMan.id}
-                  rowIndex={rowIndex}
+                  {...getColumnSettings({
+                    field,
+                    isPprInUserControl,
+                    pprYearStatus: ppr.status,
+                    timePeriod: pprSettings.currentTimePeriod,
+                    pprMonthStatuses: ppr?.months_statuses,
+                  })}
                   field={field}
-                  isVertical={field.endsWith("_time") || field === "participation"}
+                  rowIndex={rowIndex}
+                  workingMan={workingMan}
+                  isEditable={isEditable}
                   updateWorkingManTableCell={updateWorkingManTableCell}
-                  isPprInUserControl={isPprInUserControl}
-                  value={workingMan[field]}
+                  value={workingMan[field] === 0 ? "" : workingMan[field]}
+                  isVertical={field.endsWith("_time") || field === "participation"}
                 />
               </td>
             ))}

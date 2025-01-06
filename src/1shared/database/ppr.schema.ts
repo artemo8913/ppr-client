@@ -79,6 +79,7 @@ export const pprWorkingMansTable = mysqlTable("ppr_working_mans", {
   full_name: varchar("full_name", { length: 128 }).notNull().default(""),
   work_position: varchar("work_position", { length: 256 }).notNull().default(""),
   participation: createMysqlDoubleField("participation").notNull().default(1),
+  is_working_man_aproved: boolean("is_working_man_aproved").notNull().default(false),
   // Запланированное оплачиваемое время работника
   year_plan_time: createMysqlDoubleField("year_plan_time"),
   jan_plan_time: createMysqlDoubleField("jan_plan_time"),
