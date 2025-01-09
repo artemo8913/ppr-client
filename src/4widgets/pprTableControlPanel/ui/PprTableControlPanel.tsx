@@ -1,6 +1,7 @@
 "use client";
 import { FC } from "react";
 
+import { PrintButton } from "@/1shared/ui/print";
 import { usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
 import { PprTableSaveButton } from "@/3features/ppr/update";
@@ -18,15 +19,20 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
   const { ppr } = usePpr();
 
   return (
-    <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden">
-      {ppr?.name} Статус: {ppr ? translateRuYearStatus(ppr.status) : ""} Создан:{" "}
-      {new Date(ppr?.created_at!).toLocaleDateString()} Год: {ppr?.year} {ppr?.idSubdivision}-{ppr?.idDistance}-
-      {ppr?.idDirection}
+    <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden p-1">
+      Год: <b>{ppr?.year}</b> Наименование: <b>{ppr?.name}</b>{" "}
+      {ppr?.subdivisionShortName && (
+        <>
+          Цех: <b>{ppr?.subdivisionShortName}</b>
+        </>
+      )}{" "}
+      Статус: <b>{ppr ? translateRuYearStatus(ppr.status) : ""}</b>
       <PprTableSettingsModal />
       <PprTableSaveButton />
       <PprTableSetOneUnityButton />
       <PprTableCopyFactNormTimeToFactTime />
       <PprExportToXslx />
+      <PrintButton />
       <PprTableSelectTimePeriod />
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
