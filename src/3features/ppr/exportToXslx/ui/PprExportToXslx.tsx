@@ -20,7 +20,7 @@ export const PprExportToXslx: FC<IPprExportToXslxProps> = () => {
   useEffect(() => setExportUrl(`${window?.location}/export`), []);
 
   return (
-    <Tooltip title="Экспорт excel">
+    <Tooltip title="Экспорт ЭУ-132 в excel">
       <a ref={linkRef} hidden href={exportUrl} target="_blank" />
       <Button icon={<FileExcelOutlined />} type="text" shape="circle" onClick={handleClick} />
     </Tooltip>
