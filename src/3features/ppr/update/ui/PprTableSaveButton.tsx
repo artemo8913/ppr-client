@@ -41,7 +41,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
   const isDisabled = isLoading || !isPprInUserControl;
 
   return (
-    <Tooltip title="сохранить">
+    <Tooltip title="Сохранить">
       <Button
         icon={<SaveOutlined />}
         loading={isLoading}
