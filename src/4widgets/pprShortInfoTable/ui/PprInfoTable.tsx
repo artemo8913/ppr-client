@@ -47,13 +47,13 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
     render: (_, data) => data.directionShortName || "-",
   },
   {
-    title: "Статус",
+    title: "Статус годового плана ЭУ-132",
     dataIndex: "status",
     key: "status",
     render: (value) => translateRuYearStatus(value),
   },
   {
-    title: "Месяцы",
+    title: "Статусы месячного планирования",
     dataIndex: "months_statuses",
     key: "months_statuses",
     render: (_, data) => {
