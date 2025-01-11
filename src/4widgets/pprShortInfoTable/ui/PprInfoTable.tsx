@@ -21,7 +21,7 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
     title: "Наименование",
     dataIndex: "name",
     key: "name",
-    render: (value, record) => <Link href={`ppr/${record.id}`}>{value}</Link>,
+    render: (_, pprInfo) => <Link href={`ppr/${pprInfo.id}`}>{pprInfo.name}</Link>,
   },
   {
     title: "Год",
