@@ -1,5 +1,5 @@
 "use server";
-import { and, eq, like, SQL } from "drizzle-orm";
+import { and, eq, like, or, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -19,13 +19,14 @@ import {
   usersTable,
 } from "@/1shared/database";
 import { getDivisionsById } from "@/1shared/api/divisions.api";
-import { TIME_PERIODS } from "@/1shared/const/date";
+import { MONTHS, TIME_PERIODS } from "@/1shared/const/date";
 
 import {
   IPpr,
   TFactNormTimePeriodsFields,
   TFactTimePeriodsFields,
   TFactWorkPeriodsFields,
+  TMonthPprStatus,
   TPlanNormTimePeriodsFields,
   TPlanTabelTimePeriodsFields,
   TPlanTimePeriodsFields,
@@ -349,9 +350,11 @@ export async function deletePprTable(id: number) {
 export async function getManyPprsShortInfo(params?: {
   name?: string;
   year?: number | string;
-  idDirection?: number | string;
-  idDistance?: number | string;
-  idSubdivision?: number | string;
+  idDirection?: number | null | string;
+  idDistance?: number | null | string;
+  idSubdivision?: number | null | string;
+  status?: string;
+  months_statuses?: string | string[];
 }): Promise<TPprShortInfo[]> {
   const filters: SQL[] = [];
 
@@ -360,6 +363,24 @@ export async function getManyPprsShortInfo(params?: {
   if (params?.idDirection) filters.push(eq(pprsInfoTable.idDirection, Number(params.idDirection)));
   if (params?.idDistance) filters.push(eq(pprsInfoTable.idDistance, Number(params.idDistance)));
   if (params?.idSubdivision) filters.push(eq(pprsInfoTable.idSubdivision, Number(params.idSubdivision)));
+  if (params?.status) filters.push(eq(pprsInfoTable.status, params.status as TYearPprStatus));
+  if (params?.months_statuses && typeof params.months_statuses === "object") {
+    const monthStatusesFilter: SQL[] = [];
+
+    params.months_statuses.forEach((status) => {
+      const compareResult = or(...MONTHS.map((month) => eq(pprMonthsStatusesTable[month], status as TMonthPprStatus)));
+      compareResult && monthStatusesFilter.push(compareResult);
+    });
+
+    const result = or(...monthStatusesFilter);
+
+    result && filters.push(result);
+  } else if (params?.months_statuses && typeof params.months_statuses === "string") {
+    const compareResult = or(
+      ...MONTHS.map((month) => eq(pprMonthsStatusesTable[month], params.months_statuses as TMonthPprStatus))
+    );
+    compareResult && filters.push(compareResult);
+  }
 
   try {
     const responce = await db
@@ -379,12 +400,12 @@ export async function getManyPprsShortInfo(params?: {
         subdivisionShortName: subdivisionsTable.shortName,
       })
       .from(pprsInfoTable)
-      .where(and(...filters))
       .innerJoin(usersTable, eq(pprsInfoTable.idUserCreatedBy, usersTable.id))
       .innerJoin(pprMonthsStatusesTable, eq(pprsInfoTable.id, pprMonthsStatusesTable.idPpr))
       .leftJoin(directionsTable, eq(pprsInfoTable.idDirection, directionsTable.id))
       .leftJoin(distancesTable, eq(pprsInfoTable.idDistance, distancesTable.id))
-      .leftJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id));
+      .leftJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id))
+      .where(and(...filters));
 
     return responce;
   } catch (e) {
