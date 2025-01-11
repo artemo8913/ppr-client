@@ -94,8 +94,8 @@ export default async function Home() {
   return (
     <main className="flex flex-col gap-2">
       <div>
-        id: {id} Дирекция: {directionShortName} Дистанция: {distanceShortName} Подразделение: {subdivisionShortName}{" "}
-        Роль: {translateRuUserRole(role)} Ф.И.О.: {fullName}
+        id: {id} Дирекция: {directionShortName} Дистанция: {distanceShortName} Роль: {translateRuUserRole(role)} Ф.И.О.:{" "}
+        {fullName}
       </div>
       {Boolean(yearsPprsOnAgreement.length) && (
         <Card className="overflow-auto">
