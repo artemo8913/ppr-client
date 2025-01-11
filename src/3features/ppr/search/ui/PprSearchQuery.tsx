@@ -65,9 +65,10 @@ export const PprSearch: FC<IPprSearchQueryProps> = (props) => {
   });
 
   return (
-    <div className={clsx("flex gap-2 *:flex-1", props.className)}>
+    <div className={clsx("flex gap-2 flex-wrap *:flex-auto", props.className)}>
       <Search
         value={searchParams.get("name")?.toString()}
+        className="!basis-80"
         placeholder="Поиск по наименованию"
         onSearch={handleSearchName}
         disabled={isLoading}
