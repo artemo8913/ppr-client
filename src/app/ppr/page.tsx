@@ -1,3 +1,4 @@
+import Title from "antd/es/typography/Title";
 import Card from "antd/es/card/Card";
 import { unstable_cache } from "next/cache";
 
@@ -37,6 +38,7 @@ export default async function PprPage({ searchParams }: IPprPageProps) {
 
   return (
     <Card className="overflow-auto">
+      <Title level={2}>Список годовых планов ЭУ-132</Title>
       <PprSearchTransitionProvider>
         <PprSearch className="mb-4" divisions={divisions} />
         <PprInfoTable data={pprs} />

@@ -3,7 +3,7 @@ import { FC } from "react";
 
 import { PrintButton } from "@/1shared/ui/print";
 import { usePpr } from "@/1shared/providers/pprProvider";
-import { translateRuYearStatus } from "@/1shared/locale/pprStatus";
+import { getStatusText } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
 import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings";
@@ -20,13 +20,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
 
   return (
     <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden p-1">
-      Год: <b>{ppr?.year}</b> Наименование: <b>{ppr?.name}</b>{" "}
-      {ppr?.subdivisionShortName && (
-        <>
-          Цех: <b>{ppr?.subdivisionShortName}</b>
-        </>
-      )}{" "}
-      Статус: <b>{ppr ? translateRuYearStatus(ppr.status) : ""}</b>
+      Год: <b>{ppr?.year}</b> Наименование: <b>{ppr?.name}</b> Статус: <b>{ppr ? getStatusText(ppr) : ""}</b>
       <PprTableSettingsModal />
       <PprTableSaveButton />
       <PprTableSetOneUnityButton />

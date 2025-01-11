@@ -19,7 +19,7 @@ export const CreatePprModal: FC<ICreatePprModalProps> = (props) => {
   return (
     <>
       <Button className={props.className} type="primary" onClick={openModal}>
-        Добавить
+        Создать ЭУ-132
       </Button>
       <Modal title="Создать годовой план" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
         <CreatePprForm onFinish={closeModal} />

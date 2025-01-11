@@ -55,7 +55,7 @@ export const CreatePprForm: FC<ICreatePprFormProps> = ({ onFinish }) => {
       </FormItem>
       <FormItem wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit" loading={isLoading}>
-          Добавить
+          Создать
         </Button>
       </FormItem>
     </Form>

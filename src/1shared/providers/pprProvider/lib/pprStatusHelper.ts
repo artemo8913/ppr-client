@@ -1,5 +1,7 @@
 import { MONTHS, TTimePeriod } from "@/1shared/const/date";
-import { IPpr, TAllMonthStatuses, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
+import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { translateRuMonthStatus, translateRuYearStatus } from "@/1shared/locale/pprStatus";
+import { TAllMonthStatuses, TMonthPprStatus, TPprShortInfo, TYearPprStatus } from "@/2entities/ppr";
 
 export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {
   let result = true;
@@ -47,19 +49,23 @@ export function checkIsTimePeriodAvailableToSelect(
   return false;
 }
 
-export function findFirstUndonePprPeriod(ppr: IPpr | null): TTimePeriod {
+export function findFirstUndonePprPeriod(ppr: TPprShortInfo | null): TTimePeriod {
   if (!ppr) {
     return "year";
   }
+
   const { status, months_statuses } = ppr;
+
   if (status !== "in_process") {
     return "year";
   }
+
   for (const month of MONTHS) {
     if (months_statuses[month] !== "done") {
       return month;
     }
   }
+
   return "year";
 }
 
@@ -94,4 +100,41 @@ export function getNextPprYearStatus(currentStatus: TYearPprStatus): TYearPprSta
 
 export function getNextPprMonthStatus(currentStatus: TMonthPprStatus): TMonthPprStatus | null {
   return NEXT_PPR_MONTH_STATUS[currentStatus];
+}
+
+export const PPR_YEAR_STATUSES: TYearPprStatus[] = [
+  "template",
+  "plan_creating",
+  "plan_on_agreement_engineer",
+  "plan_on_agreement_time_norm",
+  "plan_on_agreement_sub_boss",
+  "plan_on_aprove",
+  "in_process",
+  "done",
+];
+
+export const PPR_MONTH_STATUSES: TMonthPprStatus[] = [
+  "none",
+  "plan_creating",
+  "plan_on_agreement_engineer",
+  "plan_on_agreement_time_norm",
+  "plan_on_aprove",
+  "in_process",
+  "fact_filling",
+  "fact_verification_engineer",
+  "fact_verification_time_norm",
+  "fact_on_agreement_sub_boss",
+  "done",
+];
+
+export function getStatusText(pprInfo: TPprShortInfo) {
+  const undoneTimePeriod = findFirstUndonePprPeriod(pprInfo);
+
+  if (pprInfo.status !== "in_process" || undoneTimePeriod === "year") {
+    return translateRuYearStatus(pprInfo.status);
+  }
+
+  return `${translateRuYearStatus(pprInfo.status)}: ${translateRuTimePeriod(
+    undoneTimePeriod
+  )} (${translateRuMonthStatus(pprInfo.months_statuses[undoneTimePeriod])})`;
 }
