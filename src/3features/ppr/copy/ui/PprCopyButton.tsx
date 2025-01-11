@@ -19,7 +19,7 @@ export const PprCopyButton: FC<IPprCopyButtonProps> = (props) => {
   const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   return (
-    <Tooltip title="Копировать">
+    <Tooltip title="Создать ЭУ-132 на основе шаблона">
       <Button icon={<CopyTwoTone className="cursor-pointer" />} onClick={openModal} />
       <Modal title="Копировать годовой план" width={1024} open={isOpen} onCancel={closeModal} footer={null}>
         <PprCopyForm pprId={props.pprId} onFinish={closeModal} />
