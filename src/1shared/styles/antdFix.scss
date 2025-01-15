@@ -1,3 +1,9 @@
 .ant-notification-stack > .ant-notification-notice-wrapper {
   transition: transform 0.3s, backdrop-filter 0s !important;
 }
+
+@media print {
+  .ant-tooltip {
+    visibility: hidden !important;
+  }
+}
