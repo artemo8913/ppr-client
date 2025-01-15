@@ -142,7 +142,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
           <div>
             <p className="font-bold text-justify">
               I. При планировании ведомости выполненных работ (форма ЭУ-99) на{" "}
-              {translateRuTimePeriod(currentTimePeriod)} месяц {ppr?.year} г. возникла необходимости корректировки
+              {translateRuTimePeriod(currentTimePeriod)} месяц {ppr?.year} г. возникла необходимость корректировки
               годового плана технического обслуживания и ремонта:
             </p>
             {isShowTextRaport ? (
