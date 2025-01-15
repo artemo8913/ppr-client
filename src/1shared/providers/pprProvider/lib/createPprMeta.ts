@@ -2,7 +2,6 @@ import { roundToFixed } from "@/1shared/lib/math";
 import {
   FACT_NORM_TIME_FIELDS,
   FACT_TIME_FIELDS,
-  getPlanWorkFieldByPlanTimeField,
   IPprData,
   IWorkingManYearPlan,
   PLAN_NORM_TIME_FIELDS,
