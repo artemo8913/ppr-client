@@ -15,6 +15,7 @@ const nextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins: ["pprclienttrans.ru"],
+      bodySizeLimit: "10mb",
     },
   },
 };
