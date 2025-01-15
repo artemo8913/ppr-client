@@ -49,8 +49,7 @@ const COLUMNS_WIDTH: { [key in keyof IPprData]?: number } = {
   total_count: 3,
   entry_year: 3,
   periodicity_normal: 3,
-  periodicity_fact: 3,
-  last_maintenance_year: 3,
+  last_maintenance_year: 15,
   norm_of_time: 3,
   norm_of_time_document: 10,
   measure: 10,
@@ -62,8 +61,6 @@ function checkIsFieldVertical(field: keyof IPprData) {
     checkIsWorkOrTimeField(field) ||
     field === "total_count" ||
     field === "entry_year" ||
-    field === "last_maintenance_year" ||
-    field === "periodicity_fact" ||
     field === "periodicity_normal" ||
     field === "line_class" ||
     field === "unity" ||

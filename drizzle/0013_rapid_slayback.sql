@@ -1,0 +1,1 @@
+ALTER TABLE `pprs_data` MODIFY COLUMN `last_maintenance_year` varchar(256) NOT NULL;

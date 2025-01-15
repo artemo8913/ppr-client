@@ -16,13 +16,15 @@ export type TPprFieldSettings = { [key in keyof IPprData]?: ITableCellProps };
 export function getThStyle(key?: keyof IPprData): React.CSSProperties {
   switch (key) {
     case "name":
-      return { width: "16%" };
+      return { width: "13%" };
     case "location":
-      return { width: "5%" };
+      return { width: "6%" };
     case "norm_of_time_document":
       return { width: "6%" };
     case "measure":
       return { width: "8%" };
+    case "last_maintenance_year":
+      return { width: "5%" };
     default:
       return {};
   }
@@ -33,7 +35,6 @@ export function checkIsFieldVertical(field: keyof IPprData): boolean {
     checkIsWorkOrTimeField(field) ||
     field === "total_count" ||
     field === "entry_year" ||
-    field === "last_maintenance_year" ||
     field === "periodicity_fact" ||
     field === "periodicity_normal" ||
     field === "line_class" ||
@@ -57,8 +58,7 @@ const EDITABLE_PLACE_DATA_FIELDS: TPprFieldSettings = {
   total_count: { cellType: "input" },
   entry_year: { cellType: "input" },
   periodicity_normal: { cellType: "input" },
-  periodicity_fact: { cellType: "input" },
-  last_maintenance_year: { cellType: "input" },
+  last_maintenance_year: { cellType: "textarea" },
   unity: { cellType: "input" },
 };
 
@@ -121,6 +121,3 @@ export const editableFieldsSettings: IEditableFieldsSettings = {
   },
 };
 
-export function getEditableFields(){
-
-}
