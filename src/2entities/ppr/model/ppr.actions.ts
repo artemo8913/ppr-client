@@ -1,5 +1,5 @@
 "use server";
-import { and, eq, like, or, SQL } from "drizzle-orm";
+import { and, eq, isNotNull, like, or, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -450,5 +450,40 @@ export async function deleteWorkingMan(id: number) {
       code: 500,
       message: "Произошла ошибка при исключении работника из плана",
     };
+  }
+}
+
+export async function getPprDataForFulfillmentReport({ subdivisionsIds }: { subdivisionsIds?: number[] }) {
+  try {
+    const filters: SQL[] = [];
+
+    const result = await db
+      .select()
+      .from(pprsWorkDataTable)
+      .leftJoin(pprsInfoTable, eq(pprsWorkDataTable.idPpr, pprsInfoTable.id))
+      .where(
+        and(
+          eq(pprsWorkDataTable.is_work_aproved, true),
+          isNotNull(pprsInfoTable.idSubdivision),
+          isNotNull(pprsInfoTable.idDistance),
+          isNotNull(pprsInfoTable.idDirection),
+          ...filters
+        )
+      )
+      .orderBy(
+        pprsWorkDataTable.common_work_id,
+        pprsInfoTable.idDirection,
+        pprsInfoTable.idDistance,
+        pprsInfoTable.idSubdivision
+      );
+
+    return result.map((data) => ({
+      ...data.pprs_data,
+      idDirection: data.pprs_info?.idDirection!,
+      idDistance: data.pprs_info?.idDistance!,
+      idSubdivision: data.pprs_info?.idSubdivision!,
+    }));
+  } catch (e) {
+    console.log(e);
   }
 }

@@ -1,0 +1,63 @@
+.ReportTable {
+  table-layout: fixed;
+
+  td,
+  th {
+    border: solid 1px black;
+  }
+
+  th {
+    outline: black solid 2px;
+    outline-offset: -1px;
+  }
+
+  thead {
+    position: sticky;
+    top: 0px;
+    z-index: 15;
+
+    background-color: rgb(245, 245, 245);
+    outline: black solid 2px;
+    outline-offset: -1px;
+  }
+
+  .isVertical {
+    writing-mode: sideways-lr;
+  }
+
+  .Q1 {
+    background-color: var(--FIRST_QUARTER);
+  }
+  .Q2 {
+    background-color: var(--SECOND_QUARTER);
+  }
+  .Q3 {
+    background-color: var(--THIRD_QUARTER);
+  }
+  .Q4 {
+    background-color: var(--FOURTH_QUARTER);
+  }
+
+  .transparent {
+    &.Q1 {
+      background-color: var(--FIRST_QUARTER_TRANSPARENT);
+    }
+    &.Q2 {
+      background-color: var(--SECOND_QUARTER_TRANSPARENT);
+    }
+    &.Q3 {
+      background-color: var(--THIRD_QUARTER_TRANSPARENT);
+    }
+    &.Q4 {
+      background-color: var(--FOURTH_QUARTER_TRANSPARENT);
+    }
+  }
+}
+
+@media print {
+  .ReportTable {
+    thead {
+      position: static;
+    }
+  }
+}

@@ -86,6 +86,7 @@ export {
   copyPprTable,
   deletePprWork,
   deleteWorkingMan,
+  getPprDataForFulfillmentReport,
 } from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";

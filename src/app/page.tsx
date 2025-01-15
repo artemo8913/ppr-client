@@ -1,4 +1,5 @@
 import { Card } from "antd";
+import Title from "antd/es/typography/Title";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/1shared/auth/authConfig";
@@ -6,7 +7,6 @@ import { translateRuUserRole } from "@/1shared/locale/user";
 import { IUser } from "@/2entities/user";
 import { getManyPprsShortInfo, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
 import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
-import Title from "antd/es/typography/Title";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
