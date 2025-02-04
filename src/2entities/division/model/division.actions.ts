@@ -89,5 +89,5 @@ export async function getDivisionsMap() {
     directionsMap.set(division.id, division);
   });
 
-  return { subdivisionsMap, distancesMap, directionsMap };
+  return { subdivisionsMap, distancesMap, directionsMap, directions, distances, subdivisions };
 }
