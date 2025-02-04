@@ -9,6 +9,7 @@ import { PprPage } from "@/5pages/pprPage";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
   const ppr = await getPprTable(Number(params.id));
+
   const works = await getCommonWorks();
 
   if (!ppr?.id) {

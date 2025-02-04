@@ -1,12 +1,12 @@
+import clsx from "clsx";
 import { FC, Fragment } from "react";
 
-import { IFulfillmentReportData, IFulfillmentReportSettings } from "@/1shared/providers/pprProvider";
-import { getQuartal, TIME_PERIODS } from "@/1shared/const/date";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { getQuartal, TIME_PERIODS } from "@/1shared/const/date";
+import { IFulfillmentReportData, IFulfillmentReportSettings } from "@/1shared/providers/pprProvider";
 import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod } from "@/2entities/ppr";
 
 import style from "./ReportTable.module.scss";
-import clsx from "clsx";
 
 interface IFulfillmentReportProps {
   reportData: IFulfillmentReportData[];
