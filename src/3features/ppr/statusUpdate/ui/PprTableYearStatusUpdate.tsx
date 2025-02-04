@@ -29,7 +29,8 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
     }
 
     if (nextStatus === "in_process") {
-      ppr?.data.forEach((datum) => (datum.is_work_aproved = true));
+      ppr?.data.forEach((pprData) => (pprData.is_work_aproved = true));
+      ppr?.workingMans.forEach((man) => (man.is_working_man_aproved = true));
     }
 
     updatePprTable(ppr.id, { ...ppr, status: nextStatus });

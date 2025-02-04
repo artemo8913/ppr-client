@@ -26,7 +26,8 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     }
 
     if (nextStatus === "in_process") {
-      ppr.data.forEach((datum) => (datum.is_work_aproved = true));
+      ppr.data.forEach((pprData) => (pprData.is_work_aproved = true));
+      ppr.workingMans.forEach((man) => (man.is_working_man_aproved = true));
     }
 
     updatePprTable(ppr.id, {
@@ -113,7 +114,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_verification_engineer") {
       return (
         <>
-          <Button onClick={rejectPlan}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button onClick={rejectFactFilling}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
           <Button onClick={setNextStatus}>Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
         </>
       );
@@ -133,7 +134,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_verification_time_norm") {
       return (
         <>
-          <Button onClick={rejectPlan}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button onClick={rejectFactFilling}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
           <Button onClick={setNextStatus}>Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
         </>
       );
@@ -153,7 +154,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_on_agreement_sub_boss") {
       return (
         <>
-          <Button onClick={rejectPlan}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button onClick={rejectFactFilling}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
           <Button onClick={setNextStatus}>Утвердить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
         </>
       );
