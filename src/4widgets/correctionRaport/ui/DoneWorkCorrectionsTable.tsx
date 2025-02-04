@@ -79,6 +79,7 @@ export const DoneWorkCorrectionsTable: FC<IDoneWorkCorrectionsTableProps> = ({
                 {isEditable ? (
                   <SetPprCorrectionTransfer
                     transferType="undone"
+                    pprData={correction.pprData}
                     transfers={undoneTransfers}
                     workId={correction.pprData.id}
                     fieldFrom={fieldFrom}
