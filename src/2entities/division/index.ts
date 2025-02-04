@@ -1,3 +1,4 @@
+export type { TDivisionType } from "./model/division.type";
 export {
   getAllDirections,
   getAllDistances,
