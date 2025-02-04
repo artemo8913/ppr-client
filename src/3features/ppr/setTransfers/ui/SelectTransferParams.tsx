@@ -3,13 +3,13 @@ import Button from "antd/es/button";
 import { InputNumberProps } from "antd";
 import TypedInputNumber from "antd/es/input-number";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import Select, { DefaultOptionType } from "antd/es/select";
+import Select from "antd/es/select";
 
-export type TOption<T> = { value: T } & DefaultOptionType;
+import { TOptionType } from "@/1shared/types/TOptionType";
 
 interface ISelectTransferParamsProps<T> {
   value: number;
-  options: TOption<T>[];
+  options: TOptionType<T>[];
   fieldTo: T;
   handleChange: (fieldTo: T, value: number) => void;
   handleAddTransfer?: () => void;
