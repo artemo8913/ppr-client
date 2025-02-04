@@ -43,7 +43,8 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
   globalPprMeta,
   currentTimePeriod,
 }) => {
-  const totalMansPlanNormTime = globalPprMeta.totalValues.final.peoples[getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
+  const totalMansPlanNormTime =
+    globalPprMeta.totalValues.final.peoples[getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalMansPlanTabelTime =
     globalPprMeta.totalValues.final.peoples[getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
@@ -69,10 +70,10 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
       ? `${roundToFixed((factTimeExploitationTotal / planTimeExploitationTotal) * 100, 0)}%`
       : "-";
 
-  const totalFactTime = monthPprMeta.totalValues.final.works[getFactTimeFieldByTimePeriod(currentTimePeriod)];
+  const totalMansFactTime = globalPprMeta.totalValues.final.peoples[getFactTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalFactTimePercent =
-    totalFactTime && totalMansPlanTime ? `${roundToFixed((totalFactTime / totalMansPlanTime) * 100, 0)}%` : "-";
+    totalMansFactTime && totalMansPlanTime ? `${roundToFixed((totalMansFactTime / totalMansPlanTime) * 100, 0)}%` : "-";
 
   return (
     <table className={style.table}>
@@ -117,7 +118,7 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
           <td>{planTimeExploitationTotal}</td>
           <td>{factTimeExploitationTotal}</td>
           <td>{exploitationPercent}</td>
-          <td>{totalFactTime}</td>
+          <td>{totalMansFactTime}</td>
           <td>{totalFactTimePercent}</td>
         </tr>
       </tfoot>
