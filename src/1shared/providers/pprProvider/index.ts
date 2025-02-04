@@ -10,6 +10,7 @@ export {
   checkIsTimePeriodAvailableToSelect,
   checkIsTimePeriodAvailableToTransfer,
   findFirstUndonePprPeriod,
+  PPR_YEAR_OPTIONS,
 } from "./lib/pprStatusHelper";
 export { checkIsPprInUserControl } from "./lib/isPprInUserControl";
 export { calculateFulfillmentReport } from "./lib/reports/calculateFulfillment";

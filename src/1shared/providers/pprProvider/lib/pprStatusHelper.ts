@@ -1,3 +1,5 @@
+import { DefaultOptionType } from "antd/es/select";
+
 import { MONTHS, TTimePeriod } from "@/1shared/const/date";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { translateRuMonthStatus, translateRuYearStatus } from "@/1shared/locale/pprStatus";
@@ -138,3 +140,8 @@ export function getStatusText(pprInfo: TPprShortInfo) {
     undoneTimePeriod
   )} (${translateRuMonthStatus(pprInfo.months_statuses[undoneTimePeriod])})`;
 }
+
+export const PPR_YEAR_OPTIONS: DefaultOptionType[] = PPR_YEAR_STATUSES.map((status) => ({
+  value: status,
+  label: translateRuYearStatus(status),
+}));
