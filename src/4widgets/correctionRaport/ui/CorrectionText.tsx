@@ -33,14 +33,14 @@ export const CorrectionText: FC<ICorrectionTextProps> = ({ type, fieldFrom, summ
           type === "plan"
             ? `${correction.pprData.name} (${correction.pprData.location}), ${
                 correction.pprData.measure
-              } - план ${firstValue} (${firstTime} чел.-ч) изменить на ${secondValue} (${secondTime} чел.-ч). Разницу ${
+              } - план ${firstValue} (${firstTime} чел.-ч) изменить на ${secondValue} (${secondTime} чел.-ч). Разницу ${roundToFixed(
                 firstValue - secondValue
-              }`
+              )}`
             : `${correction.pprData.name} (${correction.pprData.location}), ${
                 correction.pprData.measure
-              } - при плане ${firstValue} (${firstTime} чел.-ч) факт составил ${secondValue} (${secondTime} чел.-ч). Разницу ${
+              } - при плане ${firstValue} (${firstTime} чел.-ч) факт составил ${secondValue} (${secondTime} чел.-ч). Разницу ${roundToFixed(
                 firstValue - secondValue
-              }`;
+              )}`;
 
         return (
           <li key={correction.pprData.id}>
