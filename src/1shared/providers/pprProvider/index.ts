@@ -7,7 +7,7 @@ export {
   getNextPprMonthStatus,
   getNextPprYearStatus,
   checkIsAllMonthsPprStatusesIsDone,
-  checkIsTimePeriodAvailableToSelect,
+  checkIsTimePeriodAvailableForPlanning,
   checkIsTimePeriodAvailableToTransfer,
   findFirstUndonePprPeriod,
   PPR_YEAR_OPTIONS,

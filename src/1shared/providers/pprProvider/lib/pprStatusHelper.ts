@@ -28,7 +28,7 @@ export function checkIsTimePeriodAvailableToTransfer(
   return false;
 }
 
-export function checkIsTimePeriodAvailableToSelect(
+export function checkIsTimePeriodAvailableForPlanning(
   timePeriod: TTimePeriod,
   yearStatus: TYearPprStatus,
   monthsStatuses: TAllMonthStatuses
