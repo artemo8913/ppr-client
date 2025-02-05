@@ -17,7 +17,7 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
 
   const { currentTimePeriod } = usePprTableSettings();
 
-  if (!ppr) {
+  if (!ppr || currentTimePeriod === "year") {
     return null;
   }
 
