@@ -17,8 +17,12 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
 
   const { currentTimePeriod } = usePprTableSettings();
 
-  if (!ppr || currentTimePeriod === "year") {
+  if (!ppr) {
     return null;
+  }
+
+  if (currentTimePeriod === "year") {
+    return "Месячный план доступен только при просмотре ППР за конкретный месяц";
   }
 
   const planWorkField = getPlanWorkFieldByTimePeriod(currentTimePeriod);

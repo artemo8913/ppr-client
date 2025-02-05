@@ -189,7 +189,8 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
         {hasWellDoneCorrections && (
           <div>
             <p className="font-bold text-justify">
-              III. В тоже время были выполнены следующие работы, возникли следующие отвлечения:
+              III. За {translateRuTimePeriod(currentTimePeriod)} месяц возникли отвлечения, были перевыполнены или
+              выполнены незапланированные работы:
             </p>
             {isShowTextRaport ? (
               <CorrectionText
