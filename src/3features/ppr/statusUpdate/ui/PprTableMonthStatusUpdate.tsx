@@ -4,7 +4,12 @@ import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 
 import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { getNextPprMonthStatus, checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
+import {
+  getNextPprMonthStatus,
+  checkIsPprInUserControl,
+  usePpr,
+  checkIsTimePeriodAvailableForPlanning,
+} from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
 
@@ -62,7 +67,14 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   if (!data || !ppr || currentTimePeriod === "year") {
     return null;
   }
+
   const currentMonthStatus = ppr.months_statuses[currentTimePeriod];
+
+  const isAvailableForPlanning = checkIsTimePeriodAvailableForPlanning(
+    currentTimePeriod,
+    ppr.status,
+    ppr.months_statuses
+  );
 
   const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = checkIsPprInUserControl(
     ppr.created_by,
@@ -71,7 +83,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
 
   // Состояния для начальника цеха
   if (isForSubdivision) {
-    if (currentMonthStatus === "none") {
+    if (currentMonthStatus === "none" && isAvailableForPlanning) {
       return (
         <Button onClick={setNextStatus}>Запланировать работы на {translateRuTimePeriod(currentTimePeriod)}</Button>
       );

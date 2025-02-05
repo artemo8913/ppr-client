@@ -5,7 +5,7 @@ import { FC, useEffect } from "react";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { TTimePeriod, TIME_PERIODS } from "@/1shared/const/date";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { usePpr, findFirstUndonePprPeriod, checkIsTimePeriodAvailableToSelect } from "@/1shared/providers/pprProvider";
+import { usePpr, findFirstUndonePprPeriod } from "@/1shared/providers/pprProvider";
 
 type TOption = { value: TTimePeriod } & DefaultOptionType;
 
@@ -18,7 +18,6 @@ export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () =
   const options: TOption[] = TIME_PERIODS.map((period) => ({
     value: period,
     label: translateRuTimePeriod(period),
-    disabled: ppr !== null ? !checkIsTimePeriodAvailableToSelect(period, ppr.status, ppr.months_statuses) : true,
   }));
 
   useEffect(() => {
