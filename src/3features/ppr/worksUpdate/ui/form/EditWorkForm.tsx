@@ -10,7 +10,7 @@ import Select, { DefaultOptionType } from "antd/es/select";
 
 import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
-import { ICommonWork } from "@/2entities/commonWork/model/commonWork.types";
+import { ICommonWork } from "@/2entities/commonWork";
 
 export interface IEditWorkFormInitialValues extends Partial<Omit<ICommonWork, "id">> {
   branch: TWorkBranch;

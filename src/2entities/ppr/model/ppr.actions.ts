@@ -1,5 +1,5 @@
 "use server";
-import { and, eq, like, or, SQL } from "drizzle-orm";
+import { and, eq, isNotNull, like, or, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -23,6 +23,7 @@ import { MONTHS, TIME_PERIODS } from "@/1shared/const/date";
 
 import {
   IPpr,
+  IPprData,
   TFactNormTimePeriodsFields,
   TFactTimePeriodsFields,
   TFactWorkPeriodsFields,
@@ -450,5 +451,73 @@ export async function deleteWorkingMan(id: number) {
       code: 500,
       message: "Произошла ошибка при исключении работника из плана",
     };
+  }
+}
+
+export interface IGetPprDataForFulfillmentReportParams {
+  year?: string;
+  status?: string;
+  idSubdivision?: string;
+  idDistance?: string;
+  idDirection?: string;
+  workId?: string;
+}
+
+export type TGetPprDataForFulfillmentReportRes = IPprData & {
+  idDirection: number;
+  idDistance: number;
+  idSubdivision: number;
+};
+
+export async function getPprDataForFulfillmentReport({
+  workId,
+  year,
+  status,
+  idDistance,
+  idDirection,
+  idSubdivision,
+}: IGetPprDataForFulfillmentReportParams): Promise<TGetPprDataForFulfillmentReportRes[] | undefined> {
+  try {
+    const filters: SQL[] = [];
+
+    if (!year) {
+      return [];
+    }
+
+    if (year) filters.push(eq(pprsInfoTable.year, Number(year)));
+    if (status) filters.push(like(pprsInfoTable.status, status));
+    if (workId) filters.push(eq(pprsWorkDataTable.common_work_id, Number(workId)));
+    if (idDistance) filters.push(eq(pprsInfoTable.idDistance, Number(idDistance)));
+    if (idDirection) filters.push(eq(pprsInfoTable.idDirection, Number(idDirection)));
+    if (idSubdivision) filters.push(eq(pprsInfoTable.idSubdivision, Number(idSubdivision)));
+
+    const result = await db
+      .select()
+      .from(pprsWorkDataTable)
+      .leftJoin(pprsInfoTable, eq(pprsWorkDataTable.idPpr, pprsInfoTable.id))
+      .where(
+        and(
+          eq(pprsWorkDataTable.is_work_aproved, true),
+          isNotNull(pprsInfoTable.idSubdivision),
+          isNotNull(pprsInfoTable.idDistance),
+          isNotNull(pprsInfoTable.idDirection),
+          ...filters
+        )
+      )
+      .orderBy(
+        pprsWorkDataTable.common_work_id,
+        pprsInfoTable.idDirection,
+        pprsInfoTable.idDistance,
+        pprsInfoTable.idSubdivision
+      );
+
+    return result.map((data) => ({
+      ...data.pprs_data,
+      idDirection: data.pprs_info?.idDirection!,
+      idDistance: data.pprs_info?.idDistance!,
+      idSubdivision: data.pprs_info?.idSubdivision!,
+    }));
+  } catch (e) {
+    console.log(e);
   }
 }

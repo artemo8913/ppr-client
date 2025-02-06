@@ -2,21 +2,21 @@
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
+import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPprData, SummaryTableFoot, SummaryTableRow } from "@/2entities/ppr";
+import { SummaryTableFoot, SummaryTableRow } from "@/2entities/ppr";
 import { AddWorkButton } from "@/3features/ppr/worksUpdate";
 
 import HeaderCell from "./HeaderCell";
 import { useCreateColumns } from "./PprTableColumns";
+import { PprTableDataRowMemo } from "./PprTableDataRow";
 import { PprTableBranchNameRowMemo } from "./PprTableBranchNameRow";
+import { PprTableColumnsNumbersRowMemo } from "./PprTableColumnsNumbersRow";
 import { editableFieldsSettings, getThStyle, TPprFieldSettings } from "../lib/pprTableFieldsHelper";
 
 import style from "./PprTableCell.module.scss";
-import { PprTableDataRowMemo } from "./PprTableDataRow";
-import { PprTableColumnsNumbersRowMemo } from "./PprTableColumnsNumbersRow";
 
 interface IPprTableProps {}
 

@@ -5,7 +5,7 @@ import { roundToFixed } from "@/1shared/lib/math";
 import { createPprMeta, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { getPlanTimeFieldByTimePeriod, getPlanWorkFieldByTimePeriod } from "@/2entities/ppr";
+import { getPlanTimeFieldByTimePeriod, getPlanWorkFieldByTimePeriod, IPprData } from "@/2entities/ppr";
 
 import { MonthPlanTable } from "./MonthPlanTable";
 import { MonthWorkingMansTable } from "./MonthWorkingMansTable";
@@ -21,6 +21,10 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
     return null;
   }
 
+  if (currentTimePeriod === "year") {
+    return "Месячный план доступен только при просмотре ППР за конкретный месяц";
+  }
+
   const planWorkField = getPlanWorkFieldByTimePeriod(currentTimePeriod);
 
   const planTimeField = getPlanTimeFieldByTimePeriod(currentTimePeriod);
@@ -34,7 +38,7 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
       return Boolean(Number(pprData[`${currentTimePeriod}_fact_work`])) || Boolean(planValue);
     })
     .map((pprData) => {
-      const newPprData = { ...pprData };
+      const newPprData: IPprData = JSON.parse(JSON.stringify(pprData));
 
       const planWork = pprData[planWorkField];
 

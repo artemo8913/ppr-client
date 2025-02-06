@@ -1,3 +1,4 @@
+export type { TDivisionType } from "./model/division.type";
 export {
   getAllDirections,
   getAllDistances,
@@ -5,4 +6,6 @@ export {
   getDirectionById,
   getDistanceById,
   getSubdivisionById,
+  getDivisions,
+  getDivisionsMap,
 } from "./model/division.actions";

@@ -1,15 +1,15 @@
 import { ReactElement } from "react";
 import Button from "antd/es/button";
-import { InputNumberProps } from "antd";
+import { InputNumberProps, Space } from "antd";
 import TypedInputNumber from "antd/es/input-number";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import Select, { DefaultOptionType } from "antd/es/select";
+import Select from "antd/es/select";
 
-export type TOption<T> = { value: T } & DefaultOptionType;
+import { TOptionType } from "@/1shared/types/TOptionType";
 
 interface ISelectTransferParamsProps<T> {
   value: number;
-  options: TOption<T>[];
+  options: (TOptionType<T> & { planWork: number })[];
   fieldTo: T;
   handleChange: (fieldTo: T, value: number) => void;
   handleAddTransfer?: () => void;
@@ -35,6 +35,11 @@ export const SelectTransferParams: <T>(props: ISelectTransferParamsProps<T>) => 
         className="flex-1"
         value={fieldTo}
         options={options}
+        optionRender={(option) => (
+          <Space>
+            {option.data.label}({option.data.planWork})
+          </Space>
+        )}
         onChange={(fieldTo) => handleChange(fieldTo, value)}
       />
       {Boolean(handleDeleteTransfer) && (

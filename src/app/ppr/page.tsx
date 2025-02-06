@@ -1,10 +1,9 @@
 import Title from "antd/es/typography/Title";
 import Card from "antd/es/card/Card";
-import { unstable_cache } from "next/cache";
 
 import { PprSearchTransitionProvider } from "@/1shared/providers/pprSearchTransitionProvider";
+import { getDivisions } from "@/2entities/division";
 import { getManyPprsShortInfo, TPprShortInfo } from "@/2entities/ppr";
-import { getAllDirections, getAllDistances, getAllSubdivision } from "@/2entities/division";
 import { PprSearch } from "@/3features/ppr/search";
 import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
 import { CreatePprModal } from "@/3features/ppr/create";
@@ -12,22 +11,6 @@ import { CreatePprModal } from "@/3features/ppr/create";
 interface IPprPageProps {
   searchParams: { [key in keyof TPprShortInfo]?: string };
 }
-
-const getDivisions = unstable_cache(
-  async () => {
-    const [subdivisions, distances, directions] = await Promise.all([
-      getAllSubdivision(),
-      getAllDistances(),
-      getAllDirections(),
-    ]).catch((e) => {
-      throw new Error(`Load divisions data for ppr info page error. ${e}`);
-    });
-
-    return { subdivisions, distances, directions };
-  },
-  ["divisions"],
-  { revalidate: 3600, tags: ["divisions"] }
-);
 
 export default async function PprPage({ searchParams }: IPprPageProps) {
   const [pprs, divisions] = await Promise.all([getManyPprsShortInfo({ ...searchParams }), getDivisions()]).catch(

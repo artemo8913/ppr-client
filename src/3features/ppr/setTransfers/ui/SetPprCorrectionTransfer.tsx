@@ -3,13 +3,21 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 
+import { TOptionType } from "@/1shared/types/TOptionType";
 import { getTimePeriodFromString } from "@/1shared/const/date";
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { checkIsTimePeriodAvailableToTransfer, usePpr } from "@/1shared/providers/pprProvider";
 import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TPlanWorkPeriods, TPlanWorkPeriodsFields, TTransfer, PLAN_WORK_FIELDS, TPprDataWorkId } from "@/2entities/ppr";
+import {
+  TPlanWorkPeriods,
+  TPlanWorkPeriodsFields,
+  TTransfer,
+  PLAN_WORK_FIELDS,
+  TPprDataWorkId,
+  IPprData,
+} from "@/2entities/ppr";
 
-import { SelectTransferParams, TOption } from "./SelectTransferParams";
+import { SelectTransferParams } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
 
@@ -18,12 +26,14 @@ interface ISetPprCorrectionTransferProps {
   fieldFrom: TPlanWorkPeriods;
   transfers?: TTransfer[] | null;
   transferType: "plan" | "undone";
+  pprData: IPprData;
 }
 
 const MONTH_PLAN_WORK_FIELDS = PLAN_WORK_FIELDS.filter((field) => field !== "year_plan_work");
 
 export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
   workId,
+  pprData,
   fieldFrom,
   transfers = null,
   transferType,
@@ -39,18 +49,21 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
 
   const nextPlanPeriodField = MONTH_PLAN_WORK_FIELDS[monthIndex + 1];
 
-  const selectOptions: TOption<TPlanWorkPeriods>[] = MONTH_PLAN_WORK_FIELDS.map((field) => {
-    const timePeriod = getTimePeriodFromString(field);
+  const selectOptions: (TOptionType<TPlanWorkPeriods> & { planWork: number })[] = MONTH_PLAN_WORK_FIELDS.map(
+    (field) => {
+      const timePeriod = getTimePeriodFromString(field);
 
-    const disabled =
-      ppr !== null && timePeriod ? !checkIsTimePeriodAvailableToTransfer(timePeriod, ppr.months_statuses) : true;
+      const disabled =
+        ppr !== null && timePeriod ? !checkIsTimePeriodAvailableToTransfer(timePeriod, ppr.months_statuses) : true;
 
-    return {
-      value: field,
-      label: translateRuTimePeriod(field),
-      disabled,
-    };
-  });
+      return {
+        value: field,
+        planWork: pprData[field].final,
+        label: translateRuTimePeriod(field),
+        disabled,
+      };
+    }
+  );
 
   const handleTransfersChange = useCallback(
     (fieldTo: keyof TPlanWorkPeriodsFields | null, value?: number, transferIndex?: number) => {

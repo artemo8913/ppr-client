@@ -77,6 +77,8 @@ export {
   checkIsPlanTabelTimeField,
 } from "./lib/validateTypes";
 
+export type { IGetPprDataForFulfillmentReportParams, TGetPprDataForFulfillmentReportRes } from "./model/ppr.actions";
+
 export {
   getPprTable,
   createPprTable,
@@ -86,6 +88,7 @@ export {
   copyPprTable,
   deletePprWork,
   deleteWorkingMan,
+  getPprDataForFulfillmentReport,
 } from "./model/ppr.actions";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";

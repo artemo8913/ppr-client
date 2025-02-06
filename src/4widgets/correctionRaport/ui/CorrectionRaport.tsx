@@ -142,7 +142,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
           <div>
             <p className="font-bold text-justify">
               I. При планировании ведомости выполненных работ (форма ЭУ-99) на{" "}
-              {translateRuTimePeriod(currentTimePeriod)} месяц {ppr?.year} г. возникла необходимости корректировки
+              {translateRuTimePeriod(currentTimePeriod)} месяц {ppr?.year} г. возникла необходимость корректировки
               годового плана технического обслуживания и ремонта:
             </p>
             {isShowTextRaport ? (
@@ -189,7 +189,8 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
         {hasWellDoneCorrections && (
           <div>
             <p className="font-bold text-justify">
-              III. В тоже время были выполнены следующие работы, возникли следующие отвлечения:
+              III. За {translateRuTimePeriod(currentTimePeriod)} месяц возникли отвлечения, были перевыполнены или
+              выполнены незапланированные работы:
             </p>
             {isShowTextRaport ? (
               <CorrectionText

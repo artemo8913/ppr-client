@@ -78,6 +78,7 @@ export const PlanCorrectionsTable: FC<IPlanCorrectionsTableProps> = ({
               <td>
                 {isEditable ? (
                   <SetPprCorrectionTransfer
+                    pprData={correction.pprData}
                     transferType="plan"
                     transfers={planTransfers}
                     workId={correction.pprData.id}
