@@ -1,19 +1,23 @@
-import { calculateFulfillmentReport } from "@/1shared/providers/pprProvider";
+import { getCommonWorks } from "@/2entities/commonWork";
 import { getDivisionsMap } from "@/2entities/division";
-import { getPprDataForFulfillmentReport } from "@/2entities/ppr";
-import { FulfillmentReport } from "@/4widgets/reports";
+import { getPprDataForFulfillmentReport, IGetPprDataForFulfillmentReportParams } from "@/2entities/ppr";
+import { FulfillmentReport, ReportFilter } from "@/4widgets/reports";
 
-export default async function ReportsPage() {
+interface IFullfilmentReportPageProps {
+  searchParams: { [key in keyof IGetPprDataForFulfillmentReportParams]?: string };
+}
+
+export default async function FullfilmentReportPage({ searchParams }: IFullfilmentReportPageProps) {
   const divisionsMap = await getDivisionsMap();
 
-  const { reportSettings, reportData } = calculateFulfillmentReport(
-    (await getPprDataForFulfillmentReport({})) || [],
-    divisionsMap
-  );
+  const report = await getPprDataForFulfillmentReport({ ...searchParams });
+
+  const works = await getCommonWorks();
 
   return (
     <div className="overflow-auto print:overflow-visible">
-      <FulfillmentReport reportData={reportData} reportSettings={reportSettings} />
+      <ReportFilter divisions={divisionsMap} commonWorks={works} />
+      {Boolean(report?.length) && <FulfillmentReport report={report} divisions={divisionsMap} />}
     </div>
   );
 }

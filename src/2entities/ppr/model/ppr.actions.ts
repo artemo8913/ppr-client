@@ -23,6 +23,7 @@ import { MONTHS, TIME_PERIODS } from "@/1shared/const/date";
 
 import {
   IPpr,
+  IPprData,
   TFactNormTimePeriodsFields,
   TFactTimePeriodsFields,
   TFactWorkPeriodsFields,
@@ -453,9 +454,42 @@ export async function deleteWorkingMan(id: number) {
   }
 }
 
-export async function getPprDataForFulfillmentReport({ subdivisionsIds }: { subdivisionsIds?: number[] }) {
+export interface IGetPprDataForFulfillmentReportParams {
+  year?: string;
+  status?: string;
+  idSubdivision?: string;
+  idDistance?: string;
+  idDirection?: string;
+  workId?: string;
+}
+
+export type TGetPprDataForFulfillmentReportRes = IPprData & {
+  idDirection: number;
+  idDistance: number;
+  idSubdivision: number;
+};
+
+export async function getPprDataForFulfillmentReport({
+  workId,
+  year,
+  status,
+  idDistance,
+  idDirection,
+  idSubdivision,
+}: IGetPprDataForFulfillmentReportParams): Promise<TGetPprDataForFulfillmentReportRes[] | undefined> {
   try {
     const filters: SQL[] = [];
+
+    if (!year) {
+      return [];
+    }
+
+    if (year) filters.push(eq(pprsInfoTable.year, Number(year)));
+    if (status) filters.push(like(pprsInfoTable.status, status));
+    if (workId) filters.push(eq(pprsWorkDataTable.common_work_id, Number(workId)));
+    if (idDistance) filters.push(eq(pprsInfoTable.idDistance, Number(idDistance)));
+    if (idDirection) filters.push(eq(pprsInfoTable.idDirection, Number(idDirection)));
+    if (idSubdivision) filters.push(eq(pprsInfoTable.idSubdivision, Number(idSubdivision)));
 
     const result = await db
       .select()

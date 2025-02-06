@@ -1,19 +1,41 @@
+"use client";
 import clsx from "clsx";
 import { FC, Fragment } from "react";
 
 import { translateRuTimePeriod } from "@/1shared/locale/date";
 import { getQuartal, TIME_PERIODS } from "@/1shared/const/date";
-import { IFulfillmentReportData, IFulfillmentReportSettings } from "@/1shared/providers/pprProvider";
-import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod } from "@/2entities/ppr";
+import { calculateFulfillmentReport } from "@/1shared/providers/pprProvider";
+import { TDirectionDB, TDistanceDB, TSubdivisionDB } from "@/1shared/database";
+import {
+  getFactWorkFieldByTimePeriod,
+  getPlanWorkFieldByTimePeriod,
+  TGetPprDataForFulfillmentReportRes,
+} from "@/2entities/ppr";
 
 import style from "./ReportTable.module.scss";
+import { useSearchParams } from "next/navigation";
+import { TDivisionType } from "@/2entities/division";
 
 interface IFulfillmentReportProps {
-  reportData: IFulfillmentReportData[];
-  reportSettings: IFulfillmentReportSettings;
+  report?: TGetPprDataForFulfillmentReportRes[];
+  divisions: {
+    subdivisionsMap: Map<number, TSubdivisionDB>;
+    distancesMap: Map<number, TDistanceDB>;
+    directionsMap: Map<number, TDirectionDB>;
+  };
 }
 
-export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ reportData, reportSettings }) => {
+export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ report = [], divisions }) => {
+  const searchParams = useSearchParams();
+
+  const divisionType = searchParams.get("divisionType");
+
+  const { reportData, reportSettings } = calculateFulfillmentReport(
+    report,
+    divisions,
+    (divisionType as TDivisionType) || undefined
+  );
+
   return (
     <table className={style.ReportTable}>
       <thead>

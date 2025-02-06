@@ -1,4 +1,5 @@
 import { TDirectionDB, TDistanceDB, TSubdivisionDB } from "@/1shared/database";
+import { TDivisionType } from "@/2entities/division";
 import {
   IPprData,
   TPlanWorkPeriods,
@@ -43,7 +44,7 @@ export interface IFulfillmentReportData extends TPlanFactWorkFields {
   name: string;
   measure: string;
   divisionId: string;
-  summaryRowType: "direction" | "distance" | "subdivision" | "total";
+  rowType: TDivisionType;
 }
 
 export interface IFulfillmentReportSettings {
@@ -117,8 +118,11 @@ export function calculateFulfillmentReport(
     subdivisionsMap: Map<number, TSubdivisionDB>;
     distancesMap: Map<number, TDistanceDB>;
     directionsMap: Map<number, TDirectionDB>;
-  }
+  },
+  filterLevel?: TDivisionType
 ) {
+  const reportData: IFulfillmentReportData[] = [];
+
   const commonWorkReport: IFulfillmentReport = {};
 
   const reportSettings: IFulfillmentReportSettings = {};
@@ -220,7 +224,6 @@ export function calculateFulfillmentReport(
       handlePlanFactWorkValues(pprData, subdivisionSummary, distanceSummary, directionSummary, workSummary);
     }
   });
-  const reportData: IFulfillmentReportData[] = [];
 
   Object.keys(commonWorkReport).map((commonWorkId) => {
     const workSummary = commonWorkReport[Number(commonWorkId)];
@@ -248,7 +251,7 @@ export function calculateFulfillmentReport(
                         measure: workSummary.workData.measure,
                         divisionId:
                           divisions.subdivisionsMap.get(Number(subdivisionId))?.shortName || `Цех id ${subdivisionId}`,
-                        summaryRowType: "subdivision",
+                        rowType: "subdivision",
                       });
                     }
                     if (subdivisionIndex === subdivisionsList.length - 1) {
@@ -260,7 +263,7 @@ export function calculateFulfillmentReport(
                         measure: workSummary.workData.measure,
                         divisionId:
                           divisions.distancesMap.get(Number(distanceId))?.shortName || `Дистанция id ${distanceId}`,
-                        summaryRowType: "distance",
+                        rowType: "distance",
                       });
                     }
                   });
@@ -274,7 +277,7 @@ export function calculateFulfillmentReport(
                   measure: workSummary.workData.measure,
                   divisionId:
                     divisions.directionsMap.get(Number(directionId))?.shortName || `Дирекция id ${directionId}`,
-                  summaryRowType: "direction",
+                  rowType: "direction",
                 });
               }
             });
@@ -286,20 +289,33 @@ export function calculateFulfillmentReport(
             common_work_id: workSummary.workData.commonWorkId,
             name: workSummary.workData.name,
             measure: workSummary.workData.measure,
-            divisionId: `Итого`,
-            summaryRowType: "total",
+            divisionId: `ТЭ`,
+            rowType: "transenergo",
           });
         }
       });
   });
 
   // расчет rowSpan для объединения ячеек с одинаковыми работами
-  reportData.forEach((pprData, index, arr) => {
-    if (tempCommonWorkId !== pprData.common_work_id) {
+  const filteredReportData = reportData.filter((reportData) => {
+    if (filterLevel === "subdivision") {
+      return reportData.rowType === "subdivision";
+    } else if (filterLevel === "distance") {
+      return reportData.rowType === "subdivision" || reportData.rowType === "distance";
+    } else if (filterLevel === "direction") {
+      return reportData.rowType === "distance" || reportData.rowType === "direction";
+    } else if (filterLevel === "transenergo") {
+      return reportData.rowType === "direction" || reportData.rowType === "transenergo";
+    }
+    return true;
+  });
+
+  filteredReportData.forEach((reportData, index, arr) => {
+    if (tempCommonWorkId !== reportData.common_work_id) {
       reportSettings[tempIndex] = { rowSpan: tempRowSpan };
       tempIndex = index;
       tempRowSpan = 1;
-      tempCommonWorkId = pprData.common_work_id;
+      tempCommonWorkId = reportData.common_work_id;
     } else {
       tempRowSpan++;
     }
@@ -309,5 +325,5 @@ export function calculateFulfillmentReport(
     }
   });
 
-  return { reportData, reportSettings };
+  return { reportData: filteredReportData, reportSettings };
 }
