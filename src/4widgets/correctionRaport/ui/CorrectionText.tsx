@@ -25,7 +25,8 @@ export const CorrectionText: FC<ICorrectionTextProps> = ({ type, fieldFrom, summ
 
         const secondTime = roundToFixed(secondValue * correction.pprData.norm_of_time);
 
-        const transfers = correction.pprData[fieldFrom].planTransfers;
+        const transfers =
+          type === "plan" ? correction.pprData[fieldFrom].planTransfers : correction.pprData[fieldFrom].undoneTransfers;
 
         const isHaveTransfers = Boolean(transfers);
 
@@ -56,7 +57,7 @@ export const CorrectionText: FC<ICorrectionTextProps> = ({ type, fieldFrom, summ
                   return (
                     <span key={index}>
                       {text}
-                      {arr.length - 1 === index ? "." : ","}
+                      {arr.length - 1 === index ? "." : ", "}
                     </span>
                   );
                 })}
