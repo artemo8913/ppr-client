@@ -28,6 +28,10 @@ export type TAllMonthStatuses = {
   [month in TMonth]: TMonthPprStatus;
 };
 
+type TReportsNotes = {
+  [month in TMonth]: string;
+};
+
 export type TTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
 //TODO: переименовать Periods в Fields
 export type TPlanWorkPeriods = `${TTimePeriod}_plan_work`;
@@ -109,6 +113,7 @@ export interface IPpr {
   created_at: Date;
   created_by: IUser;
   months_statuses: TAllMonthStatuses;
+  reports_notes: TReportsNotes;
   idDirection: number | null;
   idDistance: number | null;
   idSubdivision: number | null;
@@ -119,7 +124,7 @@ export interface IPpr {
   subdivisionShortName?: string | null;
 }
 
-export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value">;
+export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value" | "reports_notes">;
 
 export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;

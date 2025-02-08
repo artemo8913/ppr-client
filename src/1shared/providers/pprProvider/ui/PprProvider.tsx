@@ -71,6 +71,7 @@ export interface IPprContext {
   updateWorkingManParticipation: (rowIndex: number, value: number) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   fillWorkingManPlanTime: (mode: "EVERY" | "NOT_FILLED", value: number) => void;
+  updateReportNote: (note: string, month: TMonth) => void;
   pprMeta: IPprMeta;
 }
 
@@ -102,6 +103,7 @@ const PprContext = createContext<IPprContext>({
   getPprDataWithRowSpan: () => [],
   fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
+  updateReportNote: () => {},
   pprMeta: {
     worksRowSpan: [],
     branchesMeta: [],
@@ -902,6 +904,22 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
+  const updateReportNote = useCallback((note: string, month: TMonth) => {
+    setPpr((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        reports_notes: {
+          ...prev.reports_notes,
+          [month]: note,
+        },
+      };
+    });
+  }, []);
+
   /**
    * Получить информацию о месте размещения строк категорий. Для этого перебирается массив pprData.data
    * с запланированными работами и последовательно составляется список из категорий и подкатегорий работ
@@ -954,6 +972,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateWorkingManParticipation,
         getPprDataWithRowSpan,
         fillWorkingManPlanTime,
+        updateReportNote,
         pprMeta,
       }}
     >

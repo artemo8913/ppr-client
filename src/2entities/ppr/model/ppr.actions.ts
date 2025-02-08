@@ -12,6 +12,7 @@ import {
   directionsTable,
   distancesTable,
   pprMonthsStatusesTable,
+  pprReportsNotesTable,
   pprsInfoTable,
   pprsWorkDataTable,
   pprWorkingMansTable,
@@ -50,11 +51,12 @@ import {
 
 export async function getPprTable(id: number): Promise<IPpr> {
   try {
-    const [pprInfo, workingMans, pprMonthStatuses, pprData] = await Promise.all([
+    const [pprInfo, workingMans, pprMonthStatuses, pprData, reportsNotes] = await Promise.all([
       db.select().from(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
       db.select().from(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
       db.select().from(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
       db.select().from(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)).orderBy(pprsWorkDataTable.order),
+      db.select().from(pprReportsNotesTable).where(eq(pprReportsNotesTable.idPpr, id)),
     ]).catch((e) => {
       throw new Error(e);
     });
@@ -76,6 +78,7 @@ export async function getPprTable(id: number): Promise<IPpr> {
       created_by: user,
       workingMans: workingMans,
       months_statuses: pprMonthStatuses[0],
+      reports_notes: reportsNotes[0],
       data: pprData,
       directionShortName: direction?.shortName,
       distanceShortName: distance?.shortName,
@@ -113,6 +116,8 @@ export async function createPprTable(name: string, year: number) {
       .$returningId();
 
     await db.insert(pprMonthsStatusesTable).values({ idPpr: newPprId[0].id });
+
+    await db.insert(pprReportsNotesTable).values({ idPpr: newPprId[0].id });
   } catch (e) {
     throw new Error(`Create ppr ${name} ${year}. ${e}`);
   }
@@ -244,7 +249,10 @@ export async function copyPprTable(params: {
           })
         );
       }
+
       await tx.insert(pprMonthsStatusesTable).values({ idPpr: newPprId });
+
+      await tx.insert(pprReportsNotesTable).values({ idPpr: newPprId });
 
       revalidatePath(ROUTE_PPR);
     });
@@ -265,6 +273,13 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
           .update(pprMonthsStatusesTable)
           .set({ ...params.months_statuses })
           .where(eq(pprMonthsStatusesTable.idPpr, id));
+      }
+
+      if (params.reports_notes) {
+        await tx
+          .update(pprReportsNotesTable)
+          .set({ ...params.reports_notes })
+          .where(eq(pprReportsNotesTable.idPpr, id));
       }
 
       if (params.workingMans?.length) {
@@ -338,6 +353,7 @@ export async function deletePprTable(id: number) {
         tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
         tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
         tx.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
+        tx.delete(pprReportsNotesTable).where(eq(pprReportsNotesTable.idPpr, id)),
       ]).catch((e) => {
         throw new Error(e);
       });

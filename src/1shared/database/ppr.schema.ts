@@ -71,6 +71,25 @@ export const pprMonthsStatusesTable = mysqlTable("ppr_months_statuses", {
   dec: createMysqlPprMonthStatusType("dec"),
 });
 
+export const pprReportsNotesTable = mysqlTable("ppr_reports_notes", {
+  idPpr: int("id_ppr")
+    .references(() => pprsInfoTable.id)
+    .unique()
+    .notNull(),
+  jan: varchar("jan", { length: 256 }).notNull().default(""),
+  feb: varchar("feb", { length: 256 }).notNull().default(""),
+  mar: varchar("mar", { length: 256 }).notNull().default(""),
+  apr: varchar("apr", { length: 256 }).notNull().default(""),
+  may: varchar("may", { length: 256 }).notNull().default(""),
+  june: varchar("june", { length: 256 }).notNull().default(""),
+  july: varchar("july", { length: 256 }).notNull().default(""),
+  aug: varchar("aug", { length: 256 }).notNull().default(""),
+  sept: varchar("sept", { length: 256 }).notNull().default(""),
+  oct: varchar("oct", { length: 256 }).notNull().default(""),
+  nov: varchar("nov", { length: 256 }).notNull().default(""),
+  dec: varchar("dec", { length: 256 }).notNull().default(""),
+});
+
 export const pprWorkingMansTable = mysqlTable("ppr_working_mans", {
   idPpr: int("id_ppr")
     .references(() => pprsInfoTable.id)
