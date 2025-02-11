@@ -5,9 +5,8 @@ import Button from "antd/es/button";
 import Tooltip from "antd/es/tooltip";
 import { DeleteTwoTone } from "@ant-design/icons";
 
-import { checkIsPprInUserControl } from "@/1shared/providers/pprProvider";
-import { TYearPprStatus, deletePprTable } from "@/2entities/ppr";
 import { IUser } from "@/2entities/user";
+import { TYearPprStatus, checkIsPprInUserControl, deletePprTable } from "@/2entities/ppr";
 
 interface IPprDeleteButtonProps {
   pprId: number;

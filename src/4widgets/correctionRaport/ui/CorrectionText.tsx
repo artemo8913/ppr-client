@@ -1,10 +1,10 @@
 import { FC } from "react";
 
-import { roundToFixed } from "@/1shared/lib/math";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
 
-import { ICorrectionSummary, TCorrectionItem } from "./CorrectionRaport";
+import { ICorrectionSummary, TCorrectionItem } from "../model/correctionReport.types";
 
 interface ICorrectionTextProps {
   type: "undone" | "plan";

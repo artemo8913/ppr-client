@@ -1,11 +1,8 @@
 "use client";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC } from "react";
-import {
-  TFilterPlanFactOption,
-  TFilterTimePeriodOption,
-  usePprTableSettings,
-} from "@/1shared/providers/pprTableSettingsProvider";
+
+import { TFilterPlanFactOption, TFilterTimePeriodOption, usePprTableSettings } from "@/2entities/ppr";
 
 interface IPprTableSelectFilterTimePeriodProps {}
 

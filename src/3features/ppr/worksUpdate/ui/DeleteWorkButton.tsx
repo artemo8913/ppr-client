@@ -3,9 +3,8 @@ import { FC, useTransition } from "react";
 import Button from "antd/es/button";
 import { MinusOutlined } from "@ant-design/icons";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { useNotificationProvider } from "@/1shared/providers/notificationProvider";
-import { deletePprWork as deletePprWorkFromServer, TPprDataWorkId } from "@/2entities/ppr";
+import { useNotificationProvider } from "@/1shared/notification";
+import { deletePprWork as deletePprWorkFromServer, TPprDataWorkId, usePpr } from "@/2entities/ppr";
 
 interface IDeleteWorkButtonProps {
   workId: TPprDataWorkId;

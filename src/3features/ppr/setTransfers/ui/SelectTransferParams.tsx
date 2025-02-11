@@ -5,7 +5,7 @@ import TypedInputNumber from "antd/es/input-number";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import Select from "antd/es/select";
 
-import { TOptionType } from "@/1shared/types/TOptionType";
+import { TOptionType } from "@/1shared/lib/form/TOptionType";
 
 interface ISelectTransferParamsProps<T> {
   value: number;

@@ -2,10 +2,9 @@
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC, useEffect } from "react";
 
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { TTimePeriod, TIME_PERIODS } from "@/1shared/const/date";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { usePpr, findFirstUndonePprPeriod } from "@/1shared/providers/pprProvider";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { TTimePeriod, TIME_PERIODS } from "@/1shared/lib/date";
+import { findFirstUndonePprPeriod, usePpr, usePprTableSettings } from "@/2entities/ppr";
 
 type TOption = { value: TTimePeriod } & DefaultOptionType;
 

@@ -3,11 +3,9 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 
-import { TOptionType } from "@/1shared/types/TOptionType";
-import { getTimePeriodFromString } from "@/1shared/const/date";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { checkIsTimePeriodAvailableToTransfer, usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { TOptionType } from "@/1shared/lib/form/TOptionType";
+import { getTimePeriodFromString } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import {
   TPlanWorkPeriods,
   TPlanWorkPeriodsFields,
@@ -15,6 +13,9 @@ import {
   PLAN_WORK_FIELDS,
   TPprDataWorkId,
   IPprData,
+  usePpr,
+  checkIsTimePeriodAvailableToTransfer,
+  usePprTableSettings,
 } from "@/2entities/ppr";
 
 import { SelectTransferParams } from "./SelectTransferParams";

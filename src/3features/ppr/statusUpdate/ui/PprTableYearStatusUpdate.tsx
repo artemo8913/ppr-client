@@ -4,12 +4,12 @@ import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 
 import {
-  usePpr,
-  getNextPprYearStatus,
   checkIsAllMonthsPprStatusesIsDone,
   checkIsPprInUserControl,
-} from "@/1shared/providers/pprProvider";
-import { updatePprTable } from "@/2entities/ppr";
+  getNextPprYearStatus,
+  updatePprTable,
+  usePpr,
+} from "@/2entities/ppr";
 
 interface IPprTableYearStatusUpdateProps {}
 

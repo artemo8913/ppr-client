@@ -8,9 +8,8 @@ import TextArea from "antd/es/input/TextArea";
 import TypedInputNumber from "antd/es/input-number";
 import Select, { DefaultOptionType } from "antd/es/select";
 
-import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
-import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 import { ICommonWork } from "@/2entities/commonWork";
+import { IPprBasicData, TWorkBranch, BRANCH_SELECT_OPTIONS } from "@/2entities/ppr";
 
 export interface IEditWorkFormInitialValues extends Partial<Omit<ICommonWork, "id">> {
   branch: TWorkBranch;

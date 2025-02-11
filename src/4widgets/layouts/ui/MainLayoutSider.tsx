@@ -6,7 +6,7 @@ import Sider from "antd/es/layout/Sider";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
-import { ROUTE_PPR, ROUTE_REPORTS, ROUTE_ROOT } from "@/1shared/const/routes";
+import { ROUTE_PPR, ROUTE_REPORTS, ROUTE_ROOT } from "@/1shared/lib/routes";
 
 type MenuItem = Required<MenuProps>["items"][number];
 function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {

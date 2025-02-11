@@ -3,7 +3,7 @@ import { FC, memo, useCallback } from "react";
 
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
-import { PprWorkingManUpdateControl } from "@/3features/pprWorkingMans/workingMansUpdate";
+import { PprWorkingManUpdateControl } from "@/3features/ppr/workingMansUpdate";
 
 interface IWorkingManTableCellProps extends ITableCellProps {
   workingMan: IWorkingManYearPlan;

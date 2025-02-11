@@ -3,15 +3,15 @@ import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 
-import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import {
+  usePpr,
+  updatePprTable,
+  usePprTableSettings,
   getNextPprMonthStatus,
   checkIsPprInUserControl,
-  usePpr,
   checkIsTimePeriodAvailableForPlanning,
-} from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { updatePprTable } from "@/2entities/ppr/model/ppr.actions";
+} from "@/2entities/ppr";
 
 interface IPprTableMonthStatusUpdateProps {}
 

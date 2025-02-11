@@ -1,11 +1,16 @@
 "use client";
 import { FC } from "react";
 
-import { roundToFixed } from "@/1shared/lib/math";
-import { createPprMeta, usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { getPlanTimeFieldByTimePeriod, getPlanWorkFieldByTimePeriod, IPprData } from "@/2entities/ppr";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import {
+  createPprMeta,
+  getPlanTimeFieldByTimePeriod,
+  getPlanWorkFieldByTimePeriod,
+  IPprData,
+  usePpr,
+  usePprTableSettings,
+} from "@/2entities/ppr";
 
 import { MonthPlanTable } from "./MonthPlanTable";
 import { MonthWorkingMansTable } from "./MonthWorkingMansTable";

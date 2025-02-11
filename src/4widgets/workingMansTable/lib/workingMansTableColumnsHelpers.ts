@@ -1,4 +1,4 @@
-import { TTimePeriod } from "@/1shared/const/date";
+import { TTimePeriod } from "@/1shared/lib/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import {
   getFactTimeFieldByTimePeriod,

@@ -1,14 +1,12 @@
 import { FC } from "react";
 
-import { roundToFixed } from "@/1shared/lib/math";
-import { IPprMeta } from "@/1shared/providers/pprProvider";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { IPprMeta, TPlanWorkPeriodsFields } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 
-import { ICorrectionSummary, TCorrectionItem } from "./CorrectionRaport";
-
 import style from "./CorrectionTable.module.scss";
+import { ICorrectionSummary, TCorrectionItem } from "../model/correctionReport.types";
 
 interface IDoneWorkCorrectionsTableProps {
   pprMeta: IPprMeta;

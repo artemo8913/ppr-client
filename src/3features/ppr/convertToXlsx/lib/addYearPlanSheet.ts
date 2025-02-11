@@ -1,23 +1,23 @@
 import ExcelJS from "exceljs";
 
-import { IBranchDefaultMeta, IPprMeta } from "@/1shared/providers/pprProvider";
-import { translateRuPprBranchName } from "@/1shared/locale/pprBranches";
-import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
-import { TIME_PERIODS, TTimePeriod } from "@/1shared/const/date";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { TIME_PERIODS, TTimePeriod } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import {
-  checkIsWorkOrTimeField,
   IPpr,
   IPprData,
+  IPprMeta,
+  PPR_DATA_FIELDS,
   PLAN_TIME_FIELDS,
   PLAN_WORK_FIELDS,
+  IBranchDefaultMeta,
+  translateRuPprFieldName,
   PPR_DATA_BASIC_FIELDS,
-  PPR_DATA_FIELDS,
+  checkIsWorkOrTimeField,
+  translateRuPprBranchName,
   TPprDataFieldsTotalValues,
 } from "@/2entities/ppr";
 
-import { BOLD, setBgColorXlsx } from "./xlsxStyles";
-import { BLACK_BORDER_FULL, CENTER_ALIGNMENT_WITH_WRAP, VERTICAL_ALIGNMENT } from "./xlsxStyles";
+import { BOLD, setBgColorXlsx, BLACK_BORDER_FULL, CENTER_ALIGNMENT_WITH_WRAP, VERTICAL_ALIGNMENT } from "./xlsxStyles";
 
 const MAX_COLUMNS_COUNT = 76;
 
@@ -124,7 +124,7 @@ export function addYearPlanSheet({
 
     const cell = yearPlanSheet.getCell(FIRST_ROW_INDEX, colIndex);
     // Стилизация ячейки
-    cell.value = translateRuFieldName(field);
+    cell.value = translateRuPprFieldName(field);
     cell.alignment = VERTICAL_ALIGNMENT;
     cell.border = BLACK_BORDER_FULL;
 
@@ -148,7 +148,7 @@ export function addYearPlanSheet({
     // Стилизация заголовков столбов план/факт
     getPlanFactFields(period).map((field) => {
       const planFactCell = yearPlanSheet.getCell(SECOND_ROW_INDEX, colIndex);
-      planFactCell.value = translateRuFieldName(field);
+      planFactCell.value = translateRuPprFieldName(field);
       planFactCell.alignment = VERTICAL_ALIGNMENT;
       planFactCell.border = BLACK_BORDER_FULL;
       planFactCell.fill = {

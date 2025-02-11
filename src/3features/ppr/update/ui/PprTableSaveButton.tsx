@@ -5,9 +5,8 @@ import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
-import { useNotificationProvider } from "@/1shared/providers/notificationProvider";
-import { updatePprTable } from "@/2entities/ppr";
+import { useNotificationProvider } from "@/1shared/notification";
+import { checkIsPprInUserControl, updatePprTable, usePpr } from "@/2entities/ppr";
 
 interface IPprTableUpdateFormProps {}
 

@@ -2,15 +2,15 @@
 import clsx from "clsx";
 import { FC, MutableRefObject, useRef } from "react";
 
-import { getQuartal, getTimePeriodFromString } from "@/1shared/const/date";
+import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
-import { IPprTableSettingsContext } from "@/1shared/providers/pprTableSettingsProvider";
 import {
   checkIsPlanOrFactWorkField,
   checkIsPlanTimeField,
   checkIsPlanWorkField,
   checkIsWorkOrTimeField,
   IPprData,
+  IPprTableSettingsContext,
   TPprDataWorkId,
   TTransfer,
 } from "@/2entities/ppr";
@@ -87,8 +87,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
     pprSettings.pprView === "CORRECTED_PLAN" || pprSettings.pprView === "CORRECTED_PLAN_WITH_ARROWS";
 
   const isArrowsShow =
-    pprSettings.pprView === "CORRECTED_PLAN_WITH_ARROWS" ||
-    pprSettings.pprView === "INITIAL_PLAN_WITH_ARROWS";
+    pprSettings.pprView === "CORRECTED_PLAN_WITH_ARROWS" || pprSettings.pprView === "INITIAL_PLAN_WITH_ARROWS";
 
   const isVertical = checkIsFieldVertical(field);
 

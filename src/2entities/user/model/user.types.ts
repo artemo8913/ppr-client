@@ -8,6 +8,12 @@ export type TUserRole =
   | "direction"
   | "transenergo";
 
+export interface ICredential {
+  id: number;
+  username: string;
+  password: string;
+}
+
 export interface IUser {
   id: number;
   role: TUserRole;

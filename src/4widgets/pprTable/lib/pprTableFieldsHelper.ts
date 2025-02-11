@@ -1,4 +1,4 @@
-import { MONTHS, TMonth, TTimePeriod } from "@/1shared/const/date";
+import { MONTHS, TMonth, TTimePeriod } from "@/1shared/lib/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import {
   IPprData,

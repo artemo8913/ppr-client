@@ -9,11 +9,9 @@ import { FC, useEffect, useState, useTransition } from "react";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-import { TOptionType } from "@/1shared/types/TOptionType";
-import { PPR_YEAR_OPTIONS } from "@/1shared/providers/pprProvider";
-import { TDirectionDB, TDistanceDB, TSubdivisionDB } from "@/1shared/database";
-import { TYearPprStatus } from "@/2entities/ppr";
-import { TDivisionType } from "@/2entities/division";
+import { TOptionType } from "@/1shared/lib/form/TOptionType";
+import { PPR_YEAR_OPTIONS, TYearPprStatus } from "@/2entities/ppr";
+import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
 import { ICommonWork } from "@/2entities/commonWork";
 
 const DIVISIONS_TYPE_OPTIONS: TOptionType<TDivisionType>[] = [
@@ -23,7 +21,7 @@ const DIVISIONS_TYPE_OPTIONS: TOptionType<TDivisionType>[] = [
   { label: "Подразделение", value: "subdivision" },
 ];
 
-function getDivisionOptions(divisions: (TSubdivisionDB | TDistanceDB | TDirectionDB)[]): DefaultOptionType[] {
+function getDivisionOptions(divisions: (TSubdivision | TDistance | TDirection)[]): DefaultOptionType[] {
   return divisions.map((division) => ({ value: division.id, label: division.name }));
 }
 
@@ -41,7 +39,7 @@ type TReportFilterForm = Omit<IReportFilter, "year"> & { year: Dayjs };
 
 interface IReportFilterProps {
   commonWorks?: ICommonWork[];
-  divisions: { subdivisions: TSubdivisionDB[]; distances: TDistanceDB[]; directions: TDirectionDB[] };
+  divisions: { subdivisions: TSubdivision[]; distances: TDistance[]; directions: TDirection[] };
 }
 
 export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks }) => {

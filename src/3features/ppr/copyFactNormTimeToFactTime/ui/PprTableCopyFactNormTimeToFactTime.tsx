@@ -3,8 +3,7 @@ import { Tooltip } from "antd";
 import Button from "antd/es/button";
 import { CopyOutlined } from "@ant-design/icons";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { usePpr, usePprTableSettings } from "@/2entities/ppr";
 
 export const PprTableCopyFactNormTimeToFactTime = () => {
   const { ppr, copyFactNormTimeToFactTime } = usePpr();

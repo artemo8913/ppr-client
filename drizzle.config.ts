@@ -5,9 +5,10 @@ import { defineConfig } from "drizzle-kit";
 loadEnvConfig(cwd());
 
 export default defineConfig({
-  schema: "./src/1shared/database/*.schema.ts",
+  schema: "./src/2entities/**/*.schema.ts",
   dialect: "mysql",
   out: "./drizzle",
+
   dbCredentials: {
     url: "db",
     host: process.env[`DB_HOST_${process.env.DB_LOCATION}`],

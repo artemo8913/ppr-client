@@ -1,9 +1,6 @@
-import { PprProvider } from "@/1shared/providers/pprProvider";
-import { PprTableSettingsProvider } from "@/1shared/providers/pprTableSettingsProvider";
-import { PprWorkModalProvider } from "@/1shared/providers/pprWorkModalProvider";
-import { getPprTable } from "@/2entities/ppr";
+import { getPprTable, PprProvider, PprTableSettingsProvider } from "@/2entities/ppr";
 import { getCommonWorks } from "@/2entities/commonWork";
-import { AddWorkModal, EditWorkModal } from "@/3features/ppr/worksUpdate";
+import { AddWorkModal, EditWorkModal, PprWorkModalProvider } from "@/3features/ppr/worksUpdate";
 import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { PprPage } from "@/5pages/pprPage";
 

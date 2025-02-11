@@ -2,7 +2,7 @@
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC } from "react";
 
-import { TPprView, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { TPprView, usePprTableSettings } from "@/2entities/ppr";
 
 interface IPprTableSelectCorrectionViewProps {}
 

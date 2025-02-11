@@ -1,31 +1,25 @@
 "use client";
 import clsx from "clsx";
 import { Switch } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import { roundToFixed } from "@/1shared/lib/math";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TPlanWorkPeriodsFields, getFactWorkFieldByTimePeriod, IPprData } from "@/2entities/ppr";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import {
+  TPlanWorkPeriodsFields,
+  getFactWorkFieldByTimePeriod,
+  IPprData,
+  usePpr,
+  checkIsPprInUserControl,
+  usePprTableSettings,
+} from "@/2entities/ppr";
 
 import { CorrectionNote } from "./CorrectionNote";
 import { CorrectionText } from "./CorrectionText";
 import { PlanCorrectionsTable } from "./PlanCorrectionsTable";
 import { DoneWorkCorrectionsTable } from "./DoneWorkCorrectionsTable";
-
-export interface TCorrectionItem {
-  pprData: IPprData;
-  firstCompareValue: number;
-  secondCompareValue: number;
-}
-
-export interface ICorrectionSummary {
-  plan: number;
-  fact: number;
-}
+import { ICorrectionSummary, TCorrectionItem } from "../model/correctionReport.types";
 
 interface ICorrectionRaportProps {}
 

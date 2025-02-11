@@ -1,7 +1,8 @@
 "use client";
 import { FC } from "react";
 import Slider from "antd/es/slider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+
+import { usePprTableSettings } from "@/2entities/ppr";
 
 interface IPprTableSelectHeaderHeightProps {}
 

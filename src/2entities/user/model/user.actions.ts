@@ -1,28 +1,47 @@
 "use server";
 import { eq } from "drizzle-orm";
 
-import { db, usersTable } from "@/1shared/database";
-import { getDivisionsById } from "@/1shared/api/divisions.api";
+import { db } from "@/1shared/database";
+import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/user";
 
-import { IUser } from "./user.types";
+import { IUser, ICredential } from "./user.types";
+import { credentialsTable, usersTable } from "./user.schema";
 
 export async function getUserData(id: number): Promise<IUser> {
   try {
-    const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, id) });
+    const res = (
+      await db
+        .select()
+        .from(usersTable)
+        .leftJoin(directionsTable, eq(usersTable.idDirection, directionsTable.id))
+        .leftJoin(distancesTable, eq(usersTable.idDistance, distancesTable.id))
+        .leftJoin(subdivisionsTable, eq(usersTable.idSubdivision, subdivisionsTable.id))
+        .where(eq(usersTable.id, id))
+    )[0];
 
-    if (!user) {
+    if (!res.users.id) {
       throw new Error(`User with id = ${id} not exist`);
     }
 
-    const { direction, distance, subdivision } = await getDivisionsById(user);
-
     return {
-      ...user,
-      directionShortName: direction?.shortName,
-      distanceShortName: distance?.shortName,
-      subdivisionShortName: subdivision?.shortName,
+      ...res.users,
+      directionShortName: res.directions?.shortName,
+      distanceShortName: res.distances?.shortName,
+      subdivisionShortName: res.subdivisions?.shortName,
     };
   } catch (e) {
     throw new Error(`${e}`);
   }
+}
+
+export async function getCredential(username: string): Promise<ICredential> {
+  const credential = await db.query.credentialsTable.findFirst({
+    where: eq(credentialsTable.username, username),
+  });
+
+  if (!credential) {
+    throw new Error(`Credentials for ${username} not exist`);
+  }
+
+  return credential;
 }

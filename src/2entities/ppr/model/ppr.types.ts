@@ -1,5 +1,5 @@
-import { IUser } from "../../user";
-import { TMonth, TTimePeriod } from "@/1shared/const/date";
+import { IUser } from "@/2entities/user/@x/ppr";
+import { TMonth, TTimePeriod } from "@/1shared/lib/date";
 
 export type TYearPprStatus =
   | "template"
