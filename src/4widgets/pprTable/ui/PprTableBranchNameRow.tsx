@@ -1,9 +1,7 @@
 "use client";
 import { ChangeEvent, FC, memo } from "react";
 
-import { IBranchDefaultMeta } from "@/1shared/providers/pprProvider";
-import { translateRuPprBranchName } from "@/1shared/locale/pprBranches";
-import { TPprDataWorkId } from "@/2entities/ppr";
+import { IBranchDefaultMeta, TPprDataWorkId, translateRuPprBranchName } from "@/2entities/ppr";
 
 import { useCreateColumns } from "./PprTableColumns";
 

@@ -5,9 +5,8 @@ import Button from "antd/es/button";
 import { SaveOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
-import { useNotificationProvider } from "@/1shared/providers/notificationProvider";
-import { updatePprTable } from "@/2entities/ppr";
+import { useNotificationProvider } from "@/1shared/notification";
+import { checkIsPprInUserControl, updatePprTable, usePpr } from "@/2entities/ppr";
 
 interface IPprTableUpdateFormProps {}
 
@@ -30,7 +29,11 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
     startTransition(async () => {
       if (ppr) {
         try {
-          await updatePprTable(ppr.id, { data: ppr.data, workingMans: ppr.workingMans });
+          await updatePprTable(ppr.id, {
+            data: ppr.data,
+            workingMans: ppr.workingMans,
+            reports_notes: ppr.reports_notes,
+          });
           toast({ message: "Данные успешно обновлены" });
         } catch (e) {
           toast(e, "error");

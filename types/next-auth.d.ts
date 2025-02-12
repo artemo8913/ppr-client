@@ -1,5 +1,6 @@
-import { IUser } from "@/2entities/user";
 import NextAuth from "next-auth";
+
+import { IUser } from "@/2entities/user";
 
 declare module "next-auth" {
   interface Session {

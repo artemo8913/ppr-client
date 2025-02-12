@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { transliterateRuToEn } from "@/1shared/locale/transliterateRuToEn";
+import { transliterateRuToEn } from "@/1shared/lib/locale/transliterateRuToEn";
 import { getPprTable } from "@/2entities/ppr";
 import { pprConvertToXlsx } from "@/3features/ppr/convertToXlsx";
 

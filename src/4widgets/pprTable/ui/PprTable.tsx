@@ -2,11 +2,15 @@
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { translateRuFieldName } from "@/1shared/locale/pprFieldNames";
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { SummaryTableFoot, SummaryTableRow } from "@/2entities/ppr";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import {
+  checkIsPprInUserControl,
+  SummaryTableFoot,
+  SummaryTableRow,
+  translateRuPprFieldName,
+  usePpr,
+  usePprTableSettings,
+} from "@/2entities/ppr";
 import { AddWorkButton } from "@/3features/ppr/worksUpdate";
 
 import HeaderCell from "./HeaderCell";
@@ -106,7 +110,7 @@ export const PprTable: FC<IPprTableProps> = () => {
               isVertical
               key={field}
               rowSpan={2}
-              value={translateRuFieldName(field)}
+              value={translateRuPprFieldName(field)}
               style={{
                 ...getThStyle(field),
                 height: `${pprSettings.headerHeightPx}px`,
@@ -127,7 +131,7 @@ export const PprTable: FC<IPprTableProps> = () => {
             <HeaderCell
               isVertical
               key={planFactField}
-              value={translateRuFieldName(planFactField)}
+              value={translateRuPprFieldName(planFactField)}
               cellRef={planFactField === "year_plan_work" ? planCellRef : null}
             />
           ))}

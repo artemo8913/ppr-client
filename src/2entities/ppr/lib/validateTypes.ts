@@ -1,14 +1,4 @@
 import {
-  IPprData,
-  TPlanWorkPeriods,
-  TFactWorkPeriods,
-  TPlanTimePeriods,
-  TFactTimePeriods,
-  TPlanNormTimePeriods,
-  TFactNormTimePeriods,
-  TPlanTabelTimePeriods,
-} from "../model/ppr.types";
-import {
   factNormTimeFieldsSet,
   factTimeFieldsSet,
   factWorkFieldsSet,
@@ -19,7 +9,17 @@ import {
   planWorkFieldsSet,
   pprTableFieldsSet,
   workAndTimeFieldsSet,
-} from "./constFields";
+} from "../model/ppr.const";
+import {
+  IPprData,
+  TPlanWorkPeriods,
+  TFactWorkPeriods,
+  TPlanTimePeriods,
+  TFactTimePeriods,
+  TPlanNormTimePeriods,
+  TFactNormTimePeriods,
+  TPlanTabelTimePeriods,
+} from "../model/ppr.types";
 
 export function checkIsPprDataField(column: any): column is keyof IPprData {
   return pprTableFieldsSet.has(column);

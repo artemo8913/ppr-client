@@ -1,9 +1,8 @@
 "use client";
 import clsx from "clsx";
-import { FC, memo, MutableRefObject, useCallback, useMemo } from "react";
+import { FC, memo, MutableRefObject, useCallback } from "react";
 
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { IPprData, TPprDataWorkId } from "@/2entities/ppr";
+import { IPprData, TPprDataWorkId, usePprTableSettings } from "@/2entities/ppr";
 
 import { PprTableCell } from "./PprTableCell";
 import { editableFieldsSettings, TPprFieldSettings } from "../lib/pprTableFieldsHelper";

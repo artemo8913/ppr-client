@@ -4,8 +4,9 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
-import { useWorkModal } from "@/1shared/providers/pprWorkModalProvider";
 import { IPprData } from "@/2entities/ppr";
+
+import { useWorkModal } from "./modal/WorkModalProvider";
 
 interface IAddWorkButtonProps {
   nearWork?: IPprData;

@@ -2,19 +2,20 @@
 import { useSession } from "next-auth/react";
 import { FC, useCallback, useMemo } from "react";
 
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCellMemo } from "@/1shared/ui/table";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import {
   IWorkingManYearPlan,
   SummaryTableFoot,
   checkIsFactTimeField,
   checkIsPlanNormTimeField,
   checkIsPlanTabelTimeField,
+  checkIsPprInUserControl,
+  usePpr,
+  usePprTableSettings,
 } from "@/2entities/ppr";
-import { AddWorkingManButton } from "@/3features/pprWorkingMans/workingMansUpdate";
+import { AddWorkingManButton } from "@/3features/ppr/workingMansUpdate";
 
 import { getColumnSettings, getColumnTitle, getThStyle } from "../lib/workingMansTableColumnsHelpers";
 import { WorkingManTableCellMemo } from "./WorkingManTableCell";

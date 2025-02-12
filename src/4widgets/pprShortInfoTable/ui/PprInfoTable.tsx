@@ -3,17 +3,21 @@ import { FC } from "react";
 import Link from "next/link";
 import { Table, TableProps } from "antd";
 
-import { MONTHS } from "@/1shared/const/date";
-import { getStatusText } from "@/1shared/providers/pprProvider/lib/pprStatusHelper";
-import { usePprSearchTransition } from "@/1shared/providers/pprSearchTransitionProvider";
+import { MONTHS } from "@/1shared/lib/date";
+import { getStatusText } from "@/2entities/ppr";
 import { TPprShortInfo } from "@/2entities/ppr";
+import { TDirection, TDistance, TSubdivision } from "@/2entities/division";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprCopyButton } from "@/3features/ppr/copy";
 
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
+import { PprSearchQueryTransitionProvider, usePprSearchQueryTransition } from "./PprSearchQueryTransitionProvider";
+import { PprSearchQuery } from "./PprSearchQuery";
 
 interface IPprInfoProps {
   data: TPprShortInfo[];
+  divisions?: { subdivisions: TSubdivision[]; distances: TDistance[]; directions: TDirection[] };
+  hasSearch?: boolean;
 }
 
 const columns: TableProps<TPprShortInfo>["columns"] = [
@@ -78,16 +82,19 @@ const columns: TableProps<TPprShortInfo>["columns"] = [
   },
 ];
 
-export const PprInfoTable: FC<IPprInfoProps> = ({ data }) => {
-  const { isLoading } = usePprSearchTransition();
+export const PprInfoTable: FC<IPprInfoProps> = ({ data, hasSearch, divisions }) => {
+  const { isLoading } = usePprSearchQueryTransition();
 
   return (
-    <Table
-      pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: [5, 10, 50, 100] }}
-      loading={isLoading}
-      dataSource={data}
-      columns={columns}
-      rowKey="id"
-    />
+    <PprSearchQueryTransitionProvider>
+      {hasSearch && divisions && <PprSearchQuery className="mb-4" divisions={divisions} />}
+      <Table
+        pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: [5, 10, 50, 100] }}
+        loading={isLoading}
+        dataSource={data}
+        columns={columns}
+        rowKey="id"
+      />
+    </PprSearchQueryTransitionProvider>
   );
 };

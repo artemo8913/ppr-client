@@ -1,8 +1,7 @@
 import ExcelJS from "exceljs";
 
 import { IPpr } from "@/2entities/ppr";
-
-import { IGetDivisionsResponce } from "@/1shared/api/divisions.api";
+import { IGetDivisionsResponce } from "@/2entities/division";
 
 import { BLACK_BORDER_BOTTOM, createHeaderCell } from "./xlsxStyles";
 

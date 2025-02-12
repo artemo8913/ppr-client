@@ -1,27 +1,26 @@
 "use client";
 import clsx from "clsx";
 import { FC, Fragment } from "react";
+import { useSearchParams } from "next/navigation";
 
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { getQuartal, TIME_PERIODS } from "@/1shared/const/date";
-import { calculateFulfillmentReport } from "@/1shared/providers/pprProvider";
-import { TDirectionDB, TDistanceDB, TSubdivisionDB } from "@/1shared/database";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { getQuartal, TIME_PERIODS } from "@/1shared/lib/date";
 import {
+  calculateFulfillmentReport,
   getFactWorkFieldByTimePeriod,
   getPlanWorkFieldByTimePeriod,
   TGetPprDataForFulfillmentReportRes,
 } from "@/2entities/ppr";
+import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
 
 import style from "./ReportTable.module.scss";
-import { useSearchParams } from "next/navigation";
-import { TDivisionType } from "@/2entities/division";
 
 interface IFulfillmentReportProps {
   report?: TGetPprDataForFulfillmentReportRes[];
   divisions: {
-    subdivisionsMap: Map<number, TSubdivisionDB>;
-    distancesMap: Map<number, TDistanceDB>;
-    directionsMap: Map<number, TDirectionDB>;
+    subdivisionsMap: Map<number, TSubdivision>;
+    distancesMap: Map<number, TDistance>;
+    directionsMap: Map<number, TDirection>;
   };
 }
 

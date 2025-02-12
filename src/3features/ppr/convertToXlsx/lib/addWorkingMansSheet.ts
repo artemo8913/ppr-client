@@ -1,6 +1,6 @@
 import ExcelJS from "exceljs";
 
-import { roundToFixed } from "@/1shared/lib/math";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { IWorkingManYearPlan, TWorkingManFieldsTotalValues } from "@/2entities/ppr";
 
 import {

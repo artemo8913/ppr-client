@@ -2,11 +2,11 @@
 import { useEffect } from "react";
 import Tabs from "antd/es/tabs";
 
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 import { PprTable } from "@/4widgets/pprTable";
 import { WorkingMansTable } from "@/4widgets/workingMansTable";
 import { CorrectionRaport } from "@/4widgets/correctionRaport";
 import { MonthPlan } from "@/4widgets/monthPlan";
+import { usePprTableSettings } from "@/2entities/ppr";
 
 export const PprPage = () => {
   const { currentTimePeriod } = usePprTableSettings();

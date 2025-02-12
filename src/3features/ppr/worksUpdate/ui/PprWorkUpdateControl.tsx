@@ -5,11 +5,11 @@ import { TableCellControlWrapper } from "@/1shared/ui/table";
 import { IPprData } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
-import { DeleteWorkButton } from "./DeleteWorkButton";
 import { CopyWorkButton } from "./CopyWorkButton";
+import { EditWorkButton } from "./EditWorkButton";
+import { DeleteWorkButton } from "./DeleteWorkButton";
 import { IncreaseWorkPositionButton } from "./IncreaseWorkPositionButton";
 import { DecreaseWorkPositionButton } from "./DecreaseWorkPositionButton";
-import { EditWorkButton } from "./EditWorkButton";
 
 interface ITableCellWithWorkControlProps {
   work: IPprData;

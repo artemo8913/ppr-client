@@ -1,7 +1,9 @@
 import ExcelJS from "exceljs";
+
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { IPprMeta } from "@/2entities/ppr";
+
 import { createCellWithBorderAndCenterAlignmentAndWrap, createHeaderCell } from "./xlsxStyles";
-import { roundToFixed } from "@/1shared/lib/math";
-import { IPprMeta } from "@/1shared/providers/pprProvider";
 
 interface IAddPprRealizationSheetArgs {
   workbook: ExcelJS.Workbook;

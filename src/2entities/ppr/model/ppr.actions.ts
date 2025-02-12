@@ -3,24 +3,22 @@ import { and, eq, isNotNull, like, or, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-import { NotificationType } from "@/1shared/providers/notificationProvider";
-import { buildConflictUpdateColumns } from "@/1shared/lib/buildConflictUpdateColumns";
-import { ROUTE_PPR } from "@/1shared/const/routes";
+import { db } from "@/1shared/database";
+import { ROUTE_PPR } from "@/1shared/lib/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
+import { MONTHS, TIME_PERIODS } from "@/1shared/lib/date";
+import { NotificationType } from "@/1shared/notification";
+import { buildConflictUpdateColumns } from "@/1shared/lib/database/buildConflictUpdateColumns";
+import { usersTable } from "@/2entities/user/@x/ppr";
+import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/ppr";
+
 import {
-  db,
-  directionsTable,
-  distancesTable,
   pprMonthsStatusesTable,
+  pprReportsNotesTable,
   pprsInfoTable,
   pprsWorkDataTable,
   pprWorkingMansTable,
-  subdivisionsTable,
-  usersTable,
-} from "@/1shared/database";
-import { getDivisionsById } from "@/1shared/api/divisions.api";
-import { MONTHS, TIME_PERIODS } from "@/1shared/const/date";
-
+} from "./ppr.schema";
 import {
   IPpr,
   IPprData,
@@ -35,7 +33,7 @@ import {
   TPprShortInfo,
   TWorkPlanTimePeriodsFields,
   TYearPprStatus,
-} from "..";
+} from "./ppr.types";
 import {
   getPprFieldsByTimePeriod,
   FACT_NORM_TIME_FIELDS,
@@ -46,40 +44,48 @@ import {
   PLAN_TIME_FIELDS,
   PLAN_WORK_FIELDS,
   PPR_DATA_BASIC_FIELDS,
-} from "../lib/constFields";
+} from "./ppr.const";
 
 export async function getPprTable(id: number): Promise<IPpr> {
   try {
-    const [pprInfo, workingMans, pprMonthStatuses, pprData] = await Promise.all([
-      db.select().from(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
+    const [pprInfoRes, workingMans, pprMonthStatuses, pprData, reportsNotes] = await Promise.all([
+      db
+        .select()
+        .from(pprsInfoTable)
+        .leftJoin(directionsTable, eq(pprsInfoTable.idDirection, directionsTable.id))
+        .leftJoin(distancesTable, eq(pprsInfoTable.idDistance, distancesTable.id))
+        .leftJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id))
+        .where(eq(pprsInfoTable.id, id)),
       db.select().from(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
       db.select().from(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
       db.select().from(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)).orderBy(pprsWorkDataTable.order),
+      db.select().from(pprReportsNotesTable).where(eq(pprReportsNotesTable.idPpr, id)),
     ]).catch((e) => {
       throw new Error(e);
     });
 
-    if (pprInfo.length !== 1) {
+    if (pprInfoRes.length !== 1) {
       throw new Error(`Unique ppr with id ${id} not exist`);
     }
 
-    const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, pprInfo[0].idUserCreatedBy) });
+    const user = await db.query.usersTable.findFirst({
+      where: eq(usersTable.id, pprInfoRes[0].pprs_info.idUserCreatedBy),
+    });
 
     if (!user) {
-      throw new Error(`User id ${pprInfo[0].idUserCreatedBy} created ppr with id ${id} not exist`);
+      throw new Error(`User id ${pprInfoRes[0].pprs_info.idUserCreatedBy} created ppr with id ${id} not exist`);
     }
 
-    const { direction, distance, subdivision } = await getDivisionsById(pprInfo[0]);
-
     return {
-      ...pprInfo[0],
+      ...pprInfoRes[0].pprs_info,
       created_by: user,
       workingMans: workingMans,
       months_statuses: pprMonthStatuses[0],
+      reports_notes: reportsNotes[0],
       data: pprData,
-      directionShortName: direction?.shortName,
-      distanceShortName: distance?.shortName,
-      subdivisionShortName: subdivision?.shortName,
+      directionShortName: pprInfoRes[0].directions?.shortName,
+      distanceShortName: pprInfoRes[0].distances?.shortName,
+      subdivisionShortName: pprInfoRes[0].subdivisions?.shortName,
     };
   } catch (e) {
     throw new Error(`Load ppr data. ${e}`);
@@ -113,6 +119,8 @@ export async function createPprTable(name: string, year: number) {
       .$returningId();
 
     await db.insert(pprMonthsStatusesTable).values({ idPpr: newPprId[0].id });
+
+    await db.insert(pprReportsNotesTable).values({ idPpr: newPprId[0].id });
   } catch (e) {
     throw new Error(`Create ppr ${name} ${year}. ${e}`);
   }
@@ -244,7 +252,10 @@ export async function copyPprTable(params: {
           })
         );
       }
+
       await tx.insert(pprMonthsStatusesTable).values({ idPpr: newPprId });
+
+      await tx.insert(pprReportsNotesTable).values({ idPpr: newPprId });
 
       revalidatePath(ROUTE_PPR);
     });
@@ -265,6 +276,13 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
           .update(pprMonthsStatusesTable)
           .set({ ...params.months_statuses })
           .where(eq(pprMonthsStatusesTable.idPpr, id));
+      }
+
+      if (params.reports_notes) {
+        await tx
+          .update(pprReportsNotesTable)
+          .set({ ...params.reports_notes })
+          .where(eq(pprReportsNotesTable.idPpr, id));
       }
 
       if (params.workingMans?.length) {
@@ -338,6 +356,7 @@ export async function deletePprTable(id: number) {
         tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
         tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
         tx.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
+        tx.delete(pprReportsNotesTable).where(eq(pprReportsNotesTable.idPpr, id)),
       ]).catch((e) => {
         throw new Error(e);
       });

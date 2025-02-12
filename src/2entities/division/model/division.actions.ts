@@ -2,15 +2,16 @@
 import { and, eq, SQL } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
+import { db } from "@/1shared/database";
+
 import {
-  db,
   directionsTable,
   distancesTable,
   subdivisionsTable,
   TDirectionDB,
   TDistanceDB,
   TSubdivisionDB,
-} from "@/1shared/database";
+} from "./division.schema";
 
 export async function getAllSubdivision(idDistance?: number) {
   const filters: SQL[] = [];
@@ -90,4 +91,42 @@ export async function getDivisionsMap() {
   });
 
   return { subdivisionsMap, distancesMap, directionsMap, directions, distances, subdivisions };
+}
+
+interface IDivisionsIds {
+  idDirection: number | null;
+  idDistance: number | null;
+  idSubdivision: number | null;
+}
+
+export interface IGetDivisionsResponce {
+  direction?: TDirectionDB | null;
+  distance?: TDistanceDB | null;
+  subdivision?: TSubdivisionDB | null;
+}
+
+export async function getDivisionsById({
+  idDirection,
+  idDistance,
+  idSubdivision,
+}: IDivisionsIds): Promise<IGetDivisionsResponce> {
+  try {
+    const directionReq =
+      (idDirection && db.query.directionsTable.findFirst({ where: eq(directionsTable.id, idDirection) })) || null;
+    const distanceReq =
+      (idDistance && db.query.distancesTable.findFirst({ where: eq(distancesTable.id, idDistance) })) || null;
+    const subdivisionReq =
+      (idSubdivision && db.query.subdivisionsTable.findFirst({ where: eq(subdivisionsTable.id, idSubdivision) })) ||
+      null;
+
+    const [direction, distance, subdivision] = await Promise.all([directionReq, distanceReq, subdivisionReq]).catch(
+      (e) => {
+        throw new Error(e);
+      }
+    );
+
+    return { direction, distance, subdivision };
+  } catch (e) {
+    throw new Error(`Load divisions by id error. ${e}`);
+  }
 }

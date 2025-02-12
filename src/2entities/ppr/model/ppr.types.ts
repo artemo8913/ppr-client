@@ -1,5 +1,5 @@
-import { IUser } from "../../user";
-import { TMonth, TTimePeriod } from "@/1shared/const/date";
+import { IUser } from "@/2entities/user/@x/ppr";
+import { TMonth, TTimePeriod } from "@/1shared/lib/date";
 
 export type TYearPprStatus =
   | "template"
@@ -26,6 +26,10 @@ export type TMonthPprStatus =
 
 export type TAllMonthStatuses = {
   [month in TMonth]: TMonthPprStatus;
+};
+
+type TReportsNotes = {
+  [month in TMonth]: string;
 };
 
 export type TTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
@@ -109,6 +113,7 @@ export interface IPpr {
   created_at: Date;
   created_by: IUser;
   months_statuses: TAllMonthStatuses;
+  reports_notes: TReportsNotes;
   idDirection: number | null;
   idDistance: number | null;
   idSubdivision: number | null;
@@ -119,7 +124,7 @@ export interface IPpr {
   subdivisionShortName?: string | null;
 }
 
-export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value">;
+export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value" | "reports_notes">;
 
 export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;

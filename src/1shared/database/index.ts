@@ -1,27 +1,16 @@
 import mysql, { PoolOptions } from "mysql2";
 import { drizzle } from "drizzle-orm/mysql2";
 
-import { usersTable } from "./users.schema";
-import { credentialsTable } from "./credentials.schema";
-import { commonWorksTable } from "./commonWorks.schema";
-import {
-  directionsTable,
-  distancesTable,
-  subdivisionsTable,
-  TSubdivisionDB,
-  TDirectionDB,
-  TDistanceDB,
-} from "./divisions.schema";
+import { usersTable, credentialsTable } from "@/2entities/user/model/user.schema";
+import { commonWorksTable } from "@/2entities/commonWork/model/commonWork.schema";
+import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/model/division.schema";
 import {
   pprMonthsStatusesTable,
   pprWorkingMansTable,
   pprsInfoTable,
   pprsWorkDataTable,
-  TPprDataDB,
-  TPprInfoDB,
-  TPprMonthsStatusDB,
-  TPprWorkingManDB,
-} from "./ppr.schema";
+  pprReportsNotesTable,
+} from "@/2entities/ppr/model/ppr.schema";
 
 const connectionConfig: PoolOptions = {
   host: process.env[`DB_HOST_${process.env.DB_LOCATION}`],
@@ -50,23 +39,9 @@ export const db = drizzle(connection, {
     distancesTable,
     subdivisionsTable,
     pprMonthsStatusesTable,
+    pprReportsNotesTable,
     pprWorkingMansTable,
-    pprsInfoTable,
     pprsWorkDataTable,
+    pprsInfoTable,
   },
 });
-
-export {
-  usersTable,
-  credentialsTable,
-  commonWorksTable,
-  directionsTable,
-  distancesTable,
-  subdivisionsTable,
-  pprMonthsStatusesTable,
-  pprWorkingMansTable,
-  pprsInfoTable,
-  pprsWorkDataTable,
-};
-
-export type { TPprDataDB, TPprInfoDB, TPprMonthsStatusDB, TPprWorkingManDB, TSubdivisionDB, TDirectionDB, TDistanceDB };

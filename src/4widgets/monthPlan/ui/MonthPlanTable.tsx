@@ -1,17 +1,17 @@
 "use client";
 import { FC, Fragment } from "react";
 
-import { TTimePeriod } from "@/1shared/const/date";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { IPprMeta } from "@/1shared/providers/pprProvider";
-import { translateRuPprBranchName } from "@/1shared/locale/pprBranches";
+import { TTimePeriod } from "@/1shared/lib/date";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import {
   getFactTimeFieldByTimePeriod,
   getFactWorkFieldByTimePeriod,
   getPlanTimeFieldByTimePeriod,
   getPlanWorkFieldByTimePeriod,
   IPprData,
+  IPprMeta,
   SummaryTableRow,
+  translateRuPprBranchName,
 } from "@/2entities/ppr";
 
 import style from "./MonthPlan.module.scss";

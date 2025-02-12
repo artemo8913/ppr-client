@@ -1,9 +1,10 @@
 "use server";
 import { eq } from "drizzle-orm";
 
-import { db, commonWorksTable } from "@/1shared/database";
+import { db } from "@/1shared/database";
 
-import { ICommonWork } from "..";
+import { ICommonWork } from "./commonWork.types";
+import { commonWorksTable } from "./commonWork.schema";
 
 export async function getCommonWorks(): Promise<ICommonWork[]> {
   return db.query.commonWorksTable.findMany();

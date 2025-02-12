@@ -4,13 +4,12 @@ import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
 import { useSession } from "next-auth/react";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { useWorkModal } from "@/1shared/providers/pprWorkModalProvider";
 import { ICommonWork } from "@/2entities/commonWork";
-import { IPprBasicData } from "@/2entities/ppr";
+import { IPprBasicData, usePpr } from "@/2entities/ppr";
 
-import { EditWorkForm, IEditWorkFormInitialValues } from "../form/EditWorkForm";
+import { useWorkModal } from "./WorkModalProvider";
 import { ISelectedWork, SelectWorkTable } from "../form/SelectWorkTable";
+import { EditWorkForm, IEditWorkFormInitialValues } from "../form/EditWorkForm";
 
 interface IEditModalProps extends React.ComponentProps<typeof Modal> {
   data: ICommonWork[];

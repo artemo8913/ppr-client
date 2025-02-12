@@ -1,10 +1,11 @@
+import { TTimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/lib/date";
 import {
-  TFilterPlanFactOption,
+  PPR_DATA_BASIC_FIELDS,
+  IPprData,
   TFilterTimePeriodOption,
+  TFilterPlanFactOption,
   usePprTableSettings,
-} from "@/1shared/providers/pprTableSettingsProvider";
-import { TTimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/const/date";
-import { PPR_DATA_BASIC_FIELDS, IPprData } from "@/2entities/ppr";
+} from "@/2entities/ppr";
 import { useMemo } from "react";
 
 function getTimePeriodsColumns(currentTimePeriod?: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {

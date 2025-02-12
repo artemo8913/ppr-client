@@ -3,8 +3,7 @@ import { FC } from "react";
 import Button from "antd/es/button";
 import { CopyOutlined } from "@ant-design/icons";
 
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { TPprDataWorkId } from "@/2entities/ppr";
+import { TPprDataWorkId, usePpr } from "@/2entities/ppr";
 
 interface ICopyWorkButtonProps {
   workId: TPprDataWorkId;

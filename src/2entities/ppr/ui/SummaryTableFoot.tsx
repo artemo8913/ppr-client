@@ -2,9 +2,9 @@ import { FC } from "react";
 import clsx from "clsx";
 
 import { TableCellMemo } from "@/1shared/ui/table";
-import { usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
 
+import { usePpr } from "./PprProvider";
+import { usePprTableSettings } from "./PprTableSettingsProvider";
 import { IPprData, IWorkingManYearPlan } from "../model/ppr.types";
 import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
 

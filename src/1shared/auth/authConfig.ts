@@ -1,8 +1,7 @@
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-import { getCredential } from "@/2entities/login";
-import { getUserData } from "@/2entities/user";
+import { getUserData, getCredential } from "@/2entities/user";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -17,7 +16,7 @@ export const authOptions: AuthOptions = {
     async session({ session, token: { id } }) {
       const user = await getUserData(Number(id));
 
-        if (user) {
+      if (user) {
         return { expires: session.expires, user: { ...user } };
       }
 

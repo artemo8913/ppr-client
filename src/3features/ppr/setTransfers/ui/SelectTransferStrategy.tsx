@@ -1,5 +1,5 @@
-import Select, { DefaultOptionType } from "antd/es/select";
 import { FC } from "react";
+import Select, { DefaultOptionType } from "antd/es/select";
 
 export type TTransferStrategyOption = "NULL" | "PERIOD";
 

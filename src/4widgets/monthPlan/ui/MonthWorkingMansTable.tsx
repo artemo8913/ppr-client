@@ -2,14 +2,14 @@
 import { FC } from "react";
 import clsx from "clsx";
 
-import { roundToFixed } from "@/1shared/lib/math";
-import { TTimePeriod } from "@/1shared/const/date";
-import { IPprMeta } from "@/1shared/providers/pprProvider";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { TTimePeriod } from "@/1shared/lib/date";
 import {
   getFactTimeFieldByTimePeriod,
   getPlanNormTimeFieldByTimePeriod,
   getPlanTabelTimeFieldByTimePeriod,
   getPlanTimeFieldByTimePeriod,
+  IPprMeta,
   IWorkingManYearPlan,
 } from "@/2entities/ppr";
 

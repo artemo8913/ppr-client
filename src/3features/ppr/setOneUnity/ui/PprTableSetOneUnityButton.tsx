@@ -5,7 +5,7 @@ import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 import { FormOutlined } from "@ant-design/icons";
 
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
+import { checkIsPprInUserControl, usePpr } from "@/2entities/ppr";
 
 export const PprTableSetOneUnityButton = () => {
   const { ppr, setOneUnityInAllWorks } = usePpr();

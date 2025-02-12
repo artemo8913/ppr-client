@@ -7,9 +7,8 @@ import Search, { SearchProps } from "antd/es/input/Search";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { Key, TableRowSelection } from "antd/es/table/interface";
 
-import { BRANCH_SELECT_OPTIONS } from "@/1shared/const/branchSelectOptions";
 import { ICommonWork } from "@/2entities/commonWork";
-import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
+import { IPprBasicData, TWorkBranch, BRANCH_SELECT_OPTIONS } from "@/2entities/ppr";
 
 export interface ISelectedWork extends Partial<Omit<ICommonWork, "id">> {
   note?: string;

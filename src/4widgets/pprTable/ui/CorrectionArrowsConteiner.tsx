@@ -1,8 +1,14 @@
 "use client";
-import { FC, FocusEventHandler, MutableRefObject, memo, useEffect, useState } from "react";
-import { TFilterPlanFactOption, usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
+import { FC, MutableRefObject, memo, useEffect, useState } from "react";
 import { Arrow } from "@/1shared/ui/arrow";
-import { TPlanWorkPeriodsFields, TTransfer, checkIsPlanWorkField, PLAN_WORK_FIELDS } from "@/2entities/ppr";
+import {
+  TPlanWorkPeriodsFields,
+  TTransfer,
+  checkIsPlanWorkField,
+  PLAN_WORK_FIELDS,
+  TFilterPlanFactOption,
+  usePprTableSettings,
+} from "@/2entities/ppr";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;

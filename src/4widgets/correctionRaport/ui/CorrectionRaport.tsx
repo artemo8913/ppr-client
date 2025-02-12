@@ -4,38 +4,33 @@ import { Switch } from "antd";
 import React, { FC, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import { roundToFixed } from "@/1shared/lib/math";
-import { translateRuTimePeriod } from "@/1shared/locale/date";
-import { checkIsPprInUserControl, usePpr } from "@/1shared/providers/pprProvider";
-import { usePprTableSettings } from "@/1shared/providers/pprTableSettingsProvider";
-import { TPlanWorkPeriodsFields, getFactWorkFieldByTimePeriod, IPprData } from "@/2entities/ppr";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import {
+  TPlanWorkPeriodsFields,
+  getFactWorkFieldByTimePeriod,
+  IPprData,
+  usePpr,
+  checkIsPprInUserControl,
+  usePprTableSettings,
+} from "@/2entities/ppr";
 
+import { CorrectionNote } from "./CorrectionNote";
 import { CorrectionText } from "./CorrectionText";
 import { PlanCorrectionsTable } from "./PlanCorrectionsTable";
 import { DoneWorkCorrectionsTable } from "./DoneWorkCorrectionsTable";
-
-export interface TCorrectionItem {
-  pprData: IPprData;
-  firstCompareValue: number;
-  secondCompareValue: number;
-}
-
-export interface ICorrectionSummary {
-  plan: number;
-  fact: number;
-}
+import { ICorrectionSummary, TCorrectionItem } from "../model/correctionReport.types";
 
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { ppr, pprMeta } = usePpr();
+  const { ppr, pprMeta, updateReportNote } = usePpr();
 
   const { currentTimePeriod } = usePprTableSettings();
 
   const { data: credential } = useSession();
 
   const [isShowTextRaport, setIsShowTextRaport] = useState(false);
-
   if (!credential?.user) {
     return "Не авторизирован пользователь";
   }
@@ -43,6 +38,10 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   if (currentTimePeriod === "year") {
     return "Рапорт доступен только при просмотре ППР за конкретный месяц";
   }
+
+  const handleBlurNote = (note: string) => {
+    updateReportNote(note, currentTimePeriod);
+  };
 
   const fieldFrom: keyof TPlanWorkPeriodsFields = `${currentTimePeriod}_plan_work`;
   const monthStatus = ppr?.months_statuses[currentTimePeriod];
@@ -216,6 +215,11 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
             {translateRuTimePeriod(currentTimePeriod)} месяц.
           </span>
         )}
+        <CorrectionNote
+          initialValue={ppr?.reports_notes[currentTimePeriod]}
+          isEditable={isEditablePlanCorrections || isEditableDoneWorkCorrections}
+          handleBlur={handleBlurNote}
+        />
         {!isMonthPlanFullDone && (
           <span>
             Прошу откорректировать план технического обслуживания и ремонта с сохранением премиальной оплаты труда.
