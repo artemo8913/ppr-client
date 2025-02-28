@@ -34,23 +34,16 @@ export type {
   TWorkBranch,
 } from "./model/ppr.types";
 
-export type { IGetPprDataForFulfillmentReportParams, TGetPprDataForFulfillmentReportRes } from "./model/ppr.actions";
-
-export type { IFulfillmentReportData, IFulfillmentReportSettings } from "./lib/calculateFulfillmentReport";
+export type { IGetPprDataForReportParams, TPprDataForReport } from "./model/ppr.actions";
 
 export type { IBranchDefaultMeta, IBranchMeta, IPprMeta } from "./lib/createPprMeta";
 
-export type { IPprContext } from "./ui/PprProvider";
-
 export type {
   IPprTableSettingsContext,
-  TFilterColumns,
   TFilterPlanFactOption,
   TFilterTimePeriodOption,
   TPprView,
 } from "./ui/PprTableSettingsProvider";
-
-export { BRANCH_SELECT_OPTIONS } from "./lib/branchSelectOptions";
 
 export {
   PPR_DATA_FIELDS,
@@ -112,10 +105,8 @@ export {
   copyPprTable,
   deletePprWork,
   deleteWorkingMan,
-  getPprDataForFulfillmentReport,
+  getPprDataForReport,
 } from "./model/ppr.actions";
-
-export { calculateFulfillmentReport } from "./lib/calculateFulfillmentReport";
 
 export { createPprMeta } from "./lib/createPprMeta";
 

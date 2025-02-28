@@ -448,7 +448,7 @@ export async function deletePprWork(id: number) {
     return {
       type: "error" as NotificationType,
       code: 500,
-      message: "Произошла ошибка при исключения работы из плана",
+      message: "Произошла ошибка при исключении работы из плана",
     };
   }
 }
@@ -473,7 +473,7 @@ export async function deleteWorkingMan(id: number) {
   }
 }
 
-export interface IGetPprDataForFulfillmentReportParams {
+export interface IGetPprDataForReportParams {
   year?: string;
   status?: string;
   idSubdivision?: string;
@@ -482,20 +482,23 @@ export interface IGetPprDataForFulfillmentReportParams {
   workId?: string;
 }
 
-export type TGetPprDataForFulfillmentReportRes = IPprData & {
+export type TPprDataForReport = IPprData & {
   idDirection: number;
   idDistance: number;
   idSubdivision: number;
+  directionShortName: string;
+  distanceShortName: string;
+  subdivisionShortName: string;
 };
 
-export async function getPprDataForFulfillmentReport({
+export async function getPprDataForReport({
   workId,
   year,
   status,
   idDistance,
   idDirection,
   idSubdivision,
-}: IGetPprDataForFulfillmentReportParams): Promise<TGetPprDataForFulfillmentReportRes[] | undefined> {
+}: IGetPprDataForReportParams): Promise<TPprDataForReport[] | undefined> {
   try {
     const filters: SQL[] = [];
 
@@ -514,9 +517,11 @@ export async function getPprDataForFulfillmentReport({
       .select()
       .from(pprsWorkDataTable)
       .leftJoin(pprsInfoTable, eq(pprsWorkDataTable.idPpr, pprsInfoTable.id))
+      .leftJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id))
+      .leftJoin(distancesTable, eq(pprsInfoTable.idDistance, distancesTable.id))
+      .leftJoin(directionsTable, eq(pprsInfoTable.idDirection, directionsTable.id))
       .where(
         and(
-          eq(pprsWorkDataTable.is_work_aproved, true),
           isNotNull(pprsInfoTable.idSubdivision),
           isNotNull(pprsInfoTable.idDistance),
           isNotNull(pprsInfoTable.idDirection),
@@ -535,6 +540,9 @@ export async function getPprDataForFulfillmentReport({
       idDirection: data.pprs_info?.idDirection!,
       idDistance: data.pprs_info?.idDistance!,
       idSubdivision: data.pprs_info?.idSubdivision!,
+      directionShortName: data.directions?.shortName!,
+      distanceShortName: data.distances?.shortName!,
+      subdivisionShortName: data.subdivisions?.shortName!,
     }));
   } catch (e) {
     console.log(e);

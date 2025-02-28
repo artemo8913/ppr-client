@@ -1,4 +1,4 @@
-import { TWorkBranch } from "../model/ppr.types";
+import { TWorkBranch } from "@/2entities/ppr";
 
 export const BRANCH_SELECT_OPTIONS: { value: TWorkBranch; label: string }[] = [
   { value: "exploitation", label: "Основные работы" },

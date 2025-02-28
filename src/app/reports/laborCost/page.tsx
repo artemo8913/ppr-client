@@ -1,13 +1,13 @@
 import { getCommonWorks } from "@/2entities/commonWork";
 import { getDivisionsMap } from "@/2entities/division";
 import { getPprDataForReport, IGetPprDataForReportParams } from "@/2entities/ppr";
-import { FulfillmentReport, ReportFilter } from "@/4widgets/reports";
+import { LaborCostReport, ReportFilter } from "@/4widgets/reports";
 
-interface IFullfilmentReportPageProps {
+interface ILaborCostReportPageProps {
   searchParams: { [key in keyof IGetPprDataForReportParams]?: string };
 }
 
-export default async function FullfilmentReportPage({ searchParams }: IFullfilmentReportPageProps) {
+export default async function LaborCostReportPage({ searchParams }: ILaborCostReportPageProps) {
   const divisionsMap = await getDivisionsMap();
 
   const report = await getPprDataForReport({ ...searchParams });
@@ -16,8 +16,8 @@ export default async function FullfilmentReportPage({ searchParams }: IFullfilme
 
   return (
     <div className="overflow-auto print:overflow-visible">
-      <ReportFilter divisions={divisionsMap} commonWorks={works} />
-      {Boolean(report?.length) && <FulfillmentReport dataForReport={report} divisions={divisionsMap} />}
+      <ReportFilter divisions={divisionsMap} commonWorks={works} hasShowFields={{ workName: false }} />
+      {Boolean(report?.length) && <LaborCostReport dataForReport={report} />}
     </div>
   );
 }

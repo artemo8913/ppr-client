@@ -38,7 +38,7 @@ import {
 } from "../model/ppr.const";
 import { checkIsFactTimeField, checkIsFactWorkField, checkIsPlanWorkField } from "../lib/validateTypes";
 
-export interface IPprContext {
+interface IPprContext {
   ppr: IPpr | null;
   addWork: (newWork: Partial<IPprData>, nearWorkId?: TPprDataWorkId) => void;
   copyWork: (id: TPprDataWorkId) => void;
