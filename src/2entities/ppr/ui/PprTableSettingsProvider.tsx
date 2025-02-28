@@ -5,11 +5,11 @@ import { TTimePeriod } from "@/1shared/lib/date";
 
 export type TFilterTimePeriodOption = "SHOW_ALL" | "SHOW_ONLY_CURRENT_MONTH" | "SHOW_CURRENT_QUARTAL";
 export type TFilterPlanFactOption = "SHOW_ALL" | "SHOW_ONLY_PLAN" | "SHOW_ONLY_FACT" | "SHOW_ONLY_VALUES";
-export interface TFilterColumns {
+export type TPprView = "INITIAL_PLAN" | "INITIAL_PLAN_WITH_ARROWS" | "CORRECTED_PLAN" | "CORRECTED_PLAN_WITH_ARROWS";
+interface TFilterColumns {
   months: TFilterTimePeriodOption;
   planFact: TFilterPlanFactOption;
 }
-export type TPprView = "INITIAL_PLAN" | "INITIAL_PLAN_WITH_ARROWS" | "CORRECTED_PLAN" | "CORRECTED_PLAN_WITH_ARROWS";
 
 interface IPprTableSettings {
   filterColumns: TFilterColumns;

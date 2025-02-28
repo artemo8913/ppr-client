@@ -3,41 +3,33 @@ import clsx from "clsx";
 import { FC, Fragment } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import { getQuartal, TIME_PERIODS } from "@/1shared/lib/date";
-import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
-import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
+import { getFactTimeFieldByTimePeriod, getPlanTimeFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
+import { TDivisionType } from "@/2entities/division";
 
-import { calculateFulfillmentReport } from "../lib/calculateFulfillmentReport";
+import { calculateLaborCost } from "../lib/calculateLaborCost";
 
 import style from "./ReportTable.module.scss";
 
-interface IFulfillmentReportProps {
+interface ILaborCostReportProps {
   dataForReport?: TPprDataForReport[];
-  divisions: {
-    subdivisionsMap: Map<number, TSubdivision>;
-    distancesMap: Map<number, TDistance>;
-    directionsMap: Map<number, TDirection>;
-  };
+  filterLevel?: TDivisionType;
 }
 
-export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ dataForReport = [], divisions }) => {
+export const LaborCostReport: FC<ILaborCostReportProps> = ({ dataForReport = [] }) => {
   const searchParams = useSearchParams();
 
-  const divisionType = searchParams.get("divisionType");
+  const divisionType = (searchParams.get("divisionType") as TDivisionType) || undefined;
 
-  const { report, reportSettings } = calculateFulfillmentReport(
-    dataForReport,
-    divisions,
-    (divisionType as TDivisionType) || undefined
-  );
+  const { report, reportSettings } = calculateLaborCost(dataForReport, divisionType);
 
   return (
     <table className={style.ReportTable}>
       <thead>
         <tr>
-          <th rowSpan={2}>Наименование работы</th>
-          <th rowSpan={2}>Единица измерения</th>
+          <th rowSpan={2}>Наименование</th>
           <th rowSpan={2}>Подразделение</th>
           {TIME_PERIODS.map((month) => (
             <th key={month} colSpan={2}>
@@ -56,27 +48,22 @@ export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ dataForReport =
       </thead>
       <tbody>
         {report.map((data, index) => (
-          <tr key={data.common_work_id + data.divisionId}>
-            {index in reportSettings && (
-              <>
-                <td rowSpan={reportSettings[index].rowSpan}>{data.name}</td>
-                <td rowSpan={reportSettings[index].rowSpan}>{data.measure}</td>
-              </>
-            )}
-            <td>{data.divisionId}</td>
+          <tr key={data.branch + data.name + data.divisionType + data.divisionId}>
+            {index in reportSettings && <td rowSpan={reportSettings[index].rowSpan}>{data.name}</td>}
+            <td>{data.divisionData.shortName}</td>
             {TIME_PERIODS.map((timePeriod) => {
-              const planWorkField = getPlanWorkFieldByTimePeriod(timePeriod);
-              const factWorkField = getFactWorkFieldByTimePeriod(timePeriod);
+              const plantimeField = getPlanTimeFieldByTimePeriod(timePeriod);
+              const factTimeField = getFactTimeFieldByTimePeriod(timePeriod);
 
               const quartalNumber = getQuartal(timePeriod);
 
               return (
                 <Fragment key={timePeriod}>
                   <td className={clsx(style.isVertical, "font-bold", style[`Q${quartalNumber}`])}>
-                    {data[planWorkField] || ""}
+                    {roundToFixed(data.divisionData[plantimeField], 0) || ""}
                   </td>
                   <td className={clsx(style.isVertical, style.transparent, style[`Q${quartalNumber}`])}>
-                    {data[factWorkField] || ""}
+                    {roundToFixed(data.divisionData[factTimeField], 0) || ""}
                   </td>
                 </Fragment>
               );

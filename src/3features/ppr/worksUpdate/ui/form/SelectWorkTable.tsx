@@ -8,7 +8,9 @@ import Select, { DefaultOptionType } from "antd/es/select";
 import { Key, TableRowSelection } from "antd/es/table/interface";
 
 import { ICommonWork } from "@/2entities/commonWork";
-import { IPprBasicData, TWorkBranch, BRANCH_SELECT_OPTIONS } from "@/2entities/ppr";
+import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
+
+import { BRANCH_SELECT_OPTIONS } from "../../lib/branchSelectOptions";
 
 export interface ISelectedWork extends Partial<Omit<ICommonWork, "id">> {
   note?: string;

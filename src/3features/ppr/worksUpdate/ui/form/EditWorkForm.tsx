@@ -9,7 +9,9 @@ import TypedInputNumber from "antd/es/input-number";
 import Select, { DefaultOptionType } from "antd/es/select";
 
 import { ICommonWork } from "@/2entities/commonWork";
-import { IPprBasicData, TWorkBranch, BRANCH_SELECT_OPTIONS } from "@/2entities/ppr";
+import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
+
+import { BRANCH_SELECT_OPTIONS } from "../../lib/branchSelectOptions";
 
 export interface IEditWorkFormInitialValues extends Partial<Omit<ICommonWork, "id">> {
   branch: TWorkBranch;

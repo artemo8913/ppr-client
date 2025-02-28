@@ -6,7 +6,10 @@ export default function ReportsPage() {
   return (
     <Card>
       <Title level={2}>Отчеты</Title>
-      <Link href="reports/fulfillment">Выполнение работ</Link>
+      <div className="flex flex-col">
+        <Link href="reports/fulfillment">Выполнение работ</Link>
+        <Link href="reports/laborCost">Трудозатраты</Link>
+      </div>
     </Card>
   );
 }

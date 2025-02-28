@@ -37,13 +37,30 @@ interface IReportFilter {
 
 type TReportFilterForm = Omit<IReportFilter, "year"> & { year: Dayjs };
 
+interface IShowField {
+  year: true;
+  workName: boolean;
+  division: boolean;
+  pprYearStatus: boolean;
+}
+
+const SHOW_FIELD_DEFAULT: IShowField = {
+  year: true,
+  division: true,
+  pprYearStatus: true,
+  workName: true,
+};
+
 interface IReportFilterProps {
   commonWorks?: ICommonWork[];
+  hasShowFields?: Partial<IShowField>;
   divisions: { subdivisions: TSubdivision[]; distances: TDistance[]; directions: TDirection[] };
 }
 
-export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks }) => {
+export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks, hasShowFields }) => {
   const [divisionType, setDivisionType] = useState(DIVISIONS_TYPE_OPTIONS[0].value);
+
+  const [showFields] = useState({ ...SHOW_FIELD_DEFAULT, ...hasShowFields });
 
   const pathname = usePathname();
 
@@ -98,7 +115,7 @@ export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks })
         onFinish={handleFinish}
         disabled={isLoading}
       >
-        <Form.Item<TReportFilterForm> className="w-full" name="workId">
+        <Form.Item<TReportFilterForm> hidden={!showFields.workName} className="w-full" name="workId">
           <Select
             placeholder="Выберите работу"
             showSearch
@@ -107,14 +124,16 @@ export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks })
             options={commonWorksOptions}
           />
         </Form.Item>
-        <Select
-          value={divisionType}
-          onChange={setDivisionType}
-          options={DIVISIONS_TYPE_OPTIONS}
-          placeholder="Выберите тип подразделения"
-        />
+        {showFields.division && (
+          <Select
+            value={divisionType}
+            onChange={setDivisionType}
+            options={DIVISIONS_TYPE_OPTIONS}
+            placeholder="Выберите тип подразделения"
+          />
+        )}
         {divisionType === "direction" && (
-          <Form.Item<TReportFilterForm> name="idDirection">
+          <Form.Item<TReportFilterForm> hidden={!showFields.division} name="idDirection">
             <Select
               placeholder="Выберите дирекцию"
               options={getDivisionOptions(divisions.directions)}
@@ -125,7 +144,7 @@ export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks })
           </Form.Item>
         )}
         {divisionType === "distance" && (
-          <Form.Item<TReportFilterForm> name="idDistance">
+          <Form.Item<TReportFilterForm> hidden={!showFields.division} name="idDistance">
             <Select
               placeholder="Выберите дистанцию"
               options={getDivisionOptions(divisions.distances)}
@@ -136,7 +155,7 @@ export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks })
           </Form.Item>
         )}
         {divisionType === "subdivision" && (
-          <Form.Item<TReportFilterForm> name="idSubdivision">
+          <Form.Item<TReportFilterForm> hidden={!showFields.division} name="idSubdivision">
             <Select
               placeholder="Выберите подразделение"
               options={getDivisionOptions(divisions.subdivisions)}
@@ -146,7 +165,7 @@ export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks })
             />
           </Form.Item>
         )}
-        <FormItem<TReportFilterForm> name="status" label="Статус ЭУ-132">
+        <FormItem<TReportFilterForm> hidden={!showFields.pprYearStatus} name="status" label="Статус ЭУ-132">
           <Select placeholder="Выберите статус ЭУ-132" options={PPR_YEAR_OPTIONS} allowClear />
         </FormItem>
         <FormItem<TReportFilterForm> name="year" label="Год" rules={[{ required: true }]}>

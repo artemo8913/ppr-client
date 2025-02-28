@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 // import { Inter } from "next/font/google";
 
+import { SessionProvider } from "@/1shared/auth/SessionProvider";
 import { NotificationProvider } from "@/1shared/notification";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { MainLayout } from "@/4widgets/layouts";
@@ -29,7 +29,7 @@ export default async function RootLayout(props: IRootLayoutProps) {
     <html lang="ru">
       <body>
         <AntdRegistry>
-          <SessionProvider basePath="/api/auth">
+          <SessionProvider>
             <NotificationProvider>
               {user ? <MainLayout>{props.children}</MainLayout> : <LoginPage />}
             </NotificationProvider>
