@@ -24,7 +24,12 @@ export const CorrectionNote: FC<ICorrectionNoteProps> = ({ initialValue, handleB
   };
 
   if (!isEditable) {
-    return <div className="whitespace-pre-wrap break-words">{note}</div>;
+    return (
+      <div>
+        <p className="font-bold">Примечание:</p>
+        <p className="whitespace-pre-wrap break-words">{note}</p>
+      </div>
+    );
   }
 
   return (
