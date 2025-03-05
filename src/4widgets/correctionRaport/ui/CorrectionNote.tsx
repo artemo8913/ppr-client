@@ -2,6 +2,8 @@
 import React, { ChangeEvent, FC, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 
+const NOTE_MAX_LENGTH = 2048;
+
 interface ICorrectionNoteProps {
   initialValue?: string;
   isEditable?: boolean;
@@ -22,7 +24,7 @@ export const CorrectionNote: FC<ICorrectionNoteProps> = ({ initialValue, handleB
   };
 
   if (!isEditable) {
-    return <pre className="font-[inherit]">{note}</pre>;
+    return <div className="whitespace-pre-wrap break-words">{note}</div>;
   }
 
   return (
@@ -31,7 +33,7 @@ export const CorrectionNote: FC<ICorrectionNoteProps> = ({ initialValue, handleB
       allowClear
       showCount
       value={note}
-      maxLength={256}
+      maxLength={NOTE_MAX_LENGTH}
       onBlur={handleBlurNote}
       onChange={handleChangeNote}
     />
