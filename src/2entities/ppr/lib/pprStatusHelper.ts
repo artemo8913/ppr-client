@@ -85,14 +85,14 @@ const NEXT_PPR_YEAR_STATUS: { [key in TYearPprStatus]: TYearPprStatus | null } =
 
 const NEXT_PPR_MONTH_STATUS: { [key in TMonthPprStatus]: TMonthPprStatus | null } = {
   none: "plan_creating",
-  plan_creating: "plan_on_agreement_engineer",
-  plan_on_agreement_engineer: "plan_on_agreement_time_norm",
-  plan_on_agreement_time_norm: "plan_on_aprove",
+  plan_creating: "plan_on_agreement_time_norm",
+  plan_on_agreement_time_norm: "plan_on_agreement_engineer",
+  plan_on_agreement_engineer: "plan_on_aprove",
   plan_on_aprove: "in_process",
   in_process: "fact_filling",
-  fact_filling: "fact_verification_engineer",
-  fact_verification_engineer: "fact_verification_time_norm",
-  fact_verification_time_norm: "fact_on_agreement_sub_boss",
+  fact_filling: "fact_verification_time_norm",
+  fact_verification_time_norm: "fact_verification_engineer",
+  fact_verification_engineer: "fact_on_agreement_sub_boss",
   fact_on_agreement_sub_boss: "done",
   done: null,
 };
