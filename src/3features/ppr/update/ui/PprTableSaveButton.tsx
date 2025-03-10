@@ -32,7 +32,7 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
           await updatePprTable(ppr.id, {
             data: ppr.data,
             workingMans: ppr.workingMans,
-            reports_notes: ppr.reports_notes,
+            raports_notes: ppr.raports_notes,
           });
           toast({ message: "Данные успешно обновлены" });
         } catch (e) {

@@ -113,7 +113,7 @@ export interface IPpr {
   created_at: Date;
   created_by: IUser;
   months_statuses: TAllMonthStatuses;
-  reports_notes: TReportsNotes;
+  raports_notes: TReportsNotes;
   idDirection: number | null;
   idDistance: number | null;
   idSubdivision: number | null;
@@ -124,7 +124,7 @@ export interface IPpr {
   subdivisionShortName?: string | null;
 }
 
-export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value" | "reports_notes">;
+export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value" | "raports_notes">;
 
 export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;

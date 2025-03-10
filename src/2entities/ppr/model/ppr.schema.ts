@@ -76,7 +76,7 @@ export const pprMonthsStatusesTable = mysqlTable("ppr_months_statuses", {
   dec: createMysqlPprMonthStatusType("dec"),
 });
 
-export const pprReportsNotesTable = mysqlTable("ppr_reports_notes", {
+export const pprRaportsNotesTable = mysqlTable("ppr_reports_notes", {
   idPpr: int("id_ppr")
     .references(() => pprsInfoTable.id)
     .unique()

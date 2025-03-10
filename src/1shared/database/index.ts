@@ -9,7 +9,7 @@ import {
   pprWorkingMansTable,
   pprsInfoTable,
   pprsWorkDataTable,
-  pprReportsNotesTable,
+  pprRaportsNotesTable,
 } from "@/2entities/ppr/model/ppr.schema";
 
 const connectionConfig: PoolOptions = {
@@ -39,7 +39,7 @@ export const db = drizzle(connection, {
     distancesTable,
     subdivisionsTable,
     pprMonthsStatusesTable,
-    pprReportsNotesTable,
+    pprRaportsNotesTable,
     pprWorkingMansTable,
     pprsWorkDataTable,
     pprsInfoTable,
