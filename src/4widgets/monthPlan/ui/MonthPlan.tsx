@@ -5,6 +5,7 @@ import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import {
   createPprMeta,
+  getFactTimeFieldByTimePeriod,
   getPlanTimeFieldByTimePeriod,
   getPlanWorkFieldByTimePeriod,
   IPprData,
@@ -34,13 +35,17 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
 
   const planTimeField = getPlanTimeFieldByTimePeriod(currentTimePeriod);
 
+  const factTimeField = getFactTimeFieldByTimePeriod(currentTimePeriod);
+
   const filteredPprData = ppr.data
     .filter((pprData) => {
       const plan = pprData[planWorkField];
 
       const planValue = plan.handCorrection !== null ? plan.handCorrection : plan.original + plan.outsideCorrectionsSum;
 
-      return Boolean(Number(pprData[`${currentTimePeriod}_fact_work`])) || Boolean(planValue);
+      const factTime = pprData[factTimeField];
+
+      return Boolean(Number(pprData[`${currentTimePeriod}_fact_work`])) || Boolean(planValue) || Boolean(factTime);
     })
     .map((pprData) => {
       const newPprData: IPprData = JSON.parse(JSON.stringify(pprData));
