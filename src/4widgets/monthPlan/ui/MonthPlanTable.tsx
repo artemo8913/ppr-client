@@ -4,6 +4,7 @@ import { FC, Fragment } from "react";
 import { TTimePeriod } from "@/1shared/lib/date";
 import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import {
+  getFactNormTimeFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
   getFactWorkFieldByTimePeriod,
   getPlanTimeFieldByTimePeriod,
@@ -25,6 +26,7 @@ function getMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
     "norm_of_time",
     getPlanTimeFieldByTimePeriod(timePeriod),
     getFactWorkFieldByTimePeriod(timePeriod),
+    getFactNormTimeFieldByTimePeriod(timePeriod),
     getFactTimeFieldByTimePeriod(timePeriod),
   ];
 }
@@ -35,6 +37,7 @@ function getMonthPlanFieldsForTotalRow(timePeriod: TTimePeriod): Array<keyof IPp
     "entry_year",
     getPlanTimeFieldByTimePeriod(timePeriod),
     getFactWorkFieldByTimePeriod(timePeriod),
+    getFactNormTimeFieldByTimePeriod(timePeriod),
     getFactTimeFieldByTimePeriod(timePeriod),
     "location",
   ];
@@ -42,7 +45,7 @@ function getMonthPlanFieldsForTotalRow(timePeriod: TTimePeriod): Array<keyof IPp
 
 const SUMMARY_ROW_NAME_COL_SPAN = 4;
 
-const TITLE_BRANCHES_COL_SPAN = 10;
+const TITLE_BRANCHES_COL_SPAN = 11;
 
 interface IMonthPlanTableProps {
   monthPprMeta: IPprMeta;
@@ -72,7 +75,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
           <th rowSpan={2}>№ п.п</th>
           <th colSpan={3}>Работа</th>
           <th colSpan={3}>План</th>
-          <th colSpan={2}>Выполнение</th>
+          <th colSpan={3}>Выполнение</th>
           <th rowSpan={2}>Примечание</th>
         </tr>
         <tr>
@@ -83,7 +86,8 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
           <th>Норма времени на измеритель, чел.-ч</th>
           <th>Всего трудозатрат по норме, чел.-ч</th>
           <th>Количество</th>
-          <th>Фактически затрачено чел.-ч</th>
+          <th>Нормир. время на факт.вып. объем работ, чел.-ч</th>
+          <th>Фактически затрачено, чел.-ч</th>
         </tr>
       </thead>
       <tbody>
