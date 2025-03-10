@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 
 const NOTE_MAX_LENGTH = 2048;
@@ -23,7 +23,25 @@ export const CorrectionNote: FC<ICorrectionNoteProps> = ({ initialValue, handleB
     }
   };
 
-  if (!isEditable) {
+  useEffect(() => {
+    setNote(initialValue || "");
+  }, [initialValue]);
+
+  if (isEditable) {
+    return (
+      <TextArea
+        placeholder="Введите примечание"
+        allowClear
+        showCount
+        value={note}
+        maxLength={NOTE_MAX_LENGTH}
+        onBlur={handleBlurNote}
+        onChange={handleChangeNote}
+      />
+    );
+  }
+
+  if (note) {
     return (
       <div>
         <p className="font-bold">Примечание:</p>
@@ -32,15 +50,5 @@ export const CorrectionNote: FC<ICorrectionNoteProps> = ({ initialValue, handleB
     );
   }
 
-  return (
-    <TextArea
-      placeholder="Введите примечание"
-      allowClear
-      showCount
-      value={note}
-      maxLength={NOTE_MAX_LENGTH}
-      onBlur={handleBlurNote}
-      onChange={handleChangeNote}
-    />
-  );
+  return null;
 };
