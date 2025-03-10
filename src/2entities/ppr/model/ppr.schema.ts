@@ -1,4 +1,15 @@
-import { varchar, int, smallint, mysqlTable, mysqlEnum, date, double, boolean, json } from "drizzle-orm/mysql-core";
+import {
+  varchar,
+  int,
+  smallint,
+  mysqlTable,
+  mysqlEnum,
+  date,
+  double,
+  boolean,
+  json,
+  text,
+} from "drizzle-orm/mysql-core";
 
 import { usersTable } from "@/2entities/user/@x/ppr";
 import { commonWorksTable } from "@/2entities/commonWork/@x/ppr";
@@ -65,23 +76,23 @@ export const pprMonthsStatusesTable = mysqlTable("ppr_months_statuses", {
   dec: createMysqlPprMonthStatusType("dec"),
 });
 
-export const pprReportsNotesTable = mysqlTable("ppr_reports_notes", {
+export const pprRaportsNotesTable = mysqlTable("ppr_reports_notes", {
   idPpr: int("id_ppr")
     .references(() => pprsInfoTable.id)
     .unique()
     .notNull(),
-  jan: varchar("jan", { length: 256 }).notNull().default(""),
-  feb: varchar("feb", { length: 256 }).notNull().default(""),
-  mar: varchar("mar", { length: 256 }).notNull().default(""),
-  apr: varchar("apr", { length: 256 }).notNull().default(""),
-  may: varchar("may", { length: 256 }).notNull().default(""),
-  june: varchar("june", { length: 256 }).notNull().default(""),
-  july: varchar("july", { length: 256 }).notNull().default(""),
-  aug: varchar("aug", { length: 256 }).notNull().default(""),
-  sept: varchar("sept", { length: 256 }).notNull().default(""),
-  oct: varchar("oct", { length: 256 }).notNull().default(""),
-  nov: varchar("nov", { length: 256 }).notNull().default(""),
-  dec: varchar("dec", { length: 256 }).notNull().default(""),
+  jan: text("jan").notNull().default(""),
+  feb: text("feb").notNull().default(""),
+  mar: text("mar").notNull().default(""),
+  apr: text("apr").notNull().default(""),
+  may: text("may").notNull().default(""),
+  june: text("june").notNull().default(""),
+  july: text("july").notNull().default(""),
+  aug: text("aug").notNull().default(""),
+  sept: text("sept").notNull().default(""),
+  oct: text("oct").notNull().default(""),
+  nov: text("nov").notNull().default(""),
+  dec: text("dec").notNull().default(""),
 });
 
 export const pprWorkingMansTable = mysqlTable("ppr_working_mans", {

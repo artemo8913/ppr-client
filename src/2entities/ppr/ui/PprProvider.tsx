@@ -71,7 +71,7 @@ interface IPprContext {
   updateWorkingManParticipation: (rowIndex: number, value: number) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   fillWorkingManPlanTime: (mode: "EVERY" | "NOT_FILLED", value: number) => void;
-  updateReportNote: (note: string, month: TMonth) => void;
+  updateRaportNote: (note: string, month: TMonth) => void;
   pprMeta: IPprMeta;
 }
 
@@ -103,7 +103,7 @@ const PprContext = createContext<IPprContext>({
   getPprDataWithRowSpan: () => [],
   fillWorkingManPlanTime: () => {},
   updateWorkingManParticipation: () => [],
-  updateReportNote: () => {},
+  updateRaportNote: () => {},
   pprMeta: {
     worksRowSpan: [],
     branchesMeta: [],
@@ -904,7 +904,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateReportNote = useCallback((note: string, month: TMonth) => {
+  const updateRaportNote = useCallback((note: string, month: TMonth) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -912,8 +912,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
       return {
         ...prev,
-        reports_notes: {
-          ...prev.reports_notes,
+        raports_notes: {
+          ...prev.raports_notes,
           [month]: note,
         },
       };
@@ -972,7 +972,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
         updateWorkingManParticipation,
         getPprDataWithRowSpan,
         fillWorkingManPlanTime,
-        updateReportNote,
+        updateRaportNote,
         pprMeta,
       }}
     >

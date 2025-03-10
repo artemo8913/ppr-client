@@ -3,10 +3,11 @@ import clsx from "clsx";
 import { FC, Fragment } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import { getQuartal, TIME_PERIODS } from "@/1shared/lib/date";
-import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
+import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
 
 import { calculateFulfillmentReport } from "../lib/calculateFulfillmentReport";
 
@@ -73,10 +74,10 @@ export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ dataForReport =
               return (
                 <Fragment key={timePeriod}>
                   <td className={clsx(style.isVertical, "font-bold", style[`Q${quartalNumber}`])}>
-                    {data[planWorkField] || ""}
+                    {roundToFixed(data[planWorkField]) || ""}
                   </td>
                   <td className={clsx(style.isVertical, style.transparent, style[`Q${quartalNumber}`])}>
-                    {data[factWorkField] || ""}
+                    {roundToFixed(data[factWorkField]) || ""}
                   </td>
                 </Fragment>
               );

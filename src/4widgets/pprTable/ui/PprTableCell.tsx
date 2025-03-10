@@ -2,8 +2,9 @@
 import clsx from "clsx";
 import { FC, MutableRefObject, useRef } from "react";
 
-import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
+import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { ITableCellProps, TableCell } from "@/1shared/ui/table";
+import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
 import {
   checkIsPlanOrFactWorkField,
   checkIsPlanTimeField,
@@ -17,14 +18,14 @@ import {
 import { PprWorkUpdateControl } from "@/3features/ppr/worksUpdate";
 
 import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
+import { checkIsFieldVertical } from "../lib/pprTableFieldsHelper";
 
 import style from "./PprTableCell.module.scss";
-import { checkIsFieldVertical } from "../lib/pprTableFieldsHelper";
 
 function getValue(pprData: IPprData, field: keyof IPprData, isCorrectedView: boolean) {
   if (checkIsPlanWorkField(field) || checkIsPlanTimeField(field)) {
     if (isCorrectedView) {
-      return pprData[field].final;
+      return roundToFixed(pprData[field].final);
     } else {
       return pprData[field].original;
     }

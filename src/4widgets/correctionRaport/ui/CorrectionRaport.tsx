@@ -1,36 +1,59 @@
 "use client";
 import clsx from "clsx";
 import { Switch } from "antd";
-import React, { FC, useState } from "react";
+import Select from "antd/es/select";
+import Checkbox from "antd/es/checkbox/Checkbox";
+import React, { FC, useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
+import { TOptionType } from "@/1shared/lib/form/TOptionType";
 import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
-import {
-  TPlanWorkPeriodsFields,
-  getFactWorkFieldByTimePeriod,
-  IPprData,
-  usePpr,
-  checkIsPprInUserControl,
-  usePprTableSettings,
-} from "@/2entities/ppr";
+import { TPlanWorkPeriodsFields, usePpr, checkIsPprInUserControl, usePprTableSettings } from "@/2entities/ppr";
 
 import { CorrectionNote } from "./CorrectionNote";
 import { CorrectionText } from "./CorrectionText";
-import { PlanCorrectionsTable } from "./PlanCorrectionsTable";
-import { DoneWorkCorrectionsTable } from "./DoneWorkCorrectionsTable";
-import { ICorrectionSummary, TCorrectionItem } from "../model/correctionReport.types";
+import { calculateMonthRaport } from "../lib/calculateRaport";
+import { CorrectionTable } from "./CorrectionTable";
 
 interface ICorrectionRaportProps {}
 
 export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
-  const { ppr, pprMeta, updateReportNote } = usePpr();
+  const { data: credential } = useSession();
+
+  const { ppr, pprMeta, updateRaportNote } = usePpr();
 
   const { currentTimePeriod } = usePprTableSettings();
 
-  const { data: credential } = useSession();
-
   const [isShowTextRaport, setIsShowTextRaport] = useState(false);
+
+  const [isShowSubtotal, setIsShowSubtotal] = useState({ branch: false, subbranch: false });
+
+  const toggleIsShowSubtotalForBranch = useCallback(
+    () => setIsShowSubtotal((prev) => ({ ...prev, branch: !prev.branch })),
+    []
+  );
+
+  const toggleIsShowSubtotalForSubranch = useCallback(
+    () => setIsShowSubtotal((prev) => ({ ...prev, subbranch: !prev.subbranch })),
+    []
+  );
+
+  const [subbranchOptions] = useState<TOptionType<string>[]>(
+    pprMeta.subbranchesList.map((subbranch) => {
+      return { value: subbranch, label: subbranch };
+    })
+  );
+
+  const [selectedSubbranches, setSelectedSubbranches] = useState<Set<string>>();
+
+  const handleChangeSelectSubbranch = useCallback((subbranchesList: string[]) => {
+    setSelectedSubbranches(new Set(subbranchesList));
+  }, []);
+
+  if (!ppr) {
+    return "ППР не найден";
+  }
+
   if (!credential?.user) {
     return "Не авторизирован пользователь";
   }
@@ -40,71 +63,23 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   }
 
   const handleBlurNote = (note: string) => {
-    updateReportNote(note, currentTimePeriod);
+    updateRaportNote(note, currentTimePeriod);
   };
 
   const fieldFrom: keyof TPlanWorkPeriodsFields = `${currentTimePeriod}_plan_work`;
+
   const monthStatus = ppr?.months_statuses[currentTimePeriod];
 
-  const undoneWorks: TCorrectionItem[] = [];
-  const welldoneWorks: TCorrectionItem[] = [];
-  const planCorrections: TCorrectionItem[] = [];
-
-  const planCorrectionsSummary: ICorrectionSummary = { fact: 0, plan: 0 };
-  const undoneWorksSummary: ICorrectionSummary = { fact: 0, plan: 0 };
-  const welldoneWorksSummary: ICorrectionSummary = { fact: 0, plan: 0 };
-
-  ppr?.data.forEach((pprData) => {
-    const plan = pprData[fieldFrom];
-
-    const originalPlanWorkValue = plan.original + plan.outsideCorrectionsSum;
-
-    const correctedByUserValue = plan.handCorrection;
-
-    const planWorkValue = plan.handCorrection !== null ? plan.handCorrection : originalPlanWorkValue;
-
-    const factWorkValue = pprData[getFactWorkFieldByTimePeriod(currentTimePeriod)];
-
-    if (correctedByUserValue !== null && (correctedByUserValue !== originalPlanWorkValue || plan.planTransfers)) {
-      planCorrections.push({
-        pprData,
-        firstCompareValue: originalPlanWorkValue,
-        secondCompareValue: correctedByUserValue,
-      });
-
-      planCorrectionsSummary.plan = roundToFixed(
-        originalPlanWorkValue * pprData.norm_of_time + planCorrectionsSummary.plan
-      );
-      planCorrectionsSummary.fact = roundToFixed(
-        correctedByUserValue * pprData.norm_of_time + planCorrectionsSummary.fact
-      );
-    }
-
-    if (planWorkValue > factWorkValue || (plan.undoneTransfers && planWorkValue === factWorkValue)) {
-      undoneWorks.push({
-        pprData,
-        firstCompareValue: planWorkValue,
-        secondCompareValue: factWorkValue,
-      });
-
-      undoneWorksSummary.plan = roundToFixed(planWorkValue * pprData.norm_of_time + undoneWorksSummary.plan);
-      undoneWorksSummary.fact = roundToFixed(factWorkValue * pprData.norm_of_time + undoneWorksSummary.fact);
-    } else if (planWorkValue < factWorkValue) {
-      welldoneWorks.push({
-        pprData,
-        firstCompareValue: planWorkValue,
-        secondCompareValue: factWorkValue,
-      });
-
-      welldoneWorksSummary.plan = roundToFixed(planWorkValue * pprData.norm_of_time + welldoneWorksSummary.plan);
-      welldoneWorksSummary.fact = roundToFixed(factWorkValue * pprData.norm_of_time + welldoneWorksSummary.fact);
-    }
-  });
+  const { correctedWorks, correctedWorksMeta, undoneWorks, undoneWorksMeta, welldoneWorks, welldoneWorksMeta } =
+    calculateMonthRaport(
+      ppr.data.filter((pprData) => (selectedSubbranches?.size ? selectedSubbranches?.has(pprData.subbranch) : true)),
+      currentTimePeriod
+    );
 
   const isPprUnderControl = checkIsPprInUserControl(ppr?.created_by, credential?.user).isForSubdivision;
   const isEditablePlanCorrections = monthStatus === "plan_creating" && isPprUnderControl;
   const isEditableDoneWorkCorrections = monthStatus === "fact_filling" && isPprUnderControl;
-  const hasPlanCorrections = planCorrections.length > 0;
+  const hasPlanCorrections = correctedWorks.length > 0;
   const isShowDoneWorkCorrections =
     monthStatus === "fact_filling" ||
     monthStatus === "fact_on_agreement_sub_boss" ||
@@ -118,8 +93,30 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
 
   return (
     <div>
-      <div className="print:hidden ml-auto mb-4">
-        Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
+      <div className="print:hidden mx-10 mb-4 flex-wrap flex gap-2 items-center">
+        <span>
+          Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
+        </span>
+        <Select
+          mode="tags"
+          allowClear
+          className="flex-grow"
+          options={subbranchOptions}
+          onChange={handleChangeSelectSubbranch}
+          placeholder="Выбрать конкертные подкатегории работ"
+        />
+        {!isShowTextRaport && (
+          <>
+            <label className="cursor-pointer">
+              <Checkbox checked={isShowSubtotal.branch} onChange={toggleIsShowSubtotalForBranch} />
+              Промежуточные итоги по категориям
+            </label>
+            <label className="cursor-pointer">
+              <Checkbox checked={isShowSubtotal.subbranch} onChange={toggleIsShowSubtotalForSubranch} />
+              Промежуточные итоги по подкатегориям
+            </label>
+          </>
+        )}
       </div>
       <div
         className={clsx(
@@ -146,17 +143,19 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
             </p>
             {isShowTextRaport ? (
               <CorrectionText
-                corrections={planCorrections}
-                summary={planCorrectionsSummary}
+                corrections={correctedWorks}
+                meta={correctedWorksMeta}
                 fieldFrom={fieldFrom}
                 type="plan"
               />
             ) : (
-              <PlanCorrectionsTable
+              <CorrectionTable
                 pprMeta={pprMeta}
+                transferType="plan"
                 fieldFrom={fieldFrom}
-                summary={planCorrectionsSummary}
-                planCorrections={planCorrections}
+                raportMeta={correctedWorksMeta}
+                isShowSubtotal={isShowSubtotal}
+                planCorrections={correctedWorks}
                 isEditable={isEditablePlanCorrections}
               />
             )}
@@ -168,18 +167,15 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
               II. За {translateRuTimePeriod(currentTimePeriod)} месяц не в полном объеме выполнены следующие работы:
             </p>
             {isShowTextRaport ? (
-              <CorrectionText
-                corrections={undoneWorks}
-                summary={undoneWorksSummary}
-                fieldFrom={fieldFrom}
-                type="undone"
-              />
+              <CorrectionText corrections={undoneWorks} meta={undoneWorksMeta} fieldFrom={fieldFrom} type="undone" />
             ) : (
-              <DoneWorkCorrectionsTable
+              <CorrectionTable
                 pprMeta={pprMeta}
+                transferType="undone"
                 fieldFrom={fieldFrom}
-                summary={undoneWorksSummary}
+                raportMeta={undoneWorksMeta}
                 planCorrections={undoneWorks}
+                isShowSubtotal={isShowSubtotal}
                 isEditable={isEditableDoneWorkCorrections}
               />
             )}
@@ -194,15 +190,17 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
             {isShowTextRaport ? (
               <CorrectionText
                 corrections={welldoneWorks}
-                summary={welldoneWorksSummary}
+                meta={welldoneWorksMeta}
                 fieldFrom={fieldFrom}
                 type="undone"
               />
             ) : (
-              <DoneWorkCorrectionsTable
+              <CorrectionTable
                 pprMeta={pprMeta}
+                transferType="undone"
                 fieldFrom={fieldFrom}
-                summary={welldoneWorksSummary}
+                raportMeta={welldoneWorksMeta}
+                isShowSubtotal={isShowSubtotal}
                 planCorrections={welldoneWorks}
                 isEditable={isEditableDoneWorkCorrections}
               />
@@ -211,12 +209,12 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
         )}
         {isMonthPlanFullDone && (
           <span>
-            Техническое обслуживание и ремонт выполнено согласно утвержденным плнам на{" "}
+            Техническое обслуживание и ремонт выполнено согласно утвержденным планам на{" "}
             {translateRuTimePeriod(currentTimePeriod)} месяц.
           </span>
         )}
         <CorrectionNote
-          initialValue={ppr?.reports_notes[currentTimePeriod]}
+          initialValue={ppr?.raports_notes[currentTimePeriod]}
           isEditable={isEditablePlanCorrections || isEditableDoneWorkCorrections}
           handleBlur={handleBlurNote}
         />
