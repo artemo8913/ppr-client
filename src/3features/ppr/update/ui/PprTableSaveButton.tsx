@@ -28,16 +28,13 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
   const handleSave = () =>
     startTransition(async () => {
       if (ppr) {
-        try {
-          await updatePprTable(ppr.id, {
-            data: ppr.data,
-            workingMans: ppr.workingMans,
-            raports_notes: ppr.raports_notes,
-          });
-          toast({ message: "Данные успешно обновлены" });
-        } catch (e) {
-          toast(e, "error");
-        }
+        const response = await updatePprTable(ppr.id, {
+          data: ppr.data,
+          workingMans: ppr.workingMans,
+          raports_notes: ppr.raports_notes,
+        });
+
+        toast(response);
       }
     });
 
