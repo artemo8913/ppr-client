@@ -14,7 +14,11 @@ export async function GET(_request: NextRequest, { params }: IParams) {
       throw new Error(`Ppr id not provided`);
     }
 
-    const ppr = await getPprTable(Number(params?.id));
+    const { data: ppr } = await getPprTable(Number(params?.id));
+
+    if (!ppr) {
+      throw new Error(`Ppr with id=${params?.id} not exist`);
+    }
 
     const workbook = await pprConvertToXlsx(ppr);
 
