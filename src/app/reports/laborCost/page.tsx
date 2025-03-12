@@ -10,14 +10,14 @@ interface ILaborCostReportPageProps {
 export default async function LaborCostReportPage({ searchParams }: ILaborCostReportPageProps) {
   const divisionsMap = await getDivisionsMap();
 
-  const report = await getPprDataForReport({ ...searchParams });
+  const { data } = await getPprDataForReport({ ...searchParams });
 
   const works = await getCommonWorks();
 
   return (
     <div className="overflow-auto print:overflow-visible">
       <ReportFilter divisions={divisionsMap} commonWorks={works} hasShowFields={{ workName: false }} />
-      {Boolean(report?.length) && <LaborCostReport dataForReport={report} />}
+      {Boolean(data?.length) && <LaborCostReport dataForReport={data} />}
     </div>
   );
 }

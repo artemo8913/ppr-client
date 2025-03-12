@@ -5,7 +5,7 @@ import { PprTableControlPanel } from "@/4widgets/pprTableControlPanel";
 import { PprPage } from "@/5pages/pprPage";
 
 export default async function PprPageId({ params }: { params: { id: string } }) {
-  const ppr = await getPprTable(Number(params.id));
+  const { data: ppr } = await getPprTable(Number(params.id));
 
   const works = await getCommonWorks();
 
@@ -16,7 +16,7 @@ export default async function PprPageId({ params }: { params: { id: string } }) 
   return (
     <PprTableSettingsProvider>
       <PprWorkModalProvider>
-        <PprProvider pprFromResponce={ppr}>
+        <PprProvider pprFromResponce={ppr || null}>
           <PprTableControlPanel />
           <PprPage />
           <AddWorkModal data={works} />

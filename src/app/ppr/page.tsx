@@ -20,7 +20,7 @@ export default async function PprPage({ searchParams }: IPprPageProps) {
   return (
     <Card className="overflow-auto">
       <Title level={2}>Список годовых планов ЭУ-132</Title>
-      <PprInfoTable hasSearch data={pprs} divisions={divisions} />
+      <PprInfoTable hasSearch data={pprs?.data || []} divisions={divisions} />
       <CreatePprModal className="!block ml-auto" />
     </Card>
   );

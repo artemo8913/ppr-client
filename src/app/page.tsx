@@ -33,7 +33,7 @@ export default async function Home() {
   const fullName = `${lastName} ${firstName[0]}.${middleName[0]}.`;
 
   if (role === "subdivision") {
-    const pprs = await getManyPprsShortInfo({
+    const { data } = await getManyPprsShortInfo({
       idDirection,
       idDistance,
       idSubdivision,
@@ -44,12 +44,12 @@ export default async function Home() {
         <div>
           <b>id:</b> {id} <b>Роль:</b> {translateRuUserRole(role)} <b>Ф.И.О.:</b> {fullName}
         </div>
-        {Boolean(pprs.length) && (
+        {Boolean(data?.length) && (
           <Card className="overflow-auto">
             <Title level={2}>
               Годовые планы {directionShortName} {distanceShortName} {subdivisionShortName}
             </Title>
-            <PprInfoTable data={pprs} />
+            <PprInfoTable data={data || []} />
           </Card>
         )}
       </main>
@@ -73,21 +73,25 @@ export default async function Home() {
   }
 
   const yearsPprsOnAgreement = agreementYearStatus
-    ? await getManyPprsShortInfo({
-        idDirection,
-        idDistance,
-        idSubdivision,
-        status: agreementYearStatus,
-      })
+    ? (
+        await getManyPprsShortInfo({
+          idDirection,
+          idDistance,
+          idSubdivision,
+          status: agreementYearStatus,
+        })
+      ).data || []
     : [];
 
   const monthPprsOnAgreement = agreementMonthStatuses
-    ? await getManyPprsShortInfo({
-        idDirection,
-        idDistance,
-        idSubdivision,
-        months_statuses: agreementMonthStatuses,
-      })
+    ? (
+        await getManyPprsShortInfo({
+          idDirection,
+          idDistance,
+          idSubdivision,
+          months_statuses: agreementMonthStatuses,
+        })
+      ).data || []
     : [];
 
   return (
