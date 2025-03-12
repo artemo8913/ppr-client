@@ -26,10 +26,6 @@ export async function getAllSubdivision(idDistance?: number) {
     .where(and(...filters));
 }
 
-export async function getSubdivisionById(id: number) {
-  return db.query.subdivisionsTable.findFirst({ where: eq(subdivisionsTable.id, id) });
-}
-
 export async function getAllDistances(idDirection?: number) {
   const filters: SQL[] = [];
 
@@ -43,16 +39,8 @@ export async function getAllDistances(idDirection?: number) {
     .where(and(...filters));
 }
 
-export async function getDistanceById(id: number) {
-  return db.query.distancesTable.findFirst({ where: eq(distancesTable.id, id) });
-}
-
 export async function getAllDirections() {
   return db.select().from(directionsTable);
-}
-
-export async function getDirectionById(id: number) {
-  return db.query.directionsTable.findFirst({ where: eq(directionsTable.id, id) });
 }
 
 export const getDivisions = unstable_cache(
