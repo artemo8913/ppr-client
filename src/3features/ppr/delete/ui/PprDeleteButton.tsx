@@ -5,6 +5,7 @@ import Button from "antd/es/button";
 import Tooltip from "antd/es/tooltip";
 import { DeleteTwoTone } from "@ant-design/icons";
 
+import { useNotificationProvider } from "@/1shared/notification";
 import { IUser } from "@/2entities/user";
 import { TYearPprStatus, checkIsPprInUserControl, deletePprTable } from "@/2entities/ppr";
 
@@ -19,6 +20,8 @@ export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ pprId, created_by, 
 
   const [isLoading, startTransition] = useTransition();
 
+  const { toast } = useNotificationProvider();
+
   if (!userData) {
     return (
       <Tooltip title="Удалить ППР">
@@ -32,7 +35,9 @@ export const PprDeleteButton: FC<IPprDeleteButtonProps> = ({ pprId, created_by, 
       const answer = confirm("Уверены, что хотите удалить ППР");
 
       if (answer) {
-        await deletePprTable(pprId);
+        const res = await deletePprTable(pprId);
+
+        toast(res);
       }
     });
 

@@ -7,6 +7,7 @@ import { FC, useState } from "react";
 import DatePicker from "antd/es/date-picker";
 import FormItem from "antd/es/form/FormItem";
 
+import { useNotificationProvider } from "@/1shared/notification";
 import { createPprTable } from "@/2entities/ppr";
 
 interface ICreatePprFormProps {
@@ -20,11 +21,19 @@ export const CreatePprForm: FC<ICreatePprFormProps> = ({ onFinish }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const { toast } = useNotificationProvider();
+
   const handleFinish = async (values: TNewPprForm) => {
     setIsLoading(true);
-    await createPprTable(values.name, values.year.year());
+
+    const response = await createPprTable(values.name, values.year.year());
+
+    toast(response);
+
     form.resetFields();
+
     setIsLoading(false);
+
     onFinish && onFinish();
   };
 

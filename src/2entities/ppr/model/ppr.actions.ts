@@ -7,7 +7,7 @@ import { db } from "@/1shared/database";
 import { ROUTE_PPR } from "@/1shared/lib/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { MONTHS, TIME_PERIODS } from "@/1shared/lib/date";
-import { NotificationType } from "@/1shared/notification";
+import { IServerActionReturn, returnError, returnSuccess } from "@/1shared/serverAction";
 import { buildConflictUpdateColumns } from "@/1shared/lib/database/buildConflictUpdateColumns";
 import { usersTable } from "@/2entities/user/@x/ppr";
 import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/ppr";
@@ -46,7 +46,7 @@ import {
   PPR_DATA_BASIC_FIELDS,
 } from "./ppr.const";
 
-export async function getPprTable(id: number): Promise<IPpr> {
+export async function getPprTable(id: number): Promise<IServerActionReturn<IPpr>> {
   try {
     const [pprInfoRes, workingMans, pprMonthStatuses, pprData, raportsNotes] = await Promise.all([
       db
@@ -73,26 +73,31 @@ export async function getPprTable(id: number): Promise<IPpr> {
     });
 
     if (!user) {
-      throw new Error(`User id ${pprInfoRes[0].pprs_info.idUserCreatedBy} created ppr with id ${id} not exist`);
+      throw new Error(
+        `Пользователя с id=${pprInfoRes[0].pprs_info.idUserCreatedBy}, создавшего ППР id=${id}, не существует`
+      );
     }
 
-    return {
-      ...pprInfoRes[0].pprs_info,
-      created_by: user,
-      workingMans: workingMans,
-      months_statuses: pprMonthStatuses[0],
-      raports_notes: raportsNotes[0],
-      data: pprData,
-      directionShortName: pprInfoRes[0].directions?.shortName,
-      distanceShortName: pprInfoRes[0].distances?.shortName,
-      subdivisionShortName: pprInfoRes[0].subdivisions?.shortName,
-    };
+    return returnSuccess({
+      data: {
+        ...pprInfoRes[0].pprs_info,
+        created_by: user,
+        workingMans: workingMans,
+        months_statuses: pprMonthStatuses[0],
+        raports_notes: raportsNotes[0],
+        data: pprData,
+        directionShortName: pprInfoRes[0].directions?.shortName,
+        distanceShortName: pprInfoRes[0].distances?.shortName,
+        subdivisionShortName: pprInfoRes[0].subdivisions?.shortName,
+      },
+      message: `Годовой план загружен id=${id}`,
+    });
   } catch (e) {
-    throw new Error(`Load ppr data. ${e}`);
+    return await returnError({ message: `Ошибка при загрузке Годового плана id=${id}. ${e}` });
   }
 }
 
-export async function createPprTable(name: string, year: number) {
+export async function createPprTable(name: string, year: number): Promise<IServerActionReturn> {
   try {
     const session = await getServerSession(authOptions);
 
@@ -121,11 +126,15 @@ export async function createPprTable(name: string, year: number) {
     await db.insert(pprMonthsStatusesTable).values({ idPpr: newPprId[0].id });
 
     await db.insert(pprRaportsNotesTable).values({ idPpr: newPprId[0].id });
-  } catch (e) {
-    throw new Error(`Create ppr ${name} ${year}. ${e}`);
-  }
 
-  revalidatePath(ROUTE_PPR);
+    const response = await returnSuccess({ message: `Годовой план ${name} создан` });
+
+    revalidatePath(ROUTE_PPR);
+
+    return response;
+  } catch (e) {
+    return await returnError({ message: `Ошибка при создании Годового плана ${name} на ${year} г. ${e}` });
+  }
 }
 
 export async function copyPprTable(params: {
@@ -136,7 +145,7 @@ export async function copyPprTable(params: {
   isCopyFactWork?: boolean;
   isCopyPlanWorkingMans?: boolean;
   isCopyFactWorkingMans?: boolean;
-}) {
+}): Promise<IServerActionReturn> {
   try {
     const session = await getServerSession(authOptions);
 
@@ -256,15 +265,21 @@ export async function copyPprTable(params: {
       await tx.insert(pprMonthsStatusesTable).values({ idPpr: newPprId });
 
       await tx.insert(pprRaportsNotesTable).values({ idPpr: newPprId });
-
-      revalidatePath(ROUTE_PPR);
     });
+
+    const response = await returnSuccess({ message: "Годовой план создан на основе шаблона" });
+
+    revalidatePath(ROUTE_PPR);
+
+    return response;
   } catch (e) {
-    throw new Error(`Create ppr ${params.name} ${params.year} form ppr id = ${params.instancePprId}. ${e}`);
+    return await returnError({
+      message: `При копировании Годового плана ${params.name} ${params.year} по Плану id=${params.instancePprId} произошла ошибка. ${e}`,
+    });
   }
 }
 
-export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>) {
+export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>): Promise<IServerActionReturn> {
   try {
     await db.transaction(async (tx) => {
       if (params.status) {
@@ -342,29 +357,39 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
         await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
       }
     });
+
+    const response = await returnSuccess({ message: "Годовой план обновлен" });
+
+    revalidatePath(`${ROUTE_PPR}/${id}`);
+
+    return response;
   } catch (e) {
-    throw new Error(`${e}`);
+    return await returnError({ message: `При обновлении Годового плана id=${id} произошла ошибка. ${e}` });
   }
-  revalidatePath(`${ROUTE_PPR}/${id}`);
 }
 
-export async function deletePprTable(id: number) {
+export async function deletePprTable(id: number): Promise<IServerActionReturn> {
   try {
     await db.transaction(async (tx) => {
       await Promise.all([
         tx.delete(pprMonthsStatusesTable).where(eq(pprMonthsStatusesTable.idPpr, id)),
         tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id)),
         tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id)),
-        tx.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
         tx.delete(pprRaportsNotesTable).where(eq(pprRaportsNotesTable.idPpr, id)),
+        tx.delete(pprsInfoTable).where(eq(pprsInfoTable.id, id)),
       ]).catch((e) => {
         throw new Error(e);
       });
     });
+
+    const response = await returnSuccess({ message: "Годовой план удален" });
+
+    revalidatePath(ROUTE_PPR);
+
+    return response;
   } catch (e) {
-    throw new Error(`Delete ppr ${id}. ${e}`);
+    return await returnError({ message: `При удалении Годового плана id=${id} произошла ошибка. ${e}` });
   }
-  revalidatePath(ROUTE_PPR);
 }
 
 export async function getManyPprsShortInfo(params?: {
@@ -375,7 +400,7 @@ export async function getManyPprsShortInfo(params?: {
   idSubdivision?: number | null | string;
   status?: string;
   months_statuses?: string | string[];
-}): Promise<TPprShortInfo[]> {
+}): Promise<IServerActionReturn<TPprShortInfo[]>> {
   const filters: SQL[] = [];
 
   if (params?.name) filters.push(like(pprsInfoTable.name, `%${params.name}%`));
@@ -403,7 +428,7 @@ export async function getManyPprsShortInfo(params?: {
   }
 
   try {
-    const responce = await db
+    const data = await db
       .select({
         id: pprsInfoTable.id,
         name: pprsInfoTable.name,
@@ -427,49 +452,31 @@ export async function getManyPprsShortInfo(params?: {
       .leftJoin(subdivisionsTable, eq(pprsInfoTable.idSubdivision, subdivisionsTable.id))
       .where(and(...filters));
 
-    return responce;
+    return await returnSuccess({ data, message: "Список Годовых планов сформирован" });
   } catch (e) {
-    throw new Error(`Get all pprs. ${e}`);
+    return await returnError({
+      message: `При формировании общего списка Годовых планов произошла ошибка. ${e}`,
+    });
   }
 }
 
-export async function deletePprWork(id: number) {
+export async function deletePprWork(id: number): Promise<IServerActionReturn> {
   try {
     await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.id, id));
 
-    return {
-      type: "success" as NotificationType,
-      code: 200,
-      message: "Работа успешно исключена из планов",
-    };
+    return await returnSuccess({ message: "Работа исключена из планов" });
   } catch (e) {
-    console.log(e);
-
-    return {
-      type: "error" as NotificationType,
-      code: 500,
-      message: "Произошла ошибка при исключении работы из плана",
-    };
+    return await returnError({ message: `Произошла ошибка при исключении работы id=${id} из плана` });
   }
 }
 
-export async function deleteWorkingMan(id: number) {
+export async function deleteWorkingMan(id: number): Promise<IServerActionReturn> {
   try {
     await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.id, id));
 
-    return {
-      type: "success" as NotificationType,
-      code: 200,
-      message: "Работник исключен из планов",
-    };
+    return await returnSuccess({ message: "Работник исключен из планов" });
   } catch (e) {
-    console.log(e);
-
-    return {
-      type: "error" as NotificationType,
-      code: 500,
-      message: "Произошла ошибка при исключении работника из плана",
-    };
+    return await returnError({ message: `Произошла ошибка при исключении работника id=${id} из плана` });
   }
 }
 
@@ -498,12 +505,12 @@ export async function getPprDataForReport({
   idDistance,
   idDirection,
   idSubdivision,
-}: IGetPprDataForReportParams): Promise<TPprDataForReport[] | undefined> {
+}: IGetPprDataForReportParams): Promise<IServerActionReturn<TPprDataForReport[]>> {
   try {
     const filters: SQL[] = [];
 
     if (!year) {
-      return [];
+      return await returnError({ data: [], message: "Не задан год для формирования отчета" });
     }
 
     if (year) filters.push(eq(pprsInfoTable.year, Number(year)));
@@ -535,16 +542,19 @@ export async function getPprDataForReport({
         pprsInfoTable.idSubdivision
       );
 
-    return result.map((data) => ({
-      ...data.pprs_data,
-      idDirection: data.pprs_info?.idDirection!,
-      idDistance: data.pprs_info?.idDistance!,
-      idSubdivision: data.pprs_info?.idSubdivision!,
-      directionShortName: data.directions?.shortName!,
-      distanceShortName: data.distances?.shortName!,
-      subdivisionShortName: data.subdivisions?.shortName!,
-    }));
+    return await returnSuccess({
+      data: result.map((data) => ({
+        ...data.pprs_data,
+        idDirection: data.pprs_info?.idDirection!,
+        idDistance: data.pprs_info?.idDistance!,
+        idSubdivision: data.pprs_info?.idSubdivision!,
+        directionShortName: data.directions?.shortName!,
+        distanceShortName: data.distances?.shortName!,
+        subdivisionShortName: data.subdivisions?.shortName!,
+      })),
+      message: "Данные загружены для формирования отчета",
+    });
   } catch (e) {
-    console.log(e);
+    return await returnError({ message: `Произошла ошибка при формировании отчета. ${e}` });
   }
 }

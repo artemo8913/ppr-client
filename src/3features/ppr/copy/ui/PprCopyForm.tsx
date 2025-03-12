@@ -8,6 +8,7 @@ import FormItem from "antd/es/form/FormItem";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { FC, useCallback, useState } from "react";
 
+import { useNotificationProvider } from "@/1shared/notification";
 import { copyPprTable } from "@/2entities/ppr";
 
 type TCopyPprForm = {
@@ -26,17 +27,18 @@ interface IPprCopyFormProps {
 
 export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
   const [isLoading, setIsLoading] = useState(false);
+
   const [form] = Form.useForm<TCopyPprForm>();
+
+  const { toast } = useNotificationProvider();
 
   const handleFinish = useCallback(
     async (values: TCopyPprForm) => {
       setIsLoading(true);
 
-      try {
-        await copyPprTable({ ...values, instancePprId: pprId, year: values.year.year() });
-      } catch (e) {
-        console.log(e);
-      }
+      const response = await copyPprTable({ ...values, instancePprId: pprId, year: values.year.year() });
+
+      toast(response);
 
       form.resetFields();
 
@@ -45,7 +47,7 @@ export const PprCopyForm: FC<IPprCopyFormProps> = ({ pprId, onFinish }) => {
       }
       setIsLoading(false);
     },
-    [form, onFinish, pprId]
+    [form, toast, onFinish, pprId]
   );
 
   return (
