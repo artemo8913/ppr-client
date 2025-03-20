@@ -1,0 +1,22 @@
+.fixAntdTab {
+  overflow: hidden !important;
+  flex: auto;
+
+  & :global(.ant-tabs-nav) {
+    position: sticky !important;
+    margin-bottom: 4px !important;
+  }
+
+  & :global(.ant-tabs-content-holder) {
+    overflow: auto !important;
+  }
+}
+
+@media print {
+  .fixAntdTab {
+    overflow: visible !important;
+    & :global(.ant-tabs-content-holder) {
+      overflow: visible !important;
+    }
+  }
+}
