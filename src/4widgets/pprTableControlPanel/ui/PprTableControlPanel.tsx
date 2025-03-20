@@ -26,9 +26,6 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
       <span>
         Год: <b>{ppr?.year}</b>
       </span>
-      <span className="font-bold">
-        Период планирования: <PprTableSelectTimePeriod />
-      </span>
       <Card size="small" styles={{ body: { padding: 0 } }}>
         <PprTableSettingsModal />
         <PprTableSaveButton />
@@ -37,6 +34,9 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
         <PprExportToXslx />
         <PrintButton />
       </Card>
+      <span className="font-bold">
+        Период планирования: <PprTableSelectTimePeriod />
+      </span>
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
     </div>
