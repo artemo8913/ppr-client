@@ -182,7 +182,7 @@ export function addYearPlanSheet({
 
     const branchTitleCell = yearPlanSheet.getCell(lastRowIndex, START_COLUMNS_INDEX);
 
-    // Стилизация ячеек категорий и подкатегорий
+    // Стилизация ячеек разделов и подразделов
     branchTitleCell.value = `${branchOrder} ${translateRuPprBranchName(branchName)}`;
     branchTitleCell.border = BLACK_BORDER_FULL;
     branchTitleCell.alignment = { horizontal: "left" };
@@ -219,7 +219,7 @@ export function addYearPlanSheet({
 
   // Добавить данные в таблицу
   ppr.data.map((pprData, index) => {
-    // Создание ячеек-заголовков категорий и подкатегорий, а также итоговых значений
+    // Создание ячеек-заголовков разделов и подразделов, а также итоговых значений
     if (pprData.id in branchesAndSubbrunchesOrder) {
       lastRowIndex++;
 
@@ -289,7 +289,7 @@ export function addYearPlanSheet({
       }
     });
 
-    // Если строка последняя, то добавить итого по последним пункту и категории
+    // Если строка последняя, то добавить итого по последним пункту и разделу
     if (index === ppr?.data.length - 1) {
       lastRowIndex++;
       const lastBranch = branchesMeta.slice(-1)[0];

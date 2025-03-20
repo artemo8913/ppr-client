@@ -95,24 +95,24 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     <div>
       <div className="print:hidden mx-10 mb-4 flex-wrap flex gap-2 items-center">
         Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
-        Отфильтровать подкатегории работ в рапорте:
+        Отфильтровать пункты работ в рапорте:
         <Select
           mode="tags"
           allowClear
           className="flex-grow"
           options={subbranchOptions}
           onChange={handleChangeSelectSubbranch}
-          placeholder="Выбрать подкатегории работ"
+          placeholder="Выбрать пункты работ"
         />
         {!isShowTextRaport && (
           <>
             <label className="cursor-pointer">
               <Checkbox checked={isShowSubtotal.branch} onChange={toggleIsShowSubtotalForBranch} />
-              Промежуточные итоги по категориям
+              Отобразить итоги по разделам
             </label>
             <label className="cursor-pointer">
               <Checkbox checked={isShowSubtotal.subbranch} onChange={toggleIsShowSubtotalForSubranch} />
-              Промежуточные итоги по подкатегориям
+              Отобразить итоги по пунктам
             </label>
           </>
         )}

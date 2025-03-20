@@ -171,14 +171,14 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
         rowKey={"id"}
       />
       <div className="flex gap-4 items-center">
-        Категория работ:
+        Раздел ППР:
         <Select
           className="flex-1"
           value={selectedWork.branch}
           onChange={handleSelectBranch}
           options={BRANCH_SELECT_OPTIONS}
         />
-        Подкатегория работ:
+        Пункт ППР:
         <Select
           className="flex-1"
           mode="tags"

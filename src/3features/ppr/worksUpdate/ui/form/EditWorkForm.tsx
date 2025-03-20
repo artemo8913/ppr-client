@@ -95,14 +95,14 @@ export const EditWorkForm: FC<IEditWorkFormProps> = (props) => {
         <TextArea showCount maxLength={256} />
       </FormItem>
       <FormItem<IEditWorkForm>
-        label="Раздел ППР (категория работ)"
+        label="Раздел ППР"
         name="branch"
         rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >
         <Select<TWorkBranch> options={BRANCH_SELECT_OPTIONS} />
       </FormItem>
       <FormItem<IEditWorkForm>
-        label="Подраздел ППР (подраздел категории работ)"
+        label="Пункт ППР"
         name="subbranch"
         rules={[{ required: true, message: "Поле обязательно для заполнения" }]}
       >

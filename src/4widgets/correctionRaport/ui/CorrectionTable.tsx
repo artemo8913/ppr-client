@@ -103,7 +103,7 @@ export const CorrectionTable: FC<ICorrectionTableProps> = ({
               </tr>
               {index in raportMeta.subbranches && showTotal?.subbranch && (
                 <CorrectionTableSummaryRow
-                  text={`Итог подраздела "${raportMeta.subbranches[index].name}"`}
+                  text={`Итог пункта "${raportMeta.subbranches[index].name}"`}
                   planTime={raportMeta.subbranches[index].planTime}
                   factTime={raportMeta.subbranches[index].factTime}
                   timeDiff={raportMeta.subbranches[index].timeDiff}
