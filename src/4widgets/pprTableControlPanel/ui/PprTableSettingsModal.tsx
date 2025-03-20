@@ -25,10 +25,10 @@ export default function PprTableSettingsModal() {
 
   return (
     <>
-      <Tooltip className="cursor-default" title="Настройки отображения ППР">
+      <Tooltip className="cursor-default" title="Настройки отображения плана ТОиР">
         <Button icon={<SettingOutlined />} type="text" shape="circle" onClick={openModal} />
       </Tooltip>
-      <Modal title="Настройки отображения ППР" open={isOpen} onCancel={closeModal} width={720} footer={null}>
+      <Modal title="Настройки отображения плана ТОиР" open={isOpen} onCancel={closeModal} width={720} footer={null}>
         <div className="flex justify-between items-center mb-4">
           <div>Отображаемый период времени: </div>
           <PprTableSelectFilterTimePeriod />
