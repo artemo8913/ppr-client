@@ -1,5 +1,6 @@
 "use client";
 import { FC } from "react";
+import Card from "antd/es/card/Card";
 
 import { PrintButton } from "@/1shared/ui/print";
 import { usePpr } from "@/2entities/ppr";
@@ -21,12 +22,14 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
   return (
     <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden p-1">
       Календарный план ТОиР: <b>{ppr?.name}</b> Год: <b>{ppr?.year}</b> Статус: <b>{ppr ? getStatusText(ppr) : ""}</b>
-      <PprTableSettingsModal />
-      <PprTableSaveButton />
-      <PprTableSetOneUnityButton />
-      <PprTableCopyFactNormTimeToFactTime />
-      <PprExportToXslx />
-      <PrintButton />
+      <Card size="small" styles={{ body: { padding: 0 } }}>
+        <PprTableSettingsModal />
+        <PprTableSaveButton />
+        <PprTableSetOneUnityButton />
+        <PprTableCopyFactNormTimeToFactTime />
+        <PprExportToXslx />
+        <PrintButton />
+      </Card>
       <PprTableSelectTimePeriod />
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
