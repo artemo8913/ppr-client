@@ -1,6 +1,7 @@
 "use client";
 import { FC } from "react";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { ArrowUpOutlined } from "@ant-design/icons";
 
 import { TPprDataWorkId, usePpr } from "@/2entities/ppr";
@@ -16,5 +17,9 @@ export const DecreaseWorkPositionButton: FC<IDecreaseWorkPositionButtonProps> = 
     decreaseWorkPosition(workId);
   };
 
-  return <Button onClick={handleClick} size="small" shape="circle" icon={<ArrowUpOutlined />} />;
+  return (
+    <Tooltip title="Переместить выше" placement="bottom">
+      <Button onClick={handleClick} size="small" shape="circle" icon={<ArrowUpOutlined />} />
+    </Tooltip>
+  );
 };

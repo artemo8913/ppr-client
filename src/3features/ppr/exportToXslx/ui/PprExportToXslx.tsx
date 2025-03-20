@@ -1,7 +1,7 @@
 "use client";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { Tooltip } from "antd";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { FileExcelOutlined } from "@ant-design/icons";
 
 interface IPprExportToXslxProps {}
