@@ -94,16 +94,15 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   return (
     <div>
       <div className="print:hidden mx-10 mb-4 flex-wrap flex gap-2 items-center">
-        <span>
-          Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
-        </span>
+        Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
+        Отфильтровать подкатегории работ в рапорте:
         <Select
           mode="tags"
           allowClear
           className="flex-grow"
           options={subbranchOptions}
           onChange={handleChangeSelectSubbranch}
-          placeholder="Выбрать конкертные подкатегории работ"
+          placeholder="Выбрать подкатегории работ"
         />
         {!isShowTextRaport && (
           <>
