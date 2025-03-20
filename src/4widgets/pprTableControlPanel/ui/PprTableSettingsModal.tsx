@@ -28,7 +28,7 @@ export default function PprTableSettingsModal() {
       <Tooltip className="cursor-default" title="Настройки отображения ППР">
         <Button icon={<SettingOutlined />} type="text" shape="circle" onClick={openModal} />
       </Tooltip>
-      <Modal title="Настройки отображения ППР" open={isOpen} onCancel={closeModal} footer={null}>
+      <Modal title="Настройки отображения ППР" open={isOpen} onCancel={closeModal} width={720} footer={null}>
         <div className="flex justify-between items-center mb-4">
           <div>Отображаемый период времени: </div>
           <PprTableSelectFilterTimePeriod />
@@ -53,19 +53,19 @@ export default function PprTableSettingsModal() {
           <div>Размер шрифта, px: </div>
           <PprTableSelectFontSize />
         </div>
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex gap-4 items-center mb-4">
           <div>Подсветить работы, добавленные самостоятельно</div>
           <PprTableBacklightNotCommonWork />
         </div>
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex gap-4 items-center mb-4">
           <div>Подсветить неутвержденные работы</div>
           <PprTableBacklightNotApprovedWork />
         </div>
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex gap-4 items-center mb-4">
           <div>Подсвечивать строку при наведении курсора</div>
           <PprTableBacklightRowAndCellOnHover />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex gap-4 items-center">
           <div>Объединять работы с одинаковым наименованием</div>
           <PprTableCombineSameWork />
         </div>
