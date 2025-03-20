@@ -20,7 +20,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
 
   return (
     <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden p-1">
-      Год: <b>{ppr?.year}</b> Наименование: <b>{ppr?.name}</b> Статус: <b>{ppr ? getStatusText(ppr) : ""}</b>
+      Календарный план ТОиР: <b>{ppr?.name}</b> Год: <b>{ppr?.year}</b> Статус: <b>{ppr ? getStatusText(ppr) : ""}</b>
       <PprTableSettingsModal />
       <PprTableSaveButton />
       <PprTableSetOneUnityButton />
