@@ -3,14 +3,13 @@ import { FC } from "react";
 import Card from "antd/es/card/Card";
 
 import { PrintButton } from "@/1shared/ui/print";
-import { usePpr } from "@/2entities/ppr";
-import { getStatusText } from "@/2entities/ppr/lib/pprStatusHelper";
+import { translateRuPprYearStatus, usePpr } from "@/2entities/ppr";
 import { PprTableSaveButton } from "@/3features/ppr/update";
-import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
+import { PprExportToXslx } from "@/3features/ppr/exportToXslx";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings";
 import { PprTableSetOneUnityButton } from "@/3features/ppr/setOneUnity";
 import { PprTableCopyFactNormTimeToFactTime } from "@/3features/ppr/copyFactNormTimeToFactTime";
-import { PprExportToXslx } from "@/3features/ppr/exportToXslx";
+import { PprTableYearStatusUpdate, PprTableMonthStatusUpdate } from "@/3features/ppr/statusUpdate";
 
 import PprTableSettingsModal from "./PprTableSettingsModal";
 
@@ -20,8 +19,16 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
   const { ppr } = usePpr();
 
   return (
-    <div className="flex justify-start items-center flex-wrap gap-1 bg-slate-300 print:hidden p-1">
-      Календарный план ТОиР: <b>{ppr?.name}</b> Год: <b>{ppr?.year}</b> Статус: <b>{ppr ? getStatusText(ppr) : ""}</b>
+    <div className="flex justify-start items-center flex-wrap gap-4 bg-slate-300 print:hidden p-1">
+      <span>
+        План ТОиР: <b>{ppr?.name}</b>
+      </span>
+      <span>
+        Год: <b>{ppr?.year}</b>
+      </span>
+      <span className="font-bold">
+        Период планирования: <PprTableSelectTimePeriod />
+      </span>
       <Card size="small" styles={{ body: { padding: 0 } }}>
         <PprTableSettingsModal />
         <PprTableSaveButton />
@@ -30,7 +37,6 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
         <PprExportToXslx />
         <PrintButton />
       </Card>
-      <PprTableSelectTimePeriod />
       <PprTableYearStatusUpdate />
       <PprTableMonthStatusUpdate />
     </div>
