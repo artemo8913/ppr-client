@@ -1,5 +1,5 @@
+import Link from "next/link";
 import Card from "antd/es/card/Card";
-import Link from "antd/es/typography/Link";
 import Title from "antd/es/typography/Title";
 
 export default function ReportsPage() {

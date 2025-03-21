@@ -1,3 +1,7 @@
+import Card from "antd/es/card/Card";
+import Title from "antd/es/typography/Title";
+
+import { BackLink } from "@/1shared/ui/backLink";
 import { getCommonWorks } from "@/2entities/commonWork";
 import { getDivisionsMap } from "@/2entities/division";
 import { getPprDataForReport, IGetPprDataForReportParams } from "@/2entities/ppr";
@@ -15,9 +19,13 @@ export default async function LaborCostReportPage({ searchParams }: ILaborCostRe
   const works = await getCommonWorks();
 
   return (
-    <div className="overflow-auto print:overflow-visible">
+    <Card className="overflow-auto print:overflow-visible">
+      <Title level={2}>
+        <BackLink />
+        Сводный отчет по трудозатратам
+      </Title>
       <ReportFilter divisions={divisionsMap} commonWorks={works} hasShowFields={{ workName: false }} />
       {Boolean(data?.length) && <LaborCostReport dataForReport={data} />}
-    </div>
+    </Card>
   );
 }
