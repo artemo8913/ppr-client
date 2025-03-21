@@ -47,7 +47,7 @@ export default async function Home() {
         {Boolean(data?.length) && (
           <Card className="overflow-auto">
             <Title level={2}>
-              Годовые планы {directionShortName} {distanceShortName} {subdivisionShortName}
+              Планы технического обслуживания и ремонта {directionShortName} {distanceShortName} {subdivisionShortName}
             </Title>
             <PprInfoTable data={data || []} />
           </Card>

@@ -20,7 +20,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 const items: MenuItem[] = [
   getItem(<Link href={ROUTE_ROOT}>Главная</Link>, "home", <HomeFilled />),
-  getItem(<Link href={ROUTE_PPR}>Годовые планы</Link>, "year", <TableOutlined />),
+  getItem(<Link href={ROUTE_PPR}>Планы ТОиР</Link>, "year", <TableOutlined />),
   getItem(<Link href={ROUTE_REPORTS}>Отчеты</Link>, "reports", <BarChartOutlined />),
   getItem(<a onClick={() => signOut({ callbackUrl: ROUTE_ROOT })}>Выйти</a>, "logout", <LogoutOutlined />),
 ];

@@ -90,10 +90,10 @@ export async function getPprTable(id: number): Promise<IServerActionReturn<IPpr>
         distanceShortName: pprInfoRes[0].distances?.shortName,
         subdivisionShortName: pprInfoRes[0].subdivisions?.shortName,
       },
-      message: `Годовой план загружен id=${id}`,
+      message: `План ТОиР загружен id=${id}`,
     });
   } catch (e) {
-    return await returnError({ message: `Ошибка при загрузке Годового плана id=${id}. ${e}` });
+    return await returnError({ message: `Ошибка при загрузке плана ТОиР id=${id}. ${e}` });
   }
 }
 
@@ -127,13 +127,13 @@ export async function createPprTable(name: string, year: number): Promise<IServe
 
     await db.insert(pprRaportsNotesTable).values({ idPpr: newPprId[0].id });
 
-    const response = await returnSuccess({ message: `Годовой план ${name} создан` });
+    const response = await returnSuccess({ message: `План ТОиР ${name} создан` });
 
     revalidatePath(ROUTE_PPR);
 
     return response;
   } catch (e) {
-    return await returnError({ message: `Ошибка при создании Годового плана ${name} на ${year} г. ${e}` });
+    return await returnError({ message: `Ошибка при создании плана ТОиР ${name} на ${year} г. ${e}` });
   }
 }
 
@@ -267,14 +267,14 @@ export async function copyPprTable(params: {
       await tx.insert(pprRaportsNotesTable).values({ idPpr: newPprId });
     });
 
-    const response = await returnSuccess({ message: "Годовой план создан на основе шаблона" });
+    const response = await returnSuccess({ message: "План ТОиР создан на основе шаблона" });
 
     revalidatePath(ROUTE_PPR);
 
     return response;
   } catch (e) {
     return await returnError({
-      message: `При копировании Годового плана ${params.name} ${params.year} по Плану id=${params.instancePprId} произошла ошибка. ${e}`,
+      message: `При копировании плана ТОиР ${params.name} ${params.year} по Плану id=${params.instancePprId} произошла ошибка. ${e}`,
     });
   }
 }
@@ -358,13 +358,13 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
       }
     });
 
-    const response = await returnSuccess({ message: "Годовой план обновлен" });
+    const response = await returnSuccess({ message: "План технического обслуживания и ремонта обновлен" });
 
     revalidatePath(`${ROUTE_PPR}/${id}`);
 
     return response;
   } catch (e) {
-    return await returnError({ message: `При обновлении Годового плана id=${id} произошла ошибка. ${e}` });
+    return await returnError({ message: `При обновлении плана ТОиР id=${id} произошла ошибка. ${e}` });
   }
 }
 
@@ -382,13 +382,13 @@ export async function deletePprTable(id: number): Promise<IServerActionReturn> {
       });
     });
 
-    const response = await returnSuccess({ message: "Годовой план удален" });
+    const response = await returnSuccess({ message: "План технического обслуживания и ремонта удален" });
 
     revalidatePath(ROUTE_PPR);
 
     return response;
   } catch (e) {
-    return await returnError({ message: `При удалении Годового плана id=${id} произошла ошибка. ${e}` });
+    return await returnError({ message: `При удалении плана ТОиР id=${id} произошла ошибка. ${e}` });
   }
 }
 
