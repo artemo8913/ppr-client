@@ -1,6 +1,6 @@
 "use client";
-import { Tooltip } from "antd";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { CopyOutlined } from "@ant-design/icons";
 
 import { usePpr, usePprTableSettings } from "@/2entities/ppr";

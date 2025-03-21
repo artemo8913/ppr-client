@@ -1,7 +1,7 @@
 "use client";
 import { FC, useCallback } from "react";
-import { Tooltip } from "antd";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { PrinterOutlined } from "@ant-design/icons";
 
 interface IPrintButtonProps {}

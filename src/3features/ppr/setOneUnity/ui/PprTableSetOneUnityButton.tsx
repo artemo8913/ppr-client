@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
-import { Tooltip } from "antd";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { useSession } from "next-auth/react";
 import { FormOutlined } from "@ant-design/icons";
 

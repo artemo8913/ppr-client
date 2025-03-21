@@ -1,6 +1,7 @@
 "use client";
 import { FC, useTransition } from "react";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { MinusOutlined } from "@ant-design/icons";
 
 import { useNotificationProvider } from "@/1shared/notification";
@@ -39,5 +40,9 @@ export const DeleteWorkButton: FC<IDeleteWorkButtonProps> = ({ workId }) => {
     });
   };
 
-  return <Button loading={isLoading} onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />;
+  return (
+    <Tooltip title="Удалить строку с работой" placement="bottom">
+      <Button loading={isLoading} onClick={handleClick} size="small" shape="circle" icon={<MinusOutlined />} />
+    </Tooltip>
+  );
 };

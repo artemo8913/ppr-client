@@ -1,6 +1,7 @@
 "use client";
 import { FC } from "react";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { CopyOutlined } from "@ant-design/icons";
 
 import { TPprDataWorkId, usePpr } from "@/2entities/ppr";
@@ -16,5 +17,9 @@ export const CopyWorkButton: FC<ICopyWorkButtonProps> = ({ workId }) => {
     copyWork(workId);
   };
 
-  return <Button onClick={handleClick} size="small" shape="circle" icon={<CopyOutlined />} />;
+  return (
+    <Tooltip title="Дублировать строку с работой" placement="bottom">
+      <Button onClick={handleClick} size="small" shape="circle" icon={<CopyOutlined />} />
+    </Tooltip>
+  );
 };

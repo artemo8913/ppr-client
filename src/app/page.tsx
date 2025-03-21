@@ -1,7 +1,9 @@
 import { Card } from "antd";
+import Link from "next/link";
 import Title from "antd/es/typography/Title";
 import { getServerSession } from "next-auth";
 
+import { ROUTE_PPR } from "@/1shared/lib/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { IUser, translateRuUserRole } from "@/2entities/user";
 import { getManyPprsShortInfo, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
@@ -47,9 +49,15 @@ export default async function Home() {
         {Boolean(data?.length) && (
           <Card className="overflow-auto">
             <Title level={2}>
-              Годовые планы {directionShortName} {distanceShortName} {subdivisionShortName}
+              Планы технического обслуживания и ремонта {directionShortName} {distanceShortName} {subdivisionShortName}
             </Title>
             <PprInfoTable data={data || []} />
+          </Card>
+        )}
+        {Boolean(!data?.length) && (
+          <Card className="overflow-auto">
+            <Title level={2}>Планы технического обслуживания и ремонта по {subdivisionShortName} отсутствуют.</Title>
+            <Link href={ROUTE_PPR}>Перейти на страницу для создания плана ТОиР (в т.ч. на основе шаблона)</Link>
           </Card>
         )}
       </main>
@@ -110,6 +118,12 @@ export default async function Home() {
         <Card className="overflow-auto">
           <Title level={2}>Месячные планы на согласовании / утверждении</Title>
           <PprInfoTable data={monthPprsOnAgreement} />
+        </Card>
+      )}
+      {!yearsPprsOnAgreement.length && !monthPprsOnAgreement.length && (
+        <Card className="overflow-auto">
+          <Title level={2}>Планы технического обслуживания и ремонта на согласовании / утверждении отсутствуют</Title>
+          <Link href={ROUTE_PPR}>Перейти на страницу планов ТОиР</Link>
         </Card>
       )}
     </main>

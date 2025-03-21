@@ -1,7 +1,7 @@
 "use client";
 import { FC, useMemo, useTransition } from "react";
-import { Tooltip } from "antd";
 import Button from "antd/es/button";
+import Tooltip from "antd/es/tooltip";
 import { SaveOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 

@@ -51,10 +51,18 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   // Состояния для начальника цеха
   if (isForSubdivision) {
     if (ppr_status === "plan_creating") {
-      return <Button onClick={setNextStatus}>Отправить на проверку ЭУ-132</Button>;
+      return (
+        <Button type="primary" onClick={setNextStatus}>
+          Отправить на проверку ЭУ-132
+        </Button>
+      );
     }
     if (ppr_status === "in_process" && checkIsAllMonthsPprStatusesIsDone(ppr_months_statuses)) {
-      return <Button onClick={setNextStatus}>Завершить выполнение ППР</Button>;
+      return (
+        <Button type="primary" onClick={setNextStatus}>
+          Завершить выполнение ППР
+        </Button>
+      );
     }
     if (
       ppr_status === "plan_on_agreement_engineer" ||
@@ -62,7 +70,11 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
       ppr_status === "plan_on_agreement_sub_boss" ||
       ppr_status === "plan_on_aprove"
     ) {
-      return <Button onClick={rejectPpr}>Отозвать с проверки ЭУ-132</Button>;
+      return (
+        <Button type="primary" danger onClick={rejectPpr}>
+          Отозвать с проверки ЭУ-132
+        </Button>
+      );
     }
   }
 
@@ -70,8 +82,12 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   if (isForEngineer && ppr_status === "plan_on_agreement_engineer") {
     return (
       <>
-        <Button onClick={rejectPpr}>Отклонить ЭУ-132</Button>
-        <Button onClick={setNextStatus}>Согласовать ЭУ-132</Button>
+        <Button type="primary" danger onClick={rejectPpr}>
+          Отклонить ЭУ-132
+        </Button>
+        <Button type="primary" onClick={setNextStatus}>
+          Согласовать ЭУ-132
+        </Button>
       </>
     );
   }
@@ -80,8 +96,12 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   if (isForTimeNorm && ppr_status === "plan_on_agreement_time_norm") {
     return (
       <>
-        <Button onClick={rejectPpr}>Отклонить ЭУ-132</Button>
-        <Button onClick={setNextStatus}>Согласовать ЭУ-132</Button>
+        <Button type="primary" danger onClick={rejectPpr}>
+          Отклонить ЭУ-132
+        </Button>
+        <Button type="primary" onClick={setNextStatus}>
+          Согласовать ЭУ-132
+        </Button>
       </>
     );
   }
@@ -90,8 +110,12 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   if (isForSubBoss && ppr_status === "plan_on_agreement_sub_boss") {
     return (
       <>
-        <Button onClick={rejectPpr}>Отклонить ЭУ-132</Button>
-        <Button onClick={setNextStatus}>Согласовать ЭУ-132</Button>
+        <Button type="primary" danger onClick={rejectPpr}>
+          Отклонить ЭУ-132
+        </Button>
+        <Button type="primary" onClick={setNextStatus}>
+          Согласовать ЭУ-132
+        </Button>
       </>
     );
   }
@@ -100,8 +124,12 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   if (isForBoss && ppr_status === "plan_on_aprove") {
     return (
       <>
-        <Button onClick={rejectPpr}>Отклонить ЭУ-132</Button>
-        <Button onClick={setNextStatus}>Утвердить ЭУ-132</Button>
+        <Button type="primary" danger onClick={rejectPpr}>
+          Отклонить ЭУ-132
+        </Button>
+        <Button type="primary" onClick={setNextStatus}>
+          Утвердить ЭУ-132
+        </Button>
       </>
     );
   }

@@ -3,8 +3,8 @@ import Card from "antd/es/card/Card";
 
 import { getDivisions } from "@/2entities/division";
 import { getManyPprsShortInfo, TPprShortInfo } from "@/2entities/ppr";
-import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
 import { CreatePprModal } from "@/3features/ppr/create";
+import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
 
 interface IPprPageProps {
   searchParams: { [key in keyof TPprShortInfo]?: string };
@@ -19,7 +19,7 @@ export default async function PprPage({ searchParams }: IPprPageProps) {
 
   return (
     <Card className="overflow-auto">
-      <Title level={2}>Список годовых планов ЭУ-132</Title>
+      <Title level={2}>Список планов технического обслуживания и ремонта</Title>
       <PprInfoTable hasSearch data={pprs?.data || []} divisions={divisions} />
       <CreatePprModal className="!block ml-auto" />
     </Card>

@@ -85,31 +85,53 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   if (isForSubdivision) {
     if (currentMonthStatus === "none" && isAvailableForPlanning) {
       return (
-        <Button onClick={setNextStatus}>Запланировать работы на {translateRuTimePeriod(currentTimePeriod)}</Button>
+        <Button type="primary" onClick={setNextStatus}>
+          Запланировать работы на {translateRuTimePeriod(currentTimePeriod)}
+        </Button>
       );
     }
     if (currentMonthStatus === "plan_creating") {
-      return <Button onClick={setNextStatus}>Отправить на проверку</Button>;
+      return (
+        <Button type="primary" onClick={setNextStatus}>
+          Отправить на проверку
+        </Button>
+      );
     }
     if (currentMonthStatus === "in_process") {
-      return <Button onClick={setNextStatus}>Заполнить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>;
+      return (
+        <Button type="primary" onClick={setNextStatus}>
+          Заполнить факт за {translateRuTimePeriod(currentTimePeriod)}
+        </Button>
+      );
     }
     if (currentMonthStatus === "fact_filling") {
-      return <Button onClick={setNextStatus}>Отправить на проверку</Button>;
+      return (
+        <Button type="primary" onClick={setNextStatus}>
+          Отправить на проверку
+        </Button>
+      );
     }
     if (
       currentMonthStatus === "plan_on_agreement_engineer" ||
       currentMonthStatus === "plan_on_agreement_time_norm" ||
       currentMonthStatus === "plan_on_aprove"
     ) {
-      return <Button onClick={rejectPlan}>Отозвать с проверки</Button>;
+      return (
+        <Button type="primary" danger onClick={rejectPlan}>
+          Отозвать план с проверки
+        </Button>
+      );
     }
     if (
       currentMonthStatus === "fact_verification_engineer" ||
       currentMonthStatus === "fact_verification_time_norm" ||
       currentMonthStatus === "fact_on_agreement_sub_boss"
     ) {
-      return <Button onClick={rejectFactFilling}>Отозвать с проверки</Button>;
+      return (
+        <Button type="primary" danger onClick={rejectFactFilling}>
+          Отозвать заполненный факт с проверки
+        </Button>
+      );
     }
   }
 
@@ -118,16 +140,24 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_agreement_engineer") {
       return (
         <>
-          <Button onClick={rejectPlan}>Отклонить план на {translateRuTimePeriod(currentTimePeriod)}</Button>
-          <Button onClick={setNextStatus}>Согласовать план на {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button type="primary" danger onClick={rejectPlan}>
+            Отклонить план на {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
+          <Button type="primary" onClick={setNextStatus}>
+            Согласовать план на {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
         </>
       );
     }
     if (currentMonthStatus === "fact_verification_engineer") {
       return (
         <>
-          <Button onClick={rejectFactFilling}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
-          <Button onClick={setNextStatus}>Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button type="primary" danger onClick={rejectFactFilling}>
+            Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
+          <Button type="primary" onClick={setNextStatus}>
+            Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
         </>
       );
     }
@@ -138,16 +168,24 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_agreement_time_norm") {
       return (
         <>
-          <Button onClick={rejectPlan}>Отклонить план на {translateRuTimePeriod(currentTimePeriod)}</Button>
-          <Button onClick={setNextStatus}>Согласовать план на {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button type="primary" danger onClick={rejectPlan}>
+            Отклонить план на {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
+          <Button type="primary" onClick={setNextStatus}>
+            Согласовать план на {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
         </>
       );
     }
     if (currentMonthStatus === "fact_verification_time_norm") {
       return (
         <>
-          <Button onClick={rejectFactFilling}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
-          <Button onClick={setNextStatus}>Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button type="primary" danger onClick={rejectFactFilling}>
+            Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
+          <Button type="primary" onClick={setNextStatus}>
+            Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
         </>
       );
     }
@@ -158,16 +196,24 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_aprove") {
       return (
         <>
-          <Button onClick={rejectPlan}>Отклонить план на {translateRuTimePeriod(currentTimePeriod)}</Button>
-          <Button onClick={setNextStatus}>Утвердить план на {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button type="primary" danger onClick={rejectPlan}>
+            Отклонить план на {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
+          <Button type="primary" onClick={setNextStatus}>
+            Утвердить план на {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
         </>
       );
     }
     if (currentMonthStatus === "fact_on_agreement_sub_boss") {
       return (
         <>
-          <Button onClick={rejectFactFilling}>Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
-          <Button onClick={setNextStatus}>Утвердить факт за {translateRuTimePeriod(currentTimePeriod)}</Button>
+          <Button type="primary" danger onClick={rejectFactFilling}>
+            Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
+          <Button type="primary" onClick={setNextStatus}>
+            Утвердить факт за {translateRuTimePeriod(currentTimePeriod)}
+          </Button>
         </>
       );
     }

@@ -151,7 +151,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   }
 
   function updateTempSubbranchMeta(subbranchName: string, index: number, isBranchChange?: boolean) {
-    // Обнуляем счетчик порядкового номера работы внутри подкатегории
+    // Обнуляем счетчик порядкового номера работы внутри подраздела
     tempWorkOrder = 0;
     tempWorkOrderForRowSpan = 0;
 
@@ -177,32 +177,32 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   pprData?.forEach((pprData, index) => {
     if (pprData.branch !== tempBranchMeta.name) {
-      // Инициируем новые сслыки на значения категории и подкатегории работ
+      // Инициируем новые сслыки на значения раздела и подраздела работ
       updateTempBranchMeta(pprData.branch, index);
       updateTempSubbranchMeta(pprData.subbranch, index, true);
 
-      // Добавляем к категории работ ссылку на подкатегорию
+      // Добавляем к разделу работ ссылку на подраздел
       tempBranchMeta.subbranches.push(tempSubbranchMeta);
 
-      // Добавляем ссылку на категорию работ в полный перечень категорий
+      // Добавляем ссылку на раздел работ в полный перечень разделов
       branchesMeta.push(tempBranchMeta);
 
-      // В SET наименований подкатегорий добавляем новое имя
+      // В SET наименований подразделов добавляем новое имя
       subbranchesSet.add(tempSubbranchMeta.name);
 
-      // Добавляем ссылки на категорию и подкатегорию работ в индексированный список
+      // Добавляем ссылки на раздел и подраздел работ в индексированный список
       branchesAndSubbrunchesOrder[pprData.id] = { branch: tempBranchMeta, subbranch: tempSubbranchMeta };
     } else if (pprData.subbranch !== tempSubbranchMeta.name) {
-      // Инициируем новую сслыку на значения подкатегории работ
+      // Инициируем новую сслыку на значения подраздел работ
       updateTempSubbranchMeta(pprData.subbranch, index);
 
-      // Добавляем к текущей категории работ ссылку на подкатегорию
+      // Добавляем к текущему разделу работ ссылку на подраздел
       tempBranchMeta.subbranches.push(tempSubbranchMeta);
 
-      // В SET наименований подкатегорий добавляем новое имя
+      // В SET наименований подразделов добавляем новое имя
       subbranchesSet.add(tempSubbranchMeta.name);
 
-      // Добавляем ссылку на подкатегорию работ в индексированный список
+      // Добавляем ссылку на подраздел работ в индексированный список
       branchesAndSubbrunchesOrder[pprData.id] = { subbranch: tempSubbranchMeta };
     }
 
@@ -230,7 +230,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       isInit = false;
     }
 
-    // Добавить id работы в SET категории
+    // Добавить id работы в SET разделов
     tempBranchMeta.workIds.add(pprData.id);
 
     // Счиатаем общие чел.-ч по запланированным работам
@@ -264,7 +264,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
       handleWorkPeriod(worksTotalOriginalValue, pprData[field], field);
     });
 
-    // Добавить id работы в SET подкатегории
+    // Добавить id работы в SET подразделов
     tempSubbranchMeta.workIds.add(pprData.id);
   });
 

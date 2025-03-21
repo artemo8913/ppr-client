@@ -94,26 +94,25 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
   return (
     <div>
       <div className="print:hidden mx-10 mb-4 flex-wrap flex gap-2 items-center">
-        <span>
-          Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
-        </span>
+        Текстовый рапорт: <Switch checked={isShowTextRaport} onChange={setIsShowTextRaport} />
+        Отфильтровать пункты работ в рапорте:
         <Select
           mode="tags"
           allowClear
           className="flex-grow"
           options={subbranchOptions}
           onChange={handleChangeSelectSubbranch}
-          placeholder="Выбрать конкертные подкатегории работ"
+          placeholder="Выбрать пункты работ"
         />
         {!isShowTextRaport && (
           <>
             <label className="cursor-pointer">
               <Checkbox checked={isShowSubtotal.branch} onChange={toggleIsShowSubtotalForBranch} />
-              Промежуточные итоги по категориям
+              Отобразить итоги по разделам
             </label>
             <label className="cursor-pointer">
               <Checkbox checked={isShowSubtotal.subbranch} onChange={toggleIsShowSubtotalForSubranch} />
-              Промежуточные итоги по подкатегориям
+              Отобразить итоги по пунктам
             </label>
           </>
         )}
@@ -138,8 +137,8 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
           <div>
             <p className="font-bold text-justify">
               I. При планировании ведомости выполненных работ (форма ЭУ-99) на{" "}
-              {translateRuTimePeriod(currentTimePeriod)} месяц {ppr?.year} г. возникла необходимость корректировки
-              годового плана технического обслуживания и ремонта:
+              {translateRuTimePeriod(currentTimePeriod)} месяц {ppr?.year} г. возникла необходимость корректировки плана
+              технического обслуживания и ремонта:
             </p>
             {isShowTextRaport ? (
               <CorrectionText
