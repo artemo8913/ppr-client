@@ -19,7 +19,7 @@ export const PprTableControlPanel: FC<IPprTableControlPanelProps> = () => {
   const { ppr } = usePpr();
 
   return (
-    <div className="flex justify-start items-center flex-wrap gap-4 bg-slate-300 print:hidden p-1">
+    <div className="flex justify-start items-center flex-wrap gap-3 bg-slate-300 print:hidden p-1">
       <span>
         План ТОиР: <b>{ppr?.name}</b>
       </span>
