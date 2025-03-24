@@ -44,8 +44,8 @@ export const MainLayoutSider = ({ className }: { className: string }) => {
 
   return (
     <Sider className={className} collapsible collapsed={isCollapsed} onCollapse={(value) => setIsCollapsed(value)}>
-      <div className="flex flex-wrap m-4 mb-2 text-center gap-1 cursor-default">
-        <div className="border border-gray-200 text-2xl text-gray-200 w-12">ТЭ</div>
+      <div className="my-2 text-center cursor-default">
+        <div className="border mx-auto border-gray-200 text-2xl text-gray-200 w-12">ТЭ</div>
         <div className="text-2xl text-gray-200">ППР</div>
       </div>
       <Menu defaultSelectedKeys={findDefaultSelectedKey()} theme="dark" mode="inline" items={items} />
