@@ -78,3 +78,10 @@ $column-number-cell-height: 20px;
   outline: black solid 2px;
   outline-offset: -1px;
 }
+
+@media print {
+  .PprTableColumnNumberCell,
+  .MonthHeader {
+    position: static;
+  }
+}

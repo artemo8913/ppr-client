@@ -103,7 +103,7 @@ export const PprTable: FC<IPprTableProps> = () => {
         position: "relative",
       }}
     >
-      <thead>
+      <thead className="print:table-row-group">
         <tr>
           {basicFields.map((field) => (
             <HeaderCell

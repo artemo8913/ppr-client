@@ -124,7 +124,7 @@ export const CorrectionTable: FC<ICorrectionTableProps> = ({
           );
         })}
       </tbody>
-      <tfoot className="font-bold">
+      <tfoot className="font-bold print:table-row-group">
         <CorrectionTableSummaryRow
           text="Итого"
           planTime={raportMeta.total.planTime}
