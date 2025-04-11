@@ -71,7 +71,10 @@ export const CorrectionTable: FC<ICorrectionTableProps> = ({
             <Fragment key={correction.pprData.id}>
               <tr>
                 <td>{pprMeta.worksOrderForRowSpan[correction.pprData.id]}</td>
-                <td>{correction.pprData.name}</td>
+                <td>
+                  {correction.pprData.name}
+                  {correction.pprData.note && <b>{` (прим. ${correction.pprData.note})`}</b>}
+                </td>
                 <td>{correction.pprData.location}</td>
                 <td>{correction.pprData.measure}</td>
                 <td>{correction.planWork}</td>
@@ -121,7 +124,7 @@ export const CorrectionTable: FC<ICorrectionTableProps> = ({
           );
         })}
       </tbody>
-      <tfoot className="font-bold">
+      <tfoot className="font-bold print:table-row-group">
         <CorrectionTableSummaryRow
           text="Итого"
           planTime={raportMeta.total.planTime}

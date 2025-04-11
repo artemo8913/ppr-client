@@ -1,5 +1,4 @@
 "use client";
-import clsx from "clsx";
 import Tabs from "antd/es/tabs";
 import { useEffect } from "react";
 
@@ -8,8 +7,6 @@ import { WorkingMansTable } from "@/4widgets/workingMansTable";
 import { CorrectionRaport } from "@/4widgets/correctionRaport";
 import { MonthPlan } from "@/4widgets/monthPlan";
 import { usePprTableSettings } from "@/2entities/ppr";
-
-import style from "./PprPage.module.scss";
 
 export const PprPage = () => {
   const { currentTimePeriod } = usePprTableSettings();
@@ -28,7 +25,7 @@ export const PprPage = () => {
 
   return (
     <Tabs
-      className={clsx(style.fixAntdTab, "print:overflow-visible")}
+      className={"overflow-auto flex-1 print:overflow-visible"}
       defaultActiveKey="2"
       destroyInactiveTabPane
       items={[

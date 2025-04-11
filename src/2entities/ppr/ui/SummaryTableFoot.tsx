@@ -25,7 +25,7 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
   const pprDataView: "original" | "final" = isCorrectedView ? "final" : "original";
 
   return (
-    <tfoot className="font-bold sticky bottom-0 z-20 bg-neutral-100">
+    <tfoot className="font-bold sticky bottom-0 z-20 bg-neutral-100 print:static print:table-row-group">
       <tr>
         <td
           colSpan={summaryNameColSpan}
