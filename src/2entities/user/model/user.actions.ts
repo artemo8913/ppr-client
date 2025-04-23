@@ -7,7 +7,7 @@ import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/
 import { IUser, ICredential } from "./user.types";
 import { credentialsTable, usersTable } from "./user.schema";
 
-export async function getUserData(id: number): Promise<IUser> {
+export async function getUser(id: number): Promise<IUser> {
   try {
     const res = (
       await db
