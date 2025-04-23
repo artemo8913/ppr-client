@@ -7,7 +7,7 @@ import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/
 import { IUser, ICredential } from "./user.types";
 import { credentialsTable, usersTable } from "./user.schema";
 
-export async function getUserData(id: number): Promise<IUser> {
+export async function getUser(id: number): Promise<IUser> {
   try {
     const res = (
       await db
@@ -34,7 +34,7 @@ export async function getUserData(id: number): Promise<IUser> {
   }
 }
 
-export async function getCredential(username: string): Promise<ICredential> {
+export async function getCredentials(username: string): Promise<ICredential> {
   const credential = await db.query.credentialsTable.findFirst({
     where: eq(credentialsTable.username, username),
   });
