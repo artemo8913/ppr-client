@@ -62,7 +62,9 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   const isPlanTimePeriodField = checkIsPlanTimeField(field);
   const isPlanOrFactWorkPeriodField = checkIsPlanOrFactWorkField(field);
 
-  const quartalNumber = getQuartal(getTimePeriodFromString(field));
+  const currentTimePeriod = getTimePeriodFromString(field);
+
+  const quartalNumber = currentTimePeriod && currentTimePeriod !== "year" && getQuartal(currentTimePeriod);
 
   const isBgNotTransparent = isPlanWorkPeriodField || isPlanTimePeriodField;
 

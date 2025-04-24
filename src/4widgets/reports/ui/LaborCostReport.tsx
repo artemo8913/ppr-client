@@ -55,7 +55,7 @@ export const LaborCostReport: FC<ILaborCostReportProps> = ({ dataForReport = [] 
               const plantimeField = getPlanTimeFieldByTimePeriod(timePeriod);
               const factTimeField = getFactTimeFieldByTimePeriod(timePeriod);
 
-              const quartalNumber = getQuartal(timePeriod);
+              const quartalNumber = timePeriod !== "year" && getQuartal(timePeriod);
 
               return (
                 <Fragment key={timePeriod}>

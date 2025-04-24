@@ -69,7 +69,7 @@ export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ dataForReport =
               const planWorkField = getPlanWorkFieldByTimePeriod(timePeriod);
               const factWorkField = getFactWorkFieldByTimePeriod(timePeriod);
 
-              const quartalNumber = getQuartal(timePeriod);
+              const quartalNumber = timePeriod !== "year" && getQuartal(timePeriod);
 
               return (
                 <Fragment key={timePeriod}>

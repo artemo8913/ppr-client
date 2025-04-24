@@ -8,12 +8,17 @@ import {
 } from "@/2entities/ppr";
 import { useMemo } from "react";
 
-function getTimePeriodsColumns(currentTimePeriod?: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {
+function getTimePeriodsColumns(currentTimePeriod: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":
       return TIME_PERIODS.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
     case "SHOW_CURRENT_QUARTAL":
       const result: TTimePeriod[] = ["year"];
+
+      if (currentTimePeriod === "year") {
+        return result;
+      }
+
       return result.concat(getMonthsByQuartal(getQuartal(currentTimePeriod)));
     default:
       return TIME_PERIODS;

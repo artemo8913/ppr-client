@@ -28,27 +28,26 @@ export function getTimePeriodFromString(string: string): TTimePeriod | undefined
 }
 export type TQuartalNumber = 1 | 2 | 3 | 4;
 
-export function getQuartal(timePeriod?: TTimePeriod): TQuartalNumber | undefined {
-  if (timePeriod === "jan" || timePeriod === "feb" || timePeriod === "mar") {
+export function getQuartal(month: TMonth): TQuartalNumber {
+  if (month === "jan" || month === "feb" || month === "mar") {
     return 1;
-  } else if (timePeriod === "apr" || timePeriod === "may" || timePeriod === "june") {
+  } else if (month === "apr" || month === "may" || month === "june") {
     return 2;
-  } else if (timePeriod === "july" || timePeriod === "aug" || timePeriod === "sept") {
+  } else if (month === "july" || month === "aug" || month === "sept") {
     return 3;
-  } else if (timePeriod === "oct" || timePeriod === "nov" || timePeriod === "dec") {
-    return 4;
   }
+
+  return 4;
 }
 
-export function getMonthsByQuartal(quartal?: TQuartalNumber): TMonth[] {
+export function getMonthsByQuartal(quartal: TQuartalNumber): TMonth[] {
   if (quartal === 1) {
     return ["jan", "feb", "mar"];
   } else if (quartal === 2) {
     return ["apr", "may", "june"];
   } else if (quartal === 3) {
     return ["july", "aug", "sept"];
-  } else if (quartal === 4) {
-    return ["oct", "nov", "dec"];
   }
-  return [];
+
+  return ["oct", "nov", "dec"];
 }
