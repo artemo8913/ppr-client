@@ -3,9 +3,8 @@ import clsx from "clsx";
 import { FC, Fragment } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { getQuartal, TIME_PERIODS } from "@/1shared/lib/date";
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { getQuartal, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
 import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
 import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
 

@@ -2,8 +2,7 @@
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC, useEffect } from "react";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
-import { TTimePeriod, TIME_PERIODS } from "@/1shared/lib/date";
+import { TTimePeriod, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   findFirstUndonePprPeriod,
   translateRuPprMonthStatus,

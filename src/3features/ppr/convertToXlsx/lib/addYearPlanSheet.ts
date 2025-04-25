@@ -1,7 +1,6 @@
 import ExcelJS from "exceljs";
 
-import { TIME_PERIODS, TTimePeriod } from "@/1shared/lib/date";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { TIME_PERIODS, TTimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   IPpr,
   IPprData,

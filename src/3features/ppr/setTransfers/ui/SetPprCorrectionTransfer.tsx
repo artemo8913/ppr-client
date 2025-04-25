@@ -4,8 +4,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 
 import { TOptionType } from "@/1shared/lib/form/TOptionType";
-import { getTimePeriodFromString } from "@/1shared/lib/date";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   TPlanWorkPeriods,
   TPlanWorkPeriodsFields,
@@ -60,7 +59,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
       return {
         value: field,
         planWork: pprData[field].final,
-        label: translateRuTimePeriod(field),
+        label: timePeriod && translateRuTimePeriod(timePeriod),
         disabled,
       };
     }

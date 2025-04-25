@@ -2,7 +2,7 @@
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
 import { useSession } from "next-auth/react";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   checkIsPprInUserControl,
   SummaryTableFoot,

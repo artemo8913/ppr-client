@@ -6,8 +6,8 @@ import Checkbox from "antd/es/checkbox/Checkbox";
 import React, { FC, useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { TOptionType } from "@/1shared/lib/form/TOptionType";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
 import { TPlanWorkPeriodsFields, usePpr, checkIsPprInUserControl, usePprTableSettings } from "@/2entities/ppr";
 
 import { CorrectionNote } from "./CorrectionNote";

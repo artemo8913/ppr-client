@@ -4,8 +4,7 @@ import { FC, Fragment } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
-import { getQuartal, TIME_PERIODS } from "@/1shared/lib/date";
+import { getQuartal, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
 import { getFactTimeFieldByTimePeriod, getPlanTimeFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
 import { TDivisionType } from "@/2entities/division";
 

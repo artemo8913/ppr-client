@@ -1,7 +1,6 @@
 import { DefaultOptionType } from "antd/es/select";
 
-import { MONTHS, TTimePeriod } from "@/1shared/lib/date";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { MONTHS, TTimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 
 import { translateRuPprMonthStatus, translateRuPprYearStatus } from "./pprStatusLocale";
 import { TAllMonthStatuses, TMonthPprStatus, TPprShortInfo, TYearPprStatus } from "../model/ppr.types";

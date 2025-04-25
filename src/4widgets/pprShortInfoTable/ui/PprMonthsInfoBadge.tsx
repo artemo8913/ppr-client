@@ -2,8 +2,7 @@ import { FC } from "react";
 import Badge from "antd/es/badge";
 import Tooltip from "antd/es/tooltip";
 
-import { TMonth } from "@/1shared/lib/date";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { TMonth, translateRuTimePeriod } from "@/1shared/lib/date";
 import { TMonthPprStatus, translateRuPprMonthStatus } from "@/2entities/ppr";
 
 interface IPprMonthsInfoBadgeProps {

@@ -4,7 +4,7 @@ import { FC, useCallback, useMemo } from "react";
 
 import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCellMemo } from "@/1shared/ui/table";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   IWorkingManYearPlan,
   SummaryTableFoot,

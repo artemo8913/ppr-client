@@ -1,4 +1,4 @@
-import { TIME_PERIODS } from ".";
+import { TTimePeriod } from "../model/date.types";
 
 const TIME_PERIOD_RU = {
   year: "год",
@@ -16,11 +16,6 @@ const TIME_PERIOD_RU = {
   dec: "декабрь",
 };
 
-export const translateRuTimePeriod = (string: string): string => {
-  for (const period of TIME_PERIODS) {
-    if (string.startsWith(period)) {
-      return TIME_PERIOD_RU[period];
-    }
-  }
-  return "";
+export const translateRuTimePeriod = (timePeriod: TTimePeriod): string => {
+  return TIME_PERIOD_RU[timePeriod];
 };

@@ -1,6 +1,6 @@
 import { FC, Fragment } from "react";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
 import { IPprMeta, TPlanWorkPeriodsFields, translateRuPprBranchName } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 
@@ -95,7 +95,8 @@ export const CorrectionTable: FC<ICorrectionTableProps> = ({
                   ) : (
                     <div>
                       {transfers?.map((transfer, index) => {
-                        const month = translateRuTimePeriod(transfer.fieldTo);
+                        const timePeriod = getTimePeriodFromString(transfer.fieldTo);
+                        const month = timePeriod && translateRuTimePeriod(timePeriod);
                         const text =
                           transfer.value >= 0 ? `${transfer.value} на ${month}` : `${transfer.value} с ${month}`;
                         return <div key={index}>{text}</div>;
