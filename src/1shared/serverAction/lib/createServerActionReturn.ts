@@ -2,40 +2,33 @@
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/1shared/auth/authConfig";
-import { TNotification } from "@/1shared/notification";
+import { NotificationType } from "@/1shared/notification";
 
-import { IServerActionReturn } from "../model/serverAction.types";
+import { ServerActionReturn } from "../model/serverAction.types";
 
-interface IReturnFunctionArgs<DataType = undefined> {
-  message: string;
-  data?: DataType;
-  code?: number;
-}
+type ServerActionReturnWithoutType<DataType> = Omit<ServerActionReturn<DataType>, "type">;
 
-async function serverActionLog(type: TNotification, message: string) {
+async function logServerActionResult(type: NotificationType, message: string) {
   const session = await getServerSession(authOptions);
-  const startMessage = `${type}: ${new Date().toLocaleString()} ${message}`;
 
-  if (!session) {
-    console.log(`${startMessage} user = null`);
-    return;
-  }
+  const time = new Date().toLocaleString();
 
-  const user = session.user;
+  const user = session?.user;
 
-  console.log(`${startMessage} user id=${user.id} ${user.lastName}`);
+  console.log(`${type}: ${time} ${message} user id=${user?.id} lastname=${user?.lastName}`);
 }
 
 export async function returnSuccess<DataType = undefined>({
   data,
   message,
-}: IReturnFunctionArgs<DataType>): Promise<IServerActionReturn<DataType>> {
-  await serverActionLog("success", message);
+  code,
+}: ServerActionReturnWithoutType<DataType>): Promise<ServerActionReturn<DataType>> {
+  await logServerActionResult("success", message);
 
   return {
     data,
     message,
-    code: 200,
+    code: code || 200,
     type: "success",
   };
 }
@@ -44,8 +37,8 @@ export async function returnError<DataType = undefined>({
   data,
   message,
   code,
-}: IReturnFunctionArgs<DataType>): Promise<IServerActionReturn<DataType>> {
-  await serverActionLog("error", message);
+}: ServerActionReturnWithoutType<DataType>): Promise<ServerActionReturn<DataType>> {
+  await logServerActionResult("error", message);
 
   return {
     data,
