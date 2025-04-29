@@ -1,7 +1,7 @@
 import { TIME_PERIODS } from "../model/date.const";
-import { TMonth, TQuartalNumber, TTimePeriod } from "../model/date.types";
+import { Month, QuartalNumber, TimePeriod } from "../model/date.types";
 
-export function getTimePeriodFromString(string: string): TTimePeriod | undefined {
+export function getTimePeriodFromString(string: string): TimePeriod | undefined {
   for (const period of TIME_PERIODS) {
     if (string.startsWith(period)) {
       return period;
@@ -9,7 +9,7 @@ export function getTimePeriodFromString(string: string): TTimePeriod | undefined
   }
 }
 
-export function getQuartal(month: TMonth): TQuartalNumber {
+export function getQuartal(month: Month): QuartalNumber {
   if (month === "jan" || month === "feb" || month === "mar") {
     return 1;
   } else if (month === "apr" || month === "may" || month === "june") {
@@ -21,7 +21,7 @@ export function getQuartal(month: TMonth): TQuartalNumber {
   return 4;
 }
 
-export function getMonthsByQuartal(quartal: TQuartalNumber): TMonth[] {
+export function getMonthsByQuartal(quartal: QuartalNumber): Month[] {
   if (quartal === 1) {
     return ["jan", "feb", "mar"];
   } else if (quartal === 2) {

@@ -2,7 +2,7 @@
 import Select, { DefaultOptionType } from "antd/es/select";
 import { FC, useEffect } from "react";
 
-import { TTimePeriod, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
+import { TimePeriod, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   findFirstUndonePprPeriod,
   translateRuPprMonthStatus,
@@ -11,7 +11,7 @@ import {
   usePprTableSettings,
 } from "@/2entities/ppr";
 
-type TOption = { value: TTimePeriod } & DefaultOptionType;
+type TOption = { value: TimePeriod } & DefaultOptionType;
 
 interface IPprTableSelectTimePeriodProps {}
 
@@ -36,7 +36,7 @@ export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () =
   }));
 
   return (
-    <Select<TTimePeriod, TOption>
+    <Select<TimePeriod, TOption>
       className="min-w-80"
       options={options}
       value={currentTimePeriod}

@@ -1,4 +1,4 @@
-import { TTimePeriod } from "@/1shared/lib/date";
+import { TimePeriod } from "@/1shared/lib/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import {
   getFactTimeFieldByTimePeriod,
@@ -112,7 +112,7 @@ export function getColumnSettings({
 }: {
   field: keyof IWorkingManYearPlan;
   pprYearStatus: TYearPprStatus;
-  timePeriod: TTimePeriod;
+  timePeriod: TimePeriod;
   isPprInUserControl?: boolean;
   pprMonthStatuses?: TAllMonthStatuses;
 }): ITableCellProps {

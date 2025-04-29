@@ -1,4 +1,4 @@
-import { TMonth } from "@/1shared/lib/date";
+import { Month } from "@/1shared/lib/date";
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod, IPlanWorkValues, IPprData } from "@/2entities/ppr";
 
@@ -31,7 +31,7 @@ function isWorkWelldone(plan: IPlanWorkValues, factWorkValue: number) {
 
 // TODO: Проверить использование слова Raport (где-то report пишу)
 
-export function calculateMonthRaport(allPprData: IPprData[], currentTimePeriod: TMonth) {
+export function calculateMonthRaport(allPprData: IPprData[], currentTimePeriod: Month) {
   const planField = getPlanWorkFieldByTimePeriod(currentTimePeriod);
   const factField = getFactWorkFieldByTimePeriod(currentTimePeriod);
 

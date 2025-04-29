@@ -1,6 +1,6 @@
-import { TMonth, TTimePeriod } from "./date.types";
+import { Month, TimePeriod } from "./date.types";
 
-export const MONTHS: TMonth[] = [
+export const MONTHS: Month[] = [
   "jan",
   "feb",
   "mar",
@@ -15,4 +15,4 @@ export const MONTHS: TMonth[] = [
   "dec",
 ] as const;
 
-export const TIME_PERIODS: TTimePeriod[] = ["year", ...MONTHS] as const;
+export const TIME_PERIODS: TimePeriod[] = ["year", ...MONTHS] as const;

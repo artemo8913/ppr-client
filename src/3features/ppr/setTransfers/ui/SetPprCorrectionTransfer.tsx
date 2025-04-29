@@ -3,7 +3,7 @@ import Button from "antd/es/button";
 import { PlusOutlined } from "@ant-design/icons";
 import { FC, useCallback, useMemo } from "react";
 
-import { TOptionType } from "@/1shared/lib/form/TOptionType";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   TPlanWorkPeriods,
@@ -49,7 +49,7 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
 
   const nextPlanPeriodField = MONTH_PLAN_WORK_FIELDS[monthIndex + 1];
 
-  const selectOptions: (TOptionType<TPlanWorkPeriods> & { planWork: number })[] = MONTH_PLAN_WORK_FIELDS.map(
+  const selectOptions: (OptionType<TPlanWorkPeriods> & { planWork: number })[] = MONTH_PLAN_WORK_FIELDS.map(
     (field) => {
       const timePeriod = getTimePeriodFromString(field);
 

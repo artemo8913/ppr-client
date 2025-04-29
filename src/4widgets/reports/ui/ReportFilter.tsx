@@ -9,12 +9,12 @@ import { FC, useEffect, useState, useTransition } from "react";
 import Select, { DefaultOptionType } from "antd/es/select";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-import { TOptionType } from "@/1shared/lib/form/TOptionType";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { PPR_YEAR_OPTIONS, TYearPprStatus } from "@/2entities/ppr";
 import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
 import { ICommonWork } from "@/2entities/commonWork";
 
-const DIVISIONS_TYPE_OPTIONS: TOptionType<TDivisionType>[] = [
+const DIVISIONS_TYPE_OPTIONS: OptionType<TDivisionType>[] = [
   { label: "Трансэнерго", value: "transenergo" },
   { label: "Дирекция", value: "direction" },
   { label: "Дистанция", value: "distance" },
@@ -97,7 +97,7 @@ export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks, h
     updateUrlSearchParams(values);
   };
 
-  const commonWorksOptions: TOptionType<number>[] =
+  const commonWorksOptions: OptionType<number>[] =
     commonWorks?.map((work) => ({
       value: work.id,
       label: work.name,

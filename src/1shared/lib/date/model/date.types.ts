@@ -1,5 +1,5 @@
-export type TMonth = "jan" | "feb" | "mar" | "apr" | "may" | "june" | "july" | "aug" | "sept" | "oct" | "nov" | "dec";
+export type Month = "jan" | "feb" | "mar" | "apr" | "may" | "june" | "july" | "aug" | "sept" | "oct" | "nov" | "dec";
 
-export type TTimePeriod = "year" | TMonth;
+export type TimePeriod = "year" | Month;
 
-export type TQuartalNumber = 1 | 2 | 3 | 4;
+export type QuartalNumber = 1 | 2 | 3 | 4;

@@ -1,6 +1,6 @@
 import ExcelJS from "exceljs";
 
-import { TIME_PERIODS, TTimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
+import { TIME_PERIODS, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   IPpr,
   IPprData,
@@ -67,7 +67,7 @@ function checkIsFieldVertical(field: keyof IPprData) {
   );
 }
 
-function getPlanFactFields(period: TTimePeriod) {
+function getPlanFactFields(period: TimePeriod) {
   return [
     `${period}_plan_work`,
     `${period}_plan_time`,

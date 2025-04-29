@@ -1,4 +1,4 @@
-import { MONTHS, TMonth, TTimePeriod } from "@/1shared/lib/date";
+import { MONTHS, Month, TimePeriod } from "@/1shared/lib/date";
 import { ITableCellProps } from "@/1shared/ui/table";
 import {
   IPprData,
@@ -79,7 +79,7 @@ function createEditableAllPlanFactFields(): TPprFieldSettings {
   return settings;
 }
 
-function createEditablePlanWorkFieldByMonth(month: TMonth): TPprFieldSettings {
+function createEditablePlanWorkFieldByMonth(month: Month): TPprFieldSettings {
   const settings: TPprFieldSettings = {};
 
   const planWorkField = getPlanWorkFieldByTimePeriod(month);
@@ -87,7 +87,7 @@ function createEditablePlanWorkFieldByMonth(month: TMonth): TPprFieldSettings {
   return Object.assign(settings, { [planWorkField]: EDITABLE_NUMBER_CELL });
 }
 
-function createEditableFactWorkAndFactTimeFieldByMonth(month: TMonth): TPprFieldSettings {
+function createEditableFactWorkAndFactTimeFieldByMonth(month: Month): TPprFieldSettings {
   const settings: TPprFieldSettings = {};
 
   const factWorkField = getFactWorkFieldByTimePeriod(month);
@@ -100,7 +100,7 @@ export interface IEditableFieldsSettings {
   commonWork: TPprFieldSettings;
   notCommonWork: TPprFieldSettings;
   timePeriod: {
-    [key in TTimePeriod]: { plan: TPprFieldSettings; fact: TPprFieldSettings };
+    [key in TimePeriod]: { plan: TPprFieldSettings; fact: TPprFieldSettings };
   };
 }
 

@@ -1,7 +1,7 @@
 "use client";
 import { FC, Fragment } from "react";
 
-import { getTimePeriodFromString, TTimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
+import { getTimePeriodFromString, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   getFactNormTimeFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
@@ -16,7 +16,7 @@ import {
 
 import style from "./MonthPlan.module.scss";
 
-function getMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
+function getMonthPlanFields(timePeriod: TimePeriod): Array<keyof IPprData> {
   return [
     "name",
     "location",
@@ -30,7 +30,7 @@ function getMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
   ];
 }
 
-function getMonthPlanFieldsForTotalRow(timePeriod: TTimePeriod): Array<keyof IPprData> {
+function getMonthPlanFieldsForTotalRow(timePeriod: TimePeriod): Array<keyof IPprData> {
   return [
     "name",
     "entry_year",
@@ -50,7 +50,7 @@ interface IMonthPlanTableProps {
   monthPprMeta: IPprMeta;
   globalPprMeta: IPprMeta;
   filteredPprData: IPprData[];
-  currentTimePeriod: TTimePeriod;
+  currentTimePeriod: TimePeriod;
 }
 
 export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
