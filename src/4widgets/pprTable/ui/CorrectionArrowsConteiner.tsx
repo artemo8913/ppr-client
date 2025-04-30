@@ -1,6 +1,5 @@
 "use client";
 import { FC, MutableRefObject, memo, useEffect, useState } from "react";
-import { Arrow } from "@/1shared/ui/arrow";
 import {
   TPlanWorkPeriodsFields,
   TTransfer,
@@ -9,6 +8,8 @@ import {
   TFilterPlanFactOption,
   usePprTableSettings,
 } from "@/2entities/ppr";
+
+import { CorrectionArrow } from "./CorrectionArrow";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
@@ -45,7 +46,7 @@ const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCe
   const arrows = transfers?.map((field, index) => {
     const fieldToIndex = checkIsPlanWorkField(field.fieldTo) ? PLAN_WORK_FIELDS.indexOf(field.fieldTo) : null;
     const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
-    return <Arrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
+    return <CorrectionArrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
   });
 
   if (!arrows || arrows.length === 0) {
