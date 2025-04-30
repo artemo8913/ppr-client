@@ -1,9 +1,13 @@
 @media print {
-    body {
-      background-color: white;
-    }
-  
-    .ant-tabs-nav {
-      display: none !important;
-    }
+  body {
+    background-color: white;
   }
+
+  .ant-tooltip {
+    visibility: hidden !important;
+  }
+
+  .ant-tabs-nav {
+    display: none !important;
+  }
+}
