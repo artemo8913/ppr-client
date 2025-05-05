@@ -1,7 +1,7 @@
 "use client";
 import { FC, memo, ReactNode } from "react";
 
-import { TableCellControlWrapper } from "@/1shared/ui/table";
+import { TableCellHoverWrapper } from "@/1shared/ui/table";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
 
 import { AddWorkingManButton } from "./AddWorkingManButton";
@@ -14,10 +14,13 @@ interface IPprWorkingManUpdateControlProps {
 }
 
 const PprWorkingManUpdateControl: FC<IPprWorkingManUpdateControlProps> = ({ workingMan, isShowControl, children }) => {
+  if (!isShowControl) {
+    return children;
+  }
+
   return (
-    <TableCellControlWrapper
-      isShowControl={isShowControl}
-      controlItems={
+    <TableCellHoverWrapper
+      items={
         <>
           {!workingMan.is_working_man_aproved && <DeleteWorkingManButton id={workingMan.id} />}
           <AddWorkingManButton nearWorkingManId={workingMan.id} />
@@ -25,7 +28,7 @@ const PprWorkingManUpdateControl: FC<IPprWorkingManUpdateControlProps> = ({ work
       }
     >
       {children}
-    </TableCellControlWrapper>
+    </TableCellHoverWrapper>
   );
 };
 

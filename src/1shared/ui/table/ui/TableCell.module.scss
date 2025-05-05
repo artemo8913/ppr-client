@@ -65,3 +65,21 @@ $cell-width: 80px;
     }
   }
 }
+
+.TableCellHoverWrapper {
+  display: flex;
+  min-height: 80px;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wrapper {
+  position: absolute !important;
+  bottom: -24px;
+  left: 0px;
+  z-index: 10;
+  display: flex;
+  padding: 8px 0px;
+  min-height: 48px;
+}

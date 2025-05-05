@@ -1,7 +1,7 @@
 "use client";
 import { FC, memo, ReactNode } from "react";
 
-import { TableCellControlWrapper } from "@/1shared/ui/table";
+import { TableCellHoverWrapper } from "@/1shared/ui/table";
 import { IPprData } from "@/2entities/ppr";
 
 import { AddWorkButton } from "./AddWorkButton";
@@ -18,10 +18,13 @@ interface ITableCellWithWorkControlProps {
 }
 
 const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({ work, children, isShowControl }) => {
+  if (!isShowControl) {
+    return children;
+  }
+
   return (
-    <TableCellControlWrapper
-      isShowControl={isShowControl}
-      controlItems={
+    <TableCellHoverWrapper
+      items={
         <>
           {!work.is_work_aproved && (
             <>
@@ -37,7 +40,7 @@ const PprWorkUpdateControl: FC<ITableCellWithWorkControlProps> = ({ work, childr
       }
     >
       {children}
-    </TableCellControlWrapper>
+    </TableCellHoverWrapper>
   );
 };
 
