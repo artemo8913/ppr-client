@@ -1,5 +1,5 @@
 import { TimePeriod } from "@/1shared/lib/date";
-import { ITableCellProps } from "@/1shared/ui/table";
+import { TableCellProps } from "@/1shared/ui/table";
 import {
   getFactTimeFieldByTimePeriod,
   getPlanNormTimeFieldByTimePeriod,
@@ -41,65 +41,65 @@ export function getThStyle(column: keyof IWorkingManYearPlan): React.CSSProperti
   return {};
 }
 
-const ALL_EDITABLE_SETTINGS: { [column in keyof IWorkingManYearPlan]?: ITableCellProps } = {
+const ALL_EDITABLE_SETTINGS: { [column in keyof IWorkingManYearPlan]?: TableCellProps } = {
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
-  participation: { cellType: "input", type: "number" },
-  jan_plan_norm_time: { cellType: "input", type: "number" },
-  feb_plan_norm_time: { cellType: "input", type: "number" },
-  mar_plan_norm_time: { cellType: "input", type: "number" },
-  apr_plan_norm_time: { cellType: "input", type: "number" },
-  may_plan_norm_time: { cellType: "input", type: "number" },
-  june_plan_norm_time: { cellType: "input", type: "number" },
-  july_plan_norm_time: { cellType: "input", type: "number" },
-  aug_plan_norm_time: { cellType: "input", type: "number" },
-  sept_plan_norm_time: { cellType: "input", type: "number" },
-  oct_plan_norm_time: { cellType: "input", type: "number" },
-  nov_plan_norm_time: { cellType: "input", type: "number" },
-  dec_plan_norm_time: { cellType: "input", type: "number" },
-  jan_plan_tabel_time: { cellType: "input", type: "number" },
-  feb_plan_tabel_time: { cellType: "input", type: "number" },
-  mar_plan_tabel_time: { cellType: "input", type: "number" },
-  apr_plan_tabel_time: { cellType: "input", type: "number" },
-  may_plan_tabel_time: { cellType: "input", type: "number" },
-  june_plan_tabel_time: { cellType: "input", type: "number" },
-  july_plan_tabel_time: { cellType: "input", type: "number" },
-  aug_plan_tabel_time: { cellType: "input", type: "number" },
-  sept_plan_tabel_time: { cellType: "input", type: "number" },
-  oct_plan_tabel_time: { cellType: "input", type: "number" },
-  nov_plan_tabel_time: { cellType: "input", type: "number" },
-  dec_plan_tabel_time: { cellType: "input", type: "number" },
-  jan_fact_time: { cellType: "input", type: "number" },
-  feb_fact_time: { cellType: "input", type: "number" },
-  mar_fact_time: { cellType: "input", type: "number" },
-  apr_fact_time: { cellType: "input", type: "number" },
-  may_fact_time: { cellType: "input", type: "number" },
-  june_fact_time: { cellType: "input", type: "number" },
-  july_fact_time: { cellType: "input", type: "number" },
-  aug_fact_time: { cellType: "input", type: "number" },
-  sept_fact_time: { cellType: "input", type: "number" },
-  oct_fact_time: { cellType: "input", type: "number" },
-  nov_fact_time: { cellType: "input", type: "number" },
-  dec_fact_time: { cellType: "input", type: "number" },
+  participation: { cellType: "input", inputType: "number" },
+  jan_plan_norm_time: { cellType: "input", inputType: "number" },
+  feb_plan_norm_time: { cellType: "input", inputType: "number" },
+  mar_plan_norm_time: { cellType: "input", inputType: "number" },
+  apr_plan_norm_time: { cellType: "input", inputType: "number" },
+  may_plan_norm_time: { cellType: "input", inputType: "number" },
+  june_plan_norm_time: { cellType: "input", inputType: "number" },
+  july_plan_norm_time: { cellType: "input", inputType: "number" },
+  aug_plan_norm_time: { cellType: "input", inputType: "number" },
+  sept_plan_norm_time: { cellType: "input", inputType: "number" },
+  oct_plan_norm_time: { cellType: "input", inputType: "number" },
+  nov_plan_norm_time: { cellType: "input", inputType: "number" },
+  dec_plan_norm_time: { cellType: "input", inputType: "number" },
+  jan_plan_tabel_time: { cellType: "input", inputType: "number" },
+  feb_plan_tabel_time: { cellType: "input", inputType: "number" },
+  mar_plan_tabel_time: { cellType: "input", inputType: "number" },
+  apr_plan_tabel_time: { cellType: "input", inputType: "number" },
+  may_plan_tabel_time: { cellType: "input", inputType: "number" },
+  june_plan_tabel_time: { cellType: "input", inputType: "number" },
+  july_plan_tabel_time: { cellType: "input", inputType: "number" },
+  aug_plan_tabel_time: { cellType: "input", inputType: "number" },
+  sept_plan_tabel_time: { cellType: "input", inputType: "number" },
+  oct_plan_tabel_time: { cellType: "input", inputType: "number" },
+  nov_plan_tabel_time: { cellType: "input", inputType: "number" },
+  dec_plan_tabel_time: { cellType: "input", inputType: "number" },
+  jan_fact_time: { cellType: "input", inputType: "number" },
+  feb_fact_time: { cellType: "input", inputType: "number" },
+  mar_fact_time: { cellType: "input", inputType: "number" },
+  apr_fact_time: { cellType: "input", inputType: "number" },
+  may_fact_time: { cellType: "input", inputType: "number" },
+  june_fact_time: { cellType: "input", inputType: "number" },
+  july_fact_time: { cellType: "input", inputType: "number" },
+  aug_fact_time: { cellType: "input", inputType: "number" },
+  sept_fact_time: { cellType: "input", inputType: "number" },
+  oct_fact_time: { cellType: "input", inputType: "number" },
+  nov_fact_time: { cellType: "input", inputType: "number" },
+  dec_fact_time: { cellType: "input", inputType: "number" },
 };
 
 const getPlanEditableSettings = (
   planNormField: keyof TPlanNormTimePeriodsFields,
   planTabelField: keyof TPlanTabelTimePeriodsFields
-): { [column in keyof IWorkingManYearPlan]?: ITableCellProps } => ({
+): { [column in keyof IWorkingManYearPlan]?: TableCellProps } => ({
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
-  participation: { cellType: "input", type: "number" },
+  participation: { cellType: "input", inputType: "number" },
   [planNormField]: { cellType: "input", type: "number" },
   [planTabelField]: { cellType: "input", type: "number" },
 });
 
 const getFactEditableSettings = (
   factField: keyof TFactTimePeriodsFields
-): { [column in keyof IWorkingManYearPlan]?: ITableCellProps } => ({
+): { [column in keyof IWorkingManYearPlan]?: TableCellProps } => ({
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
-  participation: { cellType: "input", type: "number" },
+  participation: { cellType: "input", inputType: "number" },
   [factField]: { cellType: "input", type: "number" },
 });
 
@@ -115,7 +115,7 @@ export function getColumnSettings({
   timePeriod: TimePeriod;
   isPprInUserControl?: boolean;
   pprMonthStatuses?: TAllMonthStatuses;
-}): ITableCellProps {
+}): TableCellProps {
   if (!isPprInUserControl) {
     return {};
   }

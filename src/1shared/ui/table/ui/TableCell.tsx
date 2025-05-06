@@ -12,110 +12,117 @@ import {
 } from "react";
 import clsx from "clsx";
 
+import { isEnterKey, isEscKey } from "@/1shared/lib/events/keyboard";
+import { convertCommaToDot, isSimilarToNumber, NUMBER_WITH_DOT_PATTERN } from "@/1shared/lib/math/stringifiedNumber";
+
 import style from "./TableCell.module.scss";
 
-type TCell = "none" | "input" | "textarea";
+type TableCellType = "none" | "input" | "textarea";
 
-export interface ITableCellProps {
-  cellType?: TCell;
+export interface TableCellProps {
   className?: string;
   isVertical?: boolean;
-  type?: HTMLInputTypeAttribute;
-  onBlur?: (value: string) => void;
-  tdRef?: RefObject<HTMLTableCellElement>;
+  cellType?: TableCellType;
+  inputType?: HTMLInputTypeAttribute;
+  updateValue?: (value: string) => void;
   value?: string | number | boolean | null;
+  parentTdRef?: RefObject<HTMLTableCellElement>;
 }
 
-const TEXTAREA_BASIC_ROWS_COUNT = 4;
-const INPUT_BASIC_MAX_LENGTH = 12;
+const INPUT_MAX_LENGTH = 12;
 
-const TableCell: FC<ITableCellProps> = (props) => {
-  const { cellType = "none", value, type, isVertical = false, onBlur, tdRef, className } = props;
+const TEXTAREA_ROWS_COUNT = 4;
 
-  const [currentValue, setCurrentValue] = useState(value);
+const ANY_SYMBOL_PATTERN = ".*";
+
+const TableCell: FC<TableCellProps> = (props) => {
+  const { cellType = "none", value, inputType, isVertical, updateValue, parentTdRef, className } = props;
+
+  const [inputValue, setInputValue] = useState(value);
 
   const ref = useRef<HTMLTextAreaElement & HTMLInputElement>(null);
 
-  const handleUpdateValue = useCallback(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setCurrentValue(e.target.value),
+  const handleInputUpdate = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setInputValue(e.target.value),
     []
   );
 
-  const handleSelect = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => e.target.select(), []);
+  const selectAllTextOnFocus = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => e.target.select(),
+    []
+  );
 
-  const handleKeydown = useCallback((keyboardEvent: KeyboardEvent) => {
-    if (keyboardEvent.key === "Escape" || keyboardEvent.key === "Enter") {
+  const blurOnKeydown = useCallback((keyboardEvent: KeyboardEvent) => {
+    if (isEscKey(keyboardEvent.key) || isEnterKey(keyboardEvent.key)) {
       ref.current?.blur();
     }
   }, []);
 
   const handleBlur = useCallback(() => {
-    if (!onBlur) {
+    if (!updateValue) {
       return;
     }
 
-    if (type === "number" && /^[0-9]+[.,]?[0-9]*$/.test(String(currentValue))) {
-      onBlur(String(currentValue).replace(",", "."));
-
-      return;
+    if (inputType === "number" && isSimilarToNumber(String(inputValue))) {
+      return updateValue(convertCommaToDot(String(inputValue)));
     }
 
-    onBlur(String(currentValue));
-  }, [currentValue, onBlur, type]);
+    updateValue(String(inputValue));
+  }, [inputValue, updateValue, inputType]);
+
+  const validatePattern = inputType === "number" ? NUMBER_WITH_DOT_PATTERN : ANY_SYMBOL_PATTERN;
+
+  const hasError = inputType === "number" && isNaN(Number(value));
 
   useEffect(() => {
-    setCurrentValue(value);
+    setInputValue(value);
   }, [value]);
 
   useEffect(() => {
-    window?.addEventListener("keydown", handleKeydown);
+    window?.addEventListener("keydown", blurOnKeydown);
 
-    return () => window?.removeEventListener("keydown", handleKeydown);
-  }, [handleKeydown]);
-
-  const validatePattern = type === "number" ? "^[0-9]+[.]?[0-9]*$" : ".*";
-
-  const hasError = type === "number" && isNaN(Number(value));
+    return () => window?.removeEventListener("keydown", blurOnKeydown);
+  }, [blurOnKeydown]);
 
   useEffect(() => {
-    const td = tdRef?.current;
+    const td = parentTdRef?.current;
 
-    const handleFocusIn = (e: FocusEvent) => {
+    const focusInputElement = (e: FocusEvent) => {
       e.preventDefault();
       e.stopPropagation();
       ref?.current?.focus();
     };
 
-    td?.addEventListener("focus", handleFocusIn);
+    td?.addEventListener("focus", focusInputElement);
 
     return () => {
-      td?.removeEventListener("focus", handleFocusIn);
+      td?.removeEventListener("focus", focusInputElement);
     };
-  }, [tdRef]);
+  }, [parentTdRef]);
 
   return (
     <div className={clsx(style.TableCell, hasError && style.hasError, isVertical && style.isVertical, className)}>
       {cellType === "textarea" && (
         <textarea
           ref={ref}
-          value={String(currentValue)}
-          onFocus={handleSelect}
-          onChange={handleUpdateValue}
           onBlur={handleBlur}
+          rows={TEXTAREA_ROWS_COUNT}
+          value={String(inputValue)}
+          onChange={handleInputUpdate}
+          onFocus={selectAllTextOnFocus}
           className={clsx(style.TextareaCell, !isVertical && style.isNotVertical)}
-          rows={TEXTAREA_BASIC_ROWS_COUNT}
         />
       )}
       {cellType === "input" && (
         <input
           ref={ref}
-          value={String(currentValue)}
-          onFocus={handleSelect}
-          onChange={handleUpdateValue}
           onBlur={handleBlur}
-          className={clsx(style.InputCell, isVertical && style.isVertical)}
-          maxLength={INPUT_BASIC_MAX_LENGTH}
           pattern={validatePattern}
+          value={String(inputValue)}
+          maxLength={INPUT_MAX_LENGTH}
+          onChange={handleInputUpdate}
+          onFocus={selectAllTextOnFocus}
+          className={clsx(style.InputCell, isVertical && style.isVertical)}
         />
       )}
       {cellType === "none" && value}

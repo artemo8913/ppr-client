@@ -1,11 +1,11 @@
 "use client";
 import { FC, memo, useCallback } from "react";
 
-import { ITableCellProps, TableCell } from "@/1shared/ui/table";
+import { TableCellProps, TableCell } from "@/1shared/ui/table";
 import { IWorkingManYearPlan } from "@/2entities/ppr";
 import { PprWorkingManUpdateControl } from "@/3features/ppr/workingMansUpdate";
 
-interface IWorkingManTableCellProps extends ITableCellProps {
+interface IWorkingManTableCellProps extends TableCellProps {
   workingMan: IWorkingManYearPlan;
   rowIndex: number;
   field: keyof IWorkingManYearPlan;
@@ -32,7 +32,7 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
 
   return (
     <PprWorkingManUpdateControl workingMan={workingMan} isShowControl={isShowControl}>
-      <TableCell {...otherProps} onBlur={handleChange} />
+      <TableCell {...otherProps} updateValue={handleChange} />
     </PprWorkingManUpdateControl>
   );
 };

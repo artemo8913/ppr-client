@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { FC, MutableRefObject, useRef } from "react";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
-import { ITableCellProps, TableCell } from "@/1shared/ui/table";
+import { TableCellProps, TableCell } from "@/1shared/ui/table";
 import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
 import {
   checkIsPlanOrFactWorkField,
@@ -34,7 +34,7 @@ function getValue(pprData: IPprData, field: keyof IPprData, isCorrectedView: boo
   return pprData[field];
 }
 
-interface IPprTableCellProps extends ITableCellProps {
+interface IPprTableCellProps extends TableCellProps {
   rowSpan?: number;
   pprData: IPprData;
   workOrder?: string;
@@ -141,7 +141,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
       {isArrowsShow && isPlanWorkPeriodField ? (
         <div className="flex flex-col justify-between gap-6">
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
-          <TableCell {...otherProps} tdRef={tdRef} isVertical={isVertical} onBlur={handleChange} value={value} />
+          <TableCell {...otherProps} parentTdRef={tdRef} isVertical={isVertical} updateValue={handleChange} value={value} />
         </div>
       ) : (
         <PprWorkUpdateControl work={pprData} isShowControl={isFieldWithControl}>
@@ -149,9 +149,9 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
             {isWorkNameField && <span className="float-left pr-1">{workOrder}</span>}
             <TableCell
               {...otherProps}
-              tdRef={tdRef}
+              parentTdRef={tdRef}
               value={value}
-              onBlur={handleChange}
+              updateValue={handleChange}
               isVertical={isVertical}
               className={clsx(isWorkNameField && "!inline")}
             />
