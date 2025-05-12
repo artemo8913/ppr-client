@@ -1,5 +1,5 @@
 import { IUser } from "@/2entities/user/@x/ppr";
-import { TMonth, TTimePeriod } from "@/1shared/lib/date";
+import { Month, TimePeriod } from "@/1shared/lib/date";
 
 export type TYearPprStatus =
   | "template"
@@ -25,22 +25,22 @@ export type TMonthPprStatus =
   | "done";
 
 export type TAllMonthStatuses = {
-  [month in TMonth]: TMonthPprStatus;
+  [month in Month]: TMonthPprStatus;
 };
 
 type TReportsNotes = {
-  [month in TMonth]: string;
+  [month in Month]: string;
 };
 
 export type TTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
 //TODO: переименовать Periods в Fields
-export type TPlanWorkPeriods = `${TTimePeriod}_plan_work`;
-export type TFactWorkPeriods = `${TTimePeriod}_fact_work`;
-export type TPlanNormTimePeriods = `${TTimePeriod}_plan_norm_time`;
-export type TPlanTabelTimePeriods = `${TTimePeriod}_plan_tabel_time`;
-export type TPlanTimePeriods = `${TTimePeriod}_plan_time`;
-export type TFactNormTimePeriods = `${TTimePeriod}_fact_norm_time`;
-export type TFactTimePeriods = `${TTimePeriod}_fact_time`;
+export type TPlanWorkPeriods = `${TimePeriod}_plan_work`;
+export type TFactWorkPeriods = `${TimePeriod}_fact_work`;
+export type TPlanNormTimePeriods = `${TimePeriod}_plan_norm_time`;
+export type TPlanTabelTimePeriods = `${TimePeriod}_plan_tabel_time`;
+export type TPlanTimePeriods = `${TimePeriod}_plan_time`;
+export type TFactNormTimePeriods = `${TimePeriod}_fact_norm_time`;
+export type TFactTimePeriods = `${TimePeriod}_fact_time`;
 
 export interface IPlanWorkValues {
   original: number;

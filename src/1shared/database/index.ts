@@ -5,11 +5,11 @@ import { usersTable, credentialsTable } from "@/2entities/user/model/user.schema
 import { commonWorksTable } from "@/2entities/commonWork/model/commonWork.schema";
 import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/model/division.schema";
 import {
-  pprMonthsStatusesTable,
-  pprWorkingMansTable,
   pprsInfoTable,
   pprsWorkDataTable,
+  pprWorkingMansTable,
   pprRaportsNotesTable,
+  pprMonthsStatusesTable,
 } from "@/2entities/ppr/model/ppr.schema";
 
 const connectionConfig: PoolOptions = {

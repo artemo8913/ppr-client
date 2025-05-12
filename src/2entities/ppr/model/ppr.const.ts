@@ -1,4 +1,4 @@
-import { TTimePeriod } from "@/1shared/lib/date";
+import { TimePeriod } from "@/1shared/lib/date";
 import {
   IPprData,
   TPlanWorkPeriods,
@@ -380,35 +380,35 @@ const planNormTimeToPlanTabelTimeFieldsPair: {
   dec_plan_norm_time: "dec_plan_tabel_time",
 };
 
-export function getPlanWorkFieldByTimePeriod(timePeriod: TTimePeriod): TPlanWorkPeriods {
+export function getPlanWorkFieldByTimePeriod(timePeriod: TimePeriod): TPlanWorkPeriods {
   return `${timePeriod}_plan_work`;
 }
 
-export function getFactWorkFieldByTimePeriod(timePeriod: TTimePeriod): TFactWorkPeriods {
+export function getFactWorkFieldByTimePeriod(timePeriod: TimePeriod): TFactWorkPeriods {
   return `${timePeriod}_fact_work`;
 }
 
-export function getPlanTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanTimePeriods {
+export function getPlanTimeFieldByTimePeriod(timePeriod: TimePeriod): TPlanTimePeriods {
   return `${timePeriod}_plan_time`;
 }
 
-export function getPlanTabelTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanTabelTimePeriods {
+export function getPlanTabelTimeFieldByTimePeriod(timePeriod: TimePeriod): TPlanTabelTimePeriods {
   return `${timePeriod}_plan_tabel_time`;
 }
 
-export function getPlanNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): TPlanNormTimePeriods {
+export function getPlanNormTimeFieldByTimePeriod(timePeriod: TimePeriod): TPlanNormTimePeriods {
   return `${timePeriod}_plan_norm_time`;
 }
 
-export function getFactTimeFieldByTimePeriod(timePeriod: TTimePeriod): TFactTimePeriods {
+export function getFactTimeFieldByTimePeriod(timePeriod: TimePeriod): TFactTimePeriods {
   return `${timePeriod}_fact_time`;
 }
 
-export function getFactNormTimeFieldByTimePeriod(timePeriod: TTimePeriod): TFactNormTimePeriods {
+export function getFactNormTimeFieldByTimePeriod(timePeriod: TimePeriod): TFactNormTimePeriods {
   return `${timePeriod}_fact_norm_time`;
 }
 
-export function getPprFieldsByTimePeriod(timePeriod: TTimePeriod) {
+export function getPprFieldsByTimePeriod(timePeriod: TimePeriod) {
   return {
     planWorkField: getPlanWorkFieldByTimePeriod(timePeriod),
     planTimeField: getPlanTimeFieldByTimePeriod(timePeriod),

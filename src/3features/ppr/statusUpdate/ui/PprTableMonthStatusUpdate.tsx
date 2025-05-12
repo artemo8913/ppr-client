@@ -3,7 +3,7 @@ import { FC, useCallback } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   usePpr,
   updatePprTable,
@@ -19,6 +19,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
   const { data } = useSession();
   const { ppr } = usePpr();
   const { currentTimePeriod } = usePprTableSettings();
+  const timePeriodRu = translateRuTimePeriod(currentTimePeriod);
 
   const setNextStatus = () => {
     if (!ppr || currentTimePeriod === "year") {
@@ -86,7 +87,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "none" && isAvailableForPlanning) {
       return (
         <Button type="primary" onClick={setNextStatus}>
-          Запланировать работы на {translateRuTimePeriod(currentTimePeriod)}
+          Запланировать работы на {timePeriodRu}
         </Button>
       );
     }
@@ -100,7 +101,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "in_process") {
       return (
         <Button type="primary" onClick={setNextStatus}>
-          Заполнить факт за {translateRuTimePeriod(currentTimePeriod)}
+          Заполнить факт за {timePeriodRu}
         </Button>
       );
     }
@@ -141,10 +142,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       return (
         <>
           <Button type="primary" danger onClick={rejectPlan}>
-            Отклонить план на {translateRuTimePeriod(currentTimePeriod)}
+            Отклонить план на {timePeriodRu}
           </Button>
           <Button type="primary" onClick={setNextStatus}>
-            Согласовать план на {translateRuTimePeriod(currentTimePeriod)}
+            Согласовать план на {timePeriodRu}
           </Button>
         </>
       );
@@ -153,10 +154,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       return (
         <>
           <Button type="primary" danger onClick={rejectFactFilling}>
-            Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}
+            Отклонить факт за {timePeriodRu}
           </Button>
           <Button type="primary" onClick={setNextStatus}>
-            Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}
+            Согласовать факт за {timePeriodRu}
           </Button>
         </>
       );
@@ -169,10 +170,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       return (
         <>
           <Button type="primary" danger onClick={rejectPlan}>
-            Отклонить план на {translateRuTimePeriod(currentTimePeriod)}
+            Отклонить план на {timePeriodRu}
           </Button>
           <Button type="primary" onClick={setNextStatus}>
-            Согласовать план на {translateRuTimePeriod(currentTimePeriod)}
+            Согласовать план на {timePeriodRu}
           </Button>
         </>
       );
@@ -181,10 +182,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       return (
         <>
           <Button type="primary" danger onClick={rejectFactFilling}>
-            Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}
+            Отклонить факт за {timePeriodRu}
           </Button>
           <Button type="primary" onClick={setNextStatus}>
-            Согласовать факт за {translateRuTimePeriod(currentTimePeriod)}
+            Согласовать факт за {timePeriodRu}
           </Button>
         </>
       );
@@ -197,10 +198,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       return (
         <>
           <Button type="primary" danger onClick={rejectPlan}>
-            Отклонить план на {translateRuTimePeriod(currentTimePeriod)}
+            Отклонить план на {timePeriodRu}
           </Button>
           <Button type="primary" onClick={setNextStatus}>
-            Утвердить план на {translateRuTimePeriod(currentTimePeriod)}
+            Утвердить план на {timePeriodRu}
           </Button>
         </>
       );
@@ -209,10 +210,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       return (
         <>
           <Button type="primary" danger onClick={rejectFactFilling}>
-            Отклонить факт за {translateRuTimePeriod(currentTimePeriod)}
+            Отклонить факт за {timePeriodRu}
           </Button>
           <Button type="primary" onClick={setNextStatus}>
-            Утвердить факт за {translateRuTimePeriod(currentTimePeriod)}
+            Утвердить факт за {timePeriodRu}
           </Button>
         </>
       );

@@ -7,7 +7,7 @@ import { db } from "@/1shared/database";
 import { ROUTE_PPR } from "@/1shared/lib/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
 import { MONTHS, TIME_PERIODS } from "@/1shared/lib/date";
-import { IServerActionReturn, returnError, returnSuccess } from "@/1shared/serverAction";
+import { ServerActionReturn, returnError, returnSuccess } from "@/1shared/serverAction";
 import { buildConflictUpdateColumns } from "@/1shared/lib/database/buildConflictUpdateColumns";
 import { usersTable } from "@/2entities/user/@x/ppr";
 import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/ppr";
@@ -46,7 +46,7 @@ import {
   PPR_DATA_BASIC_FIELDS,
 } from "./ppr.const";
 
-export async function getPprTable(id: number): Promise<IServerActionReturn<IPpr>> {
+export async function getPprTable(id: number): Promise<ServerActionReturn<IPpr>> {
   try {
     const [pprInfoRes, workingMans, pprMonthStatuses, pprData, raportsNotes] = await Promise.all([
       db
@@ -97,7 +97,7 @@ export async function getPprTable(id: number): Promise<IServerActionReturn<IPpr>
   }
 }
 
-export async function createPprTable(name: string, year: number): Promise<IServerActionReturn> {
+export async function createPprTable(name: string, year: number): Promise<ServerActionReturn> {
   try {
     const session = await getServerSession(authOptions);
 
@@ -145,7 +145,7 @@ export async function copyPprTable(params: {
   isCopyFactWork?: boolean;
   isCopyPlanWorkingMans?: boolean;
   isCopyFactWorkingMans?: boolean;
-}): Promise<IServerActionReturn> {
+}): Promise<ServerActionReturn> {
   try {
     const session = await getServerSession(authOptions);
 
@@ -279,7 +279,7 @@ export async function copyPprTable(params: {
   }
 }
 
-export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>): Promise<IServerActionReturn> {
+export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>): Promise<ServerActionReturn> {
   try {
     await db.transaction(async (tx) => {
       if (params.status) {
@@ -368,7 +368,7 @@ export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id"
   }
 }
 
-export async function deletePprTable(id: number): Promise<IServerActionReturn> {
+export async function deletePprTable(id: number): Promise<ServerActionReturn> {
   try {
     await db.transaction(async (tx) => {
       await Promise.all([
@@ -400,7 +400,7 @@ export async function getManyPprsShortInfo(params?: {
   idSubdivision?: number | null | string;
   status?: string;
   months_statuses?: string | string[];
-}): Promise<IServerActionReturn<TPprShortInfo[]>> {
+}): Promise<ServerActionReturn<TPprShortInfo[]>> {
   const filters: SQL[] = [];
 
   if (params?.name) filters.push(like(pprsInfoTable.name, `%${params.name}%`));
@@ -460,7 +460,7 @@ export async function getManyPprsShortInfo(params?: {
   }
 }
 
-export async function deletePprWork(id: number): Promise<IServerActionReturn> {
+export async function deletePprWork(id: number): Promise<ServerActionReturn> {
   try {
     await db.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.id, id));
 
@@ -470,7 +470,7 @@ export async function deletePprWork(id: number): Promise<IServerActionReturn> {
   }
 }
 
-export async function deleteWorkingMan(id: number): Promise<IServerActionReturn> {
+export async function deleteWorkingMan(id: number): Promise<ServerActionReturn> {
   try {
     await db.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.id, id));
 
@@ -505,7 +505,7 @@ export async function getPprDataForReport({
   idDistance,
   idDirection,
   idSubdivision,
-}: IGetPprDataForReportParams): Promise<IServerActionReturn<TPprDataForReport[]>> {
+}: IGetPprDataForReportParams): Promise<ServerActionReturn<TPprDataForReport[]>> {
   try {
     const filters: SQL[] = [];
 

@@ -1,9 +1,9 @@
 "use client";
-import Select, { DefaultOptionType } from "antd/es/select";
+import Select from "antd/es/select";
 import { FC, useEffect } from "react";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
-import { TTimePeriod, TIME_PERIODS } from "@/1shared/lib/date";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
+import { TimePeriod, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   findFirstUndonePprPeriod,
   translateRuPprMonthStatus,
@@ -11,8 +11,6 @@ import {
   usePpr,
   usePprTableSettings,
 } from "@/2entities/ppr";
-
-type TOption = { value: TTimePeriod } & DefaultOptionType;
 
 interface IPprTableSelectTimePeriodProps {}
 
@@ -29,7 +27,7 @@ export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () =
     return null;
   }
 
-  const options: TOption[] = TIME_PERIODS.map((period) => ({
+  const options: OptionType<TimePeriod>[] = TIME_PERIODS.map((period) => ({
     value: period,
     label: `${translateRuTimePeriod(period)} (${
       period !== "year" ? translateRuPprMonthStatus(ppr.months_statuses[period]) : translateRuPprYearStatus(ppr.status)
@@ -37,7 +35,7 @@ export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () =
   }));
 
   return (
-    <Select<TTimePeriod, TOption>
+    <Select<TimePeriod, OptionType<TimePeriod>>
       className="min-w-80"
       options={options}
       value={currentTimePeriod}

@@ -6,8 +6,8 @@ import Checkbox from "antd/es/checkbox/Checkbox";
 import React, { FC, useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import { TOptionType } from "@/1shared/lib/form/TOptionType";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { TPlanWorkPeriodsFields, usePpr, checkIsPprInUserControl, usePprTableSettings } from "@/2entities/ppr";
 
 import { CorrectionNote } from "./CorrectionNote";
@@ -38,7 +38,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     []
   );
 
-  const [subbranchOptions] = useState<TOptionType<string>[]>(
+  const [subbranchOptions] = useState<OptionType<string>[]>(
     pprMeta.subbranchesList.map((subbranch) => {
       return { value: subbranch, label: subbranch };
     })

@@ -1,4 +1,4 @@
-import { TTimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/lib/date";
+import { TimePeriod, getQuartal, getMonthsByQuartal, TIME_PERIODS } from "@/1shared/lib/date";
 import {
   PPR_DATA_BASIC_FIELDS,
   IPprData,
@@ -8,19 +8,24 @@ import {
 } from "@/2entities/ppr";
 import { useMemo } from "react";
 
-function getTimePeriodsColumns(currentTimePeriod?: TTimePeriod, option?: TFilterTimePeriodOption): TTimePeriod[] {
+function getTimePeriodsColumns(currentTimePeriod: TimePeriod, option?: TFilterTimePeriodOption): TimePeriod[] {
   switch (option) {
     case "SHOW_ONLY_CURRENT_MONTH":
       return TIME_PERIODS.filter((timePeriod) => timePeriod === "year" || timePeriod === currentTimePeriod);
     case "SHOW_CURRENT_QUARTAL":
-      const result: TTimePeriod[] = ["year"];
+      const result: TimePeriod[] = ["year"];
+
+      if (currentTimePeriod === "year") {
+        return result;
+      }
+
       return result.concat(getMonthsByQuartal(getQuartal(currentTimePeriod)));
     default:
       return TIME_PERIODS;
   }
 }
 
-function getPlanFactColumns(pprTimePeriod: TTimePeriod, option?: TFilterPlanFactOption): Array<keyof IPprData> {
+function getPlanFactColumns(pprTimePeriod: TimePeriod, option?: TFilterPlanFactOption): Array<keyof IPprData> {
   switch (option) {
     case "SHOW_ONLY_PLAN":
       return [`${pprTimePeriod}_plan_work`, `${pprTimePeriod}_plan_time`];
@@ -54,7 +59,7 @@ function getPlanFactColumnsCount(option?: TFilterPlanFactOption) {
 
 export const useCreateColumns = (): {
   basicFields: (keyof IPprData)[];
-  timePeriods: TTimePeriod[];
+  timePeriods: TimePeriod[];
   planFactFields: (keyof IPprData)[];
   allFields: (keyof IPprData)[];
   monthColSpan: number;

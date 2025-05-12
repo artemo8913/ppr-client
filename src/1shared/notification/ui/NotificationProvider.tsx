@@ -2,23 +2,23 @@
 import useNotification from "antd/es/notification/useNotification";
 import { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo } from "react";
 
-import { TNotification } from "../model/notification.types";
+import { NotificationType } from "../model/notification.types";
 import { translateRuNotificationType } from "../lib/notificationLocale";
 
-interface IToastParams {
-  type: TNotification;
+interface ToastParams {
+  type: NotificationType;
   message: string;
 }
 
-interface INoficationProviderContext {
-  toast: (params: IToastParams) => void;
+interface NoficationProviderContext {
+  toast: (params: ToastParams) => void;
 }
 
-const INIT_CONTEXT: INoficationProviderContext = {
+const INIT_CONTEXT: NoficationProviderContext = {
   toast: () => {},
 };
 
-const NoficationProviderContext = createContext<INoficationProviderContext>(INIT_CONTEXT);
+const NoficationProviderContext = createContext<NoficationProviderContext>(INIT_CONTEXT);
 
 export const useNotificationProvider = () => useContext(NoficationProviderContext);
 
@@ -26,7 +26,7 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [api, contextHolder] = useNotification();
 
   const toast = useCallback(
-    ({ type, message }: IToastParams) => {
+    ({ type, message }: ToastParams) => {
       api[type]({
         message: translateRuNotificationType(type),
         description: <NoficationProviderContext.Consumer>{() => message}</NoficationProviderContext.Consumer>,

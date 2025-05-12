@@ -3,7 +3,7 @@ import { FC } from "react";
 import clsx from "clsx";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
-import { TTimePeriod } from "@/1shared/lib/date";
+import { TimePeriod } from "@/1shared/lib/date";
 import {
   getFactTimeFieldByTimePeriod,
   getPlanNormTimeFieldByTimePeriod,
@@ -15,7 +15,7 @@ import {
 
 import style from "./MonthPlan.module.scss";
 
-function getWorkingMansMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IWorkingManYearPlan | null> {
+function getWorkingMansMonthPlanFields(timePeriod: TimePeriod): Array<keyof IWorkingManYearPlan | null> {
   return [
     "full_name",
     "work_position",
@@ -29,7 +29,7 @@ function getWorkingMansMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IWo
 interface IMonthWorkingMansTableProps {
   monthPprMeta: IPprMeta;
   globalPprMeta: IPprMeta;
-  currentTimePeriod: TTimePeriod;
+  currentTimePeriod: TimePeriod;
   workingMans: IWorkingManYearPlan[];
 }
 

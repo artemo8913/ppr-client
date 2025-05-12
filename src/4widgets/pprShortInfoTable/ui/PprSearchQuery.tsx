@@ -1,14 +1,16 @@
 "use client";
 import React, { FC } from "react";
 import clsx from "clsx";
+import Select from "antd/es/select";
 import dayjs, { Dayjs } from "dayjs";
 import Search from "antd/es/input/Search";
 import DatePicker from "antd/es/date-picker";
-import Select, { DefaultOptionType } from "antd/es/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { TDirection, TDistance, TSubdivision } from "@/2entities/division";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { TPprShortInfo } from "@/2entities/ppr";
+import { TDirection, TDistance, TSubdivision } from "@/2entities/division";
+
 import { usePprSearchQueryTransition } from "./PprSearchQueryTransitionProvider";
 
 interface IPprSearchQueryProps {
@@ -48,19 +50,19 @@ export const PprSearchQuery: FC<IPprSearchQueryProps> = (props) => {
   const handleSearchYear = (_date: Dayjs, dateString: string | string[]) =>
     typeof dateString === "string" && updateUrlSearchParam("year", dateString);
 
-  const subdivisionOptions: DefaultOptionType[] = props.divisions.subdivisions
+  const subdivisionOptions: OptionType<number>[] = props.divisions.subdivisions
     .filter((subdivision) => (idDistance ? subdivision.idDistance === idDistance : true))
     .map((subdivision) => {
       return { label: subdivision.shortName, value: subdivision.id };
     });
 
-  const distanceOptions: DefaultOptionType[] = props.divisions.distances
+  const distanceOptions: OptionType<number>[] = props.divisions.distances
     .filter((subdivision) => (idDirection ? subdivision.idDirection === idDirection : true))
     .map((distance) => {
       return { label: distance.name, value: distance.id };
     });
 
-  const directionOptions: DefaultOptionType[] = props.divisions.directions.map((direction) => {
+  const directionOptions: OptionType<number>[] = props.divisions.directions.map((direction) => {
     return { label: direction.shortName, value: direction.id };
   });
 

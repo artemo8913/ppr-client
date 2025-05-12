@@ -3,15 +3,16 @@ import { FC, useEffect } from "react";
 import Form from "antd/es/form";
 import Input from "antd/es/input";
 import Button from "antd/es/button";
+import Select from "antd/es/select";
 import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import TypedInputNumber from "antd/es/input-number";
-import Select, { DefaultOptionType } from "antd/es/select";
 
 import { ICommonWork } from "@/2entities/commonWork";
 import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 
 import { BRANCH_SELECT_OPTIONS } from "../../lib/branchSelectOptions";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 
 export interface IEditWorkFormInitialValues extends Partial<Omit<ICommonWork, "id">> {
   branch: TWorkBranch;
@@ -29,7 +30,7 @@ interface IEditWorkFormProps {
   buttonLabel?: string;
   onFinish?: () => void;
   initialValues: IEditWorkFormInitialValues;
-  subbranchOptions?: DefaultOptionType[];
+  subbranchOptions?: OptionType<string>[];
   handleAddWork: (newWork: Partial<IPprBasicData>) => void;
 }
 

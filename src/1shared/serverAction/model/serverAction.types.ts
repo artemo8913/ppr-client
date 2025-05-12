@@ -1,8 +1,8 @@
-import { TNotification } from "@/1shared/notification";
+import { NotificationType } from "@/1shared/notification";
 
-export interface IServerActionReturn<DataType = undefined> {
-  code: number;
+export interface ServerActionReturn<DataType = undefined> {
+  code?: number;
   data?: DataType;
   message: string;
-  type: TNotification;
+  type: NotificationType;
 }

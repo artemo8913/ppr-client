@@ -5,11 +5,11 @@ import TypedInputNumber from "antd/es/input-number";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import Select from "antd/es/select";
 
-import { TOptionType } from "@/1shared/lib/form/TOptionType";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 
 interface ISelectTransferParamsProps<T> {
   value: number;
-  options: (TOptionType<T> & { planWork: number })[];
+  options: (OptionType<T> & { planWork: number })[];
   fieldTo: T;
   handleChange: (fieldTo: T, value: number) => void;
   handleAddTransfer?: () => void;

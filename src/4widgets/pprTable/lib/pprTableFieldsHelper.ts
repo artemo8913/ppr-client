@@ -1,5 +1,5 @@
-import { MONTHS, TMonth, TTimePeriod } from "@/1shared/lib/date";
-import { ITableCellProps } from "@/1shared/ui/table";
+import { MONTHS, Month, TimePeriod } from "@/1shared/lib/date";
+import { TableCellProps } from "@/1shared/ui/table";
 import {
   IPprData,
   PLAN_WORK_FIELDS,
@@ -11,7 +11,7 @@ import {
   getFactTimeFieldByTimePeriod,
 } from "@/2entities/ppr";
 
-export type TPprFieldSettings = { [key in keyof IPprData]?: ITableCellProps };
+export type TPprFieldSettings = { [key in keyof IPprData]?: TableCellProps };
 
 export function getThStyle(key?: keyof IPprData): React.CSSProperties {
   switch (key) {
@@ -43,7 +43,7 @@ export function checkIsFieldVertical(field: keyof IPprData): boolean {
   );
 }
 
-const EDITABLE_NUMBER_CELL: ITableCellProps = { cellType: "input", type: "number" };
+const EDITABLE_NUMBER_CELL: TableCellProps = { cellType: "input", inputType: "number" };
 
 const EDITABLE_WORK_DATA_FIELDS: TPprFieldSettings = {
   name: { cellType: "textarea" },
@@ -79,7 +79,7 @@ function createEditableAllPlanFactFields(): TPprFieldSettings {
   return settings;
 }
 
-function createEditablePlanWorkFieldByMonth(month: TMonth): TPprFieldSettings {
+function createEditablePlanWorkFieldByMonth(month: Month): TPprFieldSettings {
   const settings: TPprFieldSettings = {};
 
   const planWorkField = getPlanWorkFieldByTimePeriod(month);
@@ -87,7 +87,7 @@ function createEditablePlanWorkFieldByMonth(month: TMonth): TPprFieldSettings {
   return Object.assign(settings, { [planWorkField]: EDITABLE_NUMBER_CELL });
 }
 
-function createEditableFactWorkAndFactTimeFieldByMonth(month: TMonth): TPprFieldSettings {
+function createEditableFactWorkAndFactTimeFieldByMonth(month: Month): TPprFieldSettings {
   const settings: TPprFieldSettings = {};
 
   const factWorkField = getFactWorkFieldByTimePeriod(month);
@@ -100,7 +100,7 @@ export interface IEditableFieldsSettings {
   commonWork: TPprFieldSettings;
   notCommonWork: TPprFieldSettings;
   timePeriod: {
-    [key in TTimePeriod]: { plan: TPprFieldSettings; fact: TPprFieldSettings };
+    [key in TimePeriod]: { plan: TPprFieldSettings; fact: TPprFieldSettings };
   };
 }
 

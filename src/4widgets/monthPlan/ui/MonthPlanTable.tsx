@@ -1,8 +1,7 @@
 "use client";
 import { FC, Fragment } from "react";
 
-import { TTimePeriod } from "@/1shared/lib/date";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { getTimePeriodFromString, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   getFactNormTimeFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
@@ -17,7 +16,7 @@ import {
 
 import style from "./MonthPlan.module.scss";
 
-function getMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
+function getMonthPlanFields(timePeriod: TimePeriod): Array<keyof IPprData> {
   return [
     "name",
     "location",
@@ -31,7 +30,7 @@ function getMonthPlanFields(timePeriod: TTimePeriod): Array<keyof IPprData> {
   ];
 }
 
-function getMonthPlanFieldsForTotalRow(timePeriod: TTimePeriod): Array<keyof IPprData> {
+function getMonthPlanFieldsForTotalRow(timePeriod: TimePeriod): Array<keyof IPprData> {
   return [
     "name",
     "entry_year",
@@ -51,7 +50,7 @@ interface IMonthPlanTableProps {
   monthPprMeta: IPprMeta;
   globalPprMeta: IPprMeta;
   filteredPprData: IPprData[];
-  currentTimePeriod: TTimePeriod;
+  currentTimePeriod: TimePeriod;
 }
 
 export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
@@ -166,7 +165,8 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
                 })}
                 <td>
                   {pprData[planWorkField].undoneTransfers?.map((transfer, index) => {
-                    const month = translateRuTimePeriod(transfer.fieldTo);
+                    const timePeriod = getTimePeriodFromString(transfer.fieldTo);
+                    const month = timePeriod && translateRuTimePeriod(timePeriod);
                     const text = transfer.value >= 0 ? `${transfer.value} на ${month}` : `${transfer.value} с ${month}`;
                     return <div key={index}>{text}</div>;
                   })}

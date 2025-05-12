@@ -1,7 +1,7 @@
 "use client";
 import { FC, PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from "react";
 
-import { TMonth } from "@/1shared/lib/date";
+import { Month } from "@/1shared/lib/date";
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
 import {
@@ -48,7 +48,7 @@ interface IPprContext {
   updatePlanWork: (id: TPprDataWorkId, field: TPlanWorkPeriods, value: number) => void;
   updateFactWork: (id: TPprDataWorkId, field: TFactWorkPeriods, value: number) => void;
   updateFactWorkTime: (id: TPprDataWorkId, field: TFactTimePeriods, value: number) => void;
-  copyFactNormTimeToFactTime: (mode: "EVERY" | "NOT_FILLED", month: TMonth) => void;
+  copyFactNormTimeToFactTime: (mode: "EVERY" | "NOT_FILLED", month: Month) => void;
   updatePprData: (id: TPprDataWorkId, field: keyof IPprData, value: string | number) => void;
   updatePlanWorkValueByUser: (id: TPprDataWorkId, field: TPlanWorkPeriods, newValue: number) => void;
   updatePprTableCell: (id: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
@@ -71,7 +71,7 @@ interface IPprContext {
   updateWorkingManParticipation: (rowIndex: number, value: number) => void;
   getPprDataWithRowSpan: (data: IPprData[]) => IPprDataWithRowSpan[];
   fillWorkingManPlanTime: (mode: "EVERY" | "NOT_FILLED", value: number) => void;
-  updateRaportNote: (note: string, month: TMonth) => void;
+  updateRaportNote: (note: string, month: Month) => void;
   pprMeta: IPprMeta;
 }
 
@@ -387,7 +387,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   //TODO: сделать единую функцию для перерасчета итоговых значений по годовым столбцам. Функция будет считать сразу и объемы, и чел.-ч
   //везде, где надо
 
-  const copyFactNormTimeToFactTime = useCallback((mode: "EVERY" | "NOT_FILLED", month: TMonth) => {
+  const copyFactNormTimeToFactTime = useCallback((mode: "EVERY" | "NOT_FILLED", month: Month) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -904,7 +904,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateRaportNote = useCallback((note: string, month: TMonth) => {
+  const updateRaportNote = useCallback((note: string, month: Month) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;

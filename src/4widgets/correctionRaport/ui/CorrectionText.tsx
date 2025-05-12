@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
 import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
 
 import { ICorrectionRaportMeta, TCorrectionItem } from "../model/correctionRaport.types";
@@ -36,7 +36,8 @@ export const CorrectionText: FC<ICorrectionTextProps> = ({ type, fieldFrom, meta
               <>
                 {" перенести: "}
                 {transfers?.map((transfer, index, arr) => {
-                  const month = translateRuTimePeriod(transfer.fieldTo);
+                  const timePeriod = getTimePeriodFromString(transfer.fieldTo);
+                  const month = timePeriod && translateRuTimePeriod(timePeriod);
                   const text = transfer.value >= 0 ? `${transfer.value} на ${month}` : `${transfer.value} с ${month}`;
 
                   return (

@@ -2,7 +2,7 @@
 import { FC } from "react";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   createPprMeta,
   getFactTimeFieldByTimePeriod,

@@ -1,7 +1,8 @@
 "use client";
-import Select, { DefaultOptionType } from "antd/es/select";
+import Select from "antd/es/select";
 import { FC } from "react";
 
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { TFilterPlanFactOption, TFilterTimePeriodOption, usePprTableSettings } from "@/2entities/ppr";
 
 interface IPprTableSelectFilterTimePeriodProps {}
@@ -9,7 +10,7 @@ interface IPprTableSelectFilterTimePeriodProps {}
 export const PprTableSelectFilterTimePeriod: FC<IPprTableSelectFilterTimePeriodProps> = () => {
   const { filterColumns, setFilterMonths } = usePprTableSettings();
   return (
-    <Select<TFilterTimePeriodOption, { value: TFilterTimePeriodOption } & DefaultOptionType>
+    <Select<TFilterTimePeriodOption, OptionType<TFilterTimePeriodOption>>
       className="min-w-24"
       options={[
         { value: "SHOW_ALL", label: "Все месяца" },
@@ -27,7 +28,7 @@ interface IPprTableSelectFilterPlanFactProps {}
 export const PprTableSelectFilterPlanFact: FC<IPprTableSelectFilterPlanFactProps> = () => {
   const { filterColumns, setFilterPlanFact } = usePprTableSettings();
   return (
-    <Select<TFilterPlanFactOption, { value: TFilterPlanFactOption } & DefaultOptionType>
+    <Select<TFilterPlanFactOption, OptionType<TFilterPlanFactOption>>
       className="min-w-24"
       options={[
         { value: "SHOW_ALL", label: "Показать все" },

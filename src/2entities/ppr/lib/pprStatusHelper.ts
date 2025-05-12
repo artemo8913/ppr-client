@@ -1,10 +1,8 @@
-import { DefaultOptionType } from "antd/es/select";
-
-import { MONTHS, TTimePeriod } from "@/1shared/lib/date";
-import { translateRuTimePeriod } from "@/1shared/lib/date/locale";
+import { MONTHS, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 
 import { translateRuPprMonthStatus, translateRuPprYearStatus } from "./pprStatusLocale";
 import { TAllMonthStatuses, TMonthPprStatus, TPprShortInfo, TYearPprStatus } from "../model/ppr.types";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 
 export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {
   let result = true;
@@ -17,7 +15,7 @@ export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatu
 }
 
 export function checkIsTimePeriodAvailableToTransfer(
-  timePeriod: TTimePeriod,
+  timePeriod: TimePeriod,
   monthsStatuses: TAllMonthStatuses
 ): boolean {
   if (timePeriod === "year") {
@@ -30,7 +28,7 @@ export function checkIsTimePeriodAvailableToTransfer(
 }
 
 export function checkIsTimePeriodAvailableForPlanning(
-  timePeriod: TTimePeriod,
+  timePeriod: TimePeriod,
   yearStatus: TYearPprStatus,
   monthsStatuses: TAllMonthStatuses
 ): boolean {
@@ -52,7 +50,7 @@ export function checkIsTimePeriodAvailableForPlanning(
   return false;
 }
 
-export function findFirstUndonePprPeriod(ppr: TPprShortInfo | null): TTimePeriod {
+export function findFirstUndonePprPeriod(ppr: TPprShortInfo | null): TimePeriod {
   if (!ppr) {
     return "year";
   }
@@ -142,7 +140,7 @@ export function getStatusText(pprInfo: TPprShortInfo) {
   )} (${translateRuPprMonthStatus(pprInfo.months_statuses[undoneTimePeriod])})`;
 }
 
-export const PPR_YEAR_OPTIONS: DefaultOptionType[] = PPR_YEAR_STATUSES.map((status) => ({
+export const PPR_YEAR_OPTIONS: OptionType<TYearPprStatus>[] = PPR_YEAR_STATUSES.map((status) => ({
   value: status,
   label: translateRuPprYearStatus(status),
 }));
