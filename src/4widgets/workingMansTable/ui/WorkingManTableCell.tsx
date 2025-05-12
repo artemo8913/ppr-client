@@ -2,8 +2,19 @@
 import { FC, memo, useCallback } from "react";
 
 import { TableCellProps, TableCell } from "@/1shared/ui/table";
-import { IWorkingManYearPlan } from "@/2entities/ppr";
+import {
+  checkIsFactNormTimeField,
+  checkIsFactTimeField,
+  checkIsFactWorkField,
+  checkIsPlanTimeField,
+  checkIsPlanWorkField,
+  IWorkingManYearPlan,
+} from "@/2entities/ppr";
 import { PprWorkingManUpdateControl } from "@/3features/ppr/workingMansUpdate";
+
+import style from "./WorkingMansTableCell.module.scss";
+import clsx from "clsx";
+import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
 
 interface IWorkingManTableCellProps extends TableCellProps {
   workingMan: IWorkingManYearPlan;
@@ -30,10 +41,18 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
 
   const isShowControl = field === "full_name" && isEditable;
 
+  const currentTimePeriod = getTimePeriodFromString(field);
+
+  const isBgTransparent = checkIsFactWorkField(field) || checkIsFactTimeField(field) || checkIsFactNormTimeField(field);
+
+  const quartalNumber = currentTimePeriod && currentTimePeriod !== "year" && getQuartal(currentTimePeriod);
+
   return (
-    <PprWorkingManUpdateControl workingMan={workingMan} isShowControl={isShowControl}>
-      <TableCell {...otherProps} updateValue={handleChange} />
-    </PprWorkingManUpdateControl>
+    <td className={clsx(style.WorkingMansTableCell, style[`Q${quartalNumber}`], isBgTransparent && style.transparent)}>
+      <PprWorkingManUpdateControl workingMan={workingMan} isShowControl={isShowControl}>
+        <TableCell {...otherProps} updateValue={handleChange} />
+      </PprWorkingManUpdateControl>
+    </td>
   );
 };
 

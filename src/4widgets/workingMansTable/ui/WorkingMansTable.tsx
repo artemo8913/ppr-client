@@ -2,7 +2,6 @@
 import { useSession } from "next-auth/react";
 import { FC, useCallback, useMemo } from "react";
 
-import { setBgColor } from "@/1shared/lib/setBgColor";
 import { TableCellMemo } from "@/1shared/ui/table";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
@@ -124,28 +123,23 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
         {ppr?.workingMans.map((workingMan, rowIndex) => (
           <tr key={workingMan.id}>
             {columnsDefault.concat(timePeriodsColumns.flat()).map((field) => (
-              <td
-                className="border border-black align-bottom"
+              <WorkingManTableCellMemo
+                {...getColumnSettings({
+                  field,
+                  isPprInUserControl,
+                  pprYearStatus: ppr.status,
+                  timePeriod: pprSettings.currentTimePeriod,
+                  pprMonthStatuses: ppr?.months_statuses,
+                })}
+                field={field}
+                rowIndex={rowIndex}
+                workingMan={workingMan}
+                isEditable={isEditable}
                 key={workingMan.id + field}
-                style={{ backgroundColor: setBgColor(field) }}
-              >
-                <WorkingManTableCellMemo
-                  {...getColumnSettings({
-                    field,
-                    isPprInUserControl,
-                    pprYearStatus: ppr.status,
-                    timePeriod: pprSettings.currentTimePeriod,
-                    pprMonthStatuses: ppr?.months_statuses,
-                  })}
-                  field={field}
-                  rowIndex={rowIndex}
-                  workingMan={workingMan}
-                  isEditable={isEditable}
-                  updateWorkingManTableCell={updateWorkingManTableCell}
-                  value={workingMan[field] === 0 ? "" : workingMan[field]}
-                  isVertical={field.endsWith("_time") || field === "participation"}
-                />
-              </td>
+                updateWorkingManTableCell={updateWorkingManTableCell}
+                value={workingMan[field] === 0 ? "" : workingMan[field]}
+                isVertical={field.endsWith("_time") || field === "participation"}
+              />
             ))}
           </tr>
         ))}
