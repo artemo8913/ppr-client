@@ -1,5 +1,6 @@
 .WorkingMansTableCell {
   border: solid 1px black;
+  vertical-align: bottom;
 
   &.Q1 {
     background-color: var(--FIRST_QUARTER);
