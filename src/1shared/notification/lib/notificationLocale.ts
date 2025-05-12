@@ -7,6 +7,6 @@ const NOTIFICATION_TYPE_RU: { [key in NotificationType]: string } = {
   warning: "Предупреждение",
 };
 
-export function translateRuNotificationType(type: NotificationType): string | undefined {
+export function translateRuNotificationType(type: NotificationType): string {
   return NOTIFICATION_TYPE_RU[type];
 }
