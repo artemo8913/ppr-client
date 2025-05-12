@@ -1,5 +1,7 @@
 import { FC } from "react";
-import Select, { DefaultOptionType } from "antd/es/select";
+import Select from "antd/es/select";
+
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 
 export type TTransferStrategyOption = "NULL" | "PERIOD";
 
@@ -10,7 +12,7 @@ interface ISelectTransferStrategyProps {
 
 export const SelectTransferStrategy: FC<ISelectTransferStrategyProps> = ({ handleChange, defaultValue }) => {
   return (
-    <Select<TTransferStrategyOption, { value: TTransferStrategyOption } & DefaultOptionType>
+    <Select<TTransferStrategyOption, OptionType<TTransferStrategyOption>>
       defaultValue={defaultValue || "NULL"}
       options={[
         { value: "NULL", label: "не переносить" },

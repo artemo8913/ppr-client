@@ -20,7 +20,7 @@ import {
   TFactNormTimePeriods,
   TPlanTabelTimePeriods,
 } from "../model/ppr.types";
-
+// TODO Создать класс PprCheckType или PprTypeValidator, экземпляр которого объединил бы в себе все эти функции
 export function checkIsPprDataField(column: any): column is keyof IPprData {
   return pprTableFieldsSet.has(column);
 }

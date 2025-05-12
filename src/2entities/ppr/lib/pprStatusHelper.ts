@@ -1,9 +1,8 @@
-import { DefaultOptionType } from "antd/es/select";
-
 import { MONTHS, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 
 import { translateRuPprMonthStatus, translateRuPprYearStatus } from "./pprStatusLocale";
 import { TAllMonthStatuses, TMonthPprStatus, TPprShortInfo, TYearPprStatus } from "../model/ppr.types";
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 
 export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: TAllMonthStatuses) {
   let result = true;
@@ -141,7 +140,7 @@ export function getStatusText(pprInfo: TPprShortInfo) {
   )} (${translateRuPprMonthStatus(pprInfo.months_statuses[undoneTimePeriod])})`;
 }
 
-export const PPR_YEAR_OPTIONS: DefaultOptionType[] = PPR_YEAR_STATUSES.map((status) => ({
+export const PPR_YEAR_OPTIONS: OptionType<TYearPprStatus>[] = PPR_YEAR_STATUSES.map((status) => ({
   value: status,
   label: translateRuPprYearStatus(status),
 }));

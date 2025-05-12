@@ -1,12 +1,13 @@
 "use client";
 import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
+import Select from "antd/es/select";
 import Button from "antd/es/button";
 import { Table as TableAntd, TableProps } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Search, { SearchProps } from "antd/es/input/Search";
-import Select, { DefaultOptionType } from "antd/es/select";
 import { Key, TableRowSelection } from "antd/es/table/interface";
 
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { ICommonWork } from "@/2entities/commonWork";
 import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 
@@ -22,7 +23,7 @@ export interface ISelectedWork extends Partial<Omit<ICommonWork, "id">> {
 interface IWorkTableProps {
   buttonLabel?: string;
   data: ICommonWork[];
-  subbranchOptions?: DefaultOptionType[];
+  subbranchOptions?: OptionType<string>[];
   initialValues: ISelectedWork;
   onFinish?: () => void;
   handleSubmit: (newWork: Partial<IPprBasicData>) => void;

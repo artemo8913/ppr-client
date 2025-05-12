@@ -2,11 +2,11 @@
 import { Dayjs } from "dayjs";
 import Form from "antd/es/form";
 import Button from "antd/es/button";
+import Select from "antd/es/select";
 import Card from "antd/es/card/Card";
 import FormItem from "antd/es/form/FormItem";
 import DatePicker from "antd/es/date-picker";
 import { FC, useEffect, useState, useTransition } from "react";
-import Select, { DefaultOptionType } from "antd/es/select";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 import { OptionType } from "@/1shared/lib/form/TOptionType";
@@ -21,7 +21,7 @@ const DIVISIONS_TYPE_OPTIONS: OptionType<TDivisionType>[] = [
   { label: "Подразделение", value: "subdivision" },
 ];
 
-function getDivisionOptions(divisions: (TSubdivision | TDistance | TDirection)[]): DefaultOptionType[] {
+function getDivisionOptions(divisions: (TSubdivision | TDistance | TDirection)[]): OptionType<number>[] {
   return divisions.map((division) => ({ value: division.id, label: division.name }));
 }
 

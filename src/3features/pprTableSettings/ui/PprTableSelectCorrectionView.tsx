@@ -1,7 +1,8 @@
 "use client";
-import Select, { DefaultOptionType } from "antd/es/select";
+import Select from "antd/es/select";
 import { FC } from "react";
 
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { TPprView, usePprTableSettings } from "@/2entities/ppr";
 
 interface IPprTableSelectCorrectionViewProps {}
@@ -10,7 +11,7 @@ export const PprTableSelectCorrectionView: FC<IPprTableSelectCorrectionViewProps
   const { pprView, setPprView } = usePprTableSettings();
 
   return (
-    <Select<TPprView, { value: TPprView } & DefaultOptionType>
+    <Select<TPprView, OptionType<TPprView>>
       className="min-w-24"
       options={[
         { value: "INITIAL_PLAN", label: "Исходный план" },

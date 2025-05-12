@@ -4,6 +4,7 @@ import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
 import { useSession } from "next-auth/react";
 
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { ICommonWork } from "@/2entities/commonWork";
 import { IPprBasicData, usePpr } from "@/2entities/ppr";
 
@@ -29,7 +30,7 @@ export const EditWorkModal: FC<IEditModalProps> = ({ data }) => {
     editWork({ ...newWorkData, id: workMeta?.id, unity: credential?.user.subdivisionShortName || "" });
   };
 
-  const subbranchOptions = subbranchesList?.map((subbranch) => {
+  const subbranchOptions: OptionType<string>[] = subbranchesList?.map((subbranch) => {
     return { value: subbranch, label: subbranch };
   });
 
@@ -70,11 +71,11 @@ export const EditWorkModal: FC<IEditModalProps> = ({ data }) => {
             children: (
               <SelectWorkTable
                 data={data}
+                buttonLabel="Редактировать"
                 onFinish={closeEditWorkModal}
                 handleSubmit={handleEditWork}
                 initialValues={initialValuesForSelectTable}
                 subbranchOptions={subbranchOptions}
-                buttonLabel="Редактировать"
               />
             ),
           },
@@ -83,11 +84,11 @@ export const EditWorkModal: FC<IEditModalProps> = ({ data }) => {
             key: "2",
             children: (
               <EditWorkForm
+                buttonLabel="Редактировать"
                 onFinish={closeEditWorkModal}
                 handleAddWork={handleEditWork}
-                initialValues={initialValuesForEditByUser}
                 subbranchOptions={subbranchOptions}
-                buttonLabel="Редактировать"
+                initialValues={initialValuesForEditByUser}
               />
             ),
           },
