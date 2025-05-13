@@ -8,19 +8,19 @@ import FormItem from "antd/es/form/FormItem";
 import TextArea from "antd/es/input/TextArea";
 import TypedInputNumber from "antd/es/input-number";
 
-import { ICommonWork } from "@/2entities/commonWork";
+import { CommonWork } from "@/2entities/commonWork";
 import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 
 import { BRANCH_SELECT_OPTIONS } from "../../lib/branchSelectOptions";
 import { OptionType } from "@/1shared/lib/form/TOptionType";
 
-export interface IEditWorkFormInitialValues extends Partial<Omit<ICommonWork, "id">> {
+export interface IEditWorkFormInitialValues extends Partial<Omit<CommonWork, "id">> {
   branch: TWorkBranch;
   subbranch?: string;
   note?: string;
 }
 
-interface IEditWorkForm extends Omit<ICommonWork, "id"> {
+interface IEditWorkForm extends Omit<CommonWork, "id"> {
   branch: TWorkBranch;
   subbranch: string[];
   note: string;

@@ -1,7 +1,1 @@
-export interface ICommonWork {
-  id: number;
-  name: string;
-  measure: string;
-  normOfTime: number;
-  normOfTimeNameFull: string;
-}
+export type { CommonWorkDB as CommonWork } from "./commonWork.schema";

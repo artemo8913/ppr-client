@@ -8,12 +8,12 @@ import Search, { SearchProps } from "antd/es/input/Search";
 import { Key, TableRowSelection } from "antd/es/table/interface";
 
 import { OptionType } from "@/1shared/lib/form/TOptionType";
-import { ICommonWork } from "@/2entities/commonWork";
+import { CommonWork } from "@/2entities/commonWork";
 import { IPprBasicData, TWorkBranch } from "@/2entities/ppr";
 
 import { BRANCH_SELECT_OPTIONS } from "../../lib/branchSelectOptions";
 
-export interface ISelectedWork extends Partial<Omit<ICommonWork, "id">> {
+export interface ISelectedWork extends Partial<Omit<CommonWork, "id">> {
   note?: string;
   id?: number | null;
   branch: TWorkBranch;
@@ -22,14 +22,14 @@ export interface ISelectedWork extends Partial<Omit<ICommonWork, "id">> {
 
 interface IWorkTableProps {
   buttonLabel?: string;
-  data: ICommonWork[];
+  data: CommonWork[];
   subbranchOptions?: OptionType<string>[];
   initialValues: ISelectedWork;
   onFinish?: () => void;
   handleSubmit: (newWork: Partial<IPprBasicData>) => void;
 }
 
-const COLUMNS: TableProps<ICommonWork>["columns"] = [
+const COLUMNS: TableProps<CommonWork>["columns"] = [
   {
     title: "Наименование работы",
     dataIndex: "name",
@@ -127,9 +127,9 @@ export const SelectWorkTable: FC<IWorkTableProps> = (props) => {
     props.onFinish && props.onFinish();
   };
 
-  const rowSelectionProp: TableRowSelection<ICommonWork> = {
+  const rowSelectionProp: TableRowSelection<CommonWork> = {
     type: "radio",
-    onChange: (selectedKeys: Key[], selectedRows: ICommonWork[]) => {
+    onChange: (selectedKeys: Key[], selectedRows: CommonWork[]) => {
       setSelectedRowKeys(selectedKeys);
       setSelectedWork((prev) => ({ ...prev, ...selectedRows[0] }));
     },

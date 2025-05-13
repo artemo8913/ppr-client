@@ -12,7 +12,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { PPR_YEAR_OPTIONS, TYearPprStatus } from "@/2entities/ppr";
 import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
-import { ICommonWork } from "@/2entities/commonWork";
+import { CommonWork } from "@/2entities/commonWork";
 
 const DIVISIONS_TYPE_OPTIONS: OptionType<TDivisionType>[] = [
   { label: "Трансэнерго", value: "transenergo" },
@@ -52,7 +52,7 @@ const SHOW_FIELD_DEFAULT: IShowField = {
 };
 
 interface IReportFilterProps {
-  commonWorks?: ICommonWork[];
+  commonWorks?: CommonWork[];
   hasShowFields?: Partial<IShowField>;
   divisions: { subdivisions: TSubdivision[]; distances: TDistance[]; directions: TDirection[] };
 }

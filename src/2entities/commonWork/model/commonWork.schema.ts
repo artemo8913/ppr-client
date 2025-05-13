@@ -9,3 +9,5 @@ export const commonWorksTable = mysqlTable("common_works", {
   normOfTimeNameFull: varchar("norm_of_time_name_full", { length: 256 }).notNull(),
   normOfTimeDocumentName: varchar("norm_of_time_document_name", { length: 256 }).notNull(),
 });
+
+export type CommonWorkDB = typeof commonWorksTable.$inferSelect;
