@@ -1,1 +1,3 @@
-export type { CommonWorkDB as CommonWork } from "./commonWork.schema";
+import { commonWorksTable } from "./commonWork.schema";
+
+export type CommonWork = typeof commonWorksTable.$inferSelect;
