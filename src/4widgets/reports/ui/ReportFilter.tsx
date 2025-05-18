@@ -11,22 +11,22 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { PPR_YEAR_OPTIONS, TYearPprStatus } from "@/2entities/ppr";
-import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
+import { Direction, Distance, DivisionType, Subdivision } from "@/2entities/division";
 import { CommonWork } from "@/2entities/commonWork";
 
-const DIVISIONS_TYPE_OPTIONS: OptionType<TDivisionType>[] = [
+const DIVISIONS_TYPE_OPTIONS: OptionType<DivisionType>[] = [
   { label: "Трансэнерго", value: "transenergo" },
   { label: "Дирекция", value: "direction" },
   { label: "Дистанция", value: "distance" },
   { label: "Подразделение", value: "subdivision" },
 ];
 
-function getDivisionOptions(divisions: (TSubdivision | TDistance | TDirection)[]): OptionType<number>[] {
+function getDivisionOptions(divisions: (Subdivision | Distance | Direction)[]): OptionType<number>[] {
   return divisions.map((division) => ({ value: division.id, label: division.name }));
 }
 
 interface IReportFilter {
-  divisionType?: TDivisionType;
+  divisionType?: DivisionType;
   year?: number;
   status?: TYearPprStatus;
   idSubdivision?: number;
@@ -54,7 +54,7 @@ const SHOW_FIELD_DEFAULT: IShowField = {
 interface IReportFilterProps {
   commonWorks?: CommonWork[];
   hasShowFields?: Partial<IShowField>;
-  divisions: { subdivisions: TSubdivision[]; distances: TDistance[]; directions: TDirection[] };
+  divisions: { subdivisions: Subdivision[]; distances: Distance[]; directions: Direction[] };
 }
 
 export const ReportFilter: FC<IReportFilterProps> = ({ divisions, commonWorks, hasShowFields }) => {

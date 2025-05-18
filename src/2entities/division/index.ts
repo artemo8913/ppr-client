@@ -1,4 +1,4 @@
-export type { TDivisionType, TDirection, TDistance, TSubdivision } from "./model/division.type";
+export type { DivisionType, Direction, Distance, Subdivision } from "./model/division.type";
 export type { IGetDivisionsResponce } from "./model/division.actions";
 
 export {

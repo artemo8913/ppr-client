@@ -6,7 +6,7 @@ import { Table, TableProps } from "antd";
 import { MONTHS } from "@/1shared/lib/date";
 import { getStatusText } from "@/2entities/ppr";
 import { TPprShortInfo } from "@/2entities/ppr";
-import { TDirection, TDistance, TSubdivision } from "@/2entities/division";
+import { Direction, Distance, Subdivision } from "@/2entities/division";
 import { PprDeleteButton } from "@/3features/ppr/delete";
 import { PprCopyButton } from "@/3features/ppr/copy";
 
@@ -16,7 +16,7 @@ import { PprSearchQuery } from "./PprSearchQuery";
 
 interface IPprInfoProps {
   data: TPprShortInfo[];
-  divisions?: { subdivisions: TSubdivision[]; distances: TDistance[]; directions: TDirection[] };
+  divisions?: { subdivisions: Subdivision[]; distances: Distance[]; directions: Direction[] };
   hasSearch?: boolean;
 }
 

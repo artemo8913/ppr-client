@@ -9,12 +9,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { TPprShortInfo } from "@/2entities/ppr";
-import { TDirection, TDistance, TSubdivision } from "@/2entities/division";
+import { Direction, Distance, Subdivision } from "@/2entities/division";
 
 import { usePprSearchQueryTransition } from "./PprSearchQueryTransitionProvider";
 
 interface IPprSearchQueryProps {
-  divisions: { subdivisions: TSubdivision[]; distances: TDistance[]; directions: TDirection[] };
+  divisions: { subdivisions: Subdivision[]; distances: Distance[]; directions: Direction[] };
   className?: string;
 }
 

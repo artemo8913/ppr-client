@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { getQuartal, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
 import { getFactTimeFieldByTimePeriod, getPlanTimeFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
-import { TDivisionType } from "@/2entities/division";
+import { DivisionType } from "@/2entities/division";
 
 import { calculateLaborCost } from "../lib/calculateLaborCost";
 
@@ -14,13 +14,13 @@ import style from "./ReportTable.module.scss";
 
 interface ILaborCostReportProps {
   dataForReport?: TPprDataForReport[];
-  filterLevel?: TDivisionType;
+  filterLevel?: DivisionType;
 }
 
 export const LaborCostReport: FC<ILaborCostReportProps> = ({ dataForReport = [] }) => {
   const searchParams = useSearchParams();
 
-  const divisionType = (searchParams.get("divisionType") as TDivisionType) || undefined;
+  const divisionType = (searchParams.get("divisionType") as DivisionType) || undefined;
 
   const { report, reportSettings } = calculateLaborCost(dataForReport, divisionType);
 
