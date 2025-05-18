@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 
 import { IPpr } from "@/2entities/ppr";
-import { IGetDivisionsResponce } from "@/2entities/division";
+import { Direction, Distance, Subdivision } from "@/2entities/division";
 
 import { BLACK_BORDER_BOTTOM, createHeaderCell } from "./xlsxStyles";
 
@@ -10,7 +10,11 @@ interface IAddTitleSheetArgs {
   ppr?: IPpr;
   sheetName?: string;
   sheetOptions?: Partial<ExcelJS.AddWorksheetOptions>;
-  divisions?: IGetDivisionsResponce;
+  divisions?: {
+    direction?: Direction | null;
+    distance?: Distance | null;
+    subdivision?: Subdivision | null;
+  };
 }
 
 export function addTitleSheet({
