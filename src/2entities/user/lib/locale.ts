@@ -1,6 +1,6 @@
-import { TUserRole } from "../model/user.types";
+import { UserRole } from "../model/user.types";
 
-const USER_ROLE_RU: { [key in TUserRole]: string } = {
+const USER_ROLE_RU: { [key in UserRole]: string } = {
   subdivision: "Начальник подразделения",
   distance_engineer: "Отраслевой инженер",
   distance_time_norm: "Инженер по нормированию труда",
@@ -11,6 +11,6 @@ const USER_ROLE_RU: { [key in TUserRole]: string } = {
   transenergo: "Работник ТрансЭнерго",
 };
 
-export function translateRuUserRole(role: TUserRole): string | undefined {
-  return USER_ROLE_RU[role];
+export function translateRuUserRole(role: UserRole): string {
+  return USER_ROLE_RU[role] || role;
 }

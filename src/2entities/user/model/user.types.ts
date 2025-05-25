@@ -1,4 +1,6 @@
-export type TUserRole =
+import { credentialsTable, usersTable } from "./user.schema";
+
+export type UserRole =
   | "subdivision"
   | "distance_engineer"
   | "distance_time_norm"
@@ -8,22 +10,10 @@ export type TUserRole =
   | "direction"
   | "transenergo";
 
-export interface ICredential {
-  id: number;
-  username: string;
-  password: string;
-}
+export type Credential = typeof credentialsTable.$inferSelect;
 
-export interface IUser {
-  id: number;
-  role: TUserRole;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  idSubdivision: number | null;
-  idDistance: number | null;
-  idDirection: number | null;
+export type User = typeof usersTable.$inferSelect & {
   directionShortName?: string;
   distanceShortName?: string;
   subdivisionShortName?: string;
-}
+};

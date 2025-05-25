@@ -3,9 +3,9 @@ import { AdapterUser } from "next-auth/adapters";
 import { AuthOptions, Session, User } from "next-auth";
 import Credentials, { CredentialInput } from "next-auth/providers/credentials";
 
-import { getUser, getCredentials, ICredential } from "@/2entities/user";
+import { getUser, getCredentials, Credential } from "@/2entities/user";
 
-type CredentialsLabel = keyof Omit<ICredential, "id">;
+type CredentialsLabel = keyof Omit<Credential, "id">;
 
 const CREDENTIALS_OPTIONS: { [key in CredentialsLabel]: CredentialInput } = {
   username: { label: "username", type: "text" },

@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 
 import { ROUTE_PPR } from "@/1shared/lib/routes";
 import { authOptions } from "@/1shared/auth/authConfig";
-import { IUser, translateRuUserRole } from "@/2entities/user";
+import { User, translateRuUserRole } from "@/2entities/user";
 import { getManyPprsShortInfo, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
 import { PprInfoTable } from "@/4widgets/pprShortInfoTable";
 
@@ -16,7 +16,7 @@ export default async function Home() {
     return null;
   }
 
-  const user: IUser = session?.user;
+  const user: User = session?.user;
 
   const {
     id,

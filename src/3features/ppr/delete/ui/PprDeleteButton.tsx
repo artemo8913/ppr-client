@@ -6,12 +6,12 @@ import Tooltip from "antd/es/tooltip";
 import { DeleteTwoTone } from "@ant-design/icons";
 
 import { useNotificationProvider } from "@/1shared/notification";
-import { IUser } from "@/2entities/user";
+import { User } from "@/2entities/user";
 import { TYearPprStatus, checkIsPprInUserControl, deletePprTable } from "@/2entities/ppr";
 
 interface IPprDeleteButtonProps {
   pprId: number;
-  created_by: IUser;
+  created_by: User;
   pprStatus: TYearPprStatus;
 }
 

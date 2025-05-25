@@ -1,4 +1,4 @@
-import { IUser } from "@/2entities/user/@x/ppr";
+import { User } from "@/2entities/user/@x/ppr";
 import { Month, TimePeriod } from "@/1shared/lib/date";
 
 export type TYearPprStatus =
@@ -111,7 +111,7 @@ export interface IPpr {
   year: number;
   status: TYearPprStatus;
   created_at: Date;
-  created_by: IUser;
+  created_by: User;
   months_statuses: TAllMonthStatuses;
   raports_notes: TReportsNotes;
   idDirection: number | null;
