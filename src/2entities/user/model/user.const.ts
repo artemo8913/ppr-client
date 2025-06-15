@@ -1,4 +1,4 @@
-import { UserRole } from "./user.types";
+import { UserRole } from "./userRole.types";
 
 export const USER_ROLES: UserRole[] = [
   "subdivision",

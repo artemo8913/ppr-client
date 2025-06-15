@@ -2,7 +2,7 @@ import { varchar, mysqlTable, mysqlEnum, int } from "drizzle-orm/mysql-core";
 
 import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/user";
 
-import { UserRole } from "./user.types";
+import { UserRole } from "./userRole.types";
 import { USER_ROLES } from "./user.const";
 
 
