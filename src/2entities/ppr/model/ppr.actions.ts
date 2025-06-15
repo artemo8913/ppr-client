@@ -4,8 +4,8 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 import { db } from "@/1shared/database";
+import { authOptions } from "@/1shared/auth";
 import { ROUTE_PPR } from "@/1shared/lib/routes";
-import { authOptions } from "@/1shared/auth/authConfig";
 import { MONTHS, TIME_PERIODS } from "@/1shared/lib/date";
 import { ServerActionReturn, returnError, returnSuccess } from "@/1shared/serverAction";
 import { buildConflictUpdateColumns } from "@/1shared/lib/database/buildConflictUpdateColumns";

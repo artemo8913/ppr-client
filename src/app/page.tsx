@@ -3,8 +3,8 @@ import Link from "next/link";
 import Title from "antd/es/typography/Title";
 import { getServerSession } from "next-auth";
 
+import { authOptions } from "@/1shared/auth";
 import { ROUTE_PPR } from "@/1shared/lib/routes";
-import { authOptions } from "@/1shared/auth/authConfig";
 import { User, translateRuUserRole } from "@/2entities/user";
 import { getManyPprsShortInfo, TMonthPprStatus, TYearPprStatus } from "@/2entities/ppr";
 import { PprInfoTable } from "@/4widgets/pprShortInfoTable";

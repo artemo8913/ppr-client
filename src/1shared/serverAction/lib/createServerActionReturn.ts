@@ -1,7 +1,7 @@
 "use server";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "@/1shared/auth/authConfig";
+import { authOptions } from "@/1shared/auth";
 import { NotificationType } from "@/1shared/notification";
 
 import { ServerActionReturn } from "../model/serverAction.types";

@@ -12,7 +12,7 @@ const CREDENTIALS_OPTIONS: { [key in CredentialsLabel]: CredentialInput } = {
   password: { label: "password", type: "password" },
 };
 
-async function authorizeByCredential(loginCredentials: Record<CredentialsLabel, string> | undefined) {
+export async function authorizeByCredential(loginCredentials: Record<CredentialsLabel, string> | undefined) {
   if (!loginCredentials) {
     return null;
   }
@@ -31,13 +31,13 @@ async function authorizeByCredential(loginCredentials: Record<CredentialsLabel, 
   };
 }
 
-async function createSession({ session, token: { id } }: { session: Session; token: JWT; user: AdapterUser }) {
+export async function createSession({ session, token: { id } }: { session: Session; token: JWT; user: AdapterUser }) {
   const user = await getUser(Number(id));
 
   return { expires: session.expires, user: { ...user } };
 }
 
-async function createJWT({ token, user }: { token: JWT; user: User | AdapterUser }) {
+export async function createJWT({ token, user }: { token: JWT; user: User | AdapterUser }) {
   return { ...token, ...user };
 }
 

@@ -2,7 +2,7 @@
 import ExcelJS from "exceljs";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "@/1shared/auth/authConfig";
+import { authOptions } from "@/1shared/auth";
 import { createPprMeta, IPpr } from "@/2entities/ppr";
 import { getDirectionById, getDistanceById, getSubdivisionById } from "@/2entities/division";
 

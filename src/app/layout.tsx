@@ -3,9 +3,8 @@ import { getServerSession } from "next-auth";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 // import { Inter } from "next/font/google";
 
-import { SessionProvider } from "@/1shared/auth/SessionProvider";
 import { NotificationProvider } from "@/1shared/notification";
-import { authOptions } from "@/1shared/auth/authConfig";
+import { authOptions, SessionProvider } from "@/1shared/auth";
 import { MainLayout } from "@/4widgets/layouts";
 import { LoginPage } from "@/5pages/loginPage";
 
