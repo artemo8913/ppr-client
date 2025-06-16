@@ -5,7 +5,7 @@ import {
   PLAN_WORK_FIELDS,
   FACT_WORK_FIELDS,
   FACT_TIME_FIELDS,
-  checkIsWorkOrTimeField,
+  pprFieldValidator,
   getPlanWorkFieldByTimePeriod,
   getFactWorkFieldByTimePeriod,
   getFactTimeFieldByTimePeriod,
@@ -32,7 +32,7 @@ export function getThStyle(key?: keyof IPprData): React.CSSProperties {
 
 export function checkIsFieldVertical(field: keyof IPprData): boolean {
   return (
-    checkIsWorkOrTimeField(field) ||
+    pprFieldValidator.isWorkOrTime(field) ||
     field === "total_count" ||
     field === "entry_year" ||
     field === "periodicity_fact" ||
@@ -120,4 +120,3 @@ export const editableFieldsSettings: IEditableFieldsSettings = {
     ),
   },
 };
-

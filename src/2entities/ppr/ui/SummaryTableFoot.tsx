@@ -5,8 +5,8 @@ import { TableCellMemo } from "@/1shared/ui/table";
 
 import { usePpr } from "./PprProvider";
 import { usePprTableSettings } from "./PprTableSettingsProvider";
+import { pprFieldValidator } from "../lib/validateTypes";
 import { IPprData, IWorkingManYearPlan } from "../model/ppr.types";
-import { checkIsFactNormTimeField, checkIsFactTimeField, checkIsPlanTimeField } from "../lib/validateTypes";
 
 interface ISummaryTableFootProps {
   fields: (keyof IPprData | keyof IWorkingManYearPlan)[];
@@ -34,9 +34,12 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
           <TableCellMemo value="Итого по разделам 1-3, чел.-ч" />
         </td>
         {fields.map((field) => {
-          const isFieldHaveTotalValueByPeoples = checkIsPlanTimeField(field) || checkIsFactTimeField(field);
+          const isFieldHaveTotalValueByPeoples =
+            pprFieldValidator.isPlanTime(field) || pprFieldValidator.isFactTime(field);
           const isFieldHaveTotalValueByWorks =
-            checkIsPlanTimeField(field) || checkIsFactNormTimeField(field) || checkIsFactTimeField(field);
+            pprFieldValidator.isPlanTime(field) ||
+            pprFieldValidator.isFactNormTime(field) ||
+            pprFieldValidator.isFactTime(field);
 
           let isWorkPlanLessThenCould = false;
 
@@ -81,7 +84,8 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
           <TableCellMemo value="Итого настой часов, чел.-ч" />
         </td>
         {fields.map((field) => {
-          const isFieldHaveTotalValueByPeoples = checkIsPlanTimeField(field) || checkIsFactTimeField(field);
+          const isFieldHaveTotalValueByPeoples =
+            pprFieldValidator.isPlanTime(field) || pprFieldValidator.isFactTime(field);
           return (
             <td
               key={field}

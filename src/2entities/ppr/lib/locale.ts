@@ -1,4 +1,4 @@
-import { checkIsPprDataField } from "./validateTypes";
+import { pprFieldValidator } from "./validateTypes";
 import { IPprData, TWorkBranch } from "../model/ppr.types";
 
 const PPR_BRANCHES_RU: { [key in TWorkBranch]: string } = {
@@ -44,7 +44,7 @@ function findPlanFactTitle(string: string) {
 }
 
 export function translateRuPprFieldName(column: keyof IPprData | string): string {
-  if (!checkIsPprDataField(column)) {
+  if (!pprFieldValidator.isPprData(column)) {
     return "";
   }
   return FIELDS_NAMES_RU[column] || findPlanFactTitle(column) || "";

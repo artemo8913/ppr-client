@@ -12,53 +12,54 @@ import {
 } from "../model/ppr.const";
 import {
   IPprData,
-  TPlanWorkPeriods,
-  TFactWorkPeriods,
-  TPlanTimePeriods,
-  TFactTimePeriods,
-  TPlanNormTimePeriods,
-  TFactNormTimePeriods,
-  TPlanTabelTimePeriods,
+  PlanWorkField,
+  FactWorkField,
+  PlanTimeField,
+  FactTimeField,
+  PlanNormTimeField,
+  FactNormTimeField,
+  PlanTabelTimeField,
 } from "../model/ppr.types";
-// TODO Создать класс PprCheckType или PprTypeValidator, экземпляр которого объединил бы в себе все эти функции
-export function checkIsPprDataField(column: any): column is keyof IPprData {
-  return pprTableFieldsSet.has(column);
+
+class PprFieldValidator {
+  isPprData(field: any): field is keyof IPprData {
+    return pprTableFieldsSet.has(field);
+  }
+
+  isPlanWork(field: any): field is PlanWorkField {
+    return planWorkFieldsSet.has(field);
+  }
+
+  isFactWork(field: any): field is FactWorkField {
+    return factWorkFieldsSet.has(field);
+  }
+
+  isPlanTime(field: any): field is PlanTimeField {
+    return planTimeFieldsSet.has(field);
+  }
+
+  isFactTime(field: any): field is FactTimeField {
+    return factTimeFieldsSet.has(field);
+  }
+
+  isPlanNormTime(field: any): field is PlanNormTimeField {
+    return planNormTimeFieldsSet.has(field);
+  }
+
+  isFactNormTime(field: any): field is FactNormTimeField {
+    return factNormTimeFieldsSet.has(field);
+  }
+
+  isPlanTabelTime(field: any): field is PlanTabelTimeField {
+    return planTabelTimeFieldsSet.has(field);
+  }
+
+  isPlanOrFactWork(field: any): field is PlanWorkField | FactWorkField {
+    return planFactWorkFieldsSet.has(field);
+  }
+  isWorkOrTime(field: any): field is PlanWorkField | PlanTimeField | FactWorkField | FactNormTimeField | FactTimeField {
+    return workAndTimeFieldsSet.has(field);
+  }
 }
 
-export function checkIsPlanWorkField(column: any): column is TPlanWorkPeriods {
-  return planWorkFieldsSet.has(column);
-}
-
-export function checkIsFactWorkField(column: any): column is TFactWorkPeriods {
-  return factWorkFieldsSet.has(column);
-}
-
-export function checkIsPlanTimeField(column: any): column is TPlanTimePeriods {
-  return planTimeFieldsSet.has(column);
-}
-
-export function checkIsFactTimeField(column: any): column is TFactTimePeriods {
-  return factTimeFieldsSet.has(column);
-}
-
-export function checkIsPlanNormTimeField(column: any): column is TPlanNormTimePeriods {
-  return planNormTimeFieldsSet.has(column);
-}
-
-export function checkIsFactNormTimeField(column: any): column is TFactNormTimePeriods {
-  return factNormTimeFieldsSet.has(column);
-}
-
-export function checkIsPlanTabelTimeField(column: any): column is TPlanTabelTimePeriods {
-  return planTabelTimeFieldsSet.has(column);
-}
-
-export function checkIsPlanOrFactWorkField(column: any): column is TPlanWorkPeriods | TFactWorkPeriods {
-  return planFactWorkFieldsSet.has(column);
-}
-
-export function checkIsWorkOrTimeField(
-  column: any
-): column is TPlanWorkPeriods | TPlanTimePeriods | TFactWorkPeriods | TFactNormTimePeriods | TFactTimePeriods {
-  return workAndTimeFieldsSet.has(column);
-}
+export const pprFieldValidator = new PprFieldValidator();
