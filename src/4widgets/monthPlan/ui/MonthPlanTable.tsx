@@ -2,17 +2,7 @@
 import { FC, Fragment } from "react";
 
 import { getTimePeriodFromString, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
-import {
-  getFactNormTimeFieldByTimePeriod,
-  getFactTimeFieldByTimePeriod,
-  getFactWorkFieldByTimePeriod,
-  getPlanTimeFieldByTimePeriod,
-  getPlanWorkFieldByTimePeriod,
-  IPprData,
-  IPprMeta,
-  SummaryTableRow,
-  translateRuPprBranchName,
-} from "@/2entities/ppr";
+import { PprField, IPprData, IPprMeta, SummaryTableRow, translateRuPprBranchName } from "@/2entities/ppr";
 
 import style from "./MonthPlan.module.scss";
 
@@ -21,12 +11,12 @@ function getMonthPlanFields(timePeriod: TimePeriod): Array<keyof IPprData> {
     "name",
     "location",
     "measure",
-    getPlanWorkFieldByTimePeriod(timePeriod),
+    PprField.getPlanWorkFieldByTimePeriod(timePeriod),
     "norm_of_time",
-    getPlanTimeFieldByTimePeriod(timePeriod),
-    getFactWorkFieldByTimePeriod(timePeriod),
-    getFactNormTimeFieldByTimePeriod(timePeriod),
-    getFactTimeFieldByTimePeriod(timePeriod),
+    PprField.getPlanTimeFieldByTimePeriod(timePeriod),
+    PprField.getFactWorkFieldByTimePeriod(timePeriod),
+    PprField.getFactNormTimeFieldByTimePeriod(timePeriod),
+    PprField.getFactTimeFieldByTimePeriod(timePeriod),
   ];
 }
 
@@ -34,10 +24,10 @@ function getMonthPlanFieldsForTotalRow(timePeriod: TimePeriod): Array<keyof IPpr
   return [
     "name",
     "entry_year",
-    getPlanTimeFieldByTimePeriod(timePeriod),
-    getFactWorkFieldByTimePeriod(timePeriod),
-    getFactNormTimeFieldByTimePeriod(timePeriod),
-    getFactTimeFieldByTimePeriod(timePeriod),
+    PprField.getPlanTimeFieldByTimePeriod(timePeriod),
+    PprField.getFactWorkFieldByTimePeriod(timePeriod),
+    PprField.getFactNormTimeFieldByTimePeriod(timePeriod),
+    PprField.getFactTimeFieldByTimePeriod(timePeriod),
     "location",
   ];
 }
@@ -64,8 +54,8 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
 
   const columnsForTotalValues = getMonthPlanFieldsForTotalRow(currentTimePeriod);
 
-  const planWorkField = getPlanWorkFieldByTimePeriod(currentTimePeriod);
-  const planTimeField = getPlanTimeFieldByTimePeriod(currentTimePeriod);
+  const planWorkField = PprField.getPlanWorkFieldByTimePeriod(currentTimePeriod);
+  const planTimeField = PprField.getPlanTimeFieldByTimePeriod(currentTimePeriod);
 
   return (
     <table className={style.table}>

@@ -1,16 +1,15 @@
-import { TimePeriod } from "@/1shared/lib/date";
 import {
-  IPprData,
-  PlanWorkField,
-  PlanTimeField,
-  FactWorkField,
-  FactTimeField,
   FactNormTimeField,
+  FactTimeField,
+  FactWorkField,
+  IPprData,
+  MonthPprStatus,
   PlanNormTimeField,
   PlanTabelTimeField,
-  YearPprStatus,
-  MonthPprStatus,
+  PlanTimeField,
+  PlanWorkField,
   TWorkBranch,
+  YearPprStatus,
 } from "./ppr.types";
 
 export const YEAR_STATUSES: YearPprStatus[] = [
@@ -278,7 +277,7 @@ export const planNormTimeFieldsSet: Set<PlanNormTimeField> = new Set(PLAN_NORM_T
 export const planTabelTimeFieldsSet: Set<PlanTabelTimeField> = new Set(PLAN_TABEL_TIME_FIELDS);
 export const factNormTimeFieldsSet: Set<FactNormTimeField> = new Set(FACT_NORM_TIME_FIELDS);
 
-const planWorkToPlanTimeFieldsPair: { [field in PlanWorkField]: PlanTimeField } = {
+export const planWorkToPlanTimeFieldsPair: { [field in PlanWorkField]: PlanTimeField } = {
   year_plan_work: "year_plan_time",
   jan_plan_work: "jan_plan_time",
   feb_plan_work: "feb_plan_time",
@@ -294,7 +293,7 @@ const planWorkToPlanTimeFieldsPair: { [field in PlanWorkField]: PlanTimeField } 
   dec_plan_work: "dec_plan_time",
 };
 
-const factWorkToPlanWorkFieldsPair: { [field in FactWorkField]: PlanWorkField } = {
+export const factWorkToPlanWorkFieldsPair: { [field in FactWorkField]: PlanWorkField } = {
   year_fact_work: "year_plan_work",
   jan_fact_work: "jan_plan_work",
   feb_fact_work: "feb_plan_work",
@@ -310,7 +309,7 @@ const factWorkToPlanWorkFieldsPair: { [field in FactWorkField]: PlanWorkField } 
   dec_fact_work: "dec_plan_work",
 };
 
-const factWorkToFactNormTimeFieldsPair: {
+export const factWorkToFactNormTimeFieldsPair: {
   [field in FactWorkField]: FactNormTimeField;
 } = {
   year_fact_work: "year_fact_norm_time",
@@ -328,7 +327,7 @@ const factWorkToFactNormTimeFieldsPair: {
   dec_fact_work: "dec_fact_norm_time",
 };
 
-const planTimeToPlanWorkFieldsPair: { [field in PlanTimeField]: PlanWorkField } = {
+export const planTimeToPlanWorkFieldsPair: { [field in PlanTimeField]: PlanWorkField } = {
   year_plan_time: "year_plan_work",
   jan_plan_time: "jan_plan_work",
   feb_plan_time: "feb_plan_work",
@@ -344,7 +343,7 @@ const planTimeToPlanWorkFieldsPair: { [field in PlanTimeField]: PlanWorkField } 
   dec_plan_time: "dec_plan_work",
 };
 
-const planTabelTimeToPlanTimeFieldsPair: {
+export const planTabelTimeToPlanTimeFieldsPair: {
   [field in PlanTabelTimeField]: PlanTimeField;
 } = {
   year_plan_tabel_time: "year_plan_time",
@@ -362,7 +361,7 @@ const planTabelTimeToPlanTimeFieldsPair: {
   dec_plan_tabel_time: "dec_plan_time",
 };
 
-const planNormTimeToPlanTabelTimeFieldsPair: {
+export const planNormTimeToPlanTabelTimeFieldsPair: {
   [field in PlanNormTimeField]: PlanTabelTimeField;
 } = {
   year_plan_norm_time: "year_plan_tabel_time",
@@ -379,67 +378,3 @@ const planNormTimeToPlanTabelTimeFieldsPair: {
   nov_plan_norm_time: "nov_plan_tabel_time",
   dec_plan_norm_time: "dec_plan_tabel_time",
 };
-
-export function getPlanWorkFieldByTimePeriod(timePeriod: TimePeriod): PlanWorkField {
-  return `${timePeriod}_plan_work`;
-}
-
-export function getFactWorkFieldByTimePeriod(timePeriod: TimePeriod): FactWorkField {
-  return `${timePeriod}_fact_work`;
-}
-
-export function getPlanTimeFieldByTimePeriod(timePeriod: TimePeriod): PlanTimeField {
-  return `${timePeriod}_plan_time`;
-}
-
-export function getPlanTabelTimeFieldByTimePeriod(timePeriod: TimePeriod): PlanTabelTimeField {
-  return `${timePeriod}_plan_tabel_time`;
-}
-
-export function getPlanNormTimeFieldByTimePeriod(timePeriod: TimePeriod): PlanNormTimeField {
-  return `${timePeriod}_plan_norm_time`;
-}
-
-export function getFactTimeFieldByTimePeriod(timePeriod: TimePeriod): FactTimeField {
-  return `${timePeriod}_fact_time`;
-}
-
-export function getFactNormTimeFieldByTimePeriod(timePeriod: TimePeriod): FactNormTimeField {
-  return `${timePeriod}_fact_norm_time`;
-}
-
-export function getPprFieldsByTimePeriod(timePeriod: TimePeriod) {
-  return {
-    planWorkField: getPlanWorkFieldByTimePeriod(timePeriod),
-    planTimeField: getPlanTimeFieldByTimePeriod(timePeriod),
-    planTabelTimeField: getPlanTabelTimeFieldByTimePeriod(timePeriod),
-    planNormTimeField: getPlanNormTimeFieldByTimePeriod(timePeriod),
-    factWorkField: getFactWorkFieldByTimePeriod(timePeriod),
-    factNormTimeField: getFactNormTimeFieldByTimePeriod(timePeriod),
-    factTimeField: getFactTimeFieldByTimePeriod(timePeriod),
-  };
-}
-
-export function getPlanTimeFieldByPlanWorkField(field: PlanWorkField): PlanTimeField {
-  return planWorkToPlanTimeFieldsPair[field];
-}
-
-export function getFactTimeFieldByFactWorkField(field: FactWorkField): FactNormTimeField {
-  return factWorkToFactNormTimeFieldsPair[field];
-}
-
-export function getPlanWorkFieldByPlanTimeField(field: PlanTimeField): PlanWorkField {
-  return planTimeToPlanWorkFieldsPair[field];
-}
-
-export function getPlanWorkFieldByFactWorkField(field: FactWorkField): PlanWorkField {
-  return factWorkToPlanWorkFieldsPair[field];
-}
-
-export function getPlanTimeFieldByPlanTabelTimeField(field: PlanTabelTimeField): PlanTimeField {
-  return planTabelTimeToPlanTimeFieldsPair[field];
-}
-
-export function getPlanTabelTimeFieldByPlanNormTimeField(field: PlanNormTimeField): PlanTabelTimeField {
-  return planNormTimeToPlanTabelTimeFieldsPair[field];
-}

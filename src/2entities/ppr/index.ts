@@ -45,6 +45,8 @@ export type {
   TPprView,
 } from "./ui/PprTableSettingsProvider";
 
+export { PprField } from "./model/PprField";
+
 export {
   PPR_DATA_FIELDS,
   PPR_DATA_BASIC_FIELDS,
@@ -56,23 +58,7 @@ export {
   PLAN_NORM_TIME_FIELDS,
   PLAN_TIME_FIELDS,
   WORK_AND_TIME_FIELDS,
-  YEAR_STATUSES,
-  MONTH_STATUSES,
   BRANCHES,
-  getPlanTimeFieldByPlanWorkField,
-  getPlanWorkFieldByPlanTimeField,
-  getFactTimeFieldByFactWorkField,
-  getPlanWorkFieldByFactWorkField,
-  getFactNormTimeFieldByTimePeriod,
-  getFactTimeFieldByTimePeriod,
-  getFactWorkFieldByTimePeriod,
-  getPlanTimeFieldByTimePeriod,
-  getPlanWorkFieldByTimePeriod,
-  getPlanTimeFieldByPlanTabelTimeField,
-  getPlanTabelTimeFieldByPlanNormTimeField,
-  getPlanNormTimeFieldByTimePeriod,
-  getPlanTabelTimeFieldByTimePeriod,
-  getPprFieldsByTimePeriod,
 } from "./model/ppr.const";
 
 export {
@@ -115,5 +101,3 @@ export { checkIsPprInUserControl } from "./lib/isPprInUserControl";
 export { translateRuPprFieldName, translateRuPprBranchName } from "./lib/locale";
 
 export { translateRuPprMonthStatus, translateRuPprYearStatus } from "./lib/pprStatusLocale";
-
-export { pprFieldValidator } from "./lib/validateTypes";

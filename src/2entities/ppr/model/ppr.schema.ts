@@ -15,8 +15,14 @@ import { usersTable } from "@/2entities/user/@x/ppr";
 import { commonWorksTable } from "@/2entities/commonWork/@x/ppr";
 import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/ppr";
 
-import { PlanWorkFieldValues, MonthPprStatus, PlanTimeFieldValues, TWorkBranch, YearPprStatus } from "../model/ppr.types";
-import { BRANCHES, MONTH_STATUSES, YEAR_STATUSES } from "./ppr.const";
+import { MONTH_STATUSES, YEAR_STATUSES, BRANCHES } from "./ppr.const";
+import {
+  PlanWorkFieldValues,
+  MonthPprStatus,
+  PlanTimeFieldValues,
+  TWorkBranch,
+  YearPprStatus,
+} from "../model/ppr.types";
 
 function createMysqlPprMonthStatusType(fieldName: string) {
   return mysqlEnum(fieldName, MONTH_STATUSES as [string])

@@ -3,7 +3,7 @@ import { FC, MutableRefObject, memo, useEffect, useState } from "react";
 import {
   TTransfer,
   PLAN_WORK_FIELDS,
-  pprFieldValidator,
+  PprField,
   usePprTableSettings,
   TFilterPlanFactOption,
   TPlanWorkPeriodsFields,
@@ -35,7 +35,7 @@ function getArrowWidthFactor(planFactFilter: TFilterPlanFactOption): number {
 const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCellRef, field, transfers }) => {
   const [basicArrowWidth, setBasicArrowWidth] = useState(0);
   const { filterColumns } = usePprTableSettings();
-  const fieldFromIndex = pprFieldValidator.isPlanWork(field) ? PLAN_WORK_FIELDS.indexOf(field) : null;
+  const fieldFromIndex = PprField.isPlanWork(field) ? PLAN_WORK_FIELDS.indexOf(field) : null;
 
   useEffect(() => {
     const width = planCellRef.current?.getBoundingClientRect().width || 0;
@@ -44,7 +44,7 @@ const CorrectionArrowsConteiner: FC<ICorrectionArrowsConteinerProps> = ({ planCe
   }, [filterColumns, planCellRef]);
 
   const arrows = transfers?.map((field, index) => {
-    const fieldToIndex = pprFieldValidator.isPlanWork(field.fieldTo) ? PLAN_WORK_FIELDS.indexOf(field.fieldTo) : null;
+    const fieldToIndex = PprField.isPlanWork(field.fieldTo) ? PLAN_WORK_FIELDS.indexOf(field.fieldTo) : null;
     const indexDiff = Math.abs((fieldFromIndex || 0) - (fieldToIndex || 0)) || 1;
     return <CorrectionArrow key={index} width={basicArrowWidth * indexDiff} value={field.value} />;
   });

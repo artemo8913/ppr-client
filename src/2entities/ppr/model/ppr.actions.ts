@@ -35,7 +35,6 @@ import {
   YearPprStatus,
 } from "./ppr.types";
 import {
-  getPprFieldsByTimePeriod,
   FACT_NORM_TIME_FIELDS,
   FACT_TIME_FIELDS,
   FACT_WORK_FIELDS,
@@ -45,6 +44,7 @@ import {
   PLAN_WORK_FIELDS,
   PPR_DATA_BASIC_FIELDS,
 } from "./ppr.const";
+import { PprField } from "./PprField";
 
 export async function getPprTable(id: number): Promise<ServerActionReturn<Ppr>> {
   try {
@@ -189,7 +189,7 @@ export async function copyPprTable(params: {
 
             TIME_PERIODS.forEach((period) => {
               const { planWorkField, planTimeField, factWorkField, factNormTimeField, factTimeField } =
-                getPprFieldsByTimePeriod(period);
+                PprField.getByTimePeriod(period);
 
               planWork[planWorkField] = {
                 original: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
@@ -241,7 +241,7 @@ export async function copyPprTable(params: {
 
             TIME_PERIODS.forEach((period) => {
               const { planTimeField, planNormTimeField, planTabelTimeField, factTimeField } =
-                getPprFieldsByTimePeriod(period);
+                PprField.getByTimePeriod(period);
 
               planNormTime[planNormTimeField] = params.isCopyPlanWorkingMans ? workingMan[planNormTimeField] : 0;
               planTabelTime[planTabelTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTabelTimeField] : 0;

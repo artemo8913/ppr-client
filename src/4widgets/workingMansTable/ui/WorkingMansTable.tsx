@@ -7,7 +7,7 @@ import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
   usePpr,
   SummaryTableFoot,
-  pprFieldValidator,
+  PprField,
   IWorkingManYearPlan,
   usePprTableSettings,
   checkIsPprInUserControl,
@@ -40,11 +40,11 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
     (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => {
       if (field === "participation") {
         updateWorkingManParticipation(rowIndex, Number(value || 0));
-      } else if (pprFieldValidator.isFactTime(field)) {
+      } else if (PprField.isFactTime(field)) {
         updateWorkingManFactTime(rowIndex, field, Number(value || 0));
-      } else if (pprFieldValidator.isPlanNormTime(field)) {
+      } else if (PprField.isPlanNormTime(field)) {
         updateWorkingManPlanNormTime(rowIndex, field, Number(value || 0));
-      } else if (pprFieldValidator.isPlanTabelTime(field)) {
+      } else if (PprField.isPlanTabelTime(field)) {
         updateWorkingManPlanTabelTime(rowIndex, field, Number(value || 0));
       } else {
         updateWorkingMan(rowIndex, field, value);

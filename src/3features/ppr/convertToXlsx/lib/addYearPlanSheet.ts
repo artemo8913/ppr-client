@@ -8,7 +8,7 @@ import {
   PPR_DATA_FIELDS,
   PLAN_TIME_FIELDS,
   PLAN_WORK_FIELDS,
-  pprFieldValidator,
+  PprField,
   IBranchDefaultMeta,
   translateRuPprFieldName,
   PPR_DATA_BASIC_FIELDS,
@@ -57,7 +57,7 @@ const COLUMNS_WIDTH: { [key in keyof IPprData]?: number } = {
 
 function checkIsFieldVertical(field: keyof IPprData) {
   return (
-    pprFieldValidator.isWorkOrTime(field) ||
+    PprField.isWorkOrTime(field) ||
     field === "total_count" ||
     field === "entry_year" ||
     field === "periodicity_normal" ||
@@ -283,7 +283,7 @@ export function addYearPlanSheet({
         cell.alignment = VERTICAL_ALIGNMENT;
       }
 
-      if (pprFieldValidator.isWorkOrTime(field) && Number(cell.value) === 0) {
+      if (PprField.isWorkOrTime(field) && Number(cell.value) === 0) {
         cell.value = "";
       }
     });

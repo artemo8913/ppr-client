@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { getQuartal, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
-import { getFactTimeFieldByTimePeriod, getPlanTimeFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
+import { PprField, TPprDataForReport } from "@/2entities/ppr";
 import { DivisionType } from "@/2entities/division";
 
 import { calculateLaborCost } from "../lib/calculateLaborCost";
@@ -51,8 +51,8 @@ export const LaborCostReport: FC<ILaborCostReportProps> = ({ dataForReport = [] 
             {index in reportSettings && <td rowSpan={reportSettings[index].rowSpan}>{data.name}</td>}
             <td>{data.divisionData.shortName}</td>
             {TIME_PERIODS.map((timePeriod) => {
-              const plantimeField = getPlanTimeFieldByTimePeriod(timePeriod);
-              const factTimeField = getFactTimeFieldByTimePeriod(timePeriod);
+              const plantimeField = PprField.getPlanTimeFieldByTimePeriod(timePeriod);
+              const factTimeField = PprField.getFactTimeFieldByTimePeriod(timePeriod);
 
               const quartalNumber = timePeriod !== "year" && getQuartal(timePeriod);
 

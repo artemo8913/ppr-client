@@ -3,15 +3,7 @@ import { FC } from "react";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
-import {
-  createPprMeta,
-  getFactTimeFieldByTimePeriod,
-  getPlanTimeFieldByTimePeriod,
-  getPlanWorkFieldByTimePeriod,
-  IPprData,
-  usePpr,
-  usePprTableSettings,
-} from "@/2entities/ppr";
+import { createPprMeta, PprField, IPprData, usePpr, usePprTableSettings } from "@/2entities/ppr";
 
 import { MonthPlanTable } from "./MonthPlanTable";
 import { MonthWorkingMansTable } from "./MonthWorkingMansTable";
@@ -31,11 +23,11 @@ export const MonthPlan: FC<IMonthPlanProps> = () => {
     return "Месячный план доступен только при просмотре ППР за конкретный месяц";
   }
 
-  const planWorkField = getPlanWorkFieldByTimePeriod(currentTimePeriod);
+  const planWorkField = PprField.getPlanWorkFieldByTimePeriod(currentTimePeriod);
 
-  const planTimeField = getPlanTimeFieldByTimePeriod(currentTimePeriod);
+  const planTimeField = PprField.getPlanTimeFieldByTimePeriod(currentTimePeriod);
 
-  const factTimeField = getFactTimeFieldByTimePeriod(currentTimePeriod);
+  const factTimeField = PprField.getFactTimeFieldByTimePeriod(currentTimePeriod);
 
   const filteredPprData = ppr.data
     .filter((pprData) => {

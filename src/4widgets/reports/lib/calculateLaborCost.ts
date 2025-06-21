@@ -3,7 +3,7 @@ import { DivisionType } from "@/2entities/division/@x/ppr";
 import {
   BRANCHES,
   FACT_TIME_FIELDS,
-  getPlanWorkFieldByPlanTimeField,
+  PprField,
   IPprData,
   PLAN_TIME_FIELDS,
   TFactTimePeriods,
@@ -47,7 +47,7 @@ function getMonthPlanTime(planField: TPlanTimePeriods, pprData?: IPprData) {
   if (!pprData) {
     return 0;
   }
-  const planWork = pprData[getPlanWorkFieldByPlanTimeField(planField)];
+  const planWork = pprData[PprField.getPlanWorkFieldByPlanTimeField(planField)];
 
   const planWorkValue =
     planWork.handCorrection !== null ? planWork.handCorrection : planWork.original + planWork.outsideCorrectionsSum;

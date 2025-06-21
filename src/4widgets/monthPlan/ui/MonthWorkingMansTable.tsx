@@ -4,14 +4,7 @@ import clsx from "clsx";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { TimePeriod } from "@/1shared/lib/date";
-import {
-  getFactTimeFieldByTimePeriod,
-  getPlanNormTimeFieldByTimePeriod,
-  getPlanTabelTimeFieldByTimePeriod,
-  getPlanTimeFieldByTimePeriod,
-  IPprMeta,
-  IWorkingManYearPlan,
-} from "@/2entities/ppr";
+import { PprField, IPprMeta, IWorkingManYearPlan } from "@/2entities/ppr";
 
 import style from "./MonthPlan.module.scss";
 
@@ -19,10 +12,10 @@ function getWorkingMansMonthPlanFields(timePeriod: TimePeriod): Array<keyof IWor
   return [
     "full_name",
     "work_position",
-    getPlanNormTimeFieldByTimePeriod(timePeriod),
-    getPlanTabelTimeFieldByTimePeriod(timePeriod),
+    PprField.getPlanNormTimeFieldByTimePeriod(timePeriod),
+    PprField.getPlanTabelTimeFieldByTimePeriod(timePeriod),
     "participation",
-    getPlanTimeFieldByTimePeriod(timePeriod),
+    PprField.getPlanTimeFieldByTimePeriod(timePeriod),
   ];
 }
 
@@ -40,23 +33,24 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
   currentTimePeriod,
 }) => {
   const totalMansPlanNormTime =
-    globalPprMeta.totalValues.final.peoples[getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
+    globalPprMeta.totalValues.final.peoples[PprField.getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalMansPlanTabelTime =
-    globalPprMeta.totalValues.final.peoples[getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
+    globalPprMeta.totalValues.final.peoples[PprField.getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
 
-  const totalMansPlanTime = globalPprMeta.totalValues.final.peoples[getPlanTimeFieldByTimePeriod(currentTimePeriod)];
+  const totalMansPlanTime =
+    globalPprMeta.totalValues.final.peoples[PprField.getPlanTimeFieldByTimePeriod(currentTimePeriod)];
 
   const planTimeExploitationTotal = monthPprMeta.branchesMeta.reduce((sum, val) => {
     if (val.type === "branch" && val.name === "exploitation") {
-      return sum + (val.total.final[getPlanTimeFieldByTimePeriod(currentTimePeriod)] || 0);
+      return sum + (val.total.final[PprField.getPlanTimeFieldByTimePeriod(currentTimePeriod)] || 0);
     }
     return sum;
   }, 0);
 
   const factTimeExploitationTotal = monthPprMeta.branchesMeta.reduce((sum, val) => {
     if (val.type === "branch" && val.name === "exploitation") {
-      return sum + (val.total.final[getFactTimeFieldByTimePeriod(currentTimePeriod)] || 0);
+      return sum + (val.total.final[PprField.getFactTimeFieldByTimePeriod(currentTimePeriod)] || 0);
     }
     return sum;
   }, 0);
@@ -66,7 +60,7 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
       ? `${roundToFixed((factTimeExploitationTotal / planTimeExploitationTotal) * 100, 0)}%`
       : "-";
 
-  const totalFactTime = globalPprMeta.totalValues.final.works[getFactTimeFieldByTimePeriod(currentTimePeriod)];
+  const totalFactTime = globalPprMeta.totalValues.final.works[PprField.getFactTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalFactTimePercent =
     totalFactTime && totalMansPlanTime ? `${roundToFixed((totalFactTime / totalMansPlanTime) * 100, 0)}%` : "-";

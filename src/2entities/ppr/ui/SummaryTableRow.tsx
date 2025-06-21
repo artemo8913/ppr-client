@@ -3,7 +3,7 @@ import { FC } from "react";
 import { TableCellMemo } from "@/1shared/ui/table";
 
 import { IPprData, TPprDataFieldsTotalValues } from "../model/ppr.types";
-import { pprFieldValidator } from "../lib/validateTypes";
+import { PprField } from "../model/PprField";
 
 interface ISummaryTableRowProps {
   name?: string;
@@ -27,9 +27,7 @@ export const SummaryTableRow: FC<ISummaryTableRowProps> = ({
       </td>
       {fields.map((field) => {
         const isFieldHaveTotalValueByWorks =
-          pprFieldValidator.isPlanTime(field) ||
-          pprFieldValidator.isFactNormTime(field) ||
-          pprFieldValidator.isFactTime(field);
+          PprField.isPlanTime(field) || PprField.isFactNormTime(field) || PprField.isFactTime(field);
 
         return (
           <td key={field} className="border border-black">
