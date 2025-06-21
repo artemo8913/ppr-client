@@ -1,8 +1,8 @@
-import { IUser } from "@/2entities/user/@x/ppr";
+import { User } from "@/2entities/user/@x/ppr";
 
 //TODO: вынести в usePpr и брать результат функции из хука (не вызывать везде и постоянно)
 /**Подходит ли данный ППР для определенных ролей (начальника цеха, инженера, заместителя начальника дистанции, начальника дистанции и т.п.) */
-export function checkIsPprInUserControl(ppr_created_by?: IUser, userData?: IUser) {
+export function checkIsPprInUserControl(ppr_created_by?: User, userData?: User) {
   if (!ppr_created_by || !userData) {
     return {
       isPprCreatedByThisUser: false,

@@ -4,8 +4,8 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 import { db } from "@/1shared/database";
+import { authOptions } from "@/1shared/auth";
 import { ROUTE_PPR } from "@/1shared/lib/routes";
-import { authOptions } from "@/1shared/auth/authConfig";
 import { MONTHS, TIME_PERIODS } from "@/1shared/lib/date";
 import { ServerActionReturn, returnError, returnSuccess } from "@/1shared/serverAction";
 import { buildConflictUpdateColumns } from "@/1shared/lib/database/buildConflictUpdateColumns";
@@ -20,22 +20,21 @@ import {
   pprWorkingMansTable,
 } from "./ppr.schema";
 import {
-  IPpr,
+  Ppr,
   IPprData,
   TFactNormTimePeriodsFields,
   TFactTimePeriodsFields,
   TFactWorkPeriodsFields,
-  TMonthPprStatus,
+  MonthPprStatus,
   TPlanNormTimePeriodsFields,
   TPlanTabelTimePeriodsFields,
   TPlanTimePeriodsFields,
   TPlanWorkPeriodsFields,
-  TPprShortInfo,
+  PprShortInfo,
   TWorkPlanTimePeriodsFields,
-  TYearPprStatus,
+  YearPprStatus,
 } from "./ppr.types";
 import {
-  getPprFieldsByTimePeriod,
   FACT_NORM_TIME_FIELDS,
   FACT_TIME_FIELDS,
   FACT_WORK_FIELDS,
@@ -45,8 +44,9 @@ import {
   PLAN_WORK_FIELDS,
   PPR_DATA_BASIC_FIELDS,
 } from "./ppr.const";
+import { PprField } from "./PprField";
 
-export async function getPprTable(id: number): Promise<ServerActionReturn<IPpr>> {
+export async function getPprTable(id: number): Promise<ServerActionReturn<Ppr>> {
   try {
     const [pprInfoRes, workingMans, pprMonthStatuses, pprData, raportsNotes] = await Promise.all([
       db
@@ -107,7 +107,7 @@ export async function createPprTable(name: string, year: number): Promise<Server
 
     const isSubdivision = session.user.role === "subdivision";
 
-    const status: TYearPprStatus = isSubdivision ? "plan_creating" : "template";
+    const status: YearPprStatus = isSubdivision ? "plan_creating" : "template";
 
     const newPprId = await db
       .insert(pprsInfoTable)
@@ -155,7 +155,7 @@ export async function copyPprTable(params: {
 
     const isSubdivision = session.user.role === "subdivision";
 
-    const status: TYearPprStatus = isSubdivision ? "plan_creating" : "template";
+    const status: YearPprStatus = isSubdivision ? "plan_creating" : "template";
 
     await db.transaction(async (tx) => {
       const newPprId = (
@@ -189,7 +189,7 @@ export async function copyPprTable(params: {
 
             TIME_PERIODS.forEach((period) => {
               const { planWorkField, planTimeField, factWorkField, factNormTimeField, factTimeField } =
-                getPprFieldsByTimePeriod(period);
+                PprField.getByTimePeriod(period);
 
               planWork[planWorkField] = {
                 original: params.isCopyPlanWork ? pprData[planWorkField].final : 0,
@@ -241,7 +241,7 @@ export async function copyPprTable(params: {
 
             TIME_PERIODS.forEach((period) => {
               const { planTimeField, planNormTimeField, planTabelTimeField, factTimeField } =
-                getPprFieldsByTimePeriod(period);
+                PprField.getByTimePeriod(period);
 
               planNormTime[planNormTimeField] = params.isCopyPlanWorkingMans ? workingMan[planNormTimeField] : 0;
               planTabelTime[planTabelTimeField] = params.isCopyPlanWorkingMans ? workingMan[planTabelTimeField] : 0;
@@ -279,7 +279,7 @@ export async function copyPprTable(params: {
   }
 }
 
-export async function updatePprTable(id: number, params: Partial<Omit<IPpr, "id">>): Promise<ServerActionReturn> {
+export async function updatePprTable(id: number, params: Partial<Omit<Ppr, "id">>): Promise<ServerActionReturn> {
   try {
     await db.transaction(async (tx) => {
       if (params.status) {
@@ -400,7 +400,7 @@ export async function getManyPprsShortInfo(params?: {
   idSubdivision?: number | null | string;
   status?: string;
   months_statuses?: string | string[];
-}): Promise<ServerActionReturn<TPprShortInfo[]>> {
+}): Promise<ServerActionReturn<PprShortInfo[]>> {
   const filters: SQL[] = [];
 
   if (params?.name) filters.push(like(pprsInfoTable.name, `%${params.name}%`));
@@ -408,12 +408,12 @@ export async function getManyPprsShortInfo(params?: {
   if (params?.idDirection) filters.push(eq(pprsInfoTable.idDirection, Number(params.idDirection)));
   if (params?.idDistance) filters.push(eq(pprsInfoTable.idDistance, Number(params.idDistance)));
   if (params?.idSubdivision) filters.push(eq(pprsInfoTable.idSubdivision, Number(params.idSubdivision)));
-  if (params?.status) filters.push(eq(pprsInfoTable.status, params.status as TYearPprStatus));
+  if (params?.status) filters.push(eq(pprsInfoTable.status, params.status as YearPprStatus));
   if (params?.months_statuses && typeof params.months_statuses === "object") {
     const monthStatusesFilter: SQL[] = [];
 
     params.months_statuses.forEach((status) => {
-      const compareResult = or(...MONTHS.map((month) => eq(pprMonthsStatusesTable[month], status as TMonthPprStatus)));
+      const compareResult = or(...MONTHS.map((month) => eq(pprMonthsStatusesTable[month], status as MonthPprStatus)));
       compareResult && monthStatusesFilter.push(compareResult);
     });
 
@@ -422,7 +422,7 @@ export async function getManyPprsShortInfo(params?: {
     result && filters.push(result);
   } else if (params?.months_statuses && typeof params.months_statuses === "string") {
     const compareResult = or(
-      ...MONTHS.map((month) => eq(pprMonthsStatusesTable[month], params.months_statuses as TMonthPprStatus))
+      ...MONTHS.map((month) => eq(pprMonthsStatusesTable[month], params.months_statuses as MonthPprStatus))
     );
     compareResult && filters.push(compareResult);
   }

@@ -1,9 +1,9 @@
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
-import { TDivisionType } from "@/2entities/division/@x/ppr";
+import { DivisionType } from "@/2entities/division/@x/ppr";
 import {
   BRANCHES,
   FACT_TIME_FIELDS,
-  getPlanWorkFieldByPlanTimeField,
+  PprField,
   IPprData,
   PLAN_TIME_FIELDS,
   TFactTimePeriods,
@@ -26,7 +26,7 @@ interface IDivisionData extends TPlanFactWorkFields {
 type TDivision = { [id: number]: IDivisionData };
 
 type TAllDivisionsData = {
-  [key in TDivisionType]: TDivision;
+  [key in DivisionType]: TDivision;
 };
 
 interface ILaborCostReportSettings {
@@ -37,17 +37,17 @@ interface ILaborCostReportData {
   divisionId: number;
   branch: TWorkBranch;
   name: TWorkBranch | string;
-  divisionType: TDivisionType;
+  divisionType: DivisionType;
   divisionData: IDivisionData;
 }
 
-const DIVISIONS_TYPES: TDivisionType[] = ["subdivision", "distance", "direction", "transenergo"] as const;
+const DIVISIONS_TYPES: DivisionType[] = ["subdivision", "distance", "direction", "transenergo"] as const;
 
 function getMonthPlanTime(planField: TPlanTimePeriods, pprData?: IPprData) {
   if (!pprData) {
     return 0;
   }
-  const planWork = pprData[getPlanWorkFieldByPlanTimeField(planField)];
+  const planWork = pprData[PprField.getPlanWorkFieldByPlanTimeField(planField)];
 
   const planWorkValue =
     planWork.handCorrection !== null ? planWork.handCorrection : planWork.original + planWork.outsideCorrectionsSum;
@@ -93,7 +93,7 @@ function sumPlanFactTimeInstance(planFactData: TPlanFactWorkFields, pprData?: IP
   return planFactData;
 }
 
-function getDivisionShortName(divisionType: TDivisionType, pprData: TPprDataForReport) {
+function getDivisionShortName(divisionType: DivisionType, pprData: TPprDataForReport) {
   if (divisionType === "subdivision") {
     return pprData.subdivisionShortName;
   }
@@ -117,7 +117,7 @@ function handlePlanFactTimeValues({
 }: {
   pprData: TPprDataForReport;
   divisionId: number;
-  divisionType: TDivisionType;
+  divisionType: DivisionType;
   divisionData: TDivision;
 }) {
   if (divisionType === "transenergo") {
@@ -139,7 +139,7 @@ function handlePlanFactTimeValues({
   }
 }
 
-export function calculateLaborCost(data: TPprDataForReport[], filterLevel?: TDivisionType) {
+export function calculateLaborCost(data: TPprDataForReport[], filterLevel?: DivisionType) {
   const divisionsDataByBranch: {
     [branch in TWorkBranch]: {
       [subbranch: string]: TAllDivisionsData;

@@ -4,10 +4,10 @@ import { eq } from "drizzle-orm";
 import { db } from "@/1shared/database";
 import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/user";
 
-import { IUser, ICredential } from "./user.types";
+import { User, Credential } from "./user.types";
 import { credentialsTable, usersTable } from "./user.schema";
 
-export async function getUser(id: number): Promise<IUser> {
+export async function getUser(id: number): Promise<User> {
   try {
     const res = (
       await db
@@ -34,14 +34,18 @@ export async function getUser(id: number): Promise<IUser> {
   }
 }
 
-export async function getCredentials(username: string): Promise<ICredential> {
-  const credential = await db.query.credentialsTable.findFirst({
-    where: eq(credentialsTable.username, username),
-  });
+export async function getCredentials(username: string): Promise<Credential> {
+  try {
+    const credentials = await db.query.credentialsTable.findFirst({
+      where: eq(credentialsTable.username, username),
+    });
 
-  if (!credential) {
-    throw new Error(`Credentials for ${username} not exist`);
+    if (!credentials) {
+      throw new Error(`Credentials for ${username} not exist`);
+    }
+
+    return credentials;
+  } catch (e) {
+    throw new Error(`${e}`);
   }
-
-  return credential;
 }

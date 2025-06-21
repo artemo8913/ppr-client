@@ -1,15 +1,15 @@
 export type {
-  IPpr,
-  TPprShortInfo,
+  Ppr as IPpr,
+  PprShortInfo as TPprShortInfo,
   IPprBasicData,
   IPprData,
   TPprDataWorkId,
   TWorkingManId,
   TTotalFieldsValues,
   IPprDataWithRowSpan,
-  TAllMonthStatuses,
-  TMonthPprStatus,
-  TYearPprStatus,
+  AllMonthStatuses as TAllMonthStatuses,
+  MonthPprStatus as TMonthPprStatus,
+  YearPprStatus as TYearPprStatus,
   IWorkingManYearPlan,
   TPlanNormTimePeriodsFields,
   TPlanTabelTimePeriodsFields,
@@ -18,19 +18,19 @@ export type {
   TFactWorkPeriodsFields,
   TFactNormTimePeriodsFields,
   TFactTimePeriodsFields,
-  IPlanWorkValues,
-  TTransfer,
-  TPlanWorkPeriods,
-  TFactWorkPeriods,
-  TPlanNormTimePeriods,
-  TPlanTabelTimePeriods,
-  TPlanTimePeriods,
-  TFactNormTimePeriods,
-  TFactTimePeriods,
+  PlanWorkFieldValues as IPlanWorkValues,
+  WorkTransfer as TTransfer,
+  PlanWorkField as TPlanWorkPeriods,
+  FactWorkField as TFactWorkPeriods,
+  PlanNormTimeField as TPlanNormTimePeriods,
+  PlanTabelTimeField as TPlanTabelTimePeriods,
+  PlanTimeField as TPlanTimePeriods,
+  FactNormTimeField as TFactNormTimePeriods,
+  FactTimeField as TFactTimePeriods,
   TPprDataFieldsTotalValues,
   TPlanTimePeriodsFields,
   TWorkingManFieldsTotalValues,
-  TPlanTimeValues,
+  PlanTimeFieldValues as TPlanTimeValues,
   TWorkBranch,
 } from "./model/ppr.types";
 
@@ -45,6 +45,8 @@ export type {
   TPprView,
 } from "./ui/PprTableSettingsProvider";
 
+export { PprField } from "./model/PprField";
+
 export {
   PPR_DATA_FIELDS,
   PPR_DATA_BASIC_FIELDS,
@@ -56,23 +58,7 @@ export {
   PLAN_NORM_TIME_FIELDS,
   PLAN_TIME_FIELDS,
   WORK_AND_TIME_FIELDS,
-  YEAR_STATUSES,
-  MONTH_STATUSES,
   BRANCHES,
-  getPlanTimeFieldByPlanWorkField,
-  getPlanWorkFieldByPlanTimeField,
-  getFactTimeFieldByFactWorkField,
-  getPlanWorkFieldByFactWorkField,
-  getFactNormTimeFieldByTimePeriod,
-  getFactTimeFieldByTimePeriod,
-  getFactWorkFieldByTimePeriod,
-  getPlanTimeFieldByTimePeriod,
-  getPlanWorkFieldByTimePeriod,
-  getPlanTimeFieldByPlanTabelTimeField,
-  getPlanTabelTimeFieldByPlanNormTimeField,
-  getPlanNormTimeFieldByTimePeriod,
-  getPlanTabelTimeFieldByTimePeriod,
-  getPprFieldsByTimePeriod,
 } from "./model/ppr.const";
 
 export {
@@ -115,16 +101,3 @@ export { checkIsPprInUserControl } from "./lib/isPprInUserControl";
 export { translateRuPprFieldName, translateRuPprBranchName } from "./lib/locale";
 
 export { translateRuPprMonthStatus, translateRuPprYearStatus } from "./lib/pprStatusLocale";
-
-export {
-  checkIsPprDataField,
-  checkIsPlanOrFactWorkField,
-  checkIsPlanWorkField,
-  checkIsPlanTimeField,
-  checkIsWorkOrTimeField,
-  checkIsFactWorkField,
-  checkIsFactTimeField,
-  checkIsFactNormTimeField,
-  checkIsPlanNormTimeField,
-  checkIsPlanTabelTimeField,
-} from "./lib/validateTypes";

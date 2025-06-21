@@ -2,14 +2,7 @@
 import { FC, memo, useCallback } from "react";
 
 import { TableCellProps, TableCell } from "@/1shared/ui/table";
-import {
-  checkIsFactNormTimeField,
-  checkIsFactTimeField,
-  checkIsFactWorkField,
-  checkIsPlanTimeField,
-  checkIsPlanWorkField,
-  IWorkingManYearPlan,
-} from "@/2entities/ppr";
+import { PprField, IWorkingManYearPlan } from "@/2entities/ppr";
 import { PprWorkingManUpdateControl } from "@/3features/ppr/workingMansUpdate";
 
 import style from "./WorkingMansTableCell.module.scss";
@@ -43,7 +36,7 @@ const WorkingManTableCell: FC<IWorkingManTableCellProps> = ({
 
   const currentTimePeriod = getTimePeriodFromString(field);
 
-  const isBgTransparent = checkIsFactWorkField(field) || checkIsFactTimeField(field) || checkIsFactNormTimeField(field);
+  const isBgTransparent = PprField.isFactWork(field) || PprField.isFactTime(field) || PprField.isFactNormTime(field);
 
   const quartalNumber = currentTimePeriod && currentTimePeriod !== "year" && getQuartal(currentTimePeriod);
 

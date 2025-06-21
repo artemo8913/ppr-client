@@ -1,6 +1,6 @@
-import { TUserRole } from "./user.types";
+import { UserRole } from "./userRole.types";
 
-export const USER_ROLES: TUserRole[] = [
+export const USER_ROLES: UserRole[] = [
   "subdivision",
   "distance_engineer",
   "distance_time_norm",

@@ -2,9 +2,9 @@
 import ExcelJS from "exceljs";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "@/1shared/auth/authConfig";
+import { authOptions } from "@/1shared/auth";
 import { createPprMeta, IPpr } from "@/2entities/ppr";
-import { getDivisionsById } from "@/2entities/division";
+import { getDirectionById, getDistanceById, getSubdivisionById } from "@/2entities/division";
 
 import { addTitleSheet } from "./addTitleSheet";
 import { addYearPlanSheet } from "./addYearPlanSheet";
@@ -56,11 +56,17 @@ export async function pprConvertToXlsx(ppr: IPpr) {
     workingMansData: ppr.workingMans,
   });
 
-  const divisions = await getDivisionsById({
-    idDirection: ppr.idDirection,
-    idDistance: ppr.idDistance,
-    idSubdivision: ppr.idSubdivision,
-  });
+  const [subdivision, distance, direction] = await Promise.all([
+    (ppr.idSubdivision && (await getSubdivisionById(ppr.idSubdivision))) || null,
+    (ppr.idDistance && (await getDistanceById(ppr.idDistance))) || null,
+    (ppr.idDirection && (await getDirectionById(ppr.idDirection))) || null,
+  ]);
+
+  const divisions = {
+    subdivision,
+    distance,
+    direction,
+  };
 
   addTitleSheet({
     ppr,

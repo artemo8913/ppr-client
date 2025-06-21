@@ -1,7 +1,3 @@
-export interface ICommonWork {
-  id: number;
-  name: string;
-  measure: string;
-  normOfTime: number;
-  normOfTimeNameFull: string;
-}
+import { commonWorksTable } from "./commonWork.schema";
+
+export type CommonWork = typeof commonWorksTable.$inferSelect;

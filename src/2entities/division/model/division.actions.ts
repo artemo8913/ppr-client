@@ -4,16 +4,22 @@ import { unstable_cache } from "next/cache";
 
 import { db } from "@/1shared/database";
 
-import {
-  directionsTable,
-  distancesTable,
-  subdivisionsTable,
-  TDirectionDB,
-  TDistanceDB,
-  TSubdivisionDB,
-} from "./division.schema";
+import { Direction, Distance, Subdivision } from "./division.type";
+import { directionsTable, distancesTable, subdivisionsTable } from "./division.schema";
 
-export async function getAllSubdivision(idDistance?: number) {
+export async function getSubdivisionById(id: number) {
+  return db.query.subdivisionsTable.findFirst({ where: eq(subdivisionsTable.id, id) });
+}
+
+export async function getDistanceById(id: number) {
+  return db.query.distancesTable.findFirst({ where: eq(distancesTable.id, id) });
+}
+
+export async function getDirectionById(id: number) {
+  return db.query.directionsTable.findFirst({ where: eq(directionsTable.id, id) });
+}
+
+async function getAllSubdivisions(idDistance?: number) {
   const filters: SQL[] = [];
 
   if (idDistance) {
@@ -26,7 +32,7 @@ export async function getAllSubdivision(idDistance?: number) {
     .where(and(...filters));
 }
 
-export async function getAllDistances(idDirection?: number) {
+async function getAllDistances(idDirection?: number) {
   const filters: SQL[] = [];
 
   if (idDirection) {
@@ -39,14 +45,14 @@ export async function getAllDistances(idDirection?: number) {
     .where(and(...filters));
 }
 
-export async function getAllDirections() {
+async function getAllDirections() {
   return db.select().from(directionsTable);
 }
 
-export const getDivisions = unstable_cache(
+const getAllDivisions = unstable_cache(
   async () => {
     const [subdivisions, distances, directions] = await Promise.all([
-      getAllSubdivision(),
+      getAllSubdivisions(),
       getAllDistances(),
       getAllDirections(),
     ]).catch((e) => {
@@ -60,61 +66,11 @@ export const getDivisions = unstable_cache(
 );
 
 export async function getDivisionsMap() {
-  const { directions, distances, subdivisions } = await getDivisions();
+  const { directions, distances, subdivisions } = await getAllDivisions();
 
-  const subdivisionsMap = new Map<number, TSubdivisionDB>();
-  const distancesMap = new Map<number, TDistanceDB>();
-  const directionsMap = new Map<number, TDirectionDB>();
-
-  subdivisions.forEach((division) => {
-    subdivisionsMap.set(division.id, division);
-  });
-
-  distances.forEach((division) => {
-    distancesMap.set(division.id, division);
-  });
-
-  directions.forEach((division) => {
-    directionsMap.set(division.id, division);
-  });
+  const subdivisionsMap = new Map<number, Subdivision>(subdivisions.map((division) => [division.id, division]));
+  const distancesMap = new Map<number, Distance>(distances.map((division) => [division.id, division]));
+  const directionsMap = new Map<number, Direction>(directions.map((division) => [division.id, division]));
 
   return { subdivisionsMap, distancesMap, directionsMap, directions, distances, subdivisions };
-}
-
-interface IDivisionsIds {
-  idDirection: number | null;
-  idDistance: number | null;
-  idSubdivision: number | null;
-}
-
-export interface IGetDivisionsResponce {
-  direction?: TDirectionDB | null;
-  distance?: TDistanceDB | null;
-  subdivision?: TSubdivisionDB | null;
-}
-
-export async function getDivisionsById({
-  idDirection,
-  idDistance,
-  idSubdivision,
-}: IDivisionsIds): Promise<IGetDivisionsResponce> {
-  try {
-    const directionReq =
-      (idDirection && db.query.directionsTable.findFirst({ where: eq(directionsTable.id, idDirection) })) || null;
-    const distanceReq =
-      (idDistance && db.query.distancesTable.findFirst({ where: eq(distancesTable.id, idDistance) })) || null;
-    const subdivisionReq =
-      (idSubdivision && db.query.subdivisionsTable.findFirst({ where: eq(subdivisionsTable.id, idSubdivision) })) ||
-      null;
-
-    const [direction, distance, subdivision] = await Promise.all([directionReq, distanceReq, subdivisionReq]).catch(
-      (e) => {
-        throw new Error(e);
-      }
-    );
-
-    return { direction, distance, subdivision };
-  } catch (e) {
-    throw new Error(`Load divisions by id error. ${e}`);
-  }
 }

@@ -3,7 +3,7 @@ import { FC } from "react";
 import Card from "antd/es/card/Card";
 
 import { PrintButton } from "@/1shared/ui/print";
-import { translateRuPprYearStatus, usePpr } from "@/2entities/ppr";
+import { usePpr } from "@/2entities/ppr";
 import { PprTableSaveButton } from "@/3features/ppr/update";
 import { PprExportToXslx } from "@/3features/ppr/exportToXslx";
 import { PprTableSelectTimePeriod } from "@/3features/pprTableSettings";

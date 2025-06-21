@@ -1,14 +1,14 @@
 import { TimePeriod } from "@/1shared/lib/date";
 import { TableCellProps } from "@/1shared/ui/table";
 import {
-  getFactTimeFieldByTimePeriod,
-  getPlanNormTimeFieldByTimePeriod,
-  getPlanTabelTimeFieldByTimePeriod,
-  IWorkingManYearPlan,
-  TAllMonthStatuses,
+  PprField,
   TYearPprStatus,
+  TAllMonthStatuses,
+  IWorkingManYearPlan,
+  TFactTimePeriodsFields,
+  TPlanNormTimePeriodsFields,
+  TPlanTabelTimePeriodsFields,
 } from "@/2entities/ppr";
-import { TFactTimePeriodsFields, TPlanNormTimePeriodsFields, TPlanTabelTimePeriodsFields } from "@/2entities/ppr";
 
 const WORKING_MAN_TABLE_FIELDS_TITLES_RU: { [key in keyof IWorkingManYearPlan | string]?: string } = {
   full_name: "Фамилия, имя, отчество",
@@ -126,9 +126,9 @@ export function getColumnSettings({
     return {};
   }
 
-  const planNormField = getPlanNormTimeFieldByTimePeriod(timePeriod);
-  const planTabelField = getPlanTabelTimeFieldByTimePeriod(timePeriod);
-  const factTimeField = getFactTimeFieldByTimePeriod(timePeriod);
+  const planNormField = PprField.getPlanNormTimeFieldByTimePeriod(timePeriod);
+  const planTabelField = PprField.getPlanTabelTimeFieldByTimePeriod(timePeriod);
+  const factTimeField = PprField.getFactTimeFieldByTimePeriod(timePeriod);
 
   if (pprMonthStatuses[timePeriod] === "plan_creating") {
     return getPlanEditableSettings(planNormField, planTabelField)[field] || {};

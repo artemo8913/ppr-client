@@ -4,7 +4,7 @@ import Tabs from "antd/es/tabs";
 import Modal from "antd/es/modal/Modal";
 import { useSession } from "next-auth/react";
 
-import { ICommonWork } from "@/2entities/commonWork";
+import { CommonWork } from "@/2entities/commonWork";
 import { IPprBasicData, usePpr } from "@/2entities/ppr";
 
 import { useWorkModal } from "./WorkModalProvider";
@@ -12,7 +12,7 @@ import { EditWorkForm } from "../form/EditWorkForm";
 import { SelectWorkTable } from "../form/SelectWorkTable";
 
 interface IAddWorkModalProps extends React.ComponentProps<typeof Modal> {
-  data: ICommonWork[];
+  data: CommonWork[];
 }
 
 export const AddWorkModal: FC<IAddWorkModalProps> = ({ data }) => {

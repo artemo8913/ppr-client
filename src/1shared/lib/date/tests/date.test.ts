@@ -1,5 +1,6 @@
+import { translateRuTimePeriod } from "../lib/locale";
+import { Month, TimePeriod } from "../model/date.types";
 import { getMonthsByQuartal, getQuartal, getTimePeriodFromString } from "../lib/getTimePeriod";
-import { Month } from "../model/date.types";
 
 describe("Проверка модуля date", () => {
   test("Строка jan - это январь (jan)", () => {
@@ -38,5 +39,34 @@ describe("Проверка модуля date", () => {
   test("4 квартал - это октябрь, ноябрь, декабрь", () => {
     const months: Month[] = ["oct", "nov", "dec"];
     expect(getMonthsByQuartal(4)).toEqual(months);
+  });
+});
+
+describe("Перевод наименований месяцев", () => {
+  // Проверка корректных переводов
+  const testCases: Array<[TimePeriod, string]> = [
+    ["year", "год"],
+    ["jan", "январь"],
+    ["feb", "февраль"],
+    ["mar", "март"],
+    ["apr", "апрель"],
+    ["may", "май"],
+    ["june", "июнь"],
+    ["july", "июль"],
+    ["aug", "август"],
+    ["sept", "сентябрь"],
+    ["oct", "октябрь"],
+    ["nov", "ноябрь"],
+    ["dec", "декабрь"],
+  ];
+
+  test.each(testCases)('для ключа "%s" возвращает "%s"', (input, expected) => {
+    expect(translateRuTimePeriod(input)).toBe(expected);
+  });
+
+  // Проверка несуществующего ключа
+  test("возвращает undefined для неизвестного ключа", () => {
+    const result = translateRuTimePeriod("unknown" as TimePeriod);
+    expect(result).toBeUndefined();
   });
 });

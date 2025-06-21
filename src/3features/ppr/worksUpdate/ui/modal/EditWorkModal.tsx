@@ -5,7 +5,7 @@ import Modal from "antd/es/modal/Modal";
 import { useSession } from "next-auth/react";
 
 import { OptionType } from "@/1shared/lib/form/TOptionType";
-import { ICommonWork } from "@/2entities/commonWork";
+import { CommonWork } from "@/2entities/commonWork";
 import { IPprBasicData, usePpr } from "@/2entities/ppr";
 
 import { useWorkModal } from "./WorkModalProvider";
@@ -13,7 +13,7 @@ import { ISelectedWork, SelectWorkTable } from "../form/SelectWorkTable";
 import { EditWorkForm, IEditWorkFormInitialValues } from "../form/EditWorkForm";
 
 interface IEditModalProps extends React.ComponentProps<typeof Modal> {
-  data: ICommonWork[];
+  data: CommonWork[];
 }
 
 export const EditWorkModal: FC<IEditModalProps> = ({ data }) => {

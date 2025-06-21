@@ -3,16 +3,16 @@ import { AdapterUser } from "next-auth/adapters";
 import { AuthOptions, Session, User } from "next-auth";
 import Credentials, { CredentialInput } from "next-auth/providers/credentials";
 
-import { getUser, getCredentials, ICredential } from "@/2entities/user";
+import { getUser, getCredentials, Credential } from "@/2entities/user";
 
-type CredentialsLabel = keyof Omit<ICredential, "id">;
+type CredentialsLabel = keyof Omit<Credential, "id">;
 
 const CREDENTIALS_OPTIONS: { [key in CredentialsLabel]: CredentialInput } = {
   username: { label: "username", type: "text" },
   password: { label: "password", type: "password" },
 };
 
-async function authorizeByCredential(loginCredentials: Record<CredentialsLabel, string> | undefined) {
+export async function authorizeByCredential(loginCredentials: Record<CredentialsLabel, string> | undefined) {
   if (!loginCredentials) {
     return null;
   }
@@ -31,13 +31,13 @@ async function authorizeByCredential(loginCredentials: Record<CredentialsLabel, 
   };
 }
 
-async function createSession({ session, token: { id } }: { session: Session; token: JWT; user: AdapterUser }) {
+export async function createSession({ session, token: { id } }: { session: Session; token: JWT; user: AdapterUser }) {
   const user = await getUser(Number(id));
 
   return { expires: session.expires, user: { ...user } };
 }
 
-async function createJWT({ token, user }: { token: JWT; user: User | AdapterUser }) {
+export async function createJWT({ token, user }: { token: JWT; user: User | AdapterUser }) {
   return { ...token, ...user };
 }
 

@@ -5,14 +5,12 @@ import { FC, useCallback, useMemo } from "react";
 import { TableCellMemo } from "@/1shared/ui/table";
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 import {
-  IWorkingManYearPlan,
-  SummaryTableFoot,
-  checkIsFactTimeField,
-  checkIsPlanNormTimeField,
-  checkIsPlanTabelTimeField,
-  checkIsPprInUserControl,
   usePpr,
+  SummaryTableFoot,
+  PprField,
+  IWorkingManYearPlan,
   usePprTableSettings,
+  checkIsPprInUserControl,
 } from "@/2entities/ppr";
 import { AddWorkingManButton } from "@/3features/ppr/workingMansUpdate";
 
@@ -42,11 +40,11 @@ export const WorkingMansTable: FC<IWorkingMansTableProps> = () => {
     (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => {
       if (field === "participation") {
         updateWorkingManParticipation(rowIndex, Number(value || 0));
-      } else if (checkIsFactTimeField(field)) {
+      } else if (PprField.isFactTime(field)) {
         updateWorkingManFactTime(rowIndex, field, Number(value || 0));
-      } else if (checkIsPlanNormTimeField(field)) {
+      } else if (PprField.isPlanNormTime(field)) {
         updateWorkingManPlanNormTime(rowIndex, field, Number(value || 0));
-      } else if (checkIsPlanTabelTimeField(field)) {
+      } else if (PprField.isPlanTabelTime(field)) {
         updateWorkingManPlanTabelTime(rowIndex, field, Number(value || 0));
       } else {
         updateWorkingMan(rowIndex, field, value);

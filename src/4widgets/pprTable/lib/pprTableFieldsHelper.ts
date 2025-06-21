@@ -1,15 +1,6 @@
 import { MONTHS, Month, TimePeriod } from "@/1shared/lib/date";
 import { TableCellProps } from "@/1shared/ui/table";
-import {
-  IPprData,
-  PLAN_WORK_FIELDS,
-  FACT_WORK_FIELDS,
-  FACT_TIME_FIELDS,
-  checkIsWorkOrTimeField,
-  getPlanWorkFieldByTimePeriod,
-  getFactWorkFieldByTimePeriod,
-  getFactTimeFieldByTimePeriod,
-} from "@/2entities/ppr";
+import { IPprData, PLAN_WORK_FIELDS, FACT_WORK_FIELDS, FACT_TIME_FIELDS, PprField } from "@/2entities/ppr";
 
 export type TPprFieldSettings = { [key in keyof IPprData]?: TableCellProps };
 
@@ -32,7 +23,7 @@ export function getThStyle(key?: keyof IPprData): React.CSSProperties {
 
 export function checkIsFieldVertical(field: keyof IPprData): boolean {
   return (
-    checkIsWorkOrTimeField(field) ||
+    PprField.isWorkOrTime(field) ||
     field === "total_count" ||
     field === "entry_year" ||
     field === "periodicity_fact" ||
@@ -82,7 +73,7 @@ function createEditableAllPlanFactFields(): TPprFieldSettings {
 function createEditablePlanWorkFieldByMonth(month: Month): TPprFieldSettings {
   const settings: TPprFieldSettings = {};
 
-  const planWorkField = getPlanWorkFieldByTimePeriod(month);
+  const planWorkField = PprField.getPlanWorkFieldByTimePeriod(month);
 
   return Object.assign(settings, { [planWorkField]: EDITABLE_NUMBER_CELL });
 }
@@ -90,8 +81,8 @@ function createEditablePlanWorkFieldByMonth(month: Month): TPprFieldSettings {
 function createEditableFactWorkAndFactTimeFieldByMonth(month: Month): TPprFieldSettings {
   const settings: TPprFieldSettings = {};
 
-  const factWorkField = getFactWorkFieldByTimePeriod(month);
-  const factTimeField = getFactTimeFieldByTimePeriod(month);
+  const factWorkField = PprField.getFactWorkFieldByTimePeriod(month);
+  const factTimeField = PprField.getFactTimeFieldByTimePeriod(month);
 
   return Object.assign(settings, { [factWorkField]: EDITABLE_NUMBER_CELL, [factTimeField]: EDITABLE_NUMBER_CELL });
 }
@@ -120,4 +111,3 @@ export const editableFieldsSettings: IEditableFieldsSettings = {
     ),
   },
 };
-

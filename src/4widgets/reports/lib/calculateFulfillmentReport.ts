@@ -1,4 +1,4 @@
-import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division/@x/ppr";
+import { Direction, Distance, DivisionType, Subdivision } from "@/2entities/division/@x/ppr";
 
 import {
   FACT_WORK_FIELDS,
@@ -46,7 +46,7 @@ interface IFulfillmentReportData extends TPlanFactWorkFields {
   name: string;
   measure: string;
   divisionId: string;
-  divisionType: TDivisionType;
+  divisionType: DivisionType;
 }
 
 interface IFulfillmentReportSettings {
@@ -111,11 +111,11 @@ function handlePlanFactWorkValues(
 export function calculateFulfillmentReport(
   pprDataOrderedByCommonWorkId: TPprDataForReport[],
   divisions: {
-    subdivisionsMap: Map<number, TSubdivision>;
-    distancesMap: Map<number, TDistance>;
-    directionsMap: Map<number, TDirection>;
+    subdivisionsMap: Map<number, Subdivision>;
+    distancesMap: Map<number, Distance>;
+    directionsMap: Map<number, Direction>;
   },
-  filterLevel?: TDivisionType
+  filterLevel?: DivisionType
 ) {
   const report: IFulfillmentReportData[] = [];
 

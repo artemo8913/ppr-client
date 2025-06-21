@@ -1,7 +1,7 @@
-import { IUser } from "@/2entities/user/@x/ppr";
+import { User } from "@/2entities/user/@x/ppr";
 import { Month, TimePeriod } from "@/1shared/lib/date";
 
-export type TYearPprStatus =
+export type YearPprStatus =
   | "template"
   | "plan_creating"
   | "plan_on_agreement_engineer"
@@ -11,7 +11,7 @@ export type TYearPprStatus =
   | "in_process"
   | "done";
 
-export type TMonthPprStatus =
+export type MonthPprStatus =
   | "none"
   | "plan_creating"
   | "plan_on_agreement_engineer"
@@ -24,70 +24,69 @@ export type TMonthPprStatus =
   | "fact_on_agreement_sub_boss"
   | "done";
 
-export type TAllMonthStatuses = {
-  [month in Month]: TMonthPprStatus;
+export type AllMonthStatuses = {
+  [month in Month]: MonthPprStatus;
 };
 
-type TReportsNotes = {
+type ReportsNotes = {
   [month in Month]: string;
 };
 
-export type TTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
-//TODO: переименовать Periods в Fields
-export type TPlanWorkPeriods = `${TimePeriod}_plan_work`;
-export type TFactWorkPeriods = `${TimePeriod}_fact_work`;
-export type TPlanNormTimePeriods = `${TimePeriod}_plan_norm_time`;
-export type TPlanTabelTimePeriods = `${TimePeriod}_plan_tabel_time`;
-export type TPlanTimePeriods = `${TimePeriod}_plan_time`;
-export type TFactNormTimePeriods = `${TimePeriod}_fact_norm_time`;
-export type TFactTimePeriods = `${TimePeriod}_fact_time`;
+export type WorkTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
+export type PlanWorkField = `${TimePeriod}_plan_work`;
+export type FactWorkField = `${TimePeriod}_fact_work`;
+export type PlanNormTimeField = `${TimePeriod}_plan_norm_time`;
+export type PlanTabelTimeField = `${TimePeriod}_plan_tabel_time`;
+export type PlanTimeField = `${TimePeriod}_plan_time`;
+export type FactNormTimeField = `${TimePeriod}_fact_norm_time`;
+export type FactTimeField = `${TimePeriod}_fact_time`;
 
-export interface IPlanWorkValues {
+export interface PlanWorkFieldValues {
   original: number;
   handCorrection: number | null;
   final: number;
   outsideCorrectionsSum: number;
   planTransfersSum: number;
-  planTransfers: TTransfer[] | null;
+  planTransfers: WorkTransfer[] | null;
   undoneTransfersSum: number;
-  undoneTransfers: TTransfer[] | null;
+  undoneTransfers: WorkTransfer[] | null;
 }
 
-export interface TPlanTimeValues {
+export interface PlanTimeFieldValues {
   original: number;
   final: number;
 }
-
+//TODO: как-то переименовать
 export type TPlanWorkPeriodsFields = {
-  [key in TPlanWorkPeriods]: IPlanWorkValues;
+  [key in PlanWorkField]: PlanWorkFieldValues;
 };
 
 export type TFactWorkPeriodsFields = {
-  [key in TFactWorkPeriods]: number;
+  [key in FactWorkField]: number;
 };
 
 export type TPlanNormTimePeriodsFields = {
-  [key in TPlanNormTimePeriods]: number;
+  [key in PlanNormTimeField]: number;
 };
 
 export type TPlanTabelTimePeriodsFields = {
-  [key in TPlanTabelTimePeriods]: number;
+  [key in PlanTabelTimeField]: number;
 };
 /**Поля месячных и годовых планируемых трудозатрат (для работ)*/
 export type TWorkPlanTimePeriodsFields = {
-  [key in TPlanTimePeriods]: TPlanTimeValues;
+  [key in PlanTimeField]: PlanTimeFieldValues;
 };
 /**Поля месячных и годовых планируемых трудозатрат (для людей)*/
 export type TPlanTimePeriodsFields = {
-  [key in TPlanTimePeriods]: number;
+  [key in PlanTimeField]: number;
 };
 
 export type TFactNormTimePeriodsFields = {
-  [key in TFactNormTimePeriods]: number;
+  [key in FactNormTimeField]: number;
 };
 
 export type TFactTimePeriodsFields = {
-  [key in TFactTimePeriods]: number;
+  [key in FactTimeField]: number;
 };
 
 export type TPprDataFieldsTotalValues = Partial<TPlanTimePeriodsFields> &
@@ -105,15 +104,15 @@ export type TTotalFieldsValues = {
   works: TPprDataFieldsTotalValues;
 };
 
-export interface IPpr {
+export interface Ppr {
   id: number;
   name: string;
   year: number;
-  status: TYearPprStatus;
+  status: YearPprStatus;
   created_at: Date;
-  created_by: IUser;
-  months_statuses: TAllMonthStatuses;
-  raports_notes: TReportsNotes;
+  created_by: User;
+  months_statuses: AllMonthStatuses;
+  raports_notes: ReportsNotes;
   idDirection: number | null;
   idDistance: number | null;
   idSubdivision: number | null;
@@ -124,7 +123,7 @@ export interface IPpr {
   subdivisionShortName?: string | null;
 }
 
-export type TPprShortInfo = Omit<IPpr, "data" | "workingMans" | "total_fields_value" | "raports_notes">;
+export type PprShortInfo = Omit<Ppr, "data" | "workingMans" | "total_fields_value" | "raports_notes">;
 
 export interface IPprDataWithRowSpan extends IPprData {
   rowSpan?: number;

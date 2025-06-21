@@ -15,12 +15,18 @@ import { usersTable } from "@/2entities/user/@x/ppr";
 import { commonWorksTable } from "@/2entities/commonWork/@x/ppr";
 import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/division/@x/ppr";
 
-import { IPlanWorkValues, TMonthPprStatus, TPlanTimeValues, TWorkBranch, TYearPprStatus } from "../model/ppr.types";
-import { BRANCHES, MONTH_STATUSES, YEAR_STATUSES } from "./ppr.const";
+import { MONTH_STATUSES, YEAR_STATUSES, BRANCHES } from "./ppr.const";
+import {
+  PlanWorkFieldValues,
+  MonthPprStatus,
+  PlanTimeFieldValues,
+  TWorkBranch,
+  YearPprStatus,
+} from "../model/ppr.types";
 
 function createMysqlPprMonthStatusType(fieldName: string) {
   return mysqlEnum(fieldName, MONTH_STATUSES as [string])
-    .$type<TMonthPprStatus>()
+    .$type<MonthPprStatus>()
     .notNull()
     .default("none");
 }
@@ -34,11 +40,11 @@ function createMysqlBigDoubleField(fieldName: string) {
 }
 
 function createMysqlJsonPlanWorkField(fieldName: string) {
-  return json(fieldName).$type<IPlanWorkValues>().notNull();
+  return json(fieldName).$type<PlanWorkFieldValues>().notNull();
 }
 
 function createMysqlJsonPlanTimeField(fieldName: string) {
-  return json(fieldName).$type<TPlanTimeValues>().notNull();
+  return json(fieldName).$type<PlanTimeFieldValues>().notNull();
 }
 
 export const pprsInfoTable = mysqlTable("pprs_info", {
@@ -46,7 +52,7 @@ export const pprsInfoTable = mysqlTable("pprs_info", {
   name: varchar("name", { length: 128 }).notNull(),
   year: smallint("year").notNull(),
   status: mysqlEnum("status", YEAR_STATUSES as [string])
-    .$type<TYearPprStatus>()
+    .$type<YearPprStatus>()
     .notNull(),
   created_at: date("created_at").notNull(),
   idUserCreatedBy: int("id_user_created_by")

@@ -5,16 +5,7 @@ import { FC, MutableRefObject, useRef } from "react";
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { TableCellProps, TableCell } from "@/1shared/ui/table";
 import { getQuartal, getTimePeriodFromString } from "@/1shared/lib/date";
-import {
-  checkIsPlanOrFactWorkField,
-  checkIsPlanTimeField,
-  checkIsPlanWorkField,
-  checkIsWorkOrTimeField,
-  IPprData,
-  IPprTableSettingsContext,
-  TPprDataWorkId,
-  TTransfer,
-} from "@/2entities/ppr";
+import { PprField, IPprData, IPprTableSettingsContext, TPprDataWorkId, TTransfer } from "@/2entities/ppr";
 import { PprWorkUpdateControl } from "@/3features/ppr/worksUpdate";
 
 import { CorrectionArrowsConteinerMemo } from "./CorrectionArrowsConteiner";
@@ -23,7 +14,7 @@ import { checkIsFieldVertical } from "../lib/pprTableFieldsHelper";
 import style from "./PprTableCell.module.scss";
 
 function getValue(pprData: IPprData, field: keyof IPprData, isCorrectedView: boolean) {
-  if (checkIsPlanWorkField(field) || checkIsPlanTimeField(field)) {
+  if (PprField.isPlanWork(field) || PprField.isPlanTime(field)) {
     if (isCorrectedView) {
       return roundToFixed(pprData[field].final);
     } else {
@@ -58,9 +49,9 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
 }) => {
   const tdRef = useRef<HTMLTableCellElement>(null);
 
-  const isPlanWorkPeriodField = checkIsPlanWorkField(field);
-  const isPlanTimePeriodField = checkIsPlanTimeField(field);
-  const isPlanOrFactWorkPeriodField = checkIsPlanOrFactWorkField(field);
+  const isPlanWorkPeriodField = PprField.isPlanWork(field);
+  const isPlanTimePeriodField = PprField.isPlanTime(field);
+  const isPlanOrFactWorkPeriodField = PprField.isPlanOrFactWork(field);
 
   const currentTimePeriod = getTimePeriodFromString(field);
 
@@ -80,7 +71,7 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
   const hasNotApprovedWorkBacklight =
     !Boolean(pprData.is_work_aproved) && (isWorkNameField || isLocationField) && pprSettings.isBacklightNotApprovedWork;
 
-  const isPlanTimeField = checkIsWorkOrTimeField(field);
+  const isPlanTimeField = PprField.isWorkOrTime(field);
 
   const isFieldWithControl =
     isPprInUserControl &&
@@ -141,7 +132,13 @@ export const PprTableCell: FC<IPprTableCellProps> = ({
       {isArrowsShow && isPlanWorkPeriodField ? (
         <div className="flex flex-col justify-between gap-6">
           <CorrectionArrowsConteinerMemo transfers={transfers} field={field} planCellRef={planCellRef} />
-          <TableCell {...otherProps} parentTdRef={tdRef} isVertical={isVertical} updateValue={handleChange} value={value} />
+          <TableCell
+            {...otherProps}
+            parentTdRef={tdRef}
+            isVertical={isVertical}
+            updateValue={handleChange}
+            value={value}
+          />
         </div>
       ) : (
         <PprWorkUpdateControl work={pprData} isShowControl={isFieldWithControl}>

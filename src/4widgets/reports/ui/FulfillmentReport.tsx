@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { getQuartal, TIME_PERIODS, translateRuTimePeriod } from "@/1shared/lib/date";
-import { TDirection, TDistance, TDivisionType, TSubdivision } from "@/2entities/division";
-import { getFactWorkFieldByTimePeriod, getPlanWorkFieldByTimePeriod, TPprDataForReport } from "@/2entities/ppr";
+import { Direction, Distance, DivisionType, Subdivision } from "@/2entities/division";
+import { PprField, TPprDataForReport } from "@/2entities/ppr";
 
 import { calculateFulfillmentReport } from "../lib/calculateFulfillmentReport";
 
@@ -15,9 +15,9 @@ import style from "./ReportTable.module.scss";
 interface IFulfillmentReportProps {
   dataForReport?: TPprDataForReport[];
   divisions: {
-    subdivisionsMap: Map<number, TSubdivision>;
-    distancesMap: Map<number, TDistance>;
-    directionsMap: Map<number, TDirection>;
+    subdivisionsMap: Map<number, Subdivision>;
+    distancesMap: Map<number, Distance>;
+    directionsMap: Map<number, Direction>;
   };
 }
 
@@ -29,7 +29,7 @@ export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ dataForReport =
   const { report, reportSettings } = calculateFulfillmentReport(
     dataForReport,
     divisions,
-    (divisionType as TDivisionType) || undefined
+    (divisionType as DivisionType) || undefined
   );
 
   return (
@@ -65,8 +65,8 @@ export const FulfillmentReport: FC<IFulfillmentReportProps> = ({ dataForReport =
             )}
             <td>{data.divisionId}</td>
             {TIME_PERIODS.map((timePeriod) => {
-              const planWorkField = getPlanWorkFieldByTimePeriod(timePeriod);
-              const factWorkField = getFactWorkFieldByTimePeriod(timePeriod);
+              const planWorkField = PprField.getPlanWorkFieldByTimePeriod(timePeriod);
+              const factWorkField = PprField.getFactWorkFieldByTimePeriod(timePeriod);
 
               const quartalNumber = timePeriod !== "year" && getQuartal(timePeriod);
 

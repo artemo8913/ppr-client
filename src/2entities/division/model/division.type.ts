@@ -1,7 +1,9 @@
-export type TDivisionType = "transenergo" | "direction" | "distance" | "subdivision";
+import { directionsTable, distancesTable, subdivisionsTable } from "./division.schema";
 
-export type {
-  TDirectionDB as TDirection,
-  TDistanceDB as TDistance,
-  TSubdivisionDB as TSubdivision,
-} from "./division.schema";
+export type DivisionType = "transenergo" | "direction" | "distance" | "subdivision";
+
+export type Direction = typeof directionsTable.$inferSelect;
+
+export type Distance = typeof distancesTable.$inferSelect;
+
+export type Subdivision = typeof subdivisionsTable.$inferSelect;
