@@ -55,7 +55,7 @@ export interface IBranchMeta extends IBranchDefaultMeta {
 }
 
 export interface IPprMeta {
-  worksOrderForRowSpan: { [id: TPprDataWorkId]: string };
+  worksOrder: { [id: TPprDataWorkId]: string };
   worksRowSpan: number[];
   subbranchesList: string[];
   branchesMeta: IBranchMeta[];
@@ -85,7 +85,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   const subbranchesSet = new Set<string>();
 
-  const worksOrderForRowSpan: { [id: TPprDataWorkId]: string } = {};
+  const worksOrder: { [id: TPprDataWorkId]: string } = {};
 
   const worksRowSpan: number[] = [];
 
@@ -100,8 +100,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   const totalOriginalValues: TTotalFieldsValues = { works: worksTotalOriginalValue, peoples: workingMansTotalValues };
 
   let isInit = true;
-
-  let tempWorkOrder = 0;
 
   let tempWorkOrderForRowSpan = 0;
 
@@ -152,7 +150,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   function updateTempSubbranchMeta(subbranchName: string, index: number, isBranchChange?: boolean) {
     // Обнуляем счетчик порядкового номера работы внутри подраздела
-    tempWorkOrder = 0;
     tempWorkOrderForRowSpan = 0;
 
     tempSubbranchMeta = {
@@ -207,7 +204,6 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     }
 
     // Расчитать rowSpan для наименования и обновить tempWorkOrder и tempWorkOrderForRowSpan
-    tempWorkOrder++;
 
     if (
       pprData.name !== tempWorkRowSpan.name ||
@@ -224,7 +220,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     }
 
     // Добавить порядковый номер работы в перечень
-    worksOrderForRowSpan[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`;
+    worksOrder[pprData.id] = `${tempSubbranchMeta.orderIndex}${tempWorkOrderForRowSpan}`;
 
     if (isInit) {
       isInit = false;
@@ -282,7 +278,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     totalValues: { final: totalFinalValues, original: totalOriginalValues },
     worksRowSpan,
     branchesMeta,
-    worksOrderForRowSpan,
+    worksOrder,
     branchesAndSubbrunchesOrder,
     subbranchesList: Array.from(subbranchesSet),
   };
