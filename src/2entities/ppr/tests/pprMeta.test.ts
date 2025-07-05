@@ -17,7 +17,7 @@ describe("createPprMeta", () => {
       },
       worksRowSpan: expect.any(Array),
       branchesMeta: expect.any(Array),
-      worksOrderForRowSpan: expect.any(Object),
+      worksOrder: expect.any(Object),
       branchesAndSubbrunchesOrder: expect.any(Object),
       subbranchesList: expect.any(Array),
     });
@@ -82,7 +82,7 @@ describe("createPprMeta", () => {
       },
       worksRowSpan: [1],
       branchesMeta: [branchShouldBe],
-      worksOrderForRowSpan: { [pprData[0].id]: "1.1.1" },
+      worksOrder: { [pprData[0].id]: "1.1.1" },
       branchesAndSubbrunchesOrder: { [pprData[0].id]: { branch: branchShouldBe, subbranch: subbranchShouldBe } },
       subbranchesList: ["subbranch"],
     });

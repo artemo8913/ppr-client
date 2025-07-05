@@ -3,11 +3,11 @@ import { TableCellProps } from "@/1shared/ui/table";
 import {
   PprField,
   TYearPprStatus,
+  TFactTimePeriods,
   TAllMonthStatuses,
   IWorkingManYearPlan,
-  TFactTimePeriodsFields,
-  TPlanNormTimePeriodsFields,
-  TPlanTabelTimePeriodsFields,
+  TPlanNormTimePeriods,
+  TPlanTabelTimePeriods,
 } from "@/2entities/ppr";
 
 const WORKING_MAN_TABLE_FIELDS_TITLES_RU: { [key in keyof IWorkingManYearPlan | string]?: string } = {
@@ -40,7 +40,7 @@ export function getThStyle(column: keyof IWorkingManYearPlan): React.CSSProperti
   }
   return {};
 }
-
+// TODO: Переделать с forEach и избавиться от копипасты
 const ALL_EDITABLE_SETTINGS: { [column in keyof IWorkingManYearPlan]?: TableCellProps } = {
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
@@ -84,8 +84,8 @@ const ALL_EDITABLE_SETTINGS: { [column in keyof IWorkingManYearPlan]?: TableCell
 };
 
 const getPlanEditableSettings = (
-  planNormField: keyof TPlanNormTimePeriodsFields,
-  planTabelField: keyof TPlanTabelTimePeriodsFields
+  planNormField: TPlanNormTimePeriods,
+  planTabelField: TPlanTabelTimePeriods
 ): { [column in keyof IWorkingManYearPlan]?: TableCellProps } => ({
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },
@@ -95,7 +95,7 @@ const getPlanEditableSettings = (
 });
 
 const getFactEditableSettings = (
-  factField: keyof TFactTimePeriodsFields
+  factField: TFactTimePeriods
 ): { [column in keyof IWorkingManYearPlan]?: TableCellProps } => ({
   full_name: { cellType: "textarea" },
   work_position: { cellType: "textarea" },

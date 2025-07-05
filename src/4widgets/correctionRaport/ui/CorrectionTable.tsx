@@ -1,7 +1,7 @@
 import { FC, Fragment } from "react";
 
 import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
-import { IPprMeta, TPlanWorkPeriodsFields, translateRuPprBranchName } from "@/2entities/ppr";
+import { IPprMeta, TPlanWorkPeriods, translateRuPprBranchName } from "@/2entities/ppr";
 import { SetPprCorrectionTransfer } from "@/3features/ppr/setTransfers";
 
 import { CorrectionTableSummaryRow } from "./CorrectionTableSummaryRow";
@@ -15,7 +15,7 @@ interface ICorrectionTableProps {
   transferType: "plan" | "undone";
   raportMeta: ICorrectionRaportMeta;
   planCorrections: TCorrectionItem[];
-  fieldFrom: keyof TPlanWorkPeriodsFields;
+  fieldFrom: TPlanWorkPeriods;
   isShowSubtotal?: {
     branch: boolean;
     subbranch: boolean;
@@ -70,7 +70,7 @@ export const CorrectionTable: FC<ICorrectionTableProps> = ({
           return (
             <Fragment key={correction.pprData.id}>
               <tr>
-                <td>{pprMeta.worksOrderForRowSpan[correction.pprData.id]}</td>
+                <td>{pprMeta.worksOrder[correction.pprData.id]}</td>
                 <td>
                   {correction.pprData.name}
                   {correction.pprData.note && <b>{` (прим. ${correction.pprData.note})`}</b>}

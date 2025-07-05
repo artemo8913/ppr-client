@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
-import { TPlanWorkPeriodsFields } from "@/2entities/ppr";
+import { TPlanWorkPeriods } from "@/2entities/ppr";
 
 import { ICorrectionRaportMeta, TCorrectionItem } from "../model/correctionRaport.types";
 
@@ -10,7 +10,7 @@ interface ICorrectionTextProps {
   type: "undone" | "plan";
   meta: ICorrectionRaportMeta;
   corrections: TCorrectionItem[];
-  fieldFrom: keyof TPlanWorkPeriodsFields;
+  fieldFrom: TPlanWorkPeriods;
 }
 
 export const CorrectionText: FC<ICorrectionTextProps> = ({ type, fieldFrom, meta: summary, corrections }) => {

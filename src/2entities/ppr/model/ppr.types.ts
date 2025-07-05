@@ -32,7 +32,9 @@ type ReportsNotes = {
   [month in Month]: string;
 };
 
-export type WorkTransfer = { fieldTo: keyof TPlanWorkPeriodsFields; value: number };
+export type WorkTransfer = { fieldTo: PlanWorkField; value: number };
+
+//TODO: Точно надо Work переименовать в Values (объемы же, а не работы в столбцах)
 export type PlanWorkField = `${TimePeriod}_plan_work`;
 export type FactWorkField = `${TimePeriod}_fact_work`;
 export type PlanNormTimeField = `${TimePeriod}_plan_norm_time`;
@@ -56,7 +58,7 @@ export interface PlanTimeFieldValues {
   original: number;
   final: number;
 }
-//TODO: как-то переименовать
+//TODO: как-то переименовать или удалить в связи с использованием только в actions
 export type TPlanWorkPeriodsFields = {
   [key in PlanWorkField]: PlanWorkFieldValues;
 };

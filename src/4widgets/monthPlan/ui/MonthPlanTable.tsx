@@ -49,7 +49,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
   filteredPprData,
   currentTimePeriod,
 }) => {
-  const { worksOrderForRowSpan } = globalPprMeta;
+  const { worksOrder } = globalPprMeta;
   const { worksRowSpan, branchesAndSubbrunchesOrder, totalValues, branchesMeta } = monthPprMeta;
 
   const columnsForTotalValues = getMonthPlanFieldsForTotalRow(currentTimePeriod);
@@ -81,10 +81,10 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
       </thead>
       <tbody>
         {filteredPprData?.map((pprData, index, data) => {
-          const [branchOrder, subbranchOrder] = worksOrderForRowSpan[pprData.id].split(".");
+          const [branchOrder, subbranchOrder] = worksOrder[pprData.id].split(".");
 
           const [prevBranchOrder, prevSubbranchOrder] = data[index - 1]?.id
-            ? worksOrderForRowSpan[data[index - 1].id].split(".")
+            ? worksOrder[data[index - 1].id].split(".")
             : ["-", "-"];
 
           return (
@@ -126,9 +126,7 @@ export const MonthPlanTable: FC<IMonthPlanTableProps> = ({
                 </>
               )}
               <tr>
-                {worksRowSpan[index] === 0 ? null : (
-                  <td rowSpan={worksRowSpan[index]}>{worksOrderForRowSpan[pprData.id]}</td>
-                )}
+                {worksRowSpan[index] === 0 ? null : <td rowSpan={worksRowSpan[index]}>{worksOrder[pprData.id]}</td>}
                 {getMonthPlanFields(currentTimePeriod).map((field) => {
                   let displayValue;
 

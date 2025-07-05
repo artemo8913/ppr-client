@@ -102,7 +102,7 @@ const PprContext = createContext<IPprContext>({
     worksRowSpan: [],
     branchesMeta: [],
     subbranchesList: [],
-    worksOrderForRowSpan: {},
+    worksOrder: {},
     branchesAndSubbrunchesOrder: {},
     totalValues: { final: { peoples: {}, works: {} }, original: { peoples: {}, works: {} } },
   },
@@ -513,9 +513,8 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
               return sum;
             }
 
-            const transferType: keyof PlanWorkFieldValues = type === "plan" ? "planTransfers" : "undoneTransfers";
-            const transferSumType: keyof PlanWorkFieldValues =
-              type === "plan" ? "planTransfersSum" : "undoneTransfersSum";
+            const transferType = type === "plan" ? "planTransfers" : "undoneTransfers";
+            const transferSumType = type === "plan" ? "planTransfersSum" : "undoneTransfersSum";
 
             newPprData[field][transferType] = newTransfers;
             newPprData[field][transferSumType] = newTransfers?.reduce((sum, val) => sum + val.value, 0) || 0;
@@ -923,7 +922,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     branchesMeta: [],
     worksRowSpan: [],
     subbranchesList: [],
-    worksOrderForRowSpan: {},
+    worksOrder: {},
     branchesAndSubbrunchesOrder: {},
     totalValues: { final: { peoples: {}, works: {} }, original: { peoples: {}, works: {} } },
   };

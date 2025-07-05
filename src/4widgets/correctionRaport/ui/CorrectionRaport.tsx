@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 
 import { translateRuTimePeriod } from "@/1shared/lib/date";
 import { OptionType } from "@/1shared/lib/form/TOptionType";
-import { TPlanWorkPeriodsFields, usePpr, checkIsPprInUserControl, usePprTableSettings } from "@/2entities/ppr";
+import { usePpr, checkIsPprInUserControl, usePprTableSettings, TPlanWorkPeriods } from "@/2entities/ppr";
 
 import { CorrectionNote } from "./CorrectionNote";
 import { CorrectionText } from "./CorrectionText";
@@ -66,7 +66,7 @@ export const CorrectionRaport: FC<ICorrectionRaportProps> = () => {
     updateRaportNote(note, currentTimePeriod);
   };
 
-  const fieldFrom: keyof TPlanWorkPeriodsFields = `${currentTimePeriod}_plan_work`;
+  const fieldFrom: TPlanWorkPeriods = `${currentTimePeriod}_plan_work`;
 
   const monthStatus = ppr?.months_statuses[currentTimePeriod];
 
