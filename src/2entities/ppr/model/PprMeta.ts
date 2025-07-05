@@ -165,7 +165,7 @@ export class PprWorksMeta {
       throw new Error("При попытке расчета итоговых значений категории произошла ошибка");
     }
     if (this._tempBranchMeta.total[type][field] !== undefined) {
-      this._tempBranchMeta.total[type][field] = roundToFixed(value + this._tempBranchMeta.total[type][field]);
+      this._tempBranchMeta.total[type][field] = roundToFixed(value + this._tempBranchMeta.total[type][field]!);
     } else {
       this._tempBranchMeta.total[type][field] = roundToFixed(value);
     }
@@ -176,7 +176,7 @@ export class PprWorksMeta {
       throw new Error("При попытке расчета итоговых значений подкатегории произошла ошибка");
     }
     if (this._tempSubbranchMeta.total[type][field] !== undefined) {
-      this._tempSubbranchMeta.total[type][field] = roundToFixed(value + this._tempSubbranchMeta.total[type][field]);
+      this._tempSubbranchMeta.total[type][field] = roundToFixed(value + this._tempSubbranchMeta.total[type][field]!);
     } else {
       this._tempSubbranchMeta.total[type][field] = roundToFixed(value);
     }
@@ -187,7 +187,7 @@ export class PprWorksMeta {
       throw new Error("При попытке расчета итога произошла ошибка");
     }
     if (this._totalTime[type][field] !== undefined) {
-      this._totalTime[type][field] = roundToFixed(value + this._totalTime[type][field]);
+      this._totalTime[type][field] = roundToFixed(value + this._totalTime[type][field]!);
     } else {
       this._totalTime[type][field] = roundToFixed(value);
     }
