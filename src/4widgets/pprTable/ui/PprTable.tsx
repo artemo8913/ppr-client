@@ -92,7 +92,7 @@ export const PprTable: FC<IPprTableProps> = () => {
     return <AddWorkButton shape="default" size="middle" type="primary" label="Добавить работу" />;
   }
 
-  const { branchesAndSubbrunchesOrder, branchesMeta, worksRowSpan, worksOrderForRowSpan } = pprMeta;
+  const { branchesAndSubbrunchesOrder, branchesMeta, worksRowSpan, worksOrder } = pprMeta;
 
   return (
     <table
@@ -179,7 +179,7 @@ export const PprTable: FC<IPprTableProps> = () => {
               isPprInUserControl={isPprInUserControl}
               updatePprTableCell={updatePprTableCell}
               getEditableDataFields={getEditableDataFields}
-              workOrder={worksOrderForRowSpan[pprData.id]}
+              workOrder={worksOrder[pprData.id]}
             />
             {index === ppr?.data.length - 1 && (
               <>

@@ -6,15 +6,14 @@ import { FC, useCallback, useMemo } from "react";
 import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { getTimePeriodFromString, translateRuTimePeriod } from "@/1shared/lib/date";
 import {
-  TPlanWorkPeriods,
-  TPlanWorkPeriodsFields,
-  TTransfer,
-  PLAN_WORK_FIELDS,
-  TPprDataWorkId,
-  IPprData,
   usePpr,
-  checkIsTimePeriodAvailableToTransfer,
+  IPprData,
+  TTransfer,
+  TPprDataWorkId,
+  TPlanWorkPeriods,
+  PLAN_WORK_FIELDS,
   usePprTableSettings,
+  checkIsTimePeriodAvailableToTransfer,
 } from "@/2entities/ppr";
 
 import { SelectTransferParams } from "./SelectTransferParams";
@@ -49,24 +48,22 @@ export const SetPprCorrectionTransfer: FC<ISetPprCorrectionTransferProps> = ({
 
   const nextPlanPeriodField = MONTH_PLAN_WORK_FIELDS[monthIndex + 1];
 
-  const selectOptions: (OptionType<TPlanWorkPeriods> & { planWork: number })[] = MONTH_PLAN_WORK_FIELDS.map(
-    (field) => {
-      const timePeriod = getTimePeriodFromString(field);
+  const selectOptions: (OptionType<TPlanWorkPeriods> & { planWork: number })[] = MONTH_PLAN_WORK_FIELDS.map((field) => {
+    const timePeriod = getTimePeriodFromString(field);
 
-      const disabled =
-        ppr !== null && timePeriod ? !checkIsTimePeriodAvailableToTransfer(timePeriod, ppr.months_statuses) : true;
+    const disabled =
+      ppr !== null && timePeriod ? !checkIsTimePeriodAvailableToTransfer(timePeriod, ppr.months_statuses) : true;
 
-      return {
-        value: field,
-        planWork: pprData[field].final,
-        label: timePeriod && translateRuTimePeriod(timePeriod),
-        disabled,
-      };
-    }
-  );
+    return {
+      value: field,
+      planWork: pprData[field].final,
+      label: timePeriod && translateRuTimePeriod(timePeriod),
+      disabled,
+    };
+  });
 
   const handleTransfersChange = useCallback(
-    (fieldTo: keyof TPlanWorkPeriodsFields | null, value?: number, transferIndex?: number) => {
+    (fieldTo: TPlanWorkPeriods | null, value?: number, transferIndex?: number) => {
       let newTransfers: TTransfer[] | null = null;
       if (!fieldTo) {
         null;

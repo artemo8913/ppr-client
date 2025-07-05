@@ -1,19 +1,19 @@
 "use client";
 import { FC, MutableRefObject, memo, useEffect, useState } from "react";
 import {
-  TTransfer,
-  PLAN_WORK_FIELDS,
   PprField,
+  TTransfer,
+  TPlanWorkPeriods,
+  PLAN_WORK_FIELDS,
   usePprTableSettings,
   TFilterPlanFactOption,
-  TPlanWorkPeriodsFields,
 } from "@/2entities/ppr";
 
 import { CorrectionArrow } from "./CorrectionArrow";
 
 interface ICorrectionArrowsConteinerProps {
   planCellRef: MutableRefObject<HTMLTableCellElement | null>;
-  field: keyof TPlanWorkPeriodsFields;
+  field: TPlanWorkPeriods;
   transfers: TTransfer[];
 }
 
