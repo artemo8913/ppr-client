@@ -5,17 +5,17 @@ import { Month } from "@/1shared/lib/date";
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
 import {
-  PlanWorkFieldValues,
+  PlanWork,
   Ppr,
   IPprBasicData,
   IPprData,
   IPprDataWithRowSpan,
   IWorkingManYearPlan,
   FactTimeField,
-  FactWorkField,
+  FactValueField,
   PlanNormTimeField,
   PlanTabelTimeField,
-  PlanWorkField,
+  PlanValueField,
   TPprDataWorkId,
   WorkTransfer,
   TWorkingManId,
@@ -39,16 +39,16 @@ interface IPprContext {
   deleteWork: (id: TPprDataWorkId) => void;
   editWork: (workData: Partial<IPprBasicData>) => void;
   updateNormOfTime: (id: TPprDataWorkId, value: number) => void;
-  updatePlanWork: (id: TPprDataWorkId, field: PlanWorkField, value: number) => void;
-  updateFactWork: (id: TPprDataWorkId, field: FactWorkField, value: number) => void;
+  updatePlanWork: (id: TPprDataWorkId, field: PlanValueField, value: number) => void;
+  updateFactWork: (id: TPprDataWorkId, field: FactValueField, value: number) => void;
   updateFactWorkTime: (id: TPprDataWorkId, field: FactTimeField, value: number) => void;
   copyFactNormTimeToFactTime: (mode: "EVERY" | "NOT_FILLED", month: Month) => void;
   updatePprData: (id: TPprDataWorkId, field: keyof IPprData, value: string | number) => void;
-  updatePlanWorkValueByUser: (id: TPprDataWorkId, field: PlanWorkField, newValue: number) => void;
+  updatePlanWorkValueByUser: (id: TPprDataWorkId, field: PlanValueField, newValue: number) => void;
   updatePprTableCell: (id: TPprDataWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
   updateTransfers: (
     id: TPprDataWorkId,
-    field: PlanWorkField,
+    field: PlanValueField,
     newTransfers: WorkTransfer[] | null,
     type: "plan" | "undone"
   ) => void;
@@ -270,7 +270,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить значение запланированного объема работ. Функция должна использоваться при создании годового плана или же добавлении новой работы при месячном планировании  */
-  const updatePlanWork = useCallback((id: TPprDataWorkId, field: PlanWorkField, value: number) => {
+  const updatePlanWork = useCallback((id: TPprDataWorkId, field: PlanValueField, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -314,7 +314,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const updateFactWork = useCallback((id: TPprDataWorkId, field: FactWorkField, value: number) => {
+  const updateFactWork = useCallback((id: TPprDataWorkId, field: FactValueField, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -422,7 +422,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       return {
         ...prev,
         data: prev.data.map((pprData) => {
-          let newValue: PlanWorkFieldValues | string | number = value;
+          let newValue: PlanWork | string | number = value;
 
           if (PprField.isPlanWork(field) || pprData.id !== id) {
             return pprData;
@@ -438,7 +438,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Задать вручную новое значение в плане ППРа. Данная функция должна использоваться только на этапе  */
-  const updatePlanWorkValueByUser = useCallback((id: TPprDataWorkId, field: PlanWorkField, value: number) => {
+  const updatePlanWorkValueByUser = useCallback((id: TPprDataWorkId, field: PlanValueField, value: number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -485,7 +485,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
    * 2. Поскольку можно переносить работы только на будущие периоды и изменение откорректированных должна быть невозможна, то у
    */
   const updateTransfers = useCallback(
-    (id: TPprDataWorkId, field: PlanWorkField, newTransfers: WorkTransfer[] | null, type: "plan" | "undone") => {
+    (id: TPprDataWorkId, field: PlanValueField, newTransfers: WorkTransfer[] | null, type: "plan" | "undone") => {
       setPpr((prev) => {
         if (!prev) {
           return prev;
@@ -499,7 +499,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
 
             const newPprData: IPprData = { ...pprData };
 
-            const outsideCorrectionsSumByField: { [field in PlanWorkField]?: number } = {};
+            const outsideCorrectionsSumByField: { [field in PlanValueField]?: number } = {};
             function handleTransfer(transfers: WorkTransfer[] | null): number {
               let sum = 0;
               transfers?.forEach((transfer) => {

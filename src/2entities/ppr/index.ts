@@ -18,10 +18,10 @@ export type {
   TFactWorkPeriodsFields,
   TFactNormTimePeriodsFields,
   TFactTimePeriodsFields,
-  PlanWorkFieldValues as IPlanWorkValues,
+  PlanWork as IPlanWorkValues,
   WorkTransfer as TTransfer,
-  PlanWorkField as TPlanWorkPeriods,
-  FactWorkField as TFactWorkPeriods,
+  PlanValueField as TPlanWorkPeriods,
+  FactValueField as TFactWorkPeriods,
   PlanNormTimeField as TPlanNormTimePeriods,
   PlanTabelTimeField as TPlanTabelTimePeriods,
   PlanTimeField as TPlanTimePeriods,
@@ -30,7 +30,7 @@ export type {
   TPprDataFieldsTotalValues,
   TPlanTimePeriodsFields,
   TWorkingManFieldsTotalValues,
-  PlanTimeFieldValues as TPlanTimeValues,
+  PlanTime as TPlanTimeValues,
   TWorkBranch,
 } from "./model/ppr.types";
 

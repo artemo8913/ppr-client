@@ -1,13 +1,13 @@
 import {
   FactNormTimeField,
   FactTimeField,
-  FactWorkField,
+  FactValueField,
   IPprData,
   MonthPprStatus,
   PlanNormTimeField,
   PlanTabelTimeField,
   PlanTimeField,
-  PlanWorkField,
+  PlanValueField,
   TWorkBranch,
   YearPprStatus,
 } from "./ppr.types";
@@ -39,7 +39,7 @@ export const MONTH_STATUSES: MonthPprStatus[] = [
 
 export const BRANCHES: TWorkBranch[] = ["exploitation", "additional", "unforeseen"] as const;
 
-export const PLAN_WORK_FIELDS: PlanWorkField[] = [
+export const PLAN_WORK_FIELDS: PlanValueField[] = [
   "year_plan_work",
   "jan_plan_work",
   "feb_plan_work",
@@ -71,7 +71,7 @@ export const PLAN_TIME_FIELDS: PlanTimeField[] = [
   "dec_plan_time",
 ] as const;
 
-export const FACT_WORK_FIELDS: FactWorkField[] = [
+export const FACT_WORK_FIELDS: FactValueField[] = [
   "year_fact_work",
   "jan_fact_work",
   "feb_fact_work",
@@ -262,22 +262,22 @@ export const PPR_DATA_FIELDS: (keyof IPprData)[] = [
 ] as const;
 
 export const pprTableFieldsSet: Set<keyof IPprData> = new Set(PPR_DATA_FIELDS);
-export const planWorkFieldsSet: Set<PlanWorkField> = new Set(PLAN_WORK_FIELDS);
-export const factWorkFieldsSet: Set<FactWorkField> = new Set(FACT_WORK_FIELDS);
+export const planWorkFieldsSet: Set<PlanValueField> = new Set(PLAN_WORK_FIELDS);
+export const factWorkFieldsSet: Set<FactValueField> = new Set(FACT_WORK_FIELDS);
 export const planTimeFieldsSet: Set<PlanTimeField> = new Set(PLAN_TIME_FIELDS);
 export const factTimeFieldsSet: Set<FactTimeField> = new Set(FACT_TIME_FIELDS);
-export const planFactWorkFieldsSet: Set<PlanWorkField | FactWorkField> = new Set([
+export const planFactWorkFieldsSet: Set<PlanValueField | FactValueField> = new Set([
   ...PLAN_WORK_FIELDS,
   ...FACT_WORK_FIELDS,
 ]);
 export const workAndTimeFieldsSet: Set<
-  PlanWorkField | PlanTimeField | FactWorkField | FactNormTimeField | FactTimeField
+  PlanValueField | PlanTimeField | FactValueField | FactNormTimeField | FactTimeField
 > = new Set(WORK_AND_TIME_FIELDS);
 export const planNormTimeFieldsSet: Set<PlanNormTimeField> = new Set(PLAN_NORM_TIME_FIELDS);
 export const planTabelTimeFieldsSet: Set<PlanTabelTimeField> = new Set(PLAN_TABEL_TIME_FIELDS);
 export const factNormTimeFieldsSet: Set<FactNormTimeField> = new Set(FACT_NORM_TIME_FIELDS);
 
-export const planWorkToPlanTimeFieldsPair: { [field in PlanWorkField]: PlanTimeField } = {
+export const planWorkToPlanTimeFieldsPair: { [field in PlanValueField]: PlanTimeField } = {
   year_plan_work: "year_plan_time",
   jan_plan_work: "jan_plan_time",
   feb_plan_work: "feb_plan_time",
@@ -293,7 +293,7 @@ export const planWorkToPlanTimeFieldsPair: { [field in PlanWorkField]: PlanTimeF
   dec_plan_work: "dec_plan_time",
 };
 
-export const factWorkToPlanWorkFieldsPair: { [field in FactWorkField]: PlanWorkField } = {
+export const factWorkToPlanWorkFieldsPair: { [field in FactValueField]: PlanValueField } = {
   year_fact_work: "year_plan_work",
   jan_fact_work: "jan_plan_work",
   feb_fact_work: "feb_plan_work",
@@ -310,7 +310,7 @@ export const factWorkToPlanWorkFieldsPair: { [field in FactWorkField]: PlanWorkF
 };
 
 export const factWorkToFactNormTimeFieldsPair: {
-  [field in FactWorkField]: FactNormTimeField;
+  [field in FactValueField]: FactNormTimeField;
 } = {
   year_fact_work: "year_fact_norm_time",
   jan_fact_work: "jan_fact_norm_time",
@@ -327,7 +327,7 @@ export const factWorkToFactNormTimeFieldsPair: {
   dec_fact_work: "dec_fact_norm_time",
 };
 
-export const planTimeToPlanWorkFieldsPair: { [field in PlanTimeField]: PlanWorkField } = {
+export const planTimeToPlanWorkFieldsPair: { [field in PlanTimeField]: PlanValueField } = {
   year_plan_time: "year_plan_work",
   jan_plan_time: "jan_plan_work",
   feb_plan_time: "feb_plan_work",

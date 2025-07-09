@@ -17,9 +17,9 @@ import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/
 
 import { MONTH_STATUSES, YEAR_STATUSES, BRANCHES } from "./ppr.const";
 import {
-  PlanWorkFieldValues,
+  PlanWork,
   MonthPprStatus,
-  PlanTimeFieldValues,
+  PlanTime,
   TWorkBranch,
   YearPprStatus,
 } from "../model/ppr.types";
@@ -40,11 +40,11 @@ function createMysqlBigDoubleField(fieldName: string) {
 }
 
 function createMysqlJsonPlanWorkField(fieldName: string) {
-  return json(fieldName).$type<PlanWorkFieldValues>().notNull();
+  return json(fieldName).$type<PlanWork>().notNull();
 }
 
 function createMysqlJsonPlanTimeField(fieldName: string) {
-  return json(fieldName).$type<PlanTimeFieldValues>().notNull();
+  return json(fieldName).$type<PlanTime>().notNull();
 }
 
 export const pprsInfoTable = mysqlTable("pprs_info", {

@@ -32,18 +32,17 @@ type ReportsNotes = {
   [month in Month]: string;
 };
 
-export type WorkTransfer = { fieldTo: PlanWorkField; value: number };
+export type WorkTransfer = { fieldTo: PlanValueField; value: number };
 
-//TODO: Точно надо Work переименовать в Values (объемы же, а не работы в столбцах)
-export type PlanWorkField = `${TimePeriod}_plan_work`;
-export type FactWorkField = `${TimePeriod}_fact_work`;
+export type PlanValueField = `${TimePeriod}_plan_work`;
+export type FactValueField = `${TimePeriod}_fact_work`;
 export type PlanNormTimeField = `${TimePeriod}_plan_norm_time`;
 export type PlanTabelTimeField = `${TimePeriod}_plan_tabel_time`;
 export type PlanTimeField = `${TimePeriod}_plan_time`;
 export type FactNormTimeField = `${TimePeriod}_fact_norm_time`;
 export type FactTimeField = `${TimePeriod}_fact_time`;
 
-export interface PlanWorkFieldValues {
+export interface PlanWork {
   original: number;
   handCorrection: number | null;
   final: number;
@@ -54,17 +53,17 @@ export interface PlanWorkFieldValues {
   undoneTransfers: WorkTransfer[] | null;
 }
 
-export interface PlanTimeFieldValues {
+export interface PlanTime {
   original: number;
   final: number;
 }
 //TODO: как-то переименовать или удалить в связи с использованием только в actions
 export type TPlanWorkPeriodsFields = {
-  [key in PlanWorkField]: PlanWorkFieldValues;
+  [key in PlanValueField]: PlanWork;
 };
 
 export type TFactWorkPeriodsFields = {
-  [key in FactWorkField]: number;
+  [key in FactValueField]: number;
 };
 
 export type TPlanNormTimePeriodsFields = {
@@ -76,7 +75,7 @@ export type TPlanTabelTimePeriodsFields = {
 };
 /**Поля месячных и годовых планируемых трудозатрат (для работ)*/
 export type TWorkPlanTimePeriodsFields = {
-  [key in PlanTimeField]: PlanTimeFieldValues;
+  [key in PlanTimeField]: PlanTime;
 };
 /**Поля месячных и годовых планируемых трудозатрат (для людей)*/
 export type TPlanTimePeriodsFields = {
