@@ -2,14 +2,14 @@ import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
 import { FACT_NORM_TIME_FIELDS, FACT_TIME_FIELDS, PLAN_TIME_FIELDS, PLAN_WORK_FIELDS } from "./ppr.const";
 import {
-  IPprData,
+  PlannedWorkWithCorrections,
   PlannedWorkId,
-  TPprDataFieldsTotalValues,
-  TWorkingManFieldsTotalValues,
-  IPprDataWithSimpleDataStructure,
+  PlannedWorkTotalTimes,
+  WorkingMansTotalTimes,
+  PlannedWork,
 } from "./ppr.types";
 
-type TotalWorkTime = { final: TPprDataFieldsTotalValues; original: TPprDataFieldsTotalValues };
+type TotalWorkTime = { final: PlannedWorkTotalTimes; original: PlannedWorkTotalTimes };
 
 type BranchMeta = {
   name: string;
@@ -38,7 +38,7 @@ type PprMetaType = {
   branchesMeta: BranchOrSubbranch[];
   worksOrder: { [id: PlannedWorkId]: string };
   totalWorkTime: TotalWorkTime;
-  totalWorkingManTime?: TWorkingManFieldsTotalValues;
+  totalWorkingManTime?: WorkingMansTotalTimes;
   branchesAndSubbrunchesList: {
     [id: PlannedWorkId]: {
       branch?: BranchMeta;
@@ -47,10 +47,10 @@ type PprMetaType = {
   };
 };
 
-class PprPlanWorkDataStuctureSimplifier {
-  plannedWorks: IPprDataWithSimpleDataStructure[];
+export class YearPlanDataStructureConverter {
+  plannedWorks: PlannedWork[];
 
-  private _simplifyDataStructure(work: IPprData, type: "original" | "final"): IPprDataWithSimpleDataStructure {
+  private _simplifyDataStructure(work: PlannedWorkWithCorrections, type: "original" | "final"): PlannedWork {
     const planValues = PLAN_WORK_FIELDS.map((field) => ({ [field]: work[field][type] }));
     const planTimes = PLAN_TIME_FIELDS.map((field) => ({ [field]: work[field][type] }));
 
@@ -61,10 +61,12 @@ class PprPlanWorkDataStuctureSimplifier {
     };
   }
 
-  constructor(plannedWorks: IPprData[], type: "original" | "final") {
+  constructor(plannedWorks: PlannedWorkWithCorrections[], type: "original" | "final") {
     this.plannedWorks = plannedWorks.map((work) => this._simplifyDataStructure(work, type));
   }
 }
+
+//TODO: сделать какой-нибудь сервис Ppr, который в одном месте соберет все связанные сервисы в одном месте.
 
 /**TODO: Разбить на подклассы. Также думаю, что необходимо сделать так, чтобы подсчет итоговых значений ничего не знал
  * о final и original значениях. Например, был бы какой-нибудь сервис, который бы предоставлял простую структуры запланированных
@@ -105,11 +107,11 @@ export class PprWorksMeta {
     branch: "additional",
   };
 
-  constructor(yearPlannedWorks: IPprData[]) {
+  constructor(yearPlannedWorks: PlannedWorkWithCorrections[]) {
     yearPlannedWorks.forEach((pprData, index) => this._updateBy(pprData, index));
   }
 
-  private _createNewBranchMeta(pprData: IPprData): BranchMeta {
+  private _createNewBranchMeta(pprData: PlannedWorkWithCorrections): BranchMeta {
     return {
       name: pprData.branch,
       prev: this._tempBranchMeta,
@@ -121,7 +123,7 @@ export class PprWorksMeta {
     };
   }
 
-  private _createNewSubbranchMeta(pprData: IPprData): SubbranchMeta {
+  private _createNewSubbranchMeta(pprData: PlannedWorkWithCorrections): SubbranchMeta {
     return {
       name: pprData.subbranch,
       prev: this._tempSubbranchMeta,
@@ -144,7 +146,7 @@ export class PprWorksMeta {
     this._rowSpans[index] = 1;
   }
 
-  private _updateTempWork(index: number, pprData: IPprData) {
+  private _updateTempWork(index: number, pprData: PlannedWorkWithCorrections) {
     this._tempWork = {
       index,
       name: pprData.name,
@@ -172,21 +174,21 @@ export class PprWorksMeta {
     };
   }
 
-  private _updateTempBranchMeta(pprData: IPprData): BranchMeta {
+  private _updateTempBranchMeta(pprData: PlannedWorkWithCorrections): BranchMeta {
     this._tempBranchMeta = this._createNewBranchMeta(pprData);
     this._branchesMeta.push(this._tempBranchMeta);
 
     return this._tempBranchMeta;
   }
 
-  private _updateTempSubbranchMeta(pprData: IPprData): SubbranchMeta {
+  private _updateTempSubbranchMeta(pprData: PlannedWorkWithCorrections): SubbranchMeta {
     this._tempSubbranchMeta = this._createNewSubbranchMeta(pprData);
     this._tempBranchMeta?.subbranches.push(this._tempSubbranchMeta);
 
     return this._tempSubbranchMeta;
   }
 
-  private _addTimeInTempBranch(type: "original" | "final", value: number, field: keyof TPprDataFieldsTotalValues) {
+  private _addTimeInTempBranch(type: "original" | "final", value: number, field: keyof PlannedWorkTotalTimes) {
     if (!this._tempBranchMeta) {
       throw new Error("При попытке расчета итоговых значений категории произошла ошибка");
     }
@@ -197,7 +199,7 @@ export class PprWorksMeta {
     }
   }
 
-  private _addTimeInTempSubbranch(type: "original" | "final", value: number, field: keyof TPprDataFieldsTotalValues) {
+  private _addTimeInTempSubbranch(type: "original" | "final", value: number, field: keyof PlannedWorkTotalTimes) {
     if (!this._tempSubbranchMeta) {
       throw new Error("При попытке расчета итоговых значений подкатегории произошла ошибка");
     }
@@ -208,7 +210,7 @@ export class PprWorksMeta {
     }
   }
 
-  private _addTimeInTotalTime(type: "original" | "final", value: number, field: keyof TPprDataFieldsTotalValues) {
+  private _addTimeInTotalTime(type: "original" | "final", value: number, field: keyof PlannedWorkTotalTimes) {
     if (!this._totalTime) {
       throw new Error("При попытке расчета итога произошла ошибка");
     }
@@ -219,7 +221,7 @@ export class PprWorksMeta {
     }
   }
 
-  private _addTimeInAllTotals(pprData: IPprData) {
+  private _addTimeInAllTotals(pprData: PlannedWorkWithCorrections) {
     PLAN_TIME_FIELDS.forEach((field) => {
       this._addTimeInTempBranch("original", pprData[field].original, field);
       this._addTimeInTempSubbranch("original", pprData[field].original, field);
@@ -262,7 +264,7 @@ export class PprWorksMeta {
     this._tempWorkOrder = 1;
   }
 
-  private _updateBy(pprData: IPprData, index: number) {
+  private _updateBy(pprData: PlannedWorkWithCorrections, index: number) {
     const isSameName = this._tempWork.name === pprData.name;
     const isSameBranch = this._tempBranchMeta?.name === pprData.branch;
     const isSameSubbranch = this._tempSubbranchMeta?.name === pprData.subbranch;
@@ -323,7 +325,7 @@ export class PprWorksMeta {
   }
 }
 
-export function createPprMeta2(yearPlannedWorks: IPprData[]): PprMetaType {
+export function createPprMeta2(yearPlannedWorks: PlannedWorkWithCorrections[]): PprMetaType {
   const workMeta = new PprWorksMeta(yearPlannedWorks);
 
   return {

@@ -1,37 +1,25 @@
 export type {
-  Ppr as IPpr,
-  PprShortInfo as TPprShortInfo,
-  IPprBasicData,
-  IPprData,
+  YearPlan as IPpr,
+  YearPlanBasicData as TPprShortInfo,
+  PlannedWorkBasicData as IPprBasicData,
+  PlannedWorkWithCorrections as IPprData,
   PlannedWorkId as TPprDataWorkId,
-  TWorkingManId,
-  TTotalFieldsValues,
-  IPprDataWithRowSpan,
-  AllMonthStatuses as TAllMonthStatuses,
-  MonthPprStatus as TMonthPprStatus,
-  YearPprStatus as TYearPprStatus,
-  IWorkingManYearPlan,
-  TPlanNormTimePeriodsFields,
-  TPlanTabelTimePeriodsFields,
-  TWorkPlanTimePeriodsFields,
-  TPlanWorkPeriodsFields,
-  TFactWorkPeriodsFields,
-  TFactNormTimePeriodsFields,
-  TFactTimePeriodsFields,
-  PlanWork as IPlanWorkValues,
+  PlannedWorkingManId as TWorkingManId,
+  AllMonthsPlansStatuses as TAllMonthStatuses,
+  MonthPlanStatus as TMonthPprStatus,
+  YearPlanStatus as TYearPprStatus,
+  PlannedWorkingMans as IWorkingManYearPlan,
+  PlanValueWithCorrection as IPlanWorkValues,
   WorkTransfer as TTransfer,
   PlanValueField as TPlanWorkPeriods,
   FactValueField as TFactWorkPeriods,
   PlanNormTimeField as TPlanNormTimePeriods,
   PlanTabelTimeField as TPlanTabelTimePeriods,
   PlanTimeField as TPlanTimePeriods,
-  FactNormTimeField as TFactNormTimePeriods,
   FactTimeField as TFactTimePeriods,
-  TPprDataFieldsTotalValues,
-  TPlanTimePeriodsFields,
-  TWorkingManFieldsTotalValues,
-  PlanTime as TPlanTimeValues,
-  TWorkBranch,
+  PlannedWorkTotalTimes as TPprDataFieldsTotalValues,
+  WorkingMansTotalTimes as TWorkingManFieldsTotalValues,
+  PlannedWorkBranch as TWorkBranch,
 } from "./model/ppr.types";
 
 export type { IGetPprDataForReportParams, TPprDataForReport } from "./model/ppr.actions";
@@ -39,10 +27,10 @@ export type { IGetPprDataForReportParams, TPprDataForReport } from "./model/ppr.
 export type { IBranchDefaultMeta, IBranchMeta, IPprMeta } from "./lib/createPprMeta";
 
 export type {
-  IPprTableSettingsContext,
+  TPprView,
   TFilterPlanFactOption,
   TFilterTimePeriodOption,
-  TPprView,
+  IPprTableSettingsContext,
 } from "./ui/PprTableSettingsProvider";
 
 export { PprField } from "./model/PprField";

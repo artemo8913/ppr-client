@@ -5,11 +5,11 @@ import { TableCellMemo } from "@/1shared/ui/table";
 
 import { usePpr } from "./PprProvider";
 import { usePprTableSettings } from "./PprTableSettingsProvider";
-import { IPprData, IWorkingManYearPlan } from "../model/ppr.types";
+import { PlannedWorkWithCorrections, PlannedWorkingMans } from "../model/ppr.types";
 import { PprField } from "../model/PprField";
 
 interface ISummaryTableFootProps {
-  fields: (keyof IPprData | keyof IWorkingManYearPlan)[];
+  fields: (keyof PlannedWorkWithCorrections | keyof PlannedWorkingMans)[];
   summaryNameColSpan: number;
 }
 
@@ -44,12 +44,12 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
 
           if (!isFieldHaveTotalValueByPeoples) {
           } else if (
-            Number(totalValues[pprDataView].peoples[field]) - Number(totalValues[pprDataView].works[field]) >
+            Number(totalValues[pprDataView].workingMans[field]) - Number(totalValues[pprDataView].works[field]) >
             1
           ) {
             isWorkPlanLessThenCould = true;
           } else if (
-            Number(totalValues[pprDataView].peoples[field]) - Number(totalValues[pprDataView].works[field]) <
+            Number(totalValues[pprDataView].workingMans[field]) - Number(totalValues[pprDataView].works[field]) <
             -1
           ) {
             isWorkPlanMoreThenCould = true;
@@ -89,7 +89,7 @@ export const SummaryTableFoot: FC<ISummaryTableFootProps> = ({ summaryNameColSpa
             >
               <TableCellMemo
                 isVertical
-                value={isFieldHaveTotalValueByPeoples ? totalValues[pprDataView].peoples[field] : "-"}
+                value={isFieldHaveTotalValueByPeoples ? totalValues[pprDataView].workingMans[field] : "-"}
               />
             </td>
           );

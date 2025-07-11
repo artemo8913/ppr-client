@@ -2,17 +2,17 @@ import {
   FactNormTimeField,
   FactTimeField,
   FactValueField,
-  IPprData,
-  MonthPprStatus,
+  PlannedWorkWithCorrections,
+  MonthPlanStatus,
   PlanNormTimeField,
   PlanTabelTimeField,
   PlanTimeField,
   PlanValueField,
-  TWorkBranch,
-  YearPprStatus,
+  PlannedWorkBranch,
+  YearPlanStatus,
 } from "./ppr.types";
 
-export const YEAR_STATUSES: YearPprStatus[] = [
+export const YEAR_STATUSES: YearPlanStatus[] = [
   "template",
   "plan_creating",
   "plan_on_agreement_engineer",
@@ -23,7 +23,7 @@ export const YEAR_STATUSES: YearPprStatus[] = [
   "done",
 ] as const;
 
-export const MONTH_STATUSES: MonthPprStatus[] = [
+export const MONTH_STATUSES: MonthPlanStatus[] = [
   "none",
   "plan_creating",
   "plan_on_agreement_engineer",
@@ -37,7 +37,7 @@ export const MONTH_STATUSES: MonthPprStatus[] = [
   "done",
 ] as const;
 
-export const BRANCHES: TWorkBranch[] = ["exploitation", "additional", "unforeseen"] as const;
+export const BRANCHES: PlannedWorkBranch[] = ["exploitation", "additional", "unforeseen"] as const;
 
 export const PLAN_WORK_FIELDS: PlanValueField[] = [
   "year_plan_work",
@@ -159,7 +159,7 @@ export const WORK_AND_TIME_FIELDS = [
   ...FACT_TIME_FIELDS,
 ];
 
-export const PPR_DATA_BASIC_FIELDS: Array<keyof IPprData> = [
+export const PPR_DATA_BASIC_FIELDS: Array<keyof PlannedWorkWithCorrections> = [
   "name",
   "location",
   "line_class",
@@ -174,7 +174,7 @@ export const PPR_DATA_BASIC_FIELDS: Array<keyof IPprData> = [
   "unity",
 ] as const;
 
-export const PPR_DATA_FIELDS: (keyof IPprData)[] = [
+export const PPR_DATA_FIELDS: (keyof PlannedWorkWithCorrections)[] = [
   "id",
   "common_work_id",
   "is_work_aproved",
@@ -261,7 +261,7 @@ export const PPR_DATA_FIELDS: (keyof IPprData)[] = [
   "dec_fact_time",
 ] as const;
 
-export const pprTableFieldsSet: Set<keyof IPprData> = new Set(PPR_DATA_FIELDS);
+export const pprTableFieldsSet: Set<keyof PlannedWorkWithCorrections> = new Set(PPR_DATA_FIELDS);
 export const planWorkFieldsSet: Set<PlanValueField> = new Set(PLAN_WORK_FIELDS);
 export const factWorkFieldsSet: Set<FactValueField> = new Set(FACT_WORK_FIELDS);
 export const planTimeFieldsSet: Set<PlanTimeField> = new Set(PLAN_TIME_FIELDS);

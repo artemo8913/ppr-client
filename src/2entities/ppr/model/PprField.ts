@@ -1,6 +1,6 @@
 import { TimePeriod } from "@/1shared/lib/date";
 import {
-  IPprData,
+  PlannedWorkWithCorrections,
   PlanValueField,
   PlanTimeField,
   FactValueField,
@@ -28,6 +28,8 @@ import {
   workAndTimeFieldsSet,
 } from "./ppr.const";
 
+//TODO: наверное лучше сделать сервис, а не класс со static
+/**Валидация и получение наименований определенных полей годового плана */
 export class PprField {
   static getPlanWorkFieldByTimePeriod(timePeriod: TimePeriod): PlanValueField {
     return `${timePeriod}_plan_work`;
@@ -69,7 +71,7 @@ export class PprField {
     };
   }
 
-  static isPprData(field: any): field is keyof IPprData {
+  static isYearPlanField(field: any): field is keyof PlannedWorkWithCorrections {
     return pprTableFieldsSet.has(field);
   }
 

@@ -5,19 +5,19 @@ import { Month } from "@/1shared/lib/date";
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
 import {
-  Ppr,
-  IPprData,
-  PlanWork,
+  YearPlan,
+  PlannedWorkWithCorrections,
+  PlanValueWithCorrection,
   WorkTransfer,
   FactTimeField,
   PlannedWorkId,
-  TWorkingManId,
-  IPprBasicData,
+  PlannedWorkingManId,
+  PlannedWorkBasicData,
   FactValueField,
   PlanValueField,
   PlanNormTimeField,
   PlanTabelTimeField,
-  IWorkingManYearPlan,
+  PlannedWorkingMans,
 } from "../model/ppr.types";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
@@ -32,13 +32,13 @@ import {
 } from "../model/ppr.const";
 
 interface IPprContext {
-  ppr: Ppr | null;
-  addWork: (newWork: Partial<IPprData>, nearWorkId?: PlannedWorkId) => void;
+  ppr: YearPlan | null;
+  addWork: (newWork: Partial<PlannedWorkWithCorrections>, nearWorkId?: PlannedWorkId) => void;
   copyWork: (id: PlannedWorkId) => void;
   deleteWork: (id: PlannedWorkId) => void;
-  editWork: (workData: Partial<IPprBasicData>) => void;
+  editWork: (workData: Partial<PlannedWorkBasicData>) => void;
   copyFactNormTimeToFactTime: (mode: "EVERY" | "NOT_FILLED", month: Month) => void;
-  updatePprTableCell: (id: PlannedWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => void;
+  updatePprTableCell: (id: PlannedWorkId, field: keyof PlannedWorkWithCorrections, value: string, isWorkAproved?: boolean) => void;
   updateTransfers: (
     id: PlannedWorkId,
     field: PlanValueField,
@@ -49,9 +49,9 @@ interface IPprContext {
   increaseWorkPosition: (id: PlannedWorkId) => void;
   decreaseWorkPosition: (id: PlannedWorkId) => void;
   updateSubbranch: (newSubbranch: string, workIdsSet: Set<PlannedWorkId>) => void;
-  addWorkingMan: (nearWorkingManId?: TWorkingManId) => void;
-  deleteWorkingMan: (id: TWorkingManId) => void;
-  updateWorkingMan: (rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => void;
+  addWorkingMan: (nearWorkingManId?: PlannedWorkingManId) => void;
+  deleteWorkingMan: (id: PlannedWorkingManId) => void;
+  updateWorkingMan: (rowIndex: number, field: keyof PlannedWorkingMans, value: unknown) => void;
   updateWorkingManPlanNormTime: (rowIndex: number, field: PlanNormTimeField, value: number) => void;
   updateWorkingManPlanTabelTime: (rowIndex: number, field: PlanTabelTimeField, value: number) => void;
   updateWorkingManFactTime: (rowIndex: number, field: FactTimeField, value: number) => void;
@@ -87,22 +87,22 @@ const PprContext = createContext<IPprContext>({
     subbranchesList: [],
     worksOrder: {},
     branchesAndSubbrunchesOrder: {},
-    totalValues: { final: { peoples: {}, works: {} }, original: { peoples: {}, works: {} } },
+    totalValues: { final: { workingMans: {}, works: {} }, original: { workingMans: {}, works: {} } },
   },
 });
 
 export const usePpr = () => useContext(PprContext);
 
 interface IPprProviderProps extends PropsWithChildren {
-  pprFromResponce: Ppr;
+  pprFromResponce: YearPlan;
 }
 
 export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }) => {
   //Данные ППРа
-  const [ppr, setPpr] = useState<Ppr | null>(null);
+  const [ppr, setPpr] = useState<YearPlan | null>(null);
 
   /**Добавить работу в ППР */
-  const addWork = useCallback((newWork: Partial<IPprData>, nearWorkId?: PlannedWorkId) => {
+  const addWork = useCallback((newWork: Partial<PlannedWorkWithCorrections>, nearWorkId?: PlannedWorkId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -135,7 +135,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       if (!prev) {
         return prev;
       }
-      let newWork: Partial<IPprData> = {};
+      let newWork: Partial<PlannedWorkWithCorrections> = {};
       let rowIndex: number = 0;
       return {
         ...prev,
@@ -169,7 +169,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     });
   }, []);
 
-  const editWork = useCallback((workData: Partial<IPprBasicData>) => {
+  const editWork = useCallback((workData: Partial<PlannedWorkBasicData>) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -229,7 +229,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             return pprData;
           }
 
-          const newPprData: IPprData = { ...pprData };
+          const newPprData: PlannedWorkWithCorrections = { ...pprData };
 
           newPprData.norm_of_time = Number(value);
 
@@ -264,7 +264,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
           if (pprData.id !== id) {
             return pprData;
           }
-          const newPprData: IPprData = { ...pprData };
+          const newPprData: PlannedWorkWithCorrections = { ...pprData };
 
           newPprData[field] = {
             ...pprData[field],
@@ -309,7 +309,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             return pprData;
           }
 
-          const newPprData: IPprData = { ...pprData };
+          const newPprData: PlannedWorkWithCorrections = { ...pprData };
 
           newPprData[field] = value;
 
@@ -344,7 +344,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             return pprData;
           }
 
-          const newPprData: IPprData = { ...pprData };
+          const newPprData: PlannedWorkWithCorrections = { ...pprData };
 
           newPprData[field] = value;
           newPprData.year_fact_time = 0;
@@ -372,7 +372,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       return {
         ...prev,
         data: prev.data.map((pprData) => {
-          const newPprData: IPprData = { ...pprData };
+          const newPprData: PlannedWorkWithCorrections = { ...pprData };
 
           const factNormTimePeriod = PprField.getFactNormTimeFieldByTimePeriod(month);
           const factTimePeriod = PprField.getFactTimeFieldByTimePeriod(month);
@@ -396,7 +396,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить данные ППРа. Функция используется для обновления ячеек с простыми типами данных (строки, числа). Функция не подходит для обновления данных планов ППРа*/
-  const updatePprData = useCallback((id: PlannedWorkId, field: keyof IPprData, value: string | number) => {
+  const updatePprData = useCallback((id: PlannedWorkId, field: keyof PlannedWorkWithCorrections, value: string | number) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -405,7 +405,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
       return {
         ...prev,
         data: prev.data.map((pprData) => {
-          let newValue: PlanWork | string | number = value;
+          let newValue: PlanValueWithCorrection | string | number = value;
 
           if (PprField.isPlanWork(field) || pprData.id !== id) {
             return pprData;
@@ -433,7 +433,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
             return pprData;
           }
 
-          const newPprData: IPprData = { ...pprData };
+          const newPprData: PlannedWorkWithCorrections = { ...pprData };
 
           newPprData[field] = {
             ...pprData[field],
@@ -480,7 +480,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
               return pprData;
             }
 
-            const newPprData: IPprData = { ...pprData };
+            const newPprData: PlannedWorkWithCorrections = { ...pprData };
 
             const outsideCorrectionsSumByField: { [field in PlanValueField]?: number } = {};
             function handleTransfer(transfers: WorkTransfer[] | null): number {
@@ -540,7 +540,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   );
 
   const updatePprTableCell = useCallback(
-    (id: PlannedWorkId, field: keyof IPprData, value: string, isWorkAproved?: boolean) => {
+    (id: PlannedWorkId, field: keyof PlannedWorkWithCorrections, value: string, isWorkAproved?: boolean) => {
       if (field === "norm_of_time") {
         updateNormOfTime(id, Number(value));
       } else if (PprField.isFactWork(field)) {
@@ -577,7 +577,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Добавить рабочего в список людей ППР */
-  const addWorkingMan = useCallback((nearWorkingManId?: TWorkingManId) => {
+  const addWorkingMan = useCallback((nearWorkingManId?: PlannedWorkingManId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -606,7 +606,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Обновить данные рабочено из списка людей ППР */
-  const updateWorkingMan = useCallback((rowIndex: number, field: keyof IWorkingManYearPlan, value: unknown) => {
+  const updateWorkingMan = useCallback((rowIndex: number, field: keyof PlannedWorkingMans, value: unknown) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -743,7 +743,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
   }, []);
 
   /**Убрать рабочего из списка людей ППР */
-  const deleteWorkingMan = useCallback((id: TWorkingManId) => {
+  const deleteWorkingMan = useCallback((id: PlannedWorkingManId) => {
     setPpr((prev) => {
       if (!prev) {
         return prev;
@@ -837,7 +837,7 @@ export const PprProvider: FC<IPprProviderProps> = ({ children, pprFromResponce }
     subbranchesList: [],
     worksOrder: {},
     branchesAndSubbrunchesOrder: {},
-    totalValues: { final: { peoples: {}, works: {} }, original: { peoples: {}, works: {} } },
+    totalValues: { final: { workingMans: {}, works: {} }, original: { workingMans: {}, works: {} } },
   };
 
   if (ppr) {

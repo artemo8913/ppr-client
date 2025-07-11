@@ -1,7 +1,7 @@
-import { IPprData, TWorkBranch } from "../model/ppr.types";
+import { PlannedWorkWithCorrections, PlannedWorkBranch } from "../model/ppr.types";
 import { PprField } from "../model/PprField";
 
-const PPR_BRANCHES_RU: { [key in TWorkBranch]: string } = {
+const PPR_BRANCHES_RU: { [key in PlannedWorkBranch]: string } = {
   additional: "Дополнительные работы",
   exploitation: "Основные (плановые) работы",
   unforeseen: "Непредвиденные работы",
@@ -9,12 +9,12 @@ const PPR_BRANCHES_RU: { [key in TWorkBranch]: string } = {
 
 export function translateRuPprBranchName(branch: string): string {
   if (branch in PPR_BRANCHES_RU) {
-    return PPR_BRANCHES_RU[branch as TWorkBranch];
+    return PPR_BRANCHES_RU[branch as PlannedWorkBranch];
   }
   return branch;
 }
 
-const FIELDS_NAMES_RU: { [key in keyof IPprData]?: string } = {
+const FIELDS_NAMES_RU: { [key in keyof PlannedWorkWithCorrections]?: string } = {
   name: "Наименования работ",
   location: "Место работ (тип оборудования)",
   line_class: "Класс участка / вид ТОиР",
@@ -43,9 +43,9 @@ function findPlanFactTitle(string: string) {
   }
 }
 
-export function translateRuPprFieldName(column: keyof IPprData | string): string {
-  if (!PprField.isPprData(column)) {
-    return "";
+export function translateRuPprFieldName(field: keyof PlannedWorkWithCorrections | string): string {
+  if (!PprField.isYearPlanField(field)) {
+    return field;
   }
-  return FIELDS_NAMES_RU[column] || findPlanFactTitle(column) || "";
+  return FIELDS_NAMES_RU[field] || findPlanFactTitle(field) || "";
 }

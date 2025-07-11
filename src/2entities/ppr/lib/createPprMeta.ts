@@ -8,19 +8,19 @@ import {
   PLAN_TIME_FIELDS,
 } from "../model/ppr.const";
 import {
-  IPprData,
-  IWorkingManYearPlan,
-  TPprDataFieldsTotalValues,
+  PlannedWorkWithCorrections,
+  PlannedWorkingMans,
+  PlannedWorkTotalTimes,
   PlannedWorkId,
-  TTotalFieldsValues,
-  TWorkBranch,
-  TWorkingManFieldsTotalValues,
+  PlannedWorksAndWorkingMansTotalTimes,
+  PlannedWorkBranch,
+  WorkingMansTotalTimes,
 } from "../model/ppr.types";
 
 function handleWorkPeriod(
-  totalObject: TPprDataFieldsTotalValues,
+  totalObject: PlannedWorkTotalTimes,
   value: number,
-  field: keyof TPprDataFieldsTotalValues
+  field: keyof PlannedWorkTotalTimes
 ) {
   if (totalObject[field] !== undefined) {
     totalObject[field] = roundToFixed(value + totalObject[field]!);
@@ -30,9 +30,9 @@ function handleWorkPeriod(
 }
 
 function handleWorkingMansPeriod(
-  totalObject: TWorkingManFieldsTotalValues,
+  totalObject: WorkingMansTotalTimes,
   value: number,
-  field: keyof TWorkingManFieldsTotalValues
+  field: keyof WorkingMansTotalTimes
 ) {
   if (totalObject[field] !== undefined) {
     totalObject[field] = roundToFixed(value + totalObject[field]!);
@@ -47,7 +47,7 @@ export interface IBranchDefaultMeta {
   workIds: Set<PlannedWorkId>;
   type: "branch" | "subbranch";
   prev: IBranchDefaultMeta | null;
-  total: { final: TPprDataFieldsTotalValues; original: TPprDataFieldsTotalValues };
+  total: { final: PlannedWorkTotalTimes; original: PlannedWorkTotalTimes };
 }
 
 export interface IBranchMeta extends IBranchDefaultMeta {
@@ -59,7 +59,7 @@ export interface IPprMeta {
   worksRowSpan: number[];
   subbranchesList: string[];
   branchesMeta: IBranchMeta[];
-  totalValues: { final: TTotalFieldsValues; original: TTotalFieldsValues };
+  totalValues: { final: PlannedWorksAndWorkingMansTotalTimes; original: PlannedWorksAndWorkingMansTotalTimes };
   branchesAndSubbrunchesOrder: {
     [id: PlannedWorkId]: {
       branch?: IBranchMeta;
@@ -69,8 +69,8 @@ export interface IPprMeta {
 }
 
 interface ICreatePprMetaArgs {
-  pprData?: IPprData[];
-  workingMansData?: IWorkingManYearPlan[];
+  pprData?: PlannedWorkWithCorrections[];
+  workingMansData?: PlannedWorkingMans[];
 }
 
 export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs): IPprMeta {
@@ -89,15 +89,15 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   const worksRowSpan: number[] = [];
 
-  const worksTotalFinalValue: TPprDataFieldsTotalValues = {};
+  const worksTotalFinalValue: PlannedWorkTotalTimes = {};
 
-  const worksTotalOriginalValue: TPprDataFieldsTotalValues = {};
+  const worksTotalOriginalValue: PlannedWorkTotalTimes = {};
 
-  const workingMansTotalValues: TWorkingManFieldsTotalValues = {};
+  const workingMansTotalValues: WorkingMansTotalTimes = {};
 
-  const totalFinalValues: TTotalFieldsValues = { works: worksTotalFinalValue, peoples: workingMansTotalValues };
+  const totalFinalValues: PlannedWorksAndWorkingMansTotalTimes = { works: worksTotalFinalValue, workingMans: workingMansTotalValues };
 
-  const totalOriginalValues: TTotalFieldsValues = { works: worksTotalOriginalValue, peoples: workingMansTotalValues };
+  const totalOriginalValues: PlannedWorksAndWorkingMansTotalTimes = { works: worksTotalOriginalValue, workingMans: workingMansTotalValues };
 
   let isInit = true;
 
@@ -106,7 +106,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   let tempWorkRowSpan: {
     name: string;
     note?: string | null;
-    branch?: TWorkBranch;
+    branch?: PlannedWorkBranch;
     subbranch?: string;
     indexStart: number;
   } = {
@@ -136,7 +136,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     prev: null,
   };
 
-  function updateTempBranchMeta(branchName: TWorkBranch, index: number) {
+  function updateTempBranchMeta(branchName: PlannedWorkBranch, index: number) {
     tempBranchMeta = {
       workIds: new Set(),
       name: branchName,
@@ -162,7 +162,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
     };
   }
 
-  function resetTempWorkCombine(indexStart: number, pprData: IPprData) {
+  function resetTempWorkCombine(indexStart: number, pprData: PlannedWorkWithCorrections) {
     tempWorkRowSpan = {
       indexStart,
       name: pprData.name,
