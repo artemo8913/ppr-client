@@ -62,6 +62,10 @@ export type TPlanWorkPeriodsFields = {
   [key in PlanValueField]: PlanWork;
 };
 
+export type TPlanWorkPeriodsFieldsNumber = {
+  [key in PlanValueField]: number;
+};
+
 export type TFactWorkPeriodsFields = {
   [key in FactValueField]: number;
 };
@@ -146,10 +150,10 @@ export interface IWorkingManYearPlan
 
 export type TWorkBranch = "exploitation" | "additional" | "unforeseen";
 
-export type TPprDataWorkId = number | string;
+export type PlannedWorkId = number | string;
 
 export interface IPprBasicData {
-  id: TPprDataWorkId;
+  id: PlannedWorkId;
   common_work_id: number | null;
   is_work_aproved: boolean;
   branch: TWorkBranch;
@@ -173,6 +177,14 @@ export interface IPprData
   extends IPprBasicData,
     TPlanWorkPeriodsFields,
     TWorkPlanTimePeriodsFields,
+    TFactWorkPeriodsFields,
+    TFactNormTimePeriodsFields,
+    TFactTimePeriodsFields {}
+
+export interface IPprDataWithSimpleDataStructure
+  extends IPprBasicData,
+    TPlanWorkPeriodsFieldsNumber,
+    TPlanTimePeriodsFields,
     TFactWorkPeriodsFields,
     TFactNormTimePeriodsFields,
     TFactTimePeriodsFields {}

@@ -11,7 +11,7 @@ import {
   IPprData,
   IWorkingManYearPlan,
   TPprDataFieldsTotalValues,
-  TPprDataWorkId,
+  PlannedWorkId,
   TTotalFieldsValues,
   TWorkBranch,
   TWorkingManFieldsTotalValues,
@@ -44,7 +44,7 @@ function handleWorkingMansPeriod(
 export interface IBranchDefaultMeta {
   name: string;
   orderIndex: string;
-  workIds: Set<TPprDataWorkId>;
+  workIds: Set<PlannedWorkId>;
   type: "branch" | "subbranch";
   prev: IBranchDefaultMeta | null;
   total: { final: TPprDataFieldsTotalValues; original: TPprDataFieldsTotalValues };
@@ -55,13 +55,13 @@ export interface IBranchMeta extends IBranchDefaultMeta {
 }
 
 export interface IPprMeta {
-  worksOrder: { [id: TPprDataWorkId]: string };
+  worksOrder: { [id: PlannedWorkId]: string };
   worksRowSpan: number[];
   subbranchesList: string[];
   branchesMeta: IBranchMeta[];
   totalValues: { final: TTotalFieldsValues; original: TTotalFieldsValues };
   branchesAndSubbrunchesOrder: {
-    [id: TPprDataWorkId]: {
+    [id: PlannedWorkId]: {
       branch?: IBranchMeta;
       subbranch: IBranchDefaultMeta;
     };
@@ -77,7 +77,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
   const branchesMeta: IBranchMeta[] = [];
 
   const branchesAndSubbrunchesOrder: {
-    [id: TPprDataWorkId]: {
+    [id: PlannedWorkId]: {
       branch?: IBranchMeta;
       subbranch: IBranchDefaultMeta;
     };
@@ -85,7 +85,7 @@ export function createPprMeta({ pprData, workingMansData }: ICreatePprMetaArgs):
 
   const subbranchesSet = new Set<string>();
 
-  const worksOrder: { [id: TPprDataWorkId]: string } = {};
+  const worksOrder: { [id: PlannedWorkId]: string } = {};
 
   const worksRowSpan: number[] = [];
 

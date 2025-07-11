@@ -1,7 +1,13 @@
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
-import { FACT_NORM_TIME_FIELDS, FACT_TIME_FIELDS, PLAN_TIME_FIELDS } from "./ppr.const";
-import { IPprData, TPprDataFieldsTotalValues, TPprDataWorkId, TWorkingManFieldsTotalValues } from "./ppr.types";
+import { FACT_NORM_TIME_FIELDS, FACT_TIME_FIELDS, PLAN_TIME_FIELDS, PLAN_WORK_FIELDS } from "./ppr.const";
+import {
+  IPprData,
+  PlannedWorkId,
+  TPprDataFieldsTotalValues,
+  TWorkingManFieldsTotalValues,
+  IPprDataWithSimpleDataStructure,
+} from "./ppr.types";
 
 type TotalWorkTime = { final: TPprDataFieldsTotalValues; original: TPprDataFieldsTotalValues };
 
@@ -11,7 +17,7 @@ type BranchMeta = {
   orderIndex: string;
   prev: BranchMeta | null;
   subbranches: SubbranchMeta[];
-  workIds: Set<TPprDataWorkId>;
+  workIds: Set<PlannedWorkId>;
   total: TotalWorkTime;
 };
 
@@ -20,7 +26,7 @@ type SubbranchMeta = {
   type: "subbranch";
   orderIndex: string;
   prev: SubbranchMeta | null;
-  workIds: Set<TPprDataWorkId>;
+  workIds: Set<PlannedWorkId>;
   total: TotalWorkTime;
 };
 
@@ -30,16 +36,36 @@ type PprMetaType = {
   worksRowSpan: number[];
   subbranchesList: string[];
   branchesMeta: BranchOrSubbranch[];
-  worksOrder: { [id: TPprDataWorkId]: string };
+  worksOrder: { [id: PlannedWorkId]: string };
   totalWorkTime: TotalWorkTime;
   totalWorkingManTime?: TWorkingManFieldsTotalValues;
   branchesAndSubbrunchesList: {
-    [id: TPprDataWorkId]: {
+    [id: PlannedWorkId]: {
       branch?: BranchMeta;
       subbranch: SubbranchMeta;
     };
   };
 };
+
+class PprPlanWorkDataStuctureSimplifier {
+  plannedWorks: IPprDataWithSimpleDataStructure[];
+
+  private _simplifyDataStructure(work: IPprData, type: "original" | "final"): IPprDataWithSimpleDataStructure {
+    const planValues = PLAN_WORK_FIELDS.map((field) => ({ [field]: work[field][type] }));
+    const planTimes = PLAN_TIME_FIELDS.map((field) => ({ [field]: work[field][type] }));
+
+    return {
+      ...work,
+      ...Object.assign({}, ...planValues),
+      ...Object.assign({}, ...planTimes),
+    };
+  }
+
+  constructor(plannedWorks: IPprData[], type: "original" | "final") {
+    this.plannedWorks = plannedWorks.map((work) => this._simplifyDataStructure(work, type));
+  }
+}
+
 /**TODO: Разбить на подклассы. Также думаю, что необходимо сделать так, чтобы подсчет итоговых значений ничего не знал
  * о final и original значениях. Например, был бы какой-нибудь сервис, который бы предоставлял простую структуры запланированных
  * работ (field: number | string). А не как сейчас для плановых объемов работ PlanWorkFieldValues {original: number;} и т.п.
@@ -57,13 +83,13 @@ export class PprWorksMeta {
   private _branchesMeta: BranchMeta[] = [];
 
   private _branchesAndSubbranchesIndexList: {
-    [id: TPprDataWorkId]: {
+    [id: PlannedWorkId]: {
       branch?: BranchMeta;
       subbranch: SubbranchMeta;
     };
   } = {};
 
-  private _worksOrder: { [id: TPprDataWorkId]: string } = {};
+  private _worksOrder: { [id: PlannedWorkId]: string } = {};
 
   private _totalTime: TotalWorkTime = { final: {}, original: {} };
 

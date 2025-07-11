@@ -3,7 +3,7 @@ export type {
   PprShortInfo as TPprShortInfo,
   IPprBasicData,
   IPprData,
-  TPprDataWorkId,
+  PlannedWorkId as TPprDataWorkId,
   TWorkingManId,
   TTotalFieldsValues,
   IPprDataWithRowSpan,
