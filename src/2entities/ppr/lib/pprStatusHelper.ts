@@ -1,10 +1,10 @@
+import { OptionType } from "@/1shared/lib/form/TOptionType";
 import { MONTHS, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 
 import { translateRuPprMonthStatus, translateRuPprYearStatus } from "./pprStatusLocale";
-import { AllMonthStatuses, MonthPprStatus, PprShortInfo, YearPprStatus } from "../model/ppr.types";
-import { OptionType } from "@/1shared/lib/form/TOptionType";
+import { AllMonthsPlansStatuses, MonthPlanStatus, YearPlanBasicData, YearPlanStatus } from "../model/ppr.types";
 
-export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: AllMonthStatuses) {
+export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: AllMonthsPlansStatuses) {
   let result = true;
   MONTHS.forEach((month) => {
     if (monthsStatuses[month] !== "done") {
@@ -16,7 +16,7 @@ export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: AllMonthStatus
 
 export function checkIsTimePeriodAvailableToTransfer(
   timePeriod: TimePeriod,
-  monthsStatuses: AllMonthStatuses
+  monthsStatuses: AllMonthsPlansStatuses
 ): boolean {
   if (timePeriod === "year") {
     return false;
@@ -29,8 +29,8 @@ export function checkIsTimePeriodAvailableToTransfer(
 
 export function checkIsTimePeriodAvailableForPlanning(
   timePeriod: TimePeriod,
-  yearStatus: YearPprStatus,
-  monthsStatuses: AllMonthStatuses
+  yearStatus: YearPlanStatus,
+  monthsStatuses: AllMonthsPlansStatuses
 ): boolean {
   if (timePeriod === "year") {
     return true;
@@ -50,7 +50,7 @@ export function checkIsTimePeriodAvailableForPlanning(
   return false;
 }
 
-export function findFirstUndonePprPeriod(ppr: PprShortInfo | null): TimePeriod {
+export function findFirstUndonePprPeriod(ppr: YearPlanBasicData | null): TimePeriod {
   if (!ppr) {
     return "year";
   }
@@ -70,7 +70,7 @@ export function findFirstUndonePprPeriod(ppr: PprShortInfo | null): TimePeriod {
   return "year";
 }
 
-const NEXT_PPR_YEAR_STATUS: { [key in YearPprStatus]: YearPprStatus | null } = {
+const NEXT_PPR_YEAR_STATUS: { [key in YearPlanStatus]: YearPlanStatus | null } = {
   template: null,
   plan_creating: "plan_on_agreement_engineer",
   plan_on_agreement_engineer: "plan_on_agreement_time_norm",
@@ -81,7 +81,7 @@ const NEXT_PPR_YEAR_STATUS: { [key in YearPprStatus]: YearPprStatus | null } = {
   done: null,
 };
 
-const NEXT_PPR_MONTH_STATUS: { [key in MonthPprStatus]: MonthPprStatus | null } = {
+const NEXT_PPR_MONTH_STATUS: { [key in MonthPlanStatus]: MonthPlanStatus | null } = {
   none: "plan_creating",
   plan_creating: "plan_on_agreement_time_norm",
   plan_on_agreement_time_norm: "plan_on_agreement_engineer",
@@ -95,15 +95,15 @@ const NEXT_PPR_MONTH_STATUS: { [key in MonthPprStatus]: MonthPprStatus | null } 
   done: null,
 };
 
-export function getNextPprYearStatus(currentStatus: YearPprStatus): YearPprStatus | null {
+export function getNextPprYearStatus(currentStatus: YearPlanStatus): YearPlanStatus | null {
   return NEXT_PPR_YEAR_STATUS[currentStatus];
 }
 
-export function getNextPprMonthStatus(currentStatus: MonthPprStatus): MonthPprStatus | null {
+export function getNextPprMonthStatus(currentStatus: MonthPlanStatus): MonthPlanStatus | null {
   return NEXT_PPR_MONTH_STATUS[currentStatus];
 }
 
-export const PPR_YEAR_STATUSES: YearPprStatus[] = [
+export const PPR_YEAR_STATUSES: YearPlanStatus[] = [
   "template",
   "plan_creating",
   "plan_on_agreement_engineer",
@@ -114,7 +114,7 @@ export const PPR_YEAR_STATUSES: YearPprStatus[] = [
   "done",
 ];
 
-export const PPR_MONTH_STATUSES: MonthPprStatus[] = [
+export const PPR_MONTH_STATUSES: MonthPlanStatus[] = [
   "none",
   "plan_creating",
   "plan_on_agreement_engineer",
@@ -128,7 +128,7 @@ export const PPR_MONTH_STATUSES: MonthPprStatus[] = [
   "done",
 ];
 
-export function getStatusText(pprInfo: PprShortInfo) {
+export function getStatusText(pprInfo: YearPlanBasicData) {
   const undoneTimePeriod = findFirstUndonePprPeriod(pprInfo);
 
   if (pprInfo.status !== "in_process" || undoneTimePeriod === "year") {
@@ -140,7 +140,7 @@ export function getStatusText(pprInfo: PprShortInfo) {
   )} (${translateRuPprMonthStatus(pprInfo.months_statuses[undoneTimePeriod])})`;
 }
 
-export const PPR_YEAR_OPTIONS: OptionType<YearPprStatus>[] = PPR_YEAR_STATUSES.map((status) => ({
+export const PPR_YEAR_OPTIONS: OptionType<YearPlanStatus>[] = PPR_YEAR_STATUSES.map((status) => ({
   value: status,
   label: translateRuPprYearStatus(status),
 }));

@@ -1,6 +1,6 @@
-import { IWorkingManYearPlan } from "../model/ppr.types";
+import { PlannedWorkingMans } from "../model/ppr.types";
 
-export function createNewWorkingManInstance(): IWorkingManYearPlan {
+export function createNewWorkingManInstance(): PlannedWorkingMans {
   return {
     id: String(new Date().toString() + Math.random()),
     full_name: "Иванов И.И.",

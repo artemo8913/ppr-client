@@ -1,7 +1,6 @@
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 import { createPprMeta, IBranchDefaultMeta, IBranchMeta, IPprMeta } from "../lib/createPprMeta";
-import { TTotalFieldsValues } from "../model/ppr.types";
 
 describe("createPprMeta", () => {
   it("createPprMeta возвращает объект нужного типа", () => {
@@ -39,7 +38,7 @@ describe("createPprMeta", () => {
     const result = createPprMeta({ pprData, workingMansData });
 
     const totalShoudBe = {
-      peoples: {},
+      workingMans: {},
       works: { year_plan_time: 1, jan_plan_time: 1, year_fact_time: 1, jan_fact_time: 1 },
     };
 

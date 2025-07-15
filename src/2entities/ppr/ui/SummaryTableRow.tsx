@@ -2,15 +2,15 @@ import { FC } from "react";
 
 import { TableCellMemo } from "@/1shared/ui/table";
 
-import { IPprData, TPprDataFieldsTotalValues } from "../model/ppr.types";
+import { PlannedWorkWithCorrections, PlannedWorkTotalTimes } from "../model/ppr.types";
 import { PprField } from "../model/PprField";
 
 interface ISummaryTableRowProps {
   name?: string;
   isVertical?: boolean;
-  fields: (keyof IPprData)[];
+  fields: (keyof PlannedWorkWithCorrections)[];
   summaryNameColSpan?: number;
-  totalFieldsValues?: TPprDataFieldsTotalValues;
+  totalFieldsValues?: PlannedWorkTotalTimes;
 }
 
 export const SummaryTableRow: FC<ISummaryTableRowProps> = ({

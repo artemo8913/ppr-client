@@ -1,8 +1,10 @@
-import { IPprData } from "../model/ppr.types";
+import { PlannedWorkWithCorrections } from "../model/ppr.types";
 
-type IPprDataWithoutId = Omit<IPprData, "id">;
+type PlannedWorkWithCorrectionsWithoutId = Omit<PlannedWorkWithCorrections, "id">;
 
-export const createNewPprWorkInstance = (newData: Partial<IPprDataWithoutId>): IPprData => {
+export const createNewPprWorkInstance = (
+  newData: Partial<PlannedWorkWithCorrectionsWithoutId>
+): PlannedWorkWithCorrections => {
   return {
     common_work_id: null,
     branch: "additional",

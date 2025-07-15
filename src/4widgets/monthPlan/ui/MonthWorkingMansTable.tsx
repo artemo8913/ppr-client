@@ -33,13 +33,13 @@ export const MonthWorkingMansTable: FC<IMonthWorkingMansTableProps> = ({
   currentTimePeriod,
 }) => {
   const totalMansPlanNormTime =
-    globalPprMeta.totalValues.final.peoples[PprField.getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
+    globalPprMeta.totalValues.final.workingMans[PprField.getPlanNormTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalMansPlanTabelTime =
-    globalPprMeta.totalValues.final.peoples[PprField.getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
+    globalPprMeta.totalValues.final.workingMans[PprField.getPlanTabelTimeFieldByTimePeriod(currentTimePeriod)];
 
   const totalMansPlanTime =
-    globalPprMeta.totalValues.final.peoples[PprField.getPlanTimeFieldByTimePeriod(currentTimePeriod)];
+    globalPprMeta.totalValues.final.workingMans[PprField.getPlanTimeFieldByTimePeriod(currentTimePeriod)];
 
   const planTimeExploitationTotal = monthPprMeta.branchesMeta.reduce((sum, val) => {
     if (val.type === "branch" && val.name === "exploitation") {

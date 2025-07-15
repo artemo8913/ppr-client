@@ -1,9 +1,9 @@
 import { TimePeriod } from "@/1shared/lib/date";
 import {
-  IPprData,
-  PlanWorkField,
+  PlannedWorkWithCorrections,
+  PlanValueField,
   PlanTimeField,
-  FactWorkField,
+  FactValueField,
   FactTimeField,
   FactNormTimeField,
   PlanNormTimeField,
@@ -28,12 +28,14 @@ import {
   workAndTimeFieldsSet,
 } from "./ppr.const";
 
+//TODO: наверное лучше сделать сервис, а не класс со static
+/**Валидация и получение наименований определенных полей годового плана */
 export class PprField {
-  static getPlanWorkFieldByTimePeriod(timePeriod: TimePeriod): PlanWorkField {
+  static getPlanWorkFieldByTimePeriod(timePeriod: TimePeriod): PlanValueField {
     return `${timePeriod}_plan_work`;
   }
 
-  static getFactWorkFieldByTimePeriod(timePeriod: TimePeriod): FactWorkField {
+  static getFactWorkFieldByTimePeriod(timePeriod: TimePeriod): FactValueField {
     return `${timePeriod}_fact_work`;
   }
 
@@ -69,15 +71,15 @@ export class PprField {
     };
   }
 
-  static isPprData(field: any): field is keyof IPprData {
+  static isYearPlanField(field: any): field is keyof PlannedWorkWithCorrections {
     return pprTableFieldsSet.has(field);
   }
 
-  static isPlanWork(field: any): field is PlanWorkField {
+  static isPlanWork(field: any): field is PlanValueField {
     return planWorkFieldsSet.has(field);
   }
 
-  static isFactWork(field: any): field is FactWorkField {
+  static isFactWork(field: any): field is FactValueField {
     return factWorkFieldsSet.has(field);
   }
 
@@ -101,28 +103,28 @@ export class PprField {
     return planTabelTimeFieldsSet.has(field);
   }
 
-  static isPlanOrFactWork(field: any): field is PlanWorkField | FactWorkField {
+  static isPlanOrFactWork(field: any): field is PlanValueField | FactValueField {
     return planFactWorkFieldsSet.has(field);
   }
   static isWorkOrTime(
     field: any
-  ): field is PlanWorkField | PlanTimeField | FactWorkField | FactNormTimeField | FactTimeField {
+  ): field is PlanValueField | PlanTimeField | FactValueField | FactNormTimeField | FactTimeField {
     return workAndTimeFieldsSet.has(field);
   }
 
-  static getPlanTimeFieldByPlanWorkField(field: PlanWorkField): PlanTimeField {
+  static getPlanTimeFieldByPlanWorkField(field: PlanValueField): PlanTimeField {
     return planWorkToPlanTimeFieldsPair[field];
   }
 
-  static getFactTimeFieldByFactWorkField(field: FactWorkField): FactNormTimeField {
+  static getFactTimeFieldByFactWorkField(field: FactValueField): FactNormTimeField {
     return factWorkToFactNormTimeFieldsPair[field];
   }
 
-  static getPlanWorkFieldByPlanTimeField(field: PlanTimeField): PlanWorkField {
+  static getPlanWorkFieldByPlanTimeField(field: PlanTimeField): PlanValueField {
     return planTimeToPlanWorkFieldsPair[field];
   }
 
-  static getPlanWorkFieldByFactWorkField(field: FactWorkField): PlanWorkField {
+  static getPlanWorkFieldByFactWorkField(field: FactValueField): PlanValueField {
     return factWorkToPlanWorkFieldsPair[field];
   }
 

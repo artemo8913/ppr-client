@@ -79,7 +79,7 @@ export async function pprConvertToXlsx(ppr: IPpr) {
   addWorkingMansSheet({
     workbook,
     workingMans: ppr.workingMans,
-    totalValue: pprMeta.totalValues.final.peoples,
+    totalValue: pprMeta.totalValues.final.workingMans,
     sheetName: PPR_WORKING_MANS_SHEET_NAME,
     sheetOptions: WORKSHEET_OPTIONS,
   });

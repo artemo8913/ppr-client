@@ -138,7 +138,7 @@ function handlePlanFactTimeValues({
     };
   }
 }
-
+//TODO: расчет отчетов вынести в сервисы в PPR, ибо вдруг потребуется в ексель делать выгрузку => здесь отчету не место
 export function calculateLaborCost(data: TPprDataForReport[], filterLevel?: DivisionType) {
   const divisionsDataByBranch: {
     [branch in TWorkBranch]: {

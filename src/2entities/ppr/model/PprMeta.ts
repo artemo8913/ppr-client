@@ -1,45 +1,26 @@
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
-import { FACT_NORM_TIME_FIELDS, FACT_TIME_FIELDS, PLAN_TIME_FIELDS } from "./ppr.const";
-import { IPprData, TPprDataFieldsTotalValues, TPprDataWorkId, TWorkingManFieldsTotalValues } from "./ppr.types";
+import {
+  FACT_NORM_TIME_FIELDS,
+  FACT_TIME_FIELDS,
+  PLAN_NORM_TIME_FIELDS,
+  PLAN_TABEL_TIME_FIELDS,
+  PLAN_TIME_FIELDS,
+  PLAN_WORK_FIELDS,
+} from "./ppr.const";
+import {
+  PlannedWork,
+  PlannedWorkId,
+  PlannedWorkTotalTimes,
+  WorkingMansTotalTimes,
+  PlannedWorkWithCorrections,
+  PlannedWorksAndWorkingMansTotalTimes,
+  TotalTimes,
+  PlannedWorkingMans,
+} from "./ppr.types";
 
-type TotalWorkTime = { final: TPprDataFieldsTotalValues; original: TPprDataFieldsTotalValues };
+//TODO: сделать какой-нибудь сервис Ppr, который в одном месте соберет все связанные сервисы в одном месте.
 
-type BranchMeta = {
-  name: string;
-  type: "branch";
-  orderIndex: string;
-  prev: BranchMeta | null;
-  subbranches: SubbranchMeta[];
-  workIds: Set<TPprDataWorkId>;
-  total: TotalWorkTime;
-};
-
-type SubbranchMeta = {
-  name: string;
-  type: "subbranch";
-  orderIndex: string;
-  prev: SubbranchMeta | null;
-  workIds: Set<TPprDataWorkId>;
-  total: TotalWorkTime;
-};
-
-type BranchOrSubbranch = BranchMeta | SubbranchMeta;
-
-type PprMetaType = {
-  worksRowSpan: number[];
-  subbranchesList: string[];
-  branchesMeta: BranchOrSubbranch[];
-  worksOrder: { [id: TPprDataWorkId]: string };
-  totalWorkTime: TotalWorkTime;
-  totalWorkingManTime?: TWorkingManFieldsTotalValues;
-  branchesAndSubbrunchesList: {
-    [id: TPprDataWorkId]: {
-      branch?: BranchMeta;
-      subbranch: SubbranchMeta;
-    };
-  };
-};
 /**TODO: Разбить на подклассы. Также думаю, что необходимо сделать так, чтобы подсчет итоговых значений ничего не знал
  * о final и original значениях. Например, был бы какой-нибудь сервис, который бы предоставлял простую структуры запланированных
  * работ (field: number | string). А не как сейчас для плановых объемов работ PlanWorkFieldValues {original: number;} и т.п.
@@ -49,88 +30,152 @@ type PprMetaType = {
  * Структуру данных PlanWorkFieldValues может и нельзя упростить из-за выдуманного процесса переноса работ,
  * но её реализацию надо "спрятать", инкапсулировать куда-нибудь
  */
-export class PprWorksMeta {
+
+type BranchMeta = {
+  name: string;
+  type: "branch";
+  orderIndex: string;
+  prev: BranchMeta | null;
+  subbranches: SubbranchMeta[];
+  workIds: Set<PlannedWorkId>;
+  total: PlannedWorkTotalTimes;
+};
+
+type SubbranchMeta = {
+  name: string;
+  type: "subbranch";
+  orderIndex: string;
+  prev: SubbranchMeta | null;
+  workIds: Set<PlannedWorkId>;
+  total: PlannedWorkTotalTimes;
+};
+
+type YearPlanMeta = {
+  worksRowSpan: number[];
+  subbranchesList: string[];
+  branchesMeta: (BranchMeta | SubbranchMeta)[];
+  worksOrder: { [id: PlannedWorkId]: string };
+  totalWorkTime: PlannedWorkTotalTimes;
+  totalWorkingManTime?: WorkingMansTotalTimes;
+  branchesAndSubbrunchesIndexList: {
+    [id: PlannedWorkId]: {
+      branch?: BranchMeta;
+      subbranch: SubbranchMeta;
+    };
+  };
+};
+
+export class PlannedWorkConverter {
+  static convertToPlannedWorkFrom(work: PlannedWorkWithCorrections, type: "original" | "final"): PlannedWork {
+    const planValues = PLAN_WORK_FIELDS.map((field) => ({ [field]: work[field][type] }));
+    const planTimes = PLAN_TIME_FIELDS.map((field) => ({ [field]: work[field][type] }));
+
+    return {
+      ...work,
+      ...Object.assign({}, ...planValues),
+      ...Object.assign({}, ...planTimes),
+    };
+  }
+
+  static convertManyToPlannedWorkFrom(manyWorks: PlannedWorkWithCorrections[], type: "original" | "final") {
+    return manyWorks.map((work) => this.convertToPlannedWorkFrom(work, type));
+  }
+}
+
+class SubbranchesList {
+  private _subbranchesSet = new Set<string>();
+
+  add(subbranch: string) {
+    this._subbranchesSet.add(subbranch);
+  }
+
+  get() {
+    return Array.from(this._subbranchesSet);
+  }
+}
+
+class WorksOrderCalculator {
+  private _worksOrderStore: { [id: PlannedWorkId]: string } = {};
+
+  private _tempWorkOrder: number = 0;
+
+  private _generateWorkOrder(subbranchOrder: string) {
+    return `${subbranchOrder}${this._tempWorkOrder}`;
+  }
+
+  saveWorkOrderInStoreFor(index: number, subbranchOrder: string) {
+    this._worksOrderStore[index] = this._generateWorkOrder(subbranchOrder);
+  }
+
+  increaseWorkOrder() {
+    return ++this._tempWorkOrder;
+  }
+
+  resetWorkOrder() {
+    this._tempWorkOrder = 1;
+  }
+
+  getWorksOrderStore() {
+    return this._worksOrderStore;
+  }
+}
+
+class RowSpanCalculator {
+  private _rowSpans: number[] = [];
+
+  increaseRowSpanFor(index: number) {
+    this._rowSpans[index]++;
+  }
+
+  clearSpanFor(index: number) {
+    this._rowSpans[index] = 0;
+  }
+
+  initRowSpanFor(index: number) {
+    this._rowSpans[index] = 1;
+  }
+
+  getRowSpans() {
+    return this._rowSpans;
+  }
+}
+
+class TotalCalculator {
+  private _total: TotalTimes = {};
+
+  reset() {
+    this._total = {};
+  }
+
+  add(value: number, field: keyof TotalTimes) {
+    if (this._total[field] !== undefined) {
+      this._total[field] = roundToFixed(value + this._total[field]!);
+    } else {
+      this._total[field] = roundToFixed(value);
+    }
+  }
+
+  get() {
+    return this._total;
+  }
+}
+
+class BranchAndSubbranchMetaCreator {
+  private _totalCalculator = new TotalCalculator();
+  private _branchTotalCalculator = new TotalCalculator();
+  private _subbranchTotalCalculator = new TotalCalculator();
+
   private _tempBranchMeta: BranchMeta | null = null;
   private _tempSubbranchMeta: SubbranchMeta | null = null;
-  private _tempWorkOrder: number = 0;
 
   private _branchesMeta: BranchMeta[] = [];
 
   private _branchesAndSubbranchesIndexList: {
-    [id: TPprDataWorkId]: {
+    [id: PlannedWorkId]: {
       branch?: BranchMeta;
       subbranch: SubbranchMeta;
     };
   } = {};
-
-  private _worksOrder: { [id: TPprDataWorkId]: string } = {};
-
-  private _totalTime: TotalWorkTime = { final: {}, original: {} };
-
-  private _subbranchesSet = new Set<string>();
-
-  private _rowSpans: number[] = [];
-
-  private _tempWork = {
-    index: -1,
-    name: "",
-    note: "",
-    subbranch: "",
-    branch: "additional",
-  };
-
-  constructor(yearPlannedWorks: IPprData[]) {
-    yearPlannedWorks.forEach((pprData, index) => this._updateBy(pprData, index));
-  }
-
-  private _createNewBranchMeta(pprData: IPprData): BranchMeta {
-    return {
-      name: pprData.branch,
-      prev: this._tempBranchMeta,
-      orderIndex: `${this._branchesMeta.length + 1}.`,
-      type: "branch",
-      subbranches: [],
-      workIds: new Set(),
-      total: { final: {}, original: {} },
-    };
-  }
-
-  private _createNewSubbranchMeta(pprData: IPprData): SubbranchMeta {
-    return {
-      name: pprData.subbranch,
-      prev: this._tempSubbranchMeta,
-      orderIndex: `${this._branchesMeta.length}.${(this._tempBranchMeta?.subbranches.length || 0) + 1}.`,
-      type: "subbranch",
-      workIds: new Set(),
-      total: { final: {}, original: {} },
-    };
-  }
-
-  private _increaseRowSpanFor() {
-    this._rowSpans[this._tempWork.index]++;
-  }
-
-  private _makeZeroRowSpanFor(index: number) {
-    this._rowSpans[index] = 0;
-  }
-
-  private _initRowSpanFor(index: number) {
-    this._rowSpans[index] = 1;
-  }
-
-  private _updateTempWork(index: number, pprData: IPprData) {
-    this._tempWork = {
-      index,
-      name: pprData.name,
-      note: pprData.note,
-      subbranch: pprData.subbranch,
-      branch: pprData.branch,
-    };
-  }
-
-  private _addToSubbranchList(subbranch: string) {
-    this._subbranchesSet.add(subbranch);
-  }
 
   private _updateBranchInIndexList(index: number, branch: BranchMeta) {
     this._branchesAndSubbranchesIndexList[index] = {
@@ -146,130 +191,55 @@ export class PprWorksMeta {
     };
   }
 
-  private _updateTempBranchMeta(pprData: IPprData): BranchMeta {
-    this._tempBranchMeta = this._createNewBranchMeta(pprData);
-    this._branchesMeta.push(this._tempBranchMeta);
+  createNewBranchMetaBy(index: number, work: PlannedWork): BranchMeta {
+    this._branchTotalCalculator.reset();
 
-    return this._tempBranchMeta;
+    const newBranch: BranchMeta = {
+      name: work.branch,
+      prev: this._tempBranchMeta,
+      orderIndex: `${this._branchesMeta.length + 1}.`,
+      type: "branch",
+      subbranches: [],
+      workIds: new Set(),
+      total: this._branchTotalCalculator.get(),
+    };
+
+    this._updateBranchInIndexList(index, newBranch);
+    this._branchesMeta.push(newBranch);
+    this._tempBranchMeta = newBranch;
+
+    return newBranch;
   }
 
-  private _updateTempSubbranchMeta(pprData: IPprData): SubbranchMeta {
-    this._tempSubbranchMeta = this._createNewSubbranchMeta(pprData);
-    this._tempBranchMeta?.subbranches.push(this._tempSubbranchMeta);
+  createNewSubbranchMetaBy(index: number, work: PlannedWork): SubbranchMeta {
+    this._subbranchTotalCalculator.reset();
 
-    return this._tempSubbranchMeta;
+    const newSubbranch: SubbranchMeta = {
+      name: work.subbranch,
+      prev: this._tempSubbranchMeta,
+      orderIndex: `${this._branchesMeta.length}.${(this._tempBranchMeta?.subbranches.length || 0) + 1}.`,
+      type: "subbranch",
+      workIds: new Set(),
+      total: this._subbranchTotalCalculator.get(),
+    };
+
+    this._updateSubbranchInIndexList(index, newSubbranch);
+    this._tempSubbranchMeta = newSubbranch;
+    this._tempBranchMeta?.subbranches.push(newSubbranch);
+
+    return newSubbranch;
   }
 
-  private _addTimeInTempBranch(type: "original" | "final", value: number, field: keyof TPprDataFieldsTotalValues) {
-    if (!this._tempBranchMeta) {
-      throw new Error("При попытке расчета итоговых значений категории произошла ошибка");
-    }
-    if (this._tempBranchMeta.total[type][field] !== undefined) {
-      this._tempBranchMeta.total[type][field] = roundToFixed(value + this._tempBranchMeta.total[type][field]!);
-    } else {
-      this._tempBranchMeta.total[type][field] = roundToFixed(value);
-    }
-  }
-
-  private _addTimeInTempSubbranch(type: "original" | "final", value: number, field: keyof TPprDataFieldsTotalValues) {
-    if (!this._tempSubbranchMeta) {
-      throw new Error("При попытке расчета итоговых значений подкатегории произошла ошибка");
-    }
-    if (this._tempSubbranchMeta.total[type][field] !== undefined) {
-      this._tempSubbranchMeta.total[type][field] = roundToFixed(value + this._tempSubbranchMeta.total[type][field]!);
-    } else {
-      this._tempSubbranchMeta.total[type][field] = roundToFixed(value);
-    }
-  }
-
-  private _addTimeInTotalTime(type: "original" | "final", value: number, field: keyof TPprDataFieldsTotalValues) {
-    if (!this._totalTime) {
-      throw new Error("При попытке расчета итога произошла ошибка");
-    }
-    if (this._totalTime[type][field] !== undefined) {
-      this._totalTime[type][field] = roundToFixed(value + this._totalTime[type][field]!);
-    } else {
-      this._totalTime[type][field] = roundToFixed(value);
-    }
-  }
-
-  private _addTimeInAllTotals(pprData: IPprData) {
-    PLAN_TIME_FIELDS.forEach((field) => {
-      this._addTimeInTempBranch("original", pprData[field].original, field);
-      this._addTimeInTempSubbranch("original", pprData[field].original, field);
-      this._addTimeInTotalTime("original", pprData[field].original, field);
-      this._addTimeInTempBranch("final", pprData[field].final, field);
-      this._addTimeInTempSubbranch("final", pprData[field].final, field);
-      this._addTimeInTotalTime("final", pprData[field].final, field);
-    });
-    FACT_NORM_TIME_FIELDS.forEach((field) => {
-      this._addTimeInTempBranch("original", pprData[field], field);
-      this._addTimeInTempSubbranch("original", pprData[field], field);
-      this._addTimeInTotalTime("original", pprData[field], field);
-      this._addTimeInTempBranch("final", pprData[field], field);
-      this._addTimeInTempSubbranch("final", pprData[field], field);
-      this._addTimeInTotalTime("final", pprData[field], field);
-    });
-    FACT_TIME_FIELDS.forEach((field) => {
-      this._addTimeInTempBranch("original", pprData[field], field);
-      this._addTimeInTempSubbranch("original", pprData[field], field);
-      this._addTimeInTotalTime("original", pprData[field], field);
-      this._addTimeInTempBranch("final", pprData[field], field);
-      this._addTimeInTempSubbranch("final", pprData[field], field);
-      this._addTimeInTotalTime("final", pprData[field], field);
+  addTimeInAllTotals(work: PlannedWork) {
+    [...PLAN_TIME_FIELDS, ...FACT_NORM_TIME_FIELDS, ...FACT_TIME_FIELDS].forEach((field) => {
+      this._branchTotalCalculator.add(work[field], field);
+      this._subbranchTotalCalculator.add(work[field], field);
+      this._totalCalculator.add(work[field], field);
     });
   }
 
-  private _addWorkOrderFor(index: number, order: string) {
-    this._worksOrder[index] = order;
-  }
-
-  private _generateWorkOrder() {
-    return `${this._tempSubbranchMeta?.orderIndex}${this._tempWorkOrder}`;
-  }
-
-  private _increaseTempWorkOrder() {
-    return ++this._tempWorkOrder;
-  }
-
-  private _resetTempWorkOrder() {
-    this._tempWorkOrder = 1;
-  }
-
-  private _updateBy(pprData: IPprData, index: number) {
-    const isSameName = this._tempWork.name === pprData.name;
-    const isSameBranch = this._tempBranchMeta?.name === pprData.branch;
-    const isSameSubbranch = this._tempSubbranchMeta?.name === pprData.subbranch;
-    const isSameNote = this._tempWork.note === pprData.note;
-
-    const isSameWork = isSameName && isSameNote && isSameBranch && isSameSubbranch;
-    const isChangedBranch = !isSameBranch;
-    const isChangedSubbranch = !isSameBranch || !isSameSubbranch;
-
-    if (isSameWork) {
-      this._increaseRowSpanFor();
-      this._makeZeroRowSpanFor(index);
-    } else {
-      this._addWorkOrderFor(this._tempWork.index, this._generateWorkOrder());
-      this._increaseTempWorkOrder();
-      this._updateTempWork(index, pprData);
-      this._initRowSpanFor(index);
-    }
-
-    if (isChangedBranch) {
-      const newBranch = this._updateTempBranchMeta(pprData);
-      this._updateBranchInIndexList(index, newBranch);
-    }
-
-    if (isChangedSubbranch) {
-      const newSubbranch = this._updateTempSubbranchMeta(pprData);
-      this._updateSubbranchInIndexList(index, newSubbranch);
-      this._resetTempWorkOrder();
-      this._addWorkOrderFor(index, this._generateWorkOrder());
-    }
-
-    this._addToSubbranchList(pprData.subbranch);
-    this._addTimeInAllTotals(pprData);
+  getCurrentSubbranchOrder(): string {
+    return this._tempSubbranchMeta?.orderIndex || "";
   }
 
   getIndexList() {
@@ -281,31 +251,99 @@ export class PprWorksMeta {
   }
 
   getTotalTime() {
-    return this._totalTime;
-  }
-
-  getSubbranchList() {
-    return Array.from(this._subbranchesSet);
-  }
-
-  getRowSpans() {
-    return this._rowSpans;
-  }
-
-  getWorksOrder() {
-    return this._worksOrder;
+    return this._totalCalculator.get();
   }
 }
 
-export function createPprMeta2(yearPlannedWorks: IPprData[]): PprMetaType {
-  const workMeta = new PprWorksMeta(yearPlannedWorks);
+class WorkingMansTotalCalculator {
+  private _totalCalculator = new TotalCalculator();
 
-  return {
-    worksRowSpan: workMeta.getRowSpans(),
-    totalWorkTime: workMeta.getTotalTime(),
-    branchesMeta: workMeta.getBranchesMeta(),
-    subbranchesList: workMeta.getSubbranchList(),
-    branchesAndSubbrunchesList: workMeta.getIndexList(),
-    worksOrder: workMeta.getWorksOrder(),
+  updateBy(workingMan: PlannedWorkingMans) {
+    [...PLAN_NORM_TIME_FIELDS, ...PLAN_TABEL_TIME_FIELDS, ...PLAN_TIME_FIELDS, ...FACT_TIME_FIELDS].forEach((field) => {
+      this._totalCalculator.add(workingMan[field], field);
+    });
+  }
+}
+
+export class YearPlanMetaCreator {
+  private _subbranchList = new SubbranchesList();
+  private _rowSpanCalculator = new RowSpanCalculator();
+  private _workOrderCalculator = new WorksOrderCalculator();
+  private _branchesAndSubbranchesCreator = new BranchAndSubbranchMetaCreator();
+
+  private _tempWork = {
+    index: -1,
+    name: "",
+    note: "",
+    subbranch: "",
+    branch: "additional",
   };
+
+  constructor(yearPlannedWorks: PlannedWorkWithCorrections[], type: "original" | "final") {
+    yearPlannedWorks.forEach((pprData, index) =>
+      this._updateBy(PlannedWorkConverter.convertToPlannedWorkFrom(pprData, type), index)
+    );
+  }
+
+  private _updateTempWork(index: number, pprData: PlannedWork) {
+    this._tempWork = {
+      index,
+      name: pprData.name,
+      note: pprData.note,
+      branch: pprData.branch,
+      subbranch: pprData.subbranch,
+    };
+  }
+
+  private _updateBy(pprData: PlannedWork, index: number) {
+    const isSameName = this._tempWork.name === pprData.name;
+    const isSameBranch = this._tempWork.branch === pprData.branch;
+    const isSameSubbranch = this._tempWork.subbranch === pprData.subbranch;
+    const isSameNote = this._tempWork.note === pprData.note;
+
+    const isSameWork = isSameName && isSameNote && isSameBranch && isSameSubbranch;
+    const isBranchChanged = !isSameBranch;
+    const isSubbranchChanged = !isSameBranch || !isSameSubbranch;
+
+    const subbranchOrder = this._branchesAndSubbranchesCreator.getCurrentSubbranchOrder();
+
+    if (isSameWork) {
+      this._rowSpanCalculator.increaseRowSpanFor(index);
+      this._rowSpanCalculator.clearSpanFor(index);
+    } else {
+      this._workOrderCalculator.saveWorkOrderInStoreFor(this._tempWork.index, subbranchOrder);
+      this._workOrderCalculator.increaseWorkOrder();
+      this._updateTempWork(index, pprData);
+      this._rowSpanCalculator.initRowSpanFor(index);
+    }
+
+    if (isBranchChanged) {
+      this._branchesAndSubbranchesCreator.createNewBranchMetaBy(index, pprData);
+    }
+
+    if (isSubbranchChanged) {
+      this._branchesAndSubbranchesCreator.createNewSubbranchMetaBy(index, pprData);
+      this._workOrderCalculator.saveWorkOrderInStoreFor(index, subbranchOrder);
+      this._workOrderCalculator.resetWorkOrder();
+    }
+
+    this._subbranchList.add(pprData.subbranch);
+    this._branchesAndSubbranchesCreator.addTimeInAllTotals(pprData);
+  }
+
+  getYearPlanMeta(): YearPlanMeta {
+    return {
+      worksRowSpan: this._rowSpanCalculator.getRowSpans(),
+      worksOrder: this._workOrderCalculator.getWorksOrderStore(),
+      subbranchesList: this._subbranchList.get(),
+      branchesAndSubbrunchesIndexList: this._branchesAndSubbranchesCreator.getIndexList(),
+      branchesMeta: this._branchesAndSubbranchesCreator.getBranchesMeta(),
+      totalWorkTime: this._branchesAndSubbranchesCreator.getTotalTime(),
+      totalWorkingManTime: {},
+    };
+  }
+}
+
+export function createPprMeta2(yearPlannedWorks: PlannedWorkWithCorrections[]): YearPlanMeta {
+  return new YearPlanMetaCreator(yearPlannedWorks, "final").getYearPlanMeta();
 }

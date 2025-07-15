@@ -1,7 +1,7 @@
 import { User } from "@/2entities/user/@x/ppr";
 import { Month, TimePeriod } from "@/1shared/lib/date";
 
-export type YearPprStatus =
+export type YearPlanStatus =
   | "template"
   | "plan_creating"
   | "plan_on_agreement_engineer"
@@ -11,7 +11,7 @@ export type YearPprStatus =
   | "in_process"
   | "done";
 
-export type MonthPprStatus =
+export type MonthPlanStatus =
   | "none"
   | "plan_creating"
   | "plan_on_agreement_engineer"
@@ -24,26 +24,25 @@ export type MonthPprStatus =
   | "fact_on_agreement_sub_boss"
   | "done";
 
-export type AllMonthStatuses = {
-  [month in Month]: MonthPprStatus;
+export type AllMonthsPlansStatuses = {
+  [month in Month]: MonthPlanStatus;
 };
 
 type ReportsNotes = {
   [month in Month]: string;
 };
 
-export type WorkTransfer = { fieldTo: PlanWorkField; value: number };
+export type WorkTransfer = { fieldTo: PlanValueField; value: number };
 
-//TODO: Точно надо Work переименовать в Values (объемы же, а не работы в столбцах)
-export type PlanWorkField = `${TimePeriod}_plan_work`;
-export type FactWorkField = `${TimePeriod}_fact_work`;
+export type PlanValueField = `${TimePeriod}_plan_work`;
+export type FactValueField = `${TimePeriod}_fact_work`;
 export type PlanNormTimeField = `${TimePeriod}_plan_norm_time`;
 export type PlanTabelTimeField = `${TimePeriod}_plan_tabel_time`;
 export type PlanTimeField = `${TimePeriod}_plan_time`;
 export type FactNormTimeField = `${TimePeriod}_fact_norm_time`;
 export type FactTimeField = `${TimePeriod}_fact_time`;
 
-export interface PlanWorkFieldValues {
+export interface PlanValueWithCorrection {
   original: number;
   handCorrection: number | null;
   final: number;
@@ -54,106 +53,107 @@ export interface PlanWorkFieldValues {
   undoneTransfers: WorkTransfer[] | null;
 }
 
-export interface PlanTimeFieldValues {
+export interface PlanTimeWithCorrection {
   original: number;
   final: number;
 }
-//TODO: как-то переименовать или удалить в связи с использованием только в actions
-export type TPlanWorkPeriodsFields = {
-  [key in PlanWorkField]: PlanWorkFieldValues;
+
+export type AllPlanValuesWithCorrections = {
+  [key in PlanValueField]: PlanValueWithCorrection;
 };
 
-export type TFactWorkPeriodsFields = {
-  [key in FactWorkField]: number;
+export type AllPlanValues = {
+  [key in PlanValueField]: number;
 };
 
-export type TPlanNormTimePeriodsFields = {
+export type AllFactValues = {
+  [key in FactValueField]: number;
+};
+
+export type AllPlanNormTimes = {
   [key in PlanNormTimeField]: number;
 };
 
-export type TPlanTabelTimePeriodsFields = {
+export type AllPlanTabelTimes = {
   [key in PlanTabelTimeField]: number;
 };
-/**Поля месячных и годовых планируемых трудозатрат (для работ)*/
-export type TWorkPlanTimePeriodsFields = {
-  [key in PlanTimeField]: PlanTimeFieldValues;
+
+export type AllPlanTimesWithCorrections = {
+  [key in PlanTimeField]: PlanTimeWithCorrection;
 };
-/**Поля месячных и годовых планируемых трудозатрат (для людей)*/
-export type TPlanTimePeriodsFields = {
+
+export type AllPlanTimes = {
   [key in PlanTimeField]: number;
 };
 
-export type TFactNormTimePeriodsFields = {
+export type AllFactNormTimes = {
   [key in FactNormTimeField]: number;
 };
 
-export type TFactTimePeriodsFields = {
+export type AllFactTimes = {
   [key in FactTimeField]: number;
 };
 
-export type TPprDataFieldsTotalValues = Partial<TPlanTimePeriodsFields> &
-  Partial<TFactNormTimePeriodsFields> &
-  Partial<TFactTimePeriodsFields>;
+export type PlannedWorkTotalTimes = Partial<AllPlanTimes> & Partial<AllFactNormTimes> & Partial<AllFactTimes>;
 
-export type TWorkingManFieldsTotalValues = Partial<TPlanNormTimePeriodsFields> &
-  Partial<TPlanTabelTimePeriodsFields> &
-  Partial<TPlanTimePeriodsFields> &
-  Partial<TFactTimePeriodsFields>;
+export type WorkingMansTotalTimes = Partial<AllPlanNormTimes> &
+  Partial<AllPlanTabelTimes> &
+  Partial<AllPlanTimes> &
+  Partial<AllFactTimes>;
 
-export type TTotalFieldsValues = {
-  //TODO: переименовать в working mans
-  peoples: TWorkingManFieldsTotalValues;
-  works: TPprDataFieldsTotalValues;
+export type TotalTimes = PlannedWorkTotalTimes & WorkingMansTotalTimes;
+//TODO: удалить, перевести все зависимости к TotalTimes
+export type PlannedWorksAndWorkingMansTotalTimes = {
+  works: PlannedWorkTotalTimes;
+  workingMans: WorkingMansTotalTimes;
 };
 
-export interface Ppr {
-  id: number;
-  name: string;
-  year: number;
-  status: YearPprStatus;
-  created_at: Date;
-  created_by: User;
-  months_statuses: AllMonthStatuses;
-  raports_notes: ReportsNotes;
+interface YearPlanInvolvedDivisions {
   idDirection: number | null;
   idDistance: number | null;
   idSubdivision: number | null;
-  workingMans: IWorkingManYearPlan[];
-  data: IPprData[];
   directionShortName?: string | null;
   distanceShortName?: string | null;
   subdivisionShortName?: string | null;
 }
 
-export type PprShortInfo = Omit<Ppr, "data" | "workingMans" | "total_fields_value" | "raports_notes">;
-
-export interface IPprDataWithRowSpan extends IPprData {
-  rowSpan?: number;
+interface PlannedWorksAndWorkingMans {
+  data: PlannedWorkWithCorrections[];
+  workingMans: PlannedWorkingMans[];
+  raports_notes: ReportsNotes;
 }
 
-export type TWorkingManId = number | string;
+export interface YearPlanBasicData extends YearPlanInvolvedDivisions {
+  id: number;
+  name: string;
+  year: number;
+  created_by: User;
+  created_at: Date;
+  status: YearPlanStatus;
+  months_statuses: AllMonthsPlansStatuses;
+}
 
-export interface IWorkingManYearPlan
-  extends TPlanNormTimePeriodsFields,
-    TPlanTabelTimePeriodsFields,
-    TPlanTimePeriodsFields,
-    TFactTimePeriodsFields {
-  id: TWorkingManId;
+export interface YearPlan extends YearPlanBasicData, PlannedWorksAndWorkingMans {}
+
+export type PlannedWorkingManId = number | string;
+
+export interface PlannedWorkingMans extends AllPlanNormTimes, AllPlanTabelTimes, AllPlanTimes, AllFactTimes {
+  id: PlannedWorkingManId;
   full_name: string;
   work_position: string;
   participation: number;
   is_working_man_aproved: boolean;
 }
 
-export type TWorkBranch = "exploitation" | "additional" | "unforeseen";
+export type PlannedWorkBranch = "exploitation" | "additional" | "unforeseen";
 
-export type TPprDataWorkId = number | string;
+export type PlannedWorkId = number | string;
 
-export interface IPprBasicData {
-  id: TPprDataWorkId;
+export interface PlannedWorkBasicData {
+  id: PlannedWorkId;
   common_work_id: number | null;
   is_work_aproved: boolean;
-  branch: TWorkBranch;
+  branch: PlannedWorkBranch;
   subbranch: string;
   note: string;
   name: string;
@@ -170,10 +170,18 @@ export interface IPprBasicData {
   unity: string;
 }
 
-export interface IPprData
-  extends IPprBasicData,
-    TPlanWorkPeriodsFields,
-    TWorkPlanTimePeriodsFields,
-    TFactWorkPeriodsFields,
-    TFactNormTimePeriodsFields,
-    TFactTimePeriodsFields {}
+export interface PlannedWorkWithCorrections
+  extends PlannedWorkBasicData,
+    AllPlanValuesWithCorrections,
+    AllPlanTimesWithCorrections,
+    AllFactValues,
+    AllFactNormTimes,
+    AllFactTimes {}
+
+export interface PlannedWork
+  extends PlannedWorkBasicData,
+    AllPlanValues,
+    AllPlanTimes,
+    AllFactValues,
+    AllFactNormTimes,
+    AllFactTimes {}

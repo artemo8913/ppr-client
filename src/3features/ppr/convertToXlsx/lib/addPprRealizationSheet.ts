@@ -61,9 +61,9 @@ export function addPprRealizationSheet({
 
   // Данные таблицы
   const pprRealizationPercent =
-    totalValues[pprDataView].works.year_fact_norm_time !== undefined && totalValues[pprDataView].peoples.year_plan_time
+    totalValues[pprDataView].works.year_fact_norm_time !== undefined && totalValues[pprDataView].workingMans.year_plan_time
       ? roundToFixed(
-          (totalValues[pprDataView].works.year_fact_norm_time! / totalValues[pprDataView].peoples.year_plan_time!) * 100
+          (totalValues[pprDataView].works.year_fact_norm_time! / totalValues[pprDataView].workingMans.year_plan_time!) * 100
         )
       : "-";
 
@@ -87,7 +87,7 @@ export function addPprRealizationSheet({
   createCellWithBorderAndCenterAlignmentAndWrap(
     pprRealizationSheet,
     "A6",
-    totalValues[pprDataView].peoples.year_plan_time
+    totalValues[pprDataView].workingMans.year_plan_time
   );
   createCellWithBorderAndCenterAlignmentAndWrap(
     pprRealizationSheet,

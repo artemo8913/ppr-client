@@ -1,6 +1,6 @@
-import { MonthPprStatus, YearPprStatus } from "../model/ppr.types";
+import { MonthPlanStatus, YearPlanStatus } from "../model/ppr.types";
 
-const MONTH_STATUS_RU: { [status in MonthPprStatus]: string } = {
+const MONTH_STATUS_RU: { [status in MonthPlanStatus]: string } = {
   none: "не запланирован",
   plan_creating: "план создаётся",
   plan_on_agreement_engineer: "план на согласовании инженера ПТО",
@@ -14,7 +14,7 @@ const MONTH_STATUS_RU: { [status in MonthPprStatus]: string } = {
   done: "завершен",
 };
 
-const YEAR_STATUS_RU: { [status in YearPprStatus]: string } = {
+const YEAR_STATUS_RU: { [status in YearPlanStatus]: string } = {
   done: "Выполнен",
   in_process: "Выполняется",
   plan_creating: "Создается",
@@ -25,10 +25,10 @@ const YEAR_STATUS_RU: { [status in YearPprStatus]: string } = {
   template: "Шаблон",
 };
 
-export function translateRuPprMonthStatus(status: MonthPprStatus): string {
+export function translateRuPprMonthStatus(status: MonthPlanStatus): string {
   return MONTH_STATUS_RU[status];
 }
 
-export function translateRuPprYearStatus(status: YearPprStatus): string {
+export function translateRuPprYearStatus(status: YearPlanStatus): string {
   return YEAR_STATUS_RU[status];
 }

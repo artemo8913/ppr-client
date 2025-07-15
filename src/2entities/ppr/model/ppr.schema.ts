@@ -17,16 +17,16 @@ import { directionsTable, distancesTable, subdivisionsTable } from "@/2entities/
 
 import { MONTH_STATUSES, YEAR_STATUSES, BRANCHES } from "./ppr.const";
 import {
-  PlanWorkFieldValues,
-  MonthPprStatus,
-  PlanTimeFieldValues,
-  TWorkBranch,
-  YearPprStatus,
+  PlanValueWithCorrection,
+  MonthPlanStatus,
+  PlanTimeWithCorrection,
+  PlannedWorkBranch,
+  YearPlanStatus,
 } from "../model/ppr.types";
 
 function createMysqlPprMonthStatusType(fieldName: string) {
   return mysqlEnum(fieldName, MONTH_STATUSES as [string])
-    .$type<MonthPprStatus>()
+    .$type<MonthPlanStatus>()
     .notNull()
     .default("none");
 }
@@ -40,11 +40,11 @@ function createMysqlBigDoubleField(fieldName: string) {
 }
 
 function createMysqlJsonPlanWorkField(fieldName: string) {
-  return json(fieldName).$type<PlanWorkFieldValues>().notNull();
+  return json(fieldName).$type<PlanValueWithCorrection>().notNull();
 }
 
 function createMysqlJsonPlanTimeField(fieldName: string) {
-  return json(fieldName).$type<PlanTimeFieldValues>().notNull();
+  return json(fieldName).$type<PlanTimeWithCorrection>().notNull();
 }
 
 export const pprsInfoTable = mysqlTable("pprs_info", {
@@ -52,7 +52,7 @@ export const pprsInfoTable = mysqlTable("pprs_info", {
   name: varchar("name", { length: 128 }).notNull(),
   year: smallint("year").notNull(),
   status: mysqlEnum("status", YEAR_STATUSES as [string])
-    .$type<YearPprStatus>()
+    .$type<YearPlanStatus>()
     .notNull(),
   created_at: date("created_at").notNull(),
   idUserCreatedBy: int("id_user_created_by")
@@ -177,7 +177,7 @@ export const pprsWorkDataTable = mysqlTable("pprs_data", {
   common_work_id: int("id_common_work").references(() => commonWorksTable.id),
   is_work_aproved: boolean("is_work_aproved").notNull(),
   branch: mysqlEnum("branch", BRANCHES as [string])
-    .$type<TWorkBranch>()
+    .$type<PlannedWorkBranch>()
     .notNull(),
   subbranch: varchar("subbranch", { length: 128 }).notNull(),
   note: varchar("note", { length: 256 }).notNull().default(""),
