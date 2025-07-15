@@ -1,6 +1,13 @@
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
-import { FACT_NORM_TIME_FIELDS, FACT_TIME_FIELDS, PLAN_TIME_FIELDS, PLAN_WORK_FIELDS } from "./ppr.const";
+import {
+  FACT_NORM_TIME_FIELDS,
+  FACT_TIME_FIELDS,
+  PLAN_NORM_TIME_FIELDS,
+  PLAN_TABEL_TIME_FIELDS,
+  PLAN_TIME_FIELDS,
+  PLAN_WORK_FIELDS,
+} from "./ppr.const";
 import {
   PlannedWork,
   PlannedWorkId,
@@ -8,6 +15,8 @@ import {
   WorkingMansTotalTimes,
   PlannedWorkWithCorrections,
   PlannedWorksAndWorkingMansTotalTimes,
+  TotalTimes,
+  PlannedWorkingMans,
 } from "./ppr.types";
 
 //TODO: сделать какой-нибудь сервис Ppr, который в одном месте соберет все связанные сервисы в одном месте.
@@ -131,42 +140,30 @@ class RowSpanCalculator {
   }
 }
 
-class YearPlanTotalCalculator {
-  private _total: PlannedWorksAndWorkingMansTotalTimes = { workingMans: {}, works: {} };
+class TotalCalculator {
+  private _total: TotalTimes = {};
 
   reset() {
-    this._total = { workingMans: {}, works: {} };
+    this._total = {};
   }
 
-  addWorkTime(value: number, field: keyof PlannedWorkTotalTimes) {
-    if (this._total.works[field] !== undefined) {
-      this._total.works[field] = roundToFixed(value + this._total.works[field]!);
+  add(value: number, field: keyof TotalTimes) {
+    if (this._total[field] !== undefined) {
+      this._total[field] = roundToFixed(value + this._total[field]!);
     } else {
-      this._total.works[field] = roundToFixed(value);
+      this._total[field] = roundToFixed(value);
     }
   }
 
-  addWorkingManTime(value: number, field: keyof WorkingMansTotalTimes) {
-    if (this._total.workingMans[field] !== undefined) {
-      this._total.workingMans[field] = roundToFixed(value + this._total.workingMans[field]!);
-    } else {
-      this._total.workingMans[field] = roundToFixed(value);
-    }
-  }
-
-  getWorks() {
-    return this._total.works;
-  }
-
-  getWorkingMans() {
-    return this._total.workingMans;
+  get() {
+    return this._total;
   }
 }
 
 class BranchAndSubbranchMetaCreator {
-  private _totalCalculator = new YearPlanTotalCalculator();
-  private _branchTotalCalculator = new YearPlanTotalCalculator();
-  private _subbranchTotalCalculator = new YearPlanTotalCalculator();
+  private _totalCalculator = new TotalCalculator();
+  private _branchTotalCalculator = new TotalCalculator();
+  private _subbranchTotalCalculator = new TotalCalculator();
 
   private _tempBranchMeta: BranchMeta | null = null;
   private _tempSubbranchMeta: SubbranchMeta | null = null;
@@ -204,7 +201,7 @@ class BranchAndSubbranchMetaCreator {
       type: "branch",
       subbranches: [],
       workIds: new Set(),
-      total: this._branchTotalCalculator.getWorks(),
+      total: this._branchTotalCalculator.get(),
     };
 
     this._updateBranchInIndexList(index, newBranch);
@@ -223,7 +220,7 @@ class BranchAndSubbranchMetaCreator {
       orderIndex: `${this._branchesMeta.length}.${(this._tempBranchMeta?.subbranches.length || 0) + 1}.`,
       type: "subbranch",
       workIds: new Set(),
-      total: this._subbranchTotalCalculator.getWorks(),
+      total: this._subbranchTotalCalculator.get(),
     };
 
     this._updateSubbranchInIndexList(index, newSubbranch);
@@ -235,9 +232,9 @@ class BranchAndSubbranchMetaCreator {
 
   addTimeInAllTotals(work: PlannedWork) {
     [...PLAN_TIME_FIELDS, ...FACT_NORM_TIME_FIELDS, ...FACT_TIME_FIELDS].forEach((field) => {
-      this._branchTotalCalculator.addWorkTime(work[field], field);
-      this._subbranchTotalCalculator.addWorkTime(work[field], field);
-      this._totalCalculator.addWorkTime(work[field], field);
+      this._branchTotalCalculator.add(work[field], field);
+      this._subbranchTotalCalculator.add(work[field], field);
+      this._totalCalculator.add(work[field], field);
     });
   }
 
@@ -254,7 +251,17 @@ class BranchAndSubbranchMetaCreator {
   }
 
   getTotalTime() {
-    return this._totalCalculator.getWorks();
+    return this._totalCalculator.get();
+  }
+}
+
+class WorkingMansTotalCalculator {
+  private _totalCalculator = new TotalCalculator();
+
+  updateBy(workingMan: PlannedWorkingMans) {
+    [...PLAN_NORM_TIME_FIELDS, ...PLAN_TABEL_TIME_FIELDS, ...PLAN_TIME_FIELDS, ...FACT_TIME_FIELDS].forEach((field) => {
+      this._totalCalculator.add(workingMan[field], field);
+    });
   }
 }
 

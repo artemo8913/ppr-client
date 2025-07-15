@@ -101,6 +101,8 @@ export type WorkingMansTotalTimes = Partial<AllPlanNormTimes> &
   Partial<AllPlanTimes> &
   Partial<AllFactTimes>;
 
+export type TotalTimes = PlannedWorkTotalTimes & WorkingMansTotalTimes;
+//TODO: удалить, перевести все зависимости к TotalTimes
 export type PlannedWorksAndWorkingMansTotalTimes = {
   works: PlannedWorkTotalTimes;
   workingMans: WorkingMansTotalTimes;
