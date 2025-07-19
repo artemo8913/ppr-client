@@ -263,12 +263,17 @@ class WorkingMansTotalCalculator {
       this._totalCalculator.add(workingMan[field], field);
     });
   }
+
+  get() {
+    return this._totalCalculator.get();
+  }
 }
 
 export class YearPlanMetaCreator {
   private _subbranchList = new SubbranchesList();
   private _rowSpanCalculator = new RowSpanCalculator();
   private _workOrderCalculator = new WorksOrderCalculator();
+  private _workingMansTotalCaluclator = new WorkingMansTotalCalculator();
   private _branchesAndSubbranchesCreator = new BranchAndSubbranchMetaCreator();
 
   private _tempWork = {
@@ -279,10 +284,15 @@ export class YearPlanMetaCreator {
     branch: "additional",
   };
 
-  constructor(yearPlannedWorks: PlannedWorkWithCorrections[], type: "original" | "final") {
-    yearPlannedWorks.forEach((pprData, index) =>
-      this._updateBy(PlannedWorkConverter.convertToPlannedWorkFrom(pprData, type), index)
+  constructor(
+    type: "original" | "final",
+    yearPlannedWorks?: PlannedWorkWithCorrections[],
+    yearPlannedWorkingMans?: PlannedWorkingMans[]
+  ) {
+    yearPlannedWorks?.forEach((work, index) =>
+      this._updateBy(PlannedWorkConverter.convertToPlannedWorkFrom(work, type), index)
     );
+    yearPlannedWorkingMans?.forEach((worker) => this._workingMansTotalCaluclator.updateBy(worker));
   }
 
   private _updateTempWork(index: number, pprData: PlannedWork) {
@@ -339,11 +349,7 @@ export class YearPlanMetaCreator {
       branchesAndSubbrunchesIndexList: this._branchesAndSubbranchesCreator.getIndexList(),
       branchesMeta: this._branchesAndSubbranchesCreator.getBranchesMeta(),
       totalWorkTime: this._branchesAndSubbranchesCreator.getTotalTime(),
-      totalWorkingManTime: {},
+      totalWorkingManTime: this._workingMansTotalCaluclator.get(),
     };
   }
-}
-
-export function createPprMeta2(yearPlannedWorks: PlannedWorkWithCorrections[]): YearPlanMeta {
-  return new YearPlanMetaCreator(yearPlannedWorks, "final").getYearPlanMeta();
 }
