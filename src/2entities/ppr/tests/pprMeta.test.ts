@@ -1,3 +1,5 @@
+import { PPP_META_MOCK } from "./pprMeta.mock";
+import { PPR_MOCK } from "./pprYearPlan.mock";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 import { createPprMeta, IBranchDefaultMeta, IBranchMeta, IPprMeta } from "../lib/createPprMeta";
@@ -85,5 +87,11 @@ describe("createPprMeta", () => {
       branchesAndSubbrunchesOrder: { [pprData[0].id]: { branch: branchShouldBe, subbranch: subbranchShouldBe } },
       subbranchesList: ["subbranch"],
     });
+  });
+
+  it("pprMeta расчитывает данные по всему Годовому плану", () => {
+    const meta = createPprMeta({ pprData: PPR_MOCK.data, workingMansData: PPR_MOCK.workingMans });
+
+    expect(meta).toMatchObject(PPP_META_MOCK);
   });
 });
