@@ -1,6 +1,16 @@
 "use client";
 import useNotification from "antd/es/notification/useNotification";
-import { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo } from "react";
+import {
+  FC,
+  useMemo,
+  useContext,
+  useCallback,
+  useTransition,
+  createContext,
+  PropsWithChildren,
+} from "react";
+
+import { ServerActionReturn } from "@/1shared/serverAction";
 
 import { NotificationType } from "../model/notification.types";
 import { translateRuNotificationType } from "../lib/notificationLocale";
@@ -21,6 +31,23 @@ const INIT_CONTEXT: NoficationProviderContext = {
 const NoficationProviderContext = createContext<NoficationProviderContext>(INIT_CONTEXT);
 
 export const useNotificationProvider = () => useContext(NoficationProviderContext);
+
+export const useTransitionWithToast = () => {
+  const { toast } = useContext(NoficationProviderContext);
+
+  const [isLoading, startTransition] = useTransition();
+
+  const awaitServerActionAndToast = useCallback(
+    (serverPromise: Promise<ServerActionReturn>) =>
+      startTransition(async () => {
+        const response = await serverPromise;
+        toast(response);
+      }),
+    [toast]
+  );
+
+  return { isLoading, awaitServerActionAndToast };
+};
 
 export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [api, contextHolder] = useNotification();

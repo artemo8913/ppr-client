@@ -1,2 +1,2 @@
 export type { NotificationType } from "./model/notification.types";
-export { NotificationProvider, useNotificationProvider } from "./ui/NotificationProvider";
+export { NotificationProvider, useNotificationProvider, useTransitionWithToast } from "./ui/NotificationProvider";
