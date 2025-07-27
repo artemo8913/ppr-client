@@ -11,7 +11,7 @@ const CREDENTIALS_OPTIONS: { [key in CredentialsLabel]: CredentialInput } = {
   username: { label: "username", type: "text" },
   password: { label: "password", type: "password" },
 };
-
+//TODO: нужно как-то предусмотреть, чтобы над одним ППРом в режиме редактирования мог работать только один ПК
 export async function authorizeByCredential(loginCredentials: Record<CredentialsLabel, string> | undefined) {
   if (!loginCredentials) {
     return null;
