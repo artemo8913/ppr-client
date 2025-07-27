@@ -4,6 +4,108 @@ import { MONTHS, TimePeriod, translateRuTimePeriod } from "@/1shared/lib/date";
 import { translateRuPprMonthStatus, translateRuPprYearStatus } from "./pprStatusLocale";
 import { AllMonthsPlansStatuses, MonthPlanStatus, YearPlanBasicData, YearPlanStatus } from "../model/ppr.types";
 
+const NEXT_PPR_YEAR_STATUS: { [key in YearPlanStatus]: YearPlanStatus | null } = {
+  template: null,
+  plan_creating: "plan_on_agreement_engineer",
+  plan_on_agreement_engineer: "plan_on_agreement_time_norm",
+  plan_on_agreement_time_norm: "plan_on_agreement_sub_boss",
+  plan_on_agreement_sub_boss: "plan_on_aprove",
+  plan_on_aprove: "in_process",
+  in_process: "done",
+  done: null,
+};
+
+const NEXT_PPR_MONTH_STATUS: { [key in MonthPlanStatus]: MonthPlanStatus | null } = {
+  none: "plan_creating",
+  plan_creating: "plan_on_agreement_time_norm",
+  plan_on_agreement_time_norm: "plan_on_agreement_engineer",
+  plan_on_agreement_engineer: "plan_on_aprove",
+  plan_on_aprove: "in_process",
+  in_process: "fact_filling",
+  fact_filling: "fact_verification_time_norm",
+  fact_verification_time_norm: "fact_verification_engineer",
+  fact_verification_engineer: "fact_on_agreement_sub_boss",
+  fact_on_agreement_sub_boss: "done",
+  done: null,
+};
+
+export const PPR_YEAR_STATUSES: YearPlanStatus[] = [
+  "template",
+  "plan_creating",
+  "plan_on_agreement_engineer",
+  "plan_on_agreement_time_norm",
+  "plan_on_agreement_sub_boss",
+  "plan_on_aprove",
+  "in_process",
+  "done",
+];
+
+export const PPR_MONTH_STATUSES: MonthPlanStatus[] = [
+  "none",
+  "plan_creating",
+  "plan_on_agreement_engineer",
+  "plan_on_agreement_time_norm",
+  "plan_on_aprove",
+  "in_process",
+  "fact_filling",
+  "fact_verification_engineer",
+  "fact_verification_time_norm",
+  "fact_on_agreement_sub_boss",
+  "done",
+];
+
+const PLAN_MONTH_STATUSES_ON_PLANNING_STAGE: MonthPlanStatus[] = [
+  "plan_creating",
+  "plan_on_agreement_engineer",
+  "plan_on_agreement_time_norm",
+  "plan_on_aprove",
+];
+
+const PLAN_MONTH_STATUSES_ON_FILLING_STAGE: MonthPlanStatus[] = [
+  "fact_filling",
+  "fact_verification_engineer",
+  "fact_verification_time_norm",
+  "fact_on_agreement_sub_boss",
+];
+
+export const PPR_YEAR_OPTIONS: OptionType<YearPlanStatus>[] = PPR_YEAR_STATUSES.map((status) => ({
+  value: status,
+  label: translateRuPprYearStatus(status),
+}));
+
+export function getNextPprYearStatus(currentStatus: YearPlanStatus): YearPlanStatus | null {
+  return NEXT_PPR_YEAR_STATUS[currentStatus];
+}
+
+export function getNextPprMonthStatus(currentStatus: MonthPlanStatus): MonthPlanStatus | null {
+  return NEXT_PPR_MONTH_STATUS[currentStatus];
+}
+
+export function getRejectedYearPlanStatus(): YearPlanStatus {
+  return "plan_creating";
+}
+
+export function getRejectedMonthPlanStatus(currentStatus: MonthPlanStatus): MonthPlanStatus {
+  if (PLAN_MONTH_STATUSES_ON_PLANNING_STAGE.indexOf(currentStatus) !== -1) {
+    return "plan_creating";
+  } else if (PLAN_MONTH_STATUSES_ON_FILLING_STAGE.indexOf(currentStatus) !== -1) {
+    return "fact_filling";
+  }
+  return currentStatus;
+}
+
+export function getStatusText(pprInfo: YearPlanBasicData) {
+  const undoneTimePeriod = findFirstUndonePprPeriod(pprInfo);
+
+  if (pprInfo.status !== "in_process" || undoneTimePeriod === "year") {
+    return translateRuPprYearStatus(pprInfo.status);
+  }
+
+  return `${translateRuPprYearStatus(pprInfo.status)}: ${translateRuTimePeriod(
+    undoneTimePeriod
+  )} (${translateRuPprMonthStatus(pprInfo.months_statuses[undoneTimePeriod])})`;
+}
+
 export function checkIsAllMonthsPprStatusesIsDone(monthsStatuses: AllMonthsPlansStatuses) {
   let result = true;
   MONTHS.forEach((month) => {
@@ -69,78 +171,3 @@ export function findFirstUndonePprPeriod(ppr: YearPlanBasicData | null): TimePer
 
   return "year";
 }
-
-const NEXT_PPR_YEAR_STATUS: { [key in YearPlanStatus]: YearPlanStatus | null } = {
-  template: null,
-  plan_creating: "plan_on_agreement_engineer",
-  plan_on_agreement_engineer: "plan_on_agreement_time_norm",
-  plan_on_agreement_time_norm: "plan_on_agreement_sub_boss",
-  plan_on_agreement_sub_boss: "plan_on_aprove",
-  plan_on_aprove: "in_process",
-  in_process: "done",
-  done: null,
-};
-
-const NEXT_PPR_MONTH_STATUS: { [key in MonthPlanStatus]: MonthPlanStatus | null } = {
-  none: "plan_creating",
-  plan_creating: "plan_on_agreement_time_norm",
-  plan_on_agreement_time_norm: "plan_on_agreement_engineer",
-  plan_on_agreement_engineer: "plan_on_aprove",
-  plan_on_aprove: "in_process",
-  in_process: "fact_filling",
-  fact_filling: "fact_verification_time_norm",
-  fact_verification_time_norm: "fact_verification_engineer",
-  fact_verification_engineer: "fact_on_agreement_sub_boss",
-  fact_on_agreement_sub_boss: "done",
-  done: null,
-};
-
-export function getNextPprYearStatus(currentStatus: YearPlanStatus): YearPlanStatus | null {
-  return NEXT_PPR_YEAR_STATUS[currentStatus];
-}
-
-export function getNextPprMonthStatus(currentStatus: MonthPlanStatus): MonthPlanStatus | null {
-  return NEXT_PPR_MONTH_STATUS[currentStatus];
-}
-
-export const PPR_YEAR_STATUSES: YearPlanStatus[] = [
-  "template",
-  "plan_creating",
-  "plan_on_agreement_engineer",
-  "plan_on_agreement_time_norm",
-  "plan_on_agreement_sub_boss",
-  "plan_on_aprove",
-  "in_process",
-  "done",
-];
-
-export const PPR_MONTH_STATUSES: MonthPlanStatus[] = [
-  "none",
-  "plan_creating",
-  "plan_on_agreement_engineer",
-  "plan_on_agreement_time_norm",
-  "plan_on_aprove",
-  "in_process",
-  "fact_filling",
-  "fact_verification_engineer",
-  "fact_verification_time_norm",
-  "fact_on_agreement_sub_boss",
-  "done",
-];
-
-export function getStatusText(pprInfo: YearPlanBasicData) {
-  const undoneTimePeriod = findFirstUndonePprPeriod(pprInfo);
-
-  if (pprInfo.status !== "in_process" || undoneTimePeriod === "year") {
-    return translateRuPprYearStatus(pprInfo.status);
-  }
-
-  return `${translateRuPprYearStatus(pprInfo.status)}: ${translateRuTimePeriod(
-    undoneTimePeriod
-  )} (${translateRuPprMonthStatus(pprInfo.months_statuses[undoneTimePeriod])})`;
-}
-
-export const PPR_YEAR_OPTIONS: OptionType<YearPlanStatus>[] = PPR_YEAR_STATUSES.map((status) => ({
-  value: status,
-  label: translateRuPprYearStatus(status),
-}));

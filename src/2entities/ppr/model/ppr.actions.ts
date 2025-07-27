@@ -3,10 +3,10 @@ import { and, eq, isNotNull, like, or, SQL } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-import { db } from "@/1shared/database";
 import { authOptions } from "@/1shared/auth";
 import { ROUTE_PPR } from "@/1shared/lib/routes";
-import { MONTHS, TIME_PERIODS } from "@/1shared/lib/date";
+import { db, DatabaseTransactionType } from "@/1shared/database";
+import { Month, MONTHS, TIME_PERIODS } from "@/1shared/lib/date";
 import { ServerActionReturn, returnError, returnSuccess } from "@/1shared/serverAction";
 import { buildConflictUpdateColumns } from "@/1shared/lib/database/buildConflictUpdateColumns";
 import { usersTable } from "@/2entities/user/@x/ppr";
@@ -45,6 +45,12 @@ import {
   PPR_DATA_BASIC_FIELDS,
 } from "./ppr.const";
 import { PprField } from "./PprField";
+import {
+  getNextPprMonthStatus,
+  getNextPprYearStatus,
+  getRejectedMonthPlanStatus,
+  getRejectedYearPlanStatus,
+} from "../lib/pprStatusHelper";
 
 export async function getPprTable(id: number): Promise<ServerActionReturn<YearPlan>> {
   try {
@@ -279,32 +285,147 @@ export async function copyPprTable(params: {
   }
 }
 
-export async function updatePprTable(id: number, params: Partial<Omit<YearPlan, "id">>): Promise<ServerActionReturn> {
+async function approveWorksAndWorkingMans(tx: DatabaseTransactionType, yearPlanId: number) {
+  return Promise.all([
+    tx.update(pprsWorkDataTable).set({ is_work_aproved: true }).where(eq(pprsWorkDataTable.idPpr, yearPlanId)),
+    tx
+      .update(pprWorkingMansTable)
+      .set({ is_working_man_aproved: true })
+      .where(eq(pprWorkingMansTable.idPpr, yearPlanId)),
+  ]);
+}
+
+export async function updateYearPlanStatus(yearPlanId: number): Promise<ServerActionReturn> {
+  try {
+    db.transaction(async (tx) => {
+      const yearPlan = await tx.query.pprsInfoTable.findFirst({ where: eq(pprsInfoTable.id, yearPlanId) });
+
+      if (!yearPlan) {
+        throw new Error(`Годовой план с id=${yearPlanId} не найден`);
+      }
+
+      const nextStatus = getNextPprYearStatus(yearPlan.status);
+
+      if (!nextStatus) {
+        throw new Error(`Годовой план с id=${yearPlanId} не взоможно обновить`);
+      }
+
+      if (nextStatus === "in_process") {
+        await approveWorksAndWorkingMans(tx, yearPlanId);
+      }
+
+      await tx.update(pprsInfoTable).set({ status: nextStatus }).where(eq(pprsInfoTable.id, yearPlanId));
+    });
+
+    const response = await returnSuccess({ message: "Статус годового плана успешно обновлен" });
+
+    revalidatePath(`${ROUTE_PPR}/${yearPlanId}`);
+
+    return response;
+  } catch (e) {
+    return await returnError({
+      message: `При обновлении статуса годового плана произошла ошибка. ${e}`,
+    });
+  }
+}
+
+export async function rejectYearPlanStatus(yearPlanId: number): Promise<ServerActionReturn> {
+  try {
+    await db.update(pprsInfoTable).set({ status: getRejectedYearPlanStatus() }).where(eq(pprsInfoTable.id, yearPlanId));
+
+    const response = await returnSuccess({ message: "Годовой план отклонен" });
+
+    revalidatePath(`${ROUTE_PPR}/${yearPlanId}`);
+
+    return response;
+  } catch (e) {
+    return await returnError({
+      message: `При отклонении годового плана id=${yearPlanId} произошла ошибка. ${e}`,
+    });
+  }
+}
+
+export async function updateMonthPlanStatus(yearPlanId: number, month: Month): Promise<ServerActionReturn> {
+  try {
+    db.transaction(async (tx) => {
+      const monthStatuses = await tx.query.pprMonthsStatusesTable.findFirst({
+        where: eq(pprMonthsStatusesTable.idPpr, yearPlanId),
+      });
+
+      if (!monthStatuses) {
+        throw new Error(`Статусы месячных планов id=${yearPlanId} не найдены`);
+      }
+
+      const nextStatus = getNextPprMonthStatus(monthStatuses[month]);
+
+      if (!nextStatus) {
+        throw new Error(`Месячный план id=${yearPlanId} на месяц=${month} не взоможно обновить`);
+      }
+
+      if (nextStatus === "in_process") {
+        await approveWorksAndWorkingMans(tx, yearPlanId);
+      }
+
+      await tx
+        .update(pprMonthsStatusesTable)
+        .set({ [month]: nextStatus })
+        .where(eq(pprMonthsStatusesTable.idPpr, yearPlanId));
+    });
+
+    const response = await returnSuccess({ message: "Статус месячного плана успешно обновлен" });
+
+    revalidatePath(`${ROUTE_PPR}/${yearPlanId}`);
+
+    return response;
+  } catch (e) {
+    return await returnError({
+      message: `При обновлении месячного плана id=${yearPlanId} месяц=${month} произошла ошибка. ${e}`,
+    });
+  }
+}
+
+export async function rejectMonthPlanStatus(yearPlanId: number, month: Month): Promise<ServerActionReturn> {
+  try {
+    const monthStatuses = await db.query.pprMonthsStatusesTable.findFirst({
+      where: eq(pprMonthsStatusesTable.idPpr, yearPlanId),
+    });
+
+    if (!monthStatuses) {
+      throw new Error(`Статусы месячных планов id=${yearPlanId} не найдены`);
+    }
+
+    await db
+      .update(pprMonthsStatusesTable)
+      .set({ [month]: getRejectedMonthPlanStatus(monthStatuses[month]) })
+      .where(eq(pprMonthsStatusesTable.idPpr, yearPlanId));
+
+    const response = await returnSuccess({ message: "Месячный план отклонен" });
+
+    revalidatePath(`${ROUTE_PPR}/${yearPlanId}`);
+
+    return response;
+  } catch (e) {
+    return await returnError({
+      message: `При отклонении месячного плана месячного плана id=${yearPlanId} месяц=${month} произошла ошибка. ${e}`,
+    });
+  }
+}
+
+export async function saveYearPlan(id: number, yearPlan: Partial<Omit<YearPlan, "id">>): Promise<ServerActionReturn> {
   try {
     await db.transaction(async (tx) => {
-      if (params.status) {
-        await tx.update(pprsInfoTable).set({ status: params.status }).where(eq(pprsInfoTable.id, id));
-      }
-
-      if (params.months_statuses) {
-        await tx
-          .update(pprMonthsStatusesTable)
-          .set({ ...params.months_statuses })
-          .where(eq(pprMonthsStatusesTable.idPpr, id));
-      }
-
-      if (params.raports_notes) {
+      if (yearPlan.raports_notes) {
         await tx
           .update(pprRaportsNotesTable)
-          .set({ ...params.raports_notes })
+          .set({ ...yearPlan.raports_notes })
           .where(eq(pprRaportsNotesTable.idPpr, id));
       }
 
-      if (params.workingMans?.length) {
+      if (yearPlan.workingMans?.length) {
         await tx
           .insert(pprWorkingMansTable)
           .values(
-            params.workingMans.map((workingMan) => {
+            yearPlan.workingMans.map((workingMan) => {
               if (typeof workingMan.id === "string") {
                 return { ...workingMan, id: undefined, idPpr: id };
               }
@@ -322,15 +443,15 @@ export async function updatePprTable(id: number, params: Partial<Omit<YearPlan, 
               ...FACT_TIME_FIELDS,
             ]),
           });
-      } else if (params.workingMans?.length === 0) {
+      } else if (yearPlan.workingMans?.length === 0) {
         await tx.delete(pprWorkingMansTable).where(eq(pprWorkingMansTable.idPpr, id));
       }
 
-      if (params.data?.length) {
+      if (yearPlan.data?.length) {
         await tx
           .insert(pprsWorkDataTable)
           .values(
-            params.data.map((pprData, index) => {
+            yearPlan.data.map((pprData, index) => {
               if (typeof pprData.id === "string") {
                 return { ...pprData, id: undefined, idPpr: id, order: index };
               }
@@ -353,16 +474,12 @@ export async function updatePprTable(id: number, params: Partial<Omit<YearPlan, 
               ...FACT_TIME_FIELDS,
             ]),
           });
-      } else if (params.data?.length === 0) {
+      } else if (yearPlan.data?.length === 0) {
         await tx.delete(pprsWorkDataTable).where(eq(pprsWorkDataTable.idPpr, id));
       }
     });
 
-    const response = await returnSuccess({ message: "План технического обслуживания и ремонта обновлен" });
-
-    revalidatePath(`${ROUTE_PPR}/${id}`);
-
-    return response;
+    return await returnSuccess({ message: "План технического обслуживания и ремонта сохранен" });
   } catch (e) {
     return await returnError({ message: `При обновлении плана ТОиР id=${id} произошла ошибка. ${e}` });
   }

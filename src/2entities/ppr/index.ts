@@ -72,14 +72,18 @@ export { PprTableSettingsProvider, usePprTableSettings } from "./ui/PprTableSett
 
 export {
   getPprTable,
-  createPprTable,
-  deletePprTable,
-  getManyPprsShortInfo,
-  updatePprTable,
   copyPprTable,
+  saveYearPlan,
   deletePprWork,
+  deletePprTable,
+  createPprTable,
   deleteWorkingMan,
   getPprDataForReport,
+  rejectYearPlanStatus,
+  updateYearPlanStatus,
+  getManyPprsShortInfo,
+  rejectMonthPlanStatus,
+  updateMonthPlanStatus,
 } from "./model/ppr.actions";
 
 export { createPprMeta } from "./lib/createPprMeta";
