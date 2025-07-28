@@ -1,5 +1,5 @@
-import { User } from "@/2entities/user/@x/ppr";
 import { Month, TimePeriod } from "@/1shared/lib/date";
+import { User } from "@/2entities/user/@x/ppr";
 
 export type YearPlanStatus =
   | "template"
@@ -23,14 +23,6 @@ export type MonthPlanStatus =
   | "fact_verification_time_norm"
   | "fact_on_agreement_sub_boss"
   | "done";
-
-export type AllMonthsPlansStatuses = {
-  [month in Month]: MonthPlanStatus;
-};
-
-type ReportsNotes = {
-  [month in Month]: string;
-};
 
 export type WorkTransfer = { fieldTo: PlanValueField; value: number };
 
@@ -120,7 +112,7 @@ interface YearPlanInvolvedDivisions {
 interface PlannedWorksAndWorkingMans {
   data: PlannedWorkWithCorrections[];
   workingMans: PlannedWorkingMans[];
-  raports_notes: ReportsNotes;
+  raports_notes: { [month in Month]: string };
 }
 
 export interface YearPlanBasicData extends YearPlanInvolvedDivisions {
@@ -130,7 +122,7 @@ export interface YearPlanBasicData extends YearPlanInvolvedDivisions {
   created_by: User;
   created_at: Date;
   status: YearPlanStatus;
-  months_statuses: AllMonthsPlansStatuses;
+  months_statuses: { [month in Month]: MonthPlanStatus };
 }
 
 export interface YearPlan extends YearPlanBasicData, PlannedWorksAndWorkingMans {}
