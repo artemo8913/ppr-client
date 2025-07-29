@@ -24,8 +24,8 @@ export const CorrectionText: FC<ICorrectionTextProps> = ({ type, fieldFrom, meta
 
         const infoText =
           type === "plan"
-            ? `${correction.pprData.name} (${correction.pprData.location}), ${correction.pprData.measure} - план ${correction.planWork} (${correction.planTime} чел.-ч) изменить на ${correction.factWork} (${correction.factWork} чел.-ч). Разницу ${correction.workDiff}`
-            : `${correction.pprData.name} (${correction.pprData.location}), ${correction.pprData.measure} - при плане ${correction.planWork} (${correction.planTime} чел.-ч) факт составил ${correction.factWork} (${correction.factWork} чел.-ч). Разницу ${correction.workDiff}`;
+            ? `${correction.pprData.name} (${correction.pprData.location}), ${correction.pprData.measure} - план ${correction.planWork} (${correction.planTime} чел.-ч) изменить на ${correction.factWork} (${correction.factTime} чел.-ч). Разницу ${correction.workDiff}`
+            : `${correction.pprData.name} (${correction.pprData.location}), ${correction.pprData.measure} - при плане ${correction.planWork} (${correction.planTime} чел.-ч) факт составил ${correction.factWork} (${correction.factTime} чел.-ч). Разницу ${correction.workDiff}`;
 
         return (
           <li key={correction.pprData.id}>
