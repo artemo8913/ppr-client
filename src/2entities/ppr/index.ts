@@ -73,7 +73,7 @@ export { PprTableSettingsProvider, usePprTableSettings } from "./ui/PprTableSett
 export {
   getPprTable,
   copyPprTable,
-  saveYearPlan,
+  saveYearPlan as updatePprTable,
   deletePprWork,
   deletePprTable,
   createPprTable,

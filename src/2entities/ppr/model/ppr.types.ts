@@ -24,6 +24,10 @@ export type MonthPlanStatus =
   | "fact_on_agreement_sub_boss"
   | "done";
 
+export type AllMonthsPlansStatuses = {
+  [month in Month]: MonthPlanStatus;
+};
+
 export type WorkTransfer = { fieldTo: PlanValueField; value: number };
 
 export type PlanValueField = `${TimePeriod}_plan_work`;
@@ -122,7 +126,7 @@ export interface YearPlanBasicData extends YearPlanInvolvedDivisions {
   created_by: User;
   created_at: Date;
   status: YearPlanStatus;
-  months_statuses: { [month in Month]: MonthPlanStatus };
+  months_statuses: AllMonthsPlansStatuses;
 }
 
 export interface YearPlan extends YearPlanBasicData, PlannedWorksAndWorkingMans {}
