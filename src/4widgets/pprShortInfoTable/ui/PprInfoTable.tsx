@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Table, TableProps } from "antd";
 
 import { MONTHS } from "@/1shared/lib/date";
-import { getStatusText } from "@/2entities/ppr";
 import { TPprShortInfo } from "@/2entities/ppr";
 import { Direction, Distance, Subdivision } from "@/2entities/division";
 import { PprDeleteButton } from "@/3features/ppr/delete";
@@ -13,6 +12,7 @@ import { PprCopyButton } from "@/3features/ppr/copy";
 import { PprMonthsInfoBadge } from "./PprMonthsInfoBadge";
 import { PprSearchQueryTransitionProvider, usePprSearchQueryTransition } from "./PprSearchQueryTransitionProvider";
 import { PprSearchQuery } from "./PprSearchQuery";
+import { getStatusText } from "../lib/getStatusText";
 
 interface IPprInfoProps {
   data: TPprShortInfo[];
