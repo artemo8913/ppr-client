@@ -1,25 +1,22 @@
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
 import {
-  FACT_NORM_TIME_FIELDS,
   FACT_TIME_FIELDS,
-  PLAN_NORM_TIME_FIELDS,
-  PLAN_TABEL_TIME_FIELDS,
   PLAN_TIME_FIELDS,
   PLAN_WORK_FIELDS,
+  PLAN_NORM_TIME_FIELDS,
+  FACT_NORM_TIME_FIELDS,
+  PLAN_TABEL_TIME_FIELDS,
 } from "./ppr.const";
 import {
+  TotalTimes,
   PlannedWork,
   PlannedWorkId,
+  PlannedWorkingMans,
   PlannedWorkTotalTimes,
   WorkingMansTotalTimes,
   PlannedWorkWithCorrections,
-  PlannedWorksAndWorkingMansTotalTimes,
-  TotalTimes,
-  PlannedWorkingMans,
 } from "./ppr.types";
-
-//TODO: сделать какой-нибудь сервис Ppr, который в одном месте соберет все связанные сервисы в одном месте.
 
 /**TODO: Разбить на подклассы. Также думаю, что необходимо сделать так, чтобы подсчет итоговых значений ничего не знал
  * о final и original значениях. Например, был бы какой-нибудь сервис, который бы предоставлял простую структуры запланированных
