@@ -19,7 +19,7 @@ export const PprTableSelectTimePeriod: FC<IPprTableSelectTimePeriodProps> = () =
   const { currentTimePeriod, setTimePeriod } = usePprTableSettings();
 
   useEffect(() => {
-    setTimePeriod(findFirstUndonePprPeriod(ppr));
+    ppr && setTimePeriod(findFirstUndonePprPeriod(ppr));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Boolean(ppr?.months_statuses)]);
 

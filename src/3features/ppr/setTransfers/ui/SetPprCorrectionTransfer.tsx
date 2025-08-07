@@ -13,12 +13,12 @@ import {
   TPlanWorkPeriods,
   PLAN_WORK_FIELDS,
   usePprTableSettings,
-  checkIsTimePeriodAvailableToTransfer,
 } from "@/2entities/ppr";
 
 import { SelectTransferParams } from "./SelectTransferParams";
 import { SelectTransferStrategy, TTransferStrategyOption } from "./SelectTransferStrategy";
 import { createNewTransferInstance } from "../lib/createNewTransferInstance";
+import { checkIsTimePeriodAvailableToTransfer } from "../lib/checkIsTimePeriodAvailableToTransfer";
 
 interface ISetPprCorrectionTransferProps {
   workId: TPprDataWorkId;
