@@ -22,7 +22,7 @@ import {
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 import { createPprMeta, IPprMeta } from "../lib/createPprMeta";
-import { PprField } from "../model/PprField";
+import { PprField } from "../model/service/PprField";
 import {
   FACT_TIME_FIELDS,
   FACT_WORK_FIELDS,

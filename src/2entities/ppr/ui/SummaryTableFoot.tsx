@@ -6,7 +6,7 @@ import { TableCellMemo } from "@/1shared/ui/table";
 import { usePpr } from "./PprProvider";
 import { usePprTableSettings } from "./PprTableSettingsProvider";
 import { PlannedWorkWithCorrections, PlannedWorkingMans } from "../model/ppr.types";
-import { PprField } from "../model/PprField";
+import { PprField } from "../model/service/PprField";
 
 interface ISummaryTableFootProps {
   fields: (keyof PlannedWorkWithCorrections | keyof PlannedWorkingMans)[];
