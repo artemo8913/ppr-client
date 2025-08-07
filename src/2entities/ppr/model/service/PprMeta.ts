@@ -7,7 +7,7 @@ import {
   PLAN_NORM_TIME_FIELDS,
   FACT_NORM_TIME_FIELDS,
   PLAN_TABEL_TIME_FIELDS,
-} from "./ppr.const";
+} from "../ppr.const";
 import {
   TotalTimes,
   PlannedWork,
@@ -16,7 +16,7 @@ import {
   PlannedWorkTotalTimes,
   WorkingMansTotalTimes,
   PlannedWorkWithCorrections,
-} from "./ppr.types";
+} from "../ppr.types";
 
 /**TODO: Разбить на подклассы. Также думаю, что необходимо сделать так, чтобы подсчет итоговых значений ничего не знал
  * о final и original значениях. Например, был бы какой-нибудь сервис, который бы предоставлял простую структуры запланированных

@@ -1,5 +1,5 @@
 import { PlannedWorkWithCorrections, PlannedWorkBranch, MonthPlanStatus, YearPlanStatus } from "../model/ppr.types";
-import { PprField } from "../model/PprField";
+import { PprField } from "../model/service/PprField";
 
 const PPR_BRANCHES_RU: { [key in PlannedWorkBranch]: string } = {
   additional: "Дополнительные работы",

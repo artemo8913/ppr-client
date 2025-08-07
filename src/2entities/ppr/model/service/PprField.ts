@@ -8,7 +8,7 @@ import {
   FactNormTimeField,
   PlanNormTimeField,
   PlanTabelTimeField,
-} from "./ppr.types";
+} from "../ppr.types";
 import {
   factNormTimeFieldsSet,
   factTimeFieldsSet,
@@ -26,7 +26,7 @@ import {
   planWorkToPlanTimeFieldsPair,
   pprTableFieldsSet,
   workAndTimeFieldsSet,
-} from "./ppr.const";
+} from "../ppr.const";
 
 //TODO: наверное лучше сделать сервис, а не класс со static
 /**Валидация и получение наименований определенных полей годового плана */

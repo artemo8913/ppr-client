@@ -12,9 +12,9 @@ import {
   PlannedWorkingManId,
   WorkTransfer,
   YearPlan,
-} from "./ppr.types";
+} from "../ppr.types";
 
-class YearPlanStore {
+export class YearPlanStore {
   private _plan: YearPlan;
 
   constructor(yearPlan: YearPlan) {
