@@ -41,29 +41,23 @@ const MONTH_STATUS_UPDATE_CONFIG: MonthPlanStatusConfig = {
   none: {
     subdivision: { canUpdate: true },
   },
-
   plan_creating: { subdivision: { canUpdate: true } },
   plan_on_agreement_engineer: {
-    subdivision: { canReject: true },
     distance_engineer: { canUpdate: true, canReject: true },
   },
   plan_on_agreement_time_norm: {
-    subdivision: { canReject: true },
     distance_time_norm: { canUpdate: true, canReject: true },
   },
-  plan_on_aprove: { subdivision: { canReject: true }, distance_sub_boss: { canUpdate: true, canReject: true } },
+  plan_on_aprove: { distance_sub_boss: { canUpdate: true, canReject: true } },
   in_process: { subdivision: { canUpdate: true } },
   fact_filling: { subdivision: { canUpdate: true } },
   fact_verification_engineer: {
-    subdivision: { canReject: true },
     distance_engineer: { canUpdate: true, canReject: true },
   },
   fact_verification_time_norm: {
-    subdivision: { canReject: true },
     distance_time_norm: { canUpdate: true, canReject: true },
   },
   fact_on_agreement_sub_boss: {
-    subdivision: { canReject: true },
     distance_sub_boss: { canUpdate: true, canReject: true },
   },
 };

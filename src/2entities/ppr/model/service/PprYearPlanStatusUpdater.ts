@@ -22,18 +22,15 @@ export type YearPlanStatusConfig = {
 const YEAR_STATUS_UPDATE_CONFIG: YearPlanStatusConfig = {
   plan_creating: { subdivision: { canUpdate: true } },
   plan_on_agreement_engineer: {
-    subdivision: { canReject: true },
     distance_engineer: { canUpdate: true, canReject: true },
   },
   plan_on_agreement_time_norm: {
-    subdivision: { canReject: true },
     distance_time_norm: { canUpdate: true, canReject: true },
   },
   plan_on_agreement_sub_boss: {
-    subdivision: { canReject: true },
     distance_sub_boss: { canUpdate: true, canReject: true },
   },
-  plan_on_aprove: { subdivision: { canReject: true }, distance_boss: { canUpdate: true, canReject: true } },
+  plan_on_aprove: { distance_boss: { canUpdate: true, canReject: true } },
   in_process: { distance_boss: { canUpdate: true, canReject: true } },
 };
 
