@@ -18,4 +18,4 @@ class YearPlanService {
   }
 }
 
-export const yearPlanService = new YearPlanService();
+export const pprService = new YearPlanService();
