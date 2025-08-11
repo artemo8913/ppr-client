@@ -1,7 +1,7 @@
 "use server";
-import { and, eq, isNotNull, like, or, SQL } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { and, eq, isNotNull, like, or, SQL } from "drizzle-orm";
 
 import { authOptions } from "@/1shared/auth";
 import { ROUTE_PPR } from "@/1shared/lib/routes";
@@ -44,13 +44,10 @@ import {
   PLAN_WORK_FIELDS,
   PPR_DATA_BASIC_FIELDS,
 } from "./ppr.const";
-import { PprField } from "./PprField";
-import {
-  getNextPprMonthStatus,
-  getNextPprYearStatus,
-  getRejectedMonthPlanStatus,
-  getRejectedYearPlanStatus,
-} from "../lib/pprStatusHelper";
+import { pprService } from "./service";
+import { PprField } from "./service/PprField";
+import { checkIsPprInUserControl } from "../lib/isPprInUserControl";
+import { translateRuPprMonthStatus, translateRuPprYearStatus } from "../lib/locale";
 
 export async function getPprTable(id: number): Promise<ServerActionReturn<YearPlan>> {
   try {
@@ -297,6 +294,12 @@ async function approveWorksAndWorkingMans(tx: DatabaseTransactionType, yearPlanI
 
 export async function updateYearPlanStatus(yearPlanId: number): Promise<ServerActionReturn> {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      throw new Error(`Session not exist`);
+    }
+
     db.transaction(async (tx) => {
       const yearPlan = await tx.query.pprsInfoTable.findFirst({ where: eq(pprsInfoTable.id, yearPlanId) });
 
@@ -304,10 +307,35 @@ export async function updateYearPlanStatus(yearPlanId: number): Promise<ServerAc
         throw new Error(`Годовой план с id=${yearPlanId} не найден`);
       }
 
-      const nextStatus = getNextPprYearStatus(yearPlan.status);
+      const userCreatedPlan = await tx.query.usersTable.findFirst({
+        where: eq(usersTable.id, yearPlan.idUserCreatedBy),
+      });
+
+      if (!userCreatedPlan) {
+        throw new Error(`Не найден пользователь id=${yearPlan.idUserCreatedBy}, создавший план id=${yearPlanId}`);
+      }
+
+      const nextStatus = pprService.statusUpdater.year.getNextStatus(yearPlan.status);
 
       if (!nextStatus) {
-        throw new Error(`Годовой план с id=${yearPlanId} не взоможно обновить`);
+        throw new Error(`У годового плана id=${yearPlanId} невозможно обновить статус`);
+      }
+
+      const isCurrentRoleCanUpdatePlan = pprService.statusUpdater.year.checkIsCanUpdate(
+        yearPlan.status,
+        session.user.role
+      );
+
+      if (!isCurrentRoleCanUpdatePlan) {
+        throw new Error(
+          `Невозможно повысить статус Годового плана id=${yearPlanId} пользователю с ролью ${session.user.role}`
+        );
+      }
+
+      const { isUserDistance } = checkIsPprInUserControl(userCreatedPlan, session.user);
+
+      if (!isUserDistance) {
+        throw new Error(`Невозможно изменить статус Годового плана id=${yearPlanId} сотруднику иной дистанции`);
       }
 
       if (nextStatus === "in_process") {
@@ -331,7 +359,10 @@ export async function updateYearPlanStatus(yearPlanId: number): Promise<ServerAc
 
 export async function rejectYearPlanStatus(yearPlanId: number): Promise<ServerActionReturn> {
   try {
-    await db.update(pprsInfoTable).set({ status: getRejectedYearPlanStatus() }).where(eq(pprsInfoTable.id, yearPlanId));
+    await db
+      .update(pprsInfoTable)
+      .set({ status: pprService.statusUpdater.year.getStatusForReject() })
+      .where(eq(pprsInfoTable.id, yearPlanId));
 
     const response = await returnSuccess({ message: "Годовой план отклонен" });
 
@@ -356,10 +387,10 @@ export async function updateMonthPlanStatus(yearPlanId: number, month: Month): P
         throw new Error(`Статусы месячных планов id=${yearPlanId} не найдены`);
       }
 
-      const nextStatus = getNextPprMonthStatus(monthStatuses[month]);
+      const nextStatus = pprService.statusUpdater.month.getNextStatus(monthStatuses[month]);
 
       if (!nextStatus) {
-        throw new Error(`Месячный план id=${yearPlanId} на месяц=${month} не взоможно обновить`);
+        throw new Error(`Месячный план id=${yearPlanId} на месяц=${month} не возможно обновить`);
       }
 
       if (nextStatus === "in_process") {
@@ -396,7 +427,7 @@ export async function rejectMonthPlanStatus(yearPlanId: number, month: Month): P
 
     await db
       .update(pprMonthsStatusesTable)
-      .set({ [month]: getRejectedMonthPlanStatus(monthStatuses[month]) })
+      .set({ [month]: pprService.statusUpdater.month.getStatusForReject(monthStatuses[month]) })
       .where(eq(pprMonthsStatusesTable.idPpr, yearPlanId));
 
     const response = await returnSuccess({ message: "Месячный план отклонен" });
