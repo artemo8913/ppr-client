@@ -22,6 +22,7 @@ export type {
   PlannedWorkBranch as TWorkBranch,
 } from "./model/ppr.types";
 
+//TODO: удалить, взамен на месте использования определять нужный тип из экспортируемой функции
 export type { IGetPprDataForReportParams, TPprDataForReport } from "./model/ppr.actions";
 
 export type { IBranchDefaultMeta, IBranchMeta, IPprMeta } from "./lib/createPprMeta";
@@ -33,7 +34,7 @@ export type {
   IPprTableSettingsContext,
 } from "./ui/PprTableSettingsProvider";
 
-export { PprField } from "./model/PprField";
+export { PprField } from "./model/service/PprField";
 
 export {
   PPR_DATA_FIELDS,
@@ -47,20 +48,10 @@ export {
   PLAN_TIME_FIELDS,
   WORK_AND_TIME_FIELDS,
   BRANCHES,
+  YEAR_STATUSES,
 } from "./model/ppr.const";
 
-export {
-  PPR_MONTH_STATUSES,
-  PPR_YEAR_OPTIONS,
-  PPR_YEAR_STATUSES,
-  checkIsAllMonthsPprStatusesIsDone,
-  checkIsTimePeriodAvailableForPlanning,
-  checkIsTimePeriodAvailableToTransfer,
-  findFirstUndonePprPeriod,
-  getNextPprMonthStatus,
-  getNextPprYearStatus,
-  getStatusText,
-} from "./lib/pprStatusHelper";
+export { findFirstUndonePprPeriod } from "./lib/findFirstUndonePprPeriod";
 
 export { SummaryTableFoot } from "./ui/SummaryTableFoot";
 
@@ -73,7 +64,7 @@ export { PprTableSettingsProvider, usePprTableSettings } from "./ui/PprTableSett
 export {
   getPprTable,
   copyPprTable,
-  saveYearPlan as updatePprTable,
+  saveYearPlan,
   deletePprWork,
   deletePprTable,
   createPprTable,
@@ -90,6 +81,11 @@ export { createPprMeta } from "./lib/createPprMeta";
 
 export { checkIsPprInUserControl } from "./lib/isPprInUserControl";
 
-export { translateRuPprFieldName, translateRuPprBranchName } from "./lib/locale";
+export {
+  translateRuPprFieldName,
+  translateRuPprBranchName,
+  translateRuPprMonthStatus,
+  translateRuPprYearStatus,
+} from "./lib/locale";
 
-export { translateRuPprMonthStatus, translateRuPprYearStatus } from "./lib/pprStatusLocale";
+export { pprService as yearPlanService } from "./model/service";
