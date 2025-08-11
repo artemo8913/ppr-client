@@ -1,77 +1,69 @@
 "use client";
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 
+import { useTransitionWithToast } from "@/1shared/notification";
 import {
-  checkIsAllMonthsPprStatusesIsDone,
-  checkIsPprInUserControl,
-  getNextPprYearStatus,
-  updatePprTable,
   usePpr,
+  saveYearPlan,
+  updateYearPlanStatus,
+  rejectYearPlanStatus,
+  checkIsPprInUserControl,
+  yearPlanService,
 } from "@/2entities/ppr";
 
-interface IPprTableYearStatusUpdateProps {}
-
-export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () => {
-  const { data } = useSession();
+export const PprTableYearStatusUpdate: FC = () => {
   const { ppr } = usePpr();
+  const { data } = useSession();
 
-  const setNextStatus = () => {
-    if (!ppr) {
-      return;
-    }
-
-    const nextStatus = getNextPprYearStatus(ppr.status);
-
-    if (!nextStatus) {
-      return;
-    }
-
-    if (nextStatus === "in_process") {
-      ppr?.data.forEach((pprData) => (pprData.is_work_aproved = true));
-      ppr?.workingMans.forEach((man) => (man.is_working_man_aproved = true));
-    }
-
-    updatePprTable(ppr.id, { ...ppr, status: nextStatus });
-  };
-
-  const rejectPpr = useCallback(() => ppr?.id && updatePprTable(ppr.id, { status: "plan_creating" }), [ppr?.id]);
+  const { isLoading, awaitServerActionAndToast } = useTransitionWithToast();
 
   if (!data || !ppr) {
     return null;
   }
-  const { months_statuses: ppr_months_statuses, status: ppr_status } = ppr;
 
   const { isForBoss, isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = checkIsPprInUserControl(
     ppr.created_by,
     data.user
   );
 
+  const setNextStatus = () => {
+    if (isForSubdivision) {
+      awaitServerActionAndToast(saveYearPlan(ppr.id, ppr));
+    }
+
+    awaitServerActionAndToast(updateYearPlanStatus(ppr.id));
+  };
+
+  const rejectStatus = () => awaitServerActionAndToast(rejectYearPlanStatus(ppr.id));
+
+  const { months_statuses, status } = ppr;
+
   // Состояния для начальника цеха
   if (isForSubdivision) {
-    if (ppr_status === "plan_creating") {
+    if (status === "plan_creating") {
       return (
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Отправить на проверку ЭУ-132
         </Button>
       );
     }
-    if (ppr_status === "in_process" && checkIsAllMonthsPprStatusesIsDone(ppr_months_statuses)) {
+    if (status === "in_process" && yearPlanService.statusUpdater.month.checkIsDoneAll(months_statuses)) {
       return (
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Завершить выполнение ППР
         </Button>
       );
     }
     if (
-      ppr_status === "plan_on_agreement_engineer" ||
-      ppr_status === "plan_on_agreement_time_norm" ||
-      ppr_status === "plan_on_agreement_sub_boss" ||
-      ppr_status === "plan_on_aprove"
+      status === "plan_on_agreement_engineer" ||
+      status === "plan_on_agreement_time_norm" ||
+      status === "plan_on_agreement_sub_boss" ||
+      status === "plan_on_aprove"
     ) {
       return (
-        <Button type="primary" danger onClick={rejectPpr}>
+        <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
           Отозвать с проверки ЭУ-132
         </Button>
       );
@@ -79,13 +71,13 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   }
 
   // Состояния для инженера
-  if (isForEngineer && ppr_status === "plan_on_agreement_engineer") {
+  if (isForEngineer && status === "plan_on_agreement_engineer") {
     return (
       <>
-        <Button type="primary" danger onClick={rejectPpr}>
+        <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
           Отклонить ЭУ-132
         </Button>
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Согласовать ЭУ-132
         </Button>
       </>
@@ -93,13 +85,13 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   }
 
   // Состояния для нормировщика
-  if (isForTimeNorm && ppr_status === "plan_on_agreement_time_norm") {
+  if (isForTimeNorm && status === "plan_on_agreement_time_norm") {
     return (
       <>
-        <Button type="primary" danger onClick={rejectPpr}>
+        <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
           Отклонить ЭУ-132
         </Button>
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Согласовать ЭУ-132
         </Button>
       </>
@@ -107,13 +99,13 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   }
 
   // Состояния для замначальника дистанции
-  if (isForSubBoss && ppr_status === "plan_on_agreement_sub_boss") {
+  if (isForSubBoss && status === "plan_on_agreement_sub_boss") {
     return (
       <>
-        <Button type="primary" danger onClick={rejectPpr}>
+        <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
           Отклонить ЭУ-132
         </Button>
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Согласовать ЭУ-132
         </Button>
       </>
@@ -121,13 +113,13 @@ export const PprTableYearStatusUpdate: FC<IPprTableYearStatusUpdateProps> = () =
   }
 
   // Состояние для начальника (ответственного за электрохозяйство)
-  if (isForBoss && ppr_status === "plan_on_aprove") {
+  if (isForBoss && status === "plan_on_aprove") {
     return (
       <>
-        <Button type="primary" danger onClick={rejectPpr}>
+        <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
           Отклонить ЭУ-132
         </Button>
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Утвердить ЭУ-132
         </Button>
       </>
