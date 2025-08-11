@@ -1,75 +1,69 @@
 "use client";
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import Button from "antd/es/button";
 import { useSession } from "next-auth/react";
 
-import { translateRuTimePeriod } from "@/1shared/lib/date";
+import { Month, MONTHS, translateRuTimePeriod } from "@/1shared/lib/date";
+import { useTransitionWithToast } from "@/1shared/notification";
 import {
   usePpr,
-  updatePprTable,
+  saveYearPlan,
   usePprTableSettings,
-  getNextPprMonthStatus,
+  updateMonthPlanStatus,
   checkIsPprInUserControl,
-  checkIsTimePeriodAvailableForPlanning,
+  rejectMonthPlanStatus,
+  TMonthPprStatus,
+  TYearPprStatus,
 } from "@/2entities/ppr";
 
-interface IPprTableMonthStatusUpdateProps {}
-
-export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({}) => {
-  const { data } = useSession();
+export const PprTableMonthStatusUpdate: FC = () => {
   const { ppr } = usePpr();
+  const { data } = useSession();
+  const { isLoading, awaitServerActionAndToast } = useTransitionWithToast();
+
   const { currentTimePeriod } = usePprTableSettings();
+
   const timePeriodRu = translateRuTimePeriod(currentTimePeriod);
-
-  const setNextStatus = () => {
-    if (!ppr || currentTimePeriod === "year") {
-      return;
-    }
-    const nextStatus = getNextPprMonthStatus(ppr.months_statuses[currentTimePeriod]);
-
-    if (!nextStatus) {
-      return;
-    }
-
-    if (nextStatus === "in_process") {
-      ppr.data.forEach((pprData) => (pprData.is_work_aproved = true));
-      ppr.workingMans.forEach((man) => (man.is_working_man_aproved = true));
-    }
-
-    updatePprTable(ppr.id, {
-      ...ppr,
-      months_statuses: {
-        ...ppr.months_statuses,
-        [currentTimePeriod]: nextStatus,
-      },
-    });
-  };
-
-  const rejectPlan = useCallback(() => {
-    if (!ppr?.id || currentTimePeriod === "year") {
-      return;
-    }
-    updatePprTable(ppr.id, {
-      months_statuses: { ...ppr.months_statuses, [currentTimePeriod]: "plan_creating" },
-    }),
-      [ppr?.id];
-  }, [ppr?.id, ppr?.months_statuses, currentTimePeriod]);
-
-  const rejectFactFilling = useCallback(() => {
-    if (!ppr?.id || currentTimePeriod === "year") {
-      return;
-    }
-    updatePprTable(ppr.id, {
-      months_statuses: { ...ppr.months_statuses, [currentTimePeriod]: "fact_filling" },
-    }),
-      [ppr?.id];
-  }, [ppr?.id, ppr?.months_statuses, currentTimePeriod]);
 
   if (!data || !ppr || currentTimePeriod === "year") {
     return null;
   }
 
+  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = checkIsPprInUserControl(
+    ppr.created_by,
+    data.user
+  );
+
+  const setNextStatus = async () => {
+    if (isForSubdivision) {
+      awaitServerActionAndToast(saveYearPlan(ppr.id, ppr));
+    }
+
+    awaitServerActionAndToast(updateMonthPlanStatus(ppr.id, currentTimePeriod));
+  };
+
+  const rejectStatus = () => awaitServerActionAndToast(rejectMonthPlanStatus(ppr.id, currentTimePeriod));
+
   const currentMonthStatus = ppr.months_statuses[currentTimePeriod];
+
+  function checkIsTimePeriodAvailableForPlanning(
+    timePeriod: Month,
+    yearStatus: TYearPprStatus,
+    monthsStatuses: { [month in Month]: TMonthPprStatus }
+  ): boolean {
+    if (yearStatus !== "in_process" && yearStatus !== "done") {
+      return false;
+    }
+
+    const timePeriodIndex = MONTHS.indexOf(timePeriod);
+    const prevTimePeriod = MONTHS[timePeriodIndex - 1] || "jan";
+
+    if (prevTimePeriod in monthsStatuses && monthsStatuses[prevTimePeriod] === "done") {
+      return true;
+    }
+
+    return false;
+  }
 
   const isAvailableForPlanning = checkIsTimePeriodAvailableForPlanning(
     currentTimePeriod,
@@ -77,37 +71,32 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     ppr.months_statuses
   );
 
-  const { isForEngineer, isForSubBoss, isForSubdivision, isForTimeNorm } = checkIsPprInUserControl(
-    ppr.created_by,
-    data.user
-  );
-
   // Состояния для начальника цеха
   if (isForSubdivision) {
     if (currentMonthStatus === "none" && isAvailableForPlanning) {
       return (
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Запланировать работы на {timePeriodRu}
         </Button>
       );
     }
     if (currentMonthStatus === "plan_creating") {
       return (
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Отправить на проверку
         </Button>
       );
     }
     if (currentMonthStatus === "in_process") {
       return (
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Заполнить факт за {timePeriodRu}
         </Button>
       );
     }
     if (currentMonthStatus === "fact_filling") {
       return (
-        <Button type="primary" onClick={setNextStatus}>
+        <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
           Отправить на проверку
         </Button>
       );
@@ -118,7 +107,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       currentMonthStatus === "plan_on_aprove"
     ) {
       return (
-        <Button type="primary" danger onClick={rejectPlan}>
+        <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
           Отозвать план с проверки
         </Button>
       );
@@ -129,7 +118,7 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
       currentMonthStatus === "fact_on_agreement_sub_boss"
     ) {
       return (
-        <Button type="primary" danger onClick={rejectFactFilling}>
+        <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
           Отозвать заполненный факт с проверки
         </Button>
       );
@@ -141,10 +130,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_agreement_engineer") {
       return (
         <>
-          <Button type="primary" danger onClick={rejectPlan}>
+          <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
             Отклонить план на {timePeriodRu}
           </Button>
-          <Button type="primary" onClick={setNextStatus}>
+          <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
             Согласовать план на {timePeriodRu}
           </Button>
         </>
@@ -153,10 +142,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_verification_engineer") {
       return (
         <>
-          <Button type="primary" danger onClick={rejectFactFilling}>
+          <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
             Отклонить факт за {timePeriodRu}
           </Button>
-          <Button type="primary" onClick={setNextStatus}>
+          <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
             Согласовать факт за {timePeriodRu}
           </Button>
         </>
@@ -169,10 +158,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_agreement_time_norm") {
       return (
         <>
-          <Button type="primary" danger onClick={rejectPlan}>
+          <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
             Отклонить план на {timePeriodRu}
           </Button>
-          <Button type="primary" onClick={setNextStatus}>
+          <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
             Согласовать план на {timePeriodRu}
           </Button>
         </>
@@ -181,10 +170,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_verification_time_norm") {
       return (
         <>
-          <Button type="primary" danger onClick={rejectFactFilling}>
+          <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
             Отклонить факт за {timePeriodRu}
           </Button>
-          <Button type="primary" onClick={setNextStatus}>
+          <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
             Согласовать факт за {timePeriodRu}
           </Button>
         </>
@@ -197,10 +186,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "plan_on_aprove") {
       return (
         <>
-          <Button type="primary" danger onClick={rejectPlan}>
+          <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
             Отклонить план на {timePeriodRu}
           </Button>
-          <Button type="primary" onClick={setNextStatus}>
+          <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
             Утвердить план на {timePeriodRu}
           </Button>
         </>
@@ -209,10 +198,10 @@ export const PprTableMonthStatusUpdate: FC<IPprTableMonthStatusUpdateProps> = ({
     if (currentMonthStatus === "fact_on_agreement_sub_boss") {
       return (
         <>
-          <Button type="primary" danger onClick={rejectFactFilling}>
+          <Button disabled={isLoading} type="primary" danger onClick={rejectStatus}>
             Отклонить факт за {timePeriodRu}
           </Button>
-          <Button type="primary" onClick={setNextStatus}>
+          <Button disabled={isLoading} type="primary" onClick={setNextStatus}>
             Утвердить факт за {timePeriodRu}
           </Button>
         </>
