@@ -10,9 +10,10 @@ import { FC, useEffect, useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 import { OptionType } from "@/1shared/lib/form/TOptionType";
-import { PPR_YEAR_OPTIONS, TYearPprStatus } from "@/2entities/ppr";
-import { Direction, Distance, DivisionType, Subdivision } from "@/2entities/division";
 import { CommonWork } from "@/2entities/commonWork";
+import { YearPlanStatus } from "@/2entities/ppr/model/ppr.types";
+import { Direction, Distance, DivisionType, Subdivision } from "@/2entities/division";
+import { translateRuPprYearStatus, TYearPprStatus, YEAR_STATUSES } from "@/2entities/ppr";
 
 const DIVISIONS_TYPE_OPTIONS: OptionType<DivisionType>[] = [
   { label: "Трансэнерго", value: "transenergo" },
@@ -20,6 +21,11 @@ const DIVISIONS_TYPE_OPTIONS: OptionType<DivisionType>[] = [
   { label: "Дистанция", value: "distance" },
   { label: "Подразделение", value: "subdivision" },
 ];
+
+const PPR_YEAR_OPTIONS: OptionType<YearPlanStatus>[] = YEAR_STATUSES.map((status) => ({
+  value: status,
+  label: translateRuPprYearStatus(status),
+}));
 
 function getDivisionOptions(divisions: (Subdivision | Distance | Direction)[]): OptionType<number>[] {
   return divisions.map((division) => ({ value: division.id, label: division.name }));
