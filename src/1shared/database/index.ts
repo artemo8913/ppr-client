@@ -13,11 +13,11 @@ import {
 } from "@/2entities/ppr/model/ppr.schema";
 
 const connectionConfig: PoolOptions = {
-  host: process.env[`DB_HOST_${process.env.DB_LOCATION}`],
-  database: process.env[`DB_NAME_${process.env.DB_LOCATION}`],
-  port: Number(process.env[`DB_PORT_${process.env.DB_LOCATION}`]),
-  user: process.env[`DB_USER_${process.env.DB_LOCATION}`],
-  password: process.env[`DB_PASSWORD_${process.env.DB_LOCATION}`],
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
 };
 /**
  * For the built in migrate function with DDL migrations we and drivers strongly encourage you to use single client connection.
