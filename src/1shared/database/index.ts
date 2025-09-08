@@ -12,6 +12,10 @@ import {
   pprMonthsStatusesTable,
 } from "@/2entities/ppr/model/ppr.schema";
 
+if (!process.env.DB_USER || !process.env.DB_HOST || !process.env.DB_NAME) {
+  throw new Error('Не заданы данные для подключения к sql серверу')
+}
+
 const connectionConfig: PoolOptions = {
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
