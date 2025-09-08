@@ -47,7 +47,6 @@ import {
 import { pprService } from "./service";
 import { PprField } from "./service/PprField";
 import { checkIsPprInUserControl } from "../lib/isPprInUserControl";
-import { translateRuPprMonthStatus, translateRuPprYearStatus } from "../lib/locale";
 
 export async function getPprTable(id: number): Promise<ServerActionReturn<YearPlan>> {
   try {
@@ -300,7 +299,7 @@ export async function updateYearPlanStatus(yearPlanId: number): Promise<ServerAc
       throw new Error(`Session not exist`);
     }
 
-    db.transaction(async (tx) => {
+    await db.transaction(async (tx) => {
       const yearPlan = await tx.query.pprsInfoTable.findFirst({ where: eq(pprsInfoTable.id, yearPlanId) });
 
       if (!yearPlan) {
@@ -378,7 +377,7 @@ export async function rejectYearPlanStatus(yearPlanId: number): Promise<ServerAc
 
 export async function updateMonthPlanStatus(yearPlanId: number, month: Month): Promise<ServerActionReturn> {
   try {
-    db.transaction(async (tx) => {
+    await db.transaction(async (tx) => {
       const monthStatuses = await tx.query.pprMonthsStatusesTable.findFirst({
         where: eq(pprMonthsStatusesTable.idPpr, yearPlanId),
       });
