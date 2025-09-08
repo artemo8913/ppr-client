@@ -1,4 +1,8 @@
+import dotenv from 'dotenv';
+import path from 'node:path';
 import { defineConfig, devices } from "@playwright/test";
+
+dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
 /**
  * Read environment variables from file.
@@ -20,7 +24,7 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -33,7 +37,7 @@ export default defineConfig({
   },
   expect: {
     /* Default timeout for async expect matchers in milliseconds, defaults to 5000ms */
-    timeout: 10000,
+    timeout: 20000,
   },
   /* Configure projects for major browsers */
   projects: [
@@ -74,9 +78,9 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: {
+    command: 'npm run build && npm run start',
+    url: 'http://localhost:3000',
+    reuseExistingServer: true,
+  },
 });
