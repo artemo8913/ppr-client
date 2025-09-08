@@ -1,5 +1,5 @@
-import { User } from "@/2entities/user/@x/ppr";
 import { Month, TimePeriod } from "@/1shared/lib/date";
+import { User } from "@/2entities/user/@x/ppr";
 
 export type YearPlanStatus =
   | "template"
@@ -26,10 +26,6 @@ export type MonthPlanStatus =
 
 export type AllMonthsPlansStatuses = {
   [month in Month]: MonthPlanStatus;
-};
-
-type ReportsNotes = {
-  [month in Month]: string;
 };
 
 export type WorkTransfer = { fieldTo: PlanValueField; value: number };
@@ -120,7 +116,7 @@ interface YearPlanInvolvedDivisions {
 interface PlannedWorksAndWorkingMans {
   data: PlannedWorkWithCorrections[];
   workingMans: PlannedWorkingMans[];
-  raports_notes: ReportsNotes;
+  raports_notes: { [month in Month]: string };
 }
 
 export interface YearPlanBasicData extends YearPlanInvolvedDivisions {

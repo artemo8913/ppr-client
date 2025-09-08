@@ -1,23 +1,21 @@
 "use client";
-import { FC, useMemo, useTransition } from "react";
+import { FC, useMemo } from "react";
 import Button from "antd/es/button";
 import Tooltip from "antd/es/tooltip";
 import { SaveOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 
-import { useNotificationProvider } from "@/1shared/notification";
-import { checkIsPprInUserControl, updatePprTable, usePpr } from "@/2entities/ppr";
+import { useTransitionWithToast } from "@/1shared/notification";
+import { checkIsPprInUserControl, saveYearPlan, usePpr } from "@/2entities/ppr";
 
 interface IPprTableUpdateFormProps {}
 
 export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
   const { ppr } = usePpr();
 
-  const [isLoading, startTransition] = useTransition();
+  const { isLoading, awaitServerActionAndToast } = useTransitionWithToast();
 
   const { data: credential } = useSession();
-
-  const { toast } = useNotificationProvider();
 
   const isPprInUserControl = useMemo(() => {
     const { isForSubdivision, isPprCreatedByThisUser } = checkIsPprInUserControl(ppr?.created_by, credential?.user);
@@ -25,18 +23,19 @@ export const PprTableSaveButton: FC<IPprTableUpdateFormProps> = () => {
     return isForSubdivision || (isPprCreatedByThisUser && ppr?.status === "template");
   }, [credential?.user, ppr?.created_by, ppr?.status]);
 
-  const handleSave = () =>
-    startTransition(async () => {
-      if (ppr) {
-        const response = await updatePprTable(ppr.id, {
-          data: ppr.data,
-          workingMans: ppr.workingMans,
-          raports_notes: ppr.raports_notes,
-        });
+  if (!ppr) {
+    return;
+  }
 
-        toast(response);
-      }
-    });
+  const handleSave = () => {
+    awaitServerActionAndToast(
+      saveYearPlan(ppr.id, {
+        data: ppr.data,
+        workingMans: ppr.workingMans,
+        raports_notes: ppr.raports_notes,
+      })
+    );
+  };
 
   const isDisabled = isLoading || !isPprInUserControl;
 

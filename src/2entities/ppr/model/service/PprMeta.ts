@@ -1,25 +1,22 @@
 import { roundToFixed } from "@/1shared/lib/math/roundToFixed";
 
 import {
-  FACT_NORM_TIME_FIELDS,
   FACT_TIME_FIELDS,
-  PLAN_NORM_TIME_FIELDS,
-  PLAN_TABEL_TIME_FIELDS,
   PLAN_TIME_FIELDS,
   PLAN_WORK_FIELDS,
-} from "./ppr.const";
+  PLAN_NORM_TIME_FIELDS,
+  FACT_NORM_TIME_FIELDS,
+  PLAN_TABEL_TIME_FIELDS,
+} from "../ppr.const";
 import {
+  TotalTimes,
   PlannedWork,
   PlannedWorkId,
+  PlannedWorkingMans,
   PlannedWorkTotalTimes,
   WorkingMansTotalTimes,
   PlannedWorkWithCorrections,
-  PlannedWorksAndWorkingMansTotalTimes,
-  TotalTimes,
-  PlannedWorkingMans,
-} from "./ppr.types";
-
-//TODO: сделать какой-нибудь сервис Ppr, который в одном месте соберет все связанные сервисы в одном месте.
+} from "../ppr.types";
 
 /**TODO: Разбить на подклассы. Также думаю, что необходимо сделать так, чтобы подсчет итоговых значений ничего не знал
  * о final и original значениях. Например, был бы какой-нибудь сервис, который бы предоставлял простую структуры запланированных
@@ -263,12 +260,17 @@ class WorkingMansTotalCalculator {
       this._totalCalculator.add(workingMan[field], field);
     });
   }
+
+  get() {
+    return this._totalCalculator.get();
+  }
 }
 
 export class YearPlanMetaCreator {
   private _subbranchList = new SubbranchesList();
   private _rowSpanCalculator = new RowSpanCalculator();
   private _workOrderCalculator = new WorksOrderCalculator();
+  private _workingMansTotalCaluclator = new WorkingMansTotalCalculator();
   private _branchesAndSubbranchesCreator = new BranchAndSubbranchMetaCreator();
 
   private _tempWork = {
@@ -279,10 +281,15 @@ export class YearPlanMetaCreator {
     branch: "additional",
   };
 
-  constructor(yearPlannedWorks: PlannedWorkWithCorrections[], type: "original" | "final") {
-    yearPlannedWorks.forEach((pprData, index) =>
-      this._updateBy(PlannedWorkConverter.convertToPlannedWorkFrom(pprData, type), index)
+  constructor(
+    type: "original" | "final",
+    yearPlannedWorks?: PlannedWorkWithCorrections[],
+    yearPlannedWorkingMans?: PlannedWorkingMans[]
+  ) {
+    yearPlannedWorks?.forEach((work, index) =>
+      this._updateBy(PlannedWorkConverter.convertToPlannedWorkFrom(work, type), index)
     );
+    yearPlannedWorkingMans?.forEach((worker) => this._workingMansTotalCaluclator.updateBy(worker));
   }
 
   private _updateTempWork(index: number, pprData: PlannedWork) {
@@ -295,40 +302,52 @@ export class YearPlanMetaCreator {
     };
   }
 
-  private _updateBy(pprData: PlannedWork, index: number) {
-    const isSameName = this._tempWork.name === pprData.name;
-    const isSameBranch = this._tempWork.branch === pprData.branch;
-    const isSameSubbranch = this._tempWork.subbranch === pprData.subbranch;
-    const isSameNote = this._tempWork.note === pprData.note;
+  private _checkIsTempWorkSameAs(work: PlannedWork) {
+    const isSameName = this._tempWork.name === work.name;
+    const isSameNote = this._tempWork.note === work.note;
+    const isSameBranch = this._checkIsTempWorkHaveSameBranchAs(work);
+    const isSameSubbranch = this._checkIsTempWorkHaveSameSubbranchAs(work);
 
-    const isSameWork = isSameName && isSameNote && isSameBranch && isSameSubbranch;
-    const isBranchChanged = !isSameBranch;
-    const isSubbranchChanged = !isSameBranch || !isSameSubbranch;
+    return isSameName && isSameNote && isSameBranch && isSameSubbranch;
+  }
+
+  private _checkIsTempWorkHaveSameBranchAs(work: PlannedWork) {
+    return this._tempWork.branch === work.branch;
+  }
+
+  private _checkIsTempWorkHaveSameSubbranchAs(work: PlannedWork) {
+    return this._tempWork.subbranch === work.subbranch;
+  }
+
+  private _updateBy(work: PlannedWork, index: number) {
+    const isBranchChanged = !this._checkIsTempWorkHaveSameBranchAs(work);
+    const isSubbranchChanged = isBranchChanged || !this._checkIsTempWorkHaveSameSubbranchAs(work);
 
     const subbranchOrder = this._branchesAndSubbranchesCreator.getCurrentSubbranchOrder();
 
-    if (isSameWork) {
-      this._rowSpanCalculator.increaseRowSpanFor(index);
+    if (this._checkIsTempWorkSameAs(work)) {
+      //тут косяк какой-то что-ли. проверь формирование row span
+      this._rowSpanCalculator.increaseRowSpanFor(this._tempWork.index);
       this._rowSpanCalculator.clearSpanFor(index);
     } else {
       this._workOrderCalculator.saveWorkOrderInStoreFor(this._tempWork.index, subbranchOrder);
       this._workOrderCalculator.increaseWorkOrder();
-      this._updateTempWork(index, pprData);
+      this._updateTempWork(index, work);
       this._rowSpanCalculator.initRowSpanFor(index);
     }
 
     if (isBranchChanged) {
-      this._branchesAndSubbranchesCreator.createNewBranchMetaBy(index, pprData);
+      this._branchesAndSubbranchesCreator.createNewBranchMetaBy(index, work);
     }
 
     if (isSubbranchChanged) {
-      this._branchesAndSubbranchesCreator.createNewSubbranchMetaBy(index, pprData);
+      this._branchesAndSubbranchesCreator.createNewSubbranchMetaBy(index, work);
       this._workOrderCalculator.saveWorkOrderInStoreFor(index, subbranchOrder);
       this._workOrderCalculator.resetWorkOrder();
     }
 
-    this._subbranchList.add(pprData.subbranch);
-    this._branchesAndSubbranchesCreator.addTimeInAllTotals(pprData);
+    this._subbranchList.add(work.subbranch);
+    this._branchesAndSubbranchesCreator.addTimeInAllTotals(work);
   }
 
   getYearPlanMeta(): YearPlanMeta {
@@ -339,11 +358,7 @@ export class YearPlanMetaCreator {
       branchesAndSubbrunchesIndexList: this._branchesAndSubbranchesCreator.getIndexList(),
       branchesMeta: this._branchesAndSubbranchesCreator.getBranchesMeta(),
       totalWorkTime: this._branchesAndSubbranchesCreator.getTotalTime(),
-      totalWorkingManTime: {},
+      totalWorkingManTime: this._workingMansTotalCaluclator.get(),
     };
   }
-}
-
-export function createPprMeta2(yearPlannedWorks: PlannedWorkWithCorrections[]): YearPlanMeta {
-  return new YearPlanMetaCreator(yearPlannedWorks, "final").getYearPlanMeta();
 }

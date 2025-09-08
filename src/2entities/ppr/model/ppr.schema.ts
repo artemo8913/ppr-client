@@ -22,7 +22,7 @@ import {
   PlanTimeWithCorrection,
   PlannedWorkBranch,
   YearPlanStatus,
-} from "../model/ppr.types";
+} from "./ppr.types";
 
 function createMysqlPprMonthStatusType(fieldName: string) {
   return mysqlEnum(fieldName, MONTH_STATUSES as [string])
@@ -61,6 +61,8 @@ export const pprsInfoTable = mysqlTable("pprs_info", {
   idDirection: int("id_direction").references(() => directionsTable.id),
   idDistance: int("id_distance").references(() => distancesTable.id),
   idSubdivision: int("id_subdivision").references(() => subdivisionsTable.id),
+  //TODO: добавить версию годового плана (время последнего обновления). Если на локальной машине будет отличаться, то
+  //будет возникать ошибка, в уведомлении будет предложено обновить страницу
 });
 
 export const pprMonthsStatusesTable = mysqlTable("ppr_months_statuses", {

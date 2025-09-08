@@ -3,7 +3,7 @@ import { FC } from "react";
 import { TableCellMemo } from "@/1shared/ui/table";
 
 import { PlannedWorkWithCorrections, PlannedWorkTotalTimes } from "../model/ppr.types";
-import { PprField } from "../model/PprField";
+import { PprField } from "../model/service/PprField";
 
 interface ISummaryTableRowProps {
   name?: string;

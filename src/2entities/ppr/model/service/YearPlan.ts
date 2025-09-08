@@ -11,21 +11,34 @@ import {
   PlanValueField,
   PlannedWorkingManId,
   WorkTransfer,
-} from "./ppr.types";
+  YearPlan,
+} from "../ppr.types";
 
-class YearPlan {
+export class YearPlanStore {
+  private _plan: YearPlan;
+
+  constructor(yearPlan: YearPlan) {
+    this._plan = yearPlan;
+  }
+
+  private _updateNormOfTime(id: PlannedWorkId, value: number) {}
+  private _updatePlanWork(id: PlannedWorkId, field: PlanValueField, value: number) {}
+  private _updateFactWork(id: PlannedWorkId, field: FactValueField, value: number) {}
+  private _updateFactWorkTime(id: PlannedWorkId, field: FactTimeField, value: number) {}
+  private _updatePlanWorkValueByUser(id: PlannedWorkId, field: PlanValueField, newValue: number) {}
+  private _updatePprData(id: PlannedWorkId, field: keyof PlannedWorkWithCorrections, value: string | number) {}
+
   addWork(newWork: Partial<PlannedWorkWithCorrections>, nearWorkId?: PlannedWorkId) {}
+
   copyWork(id: PlannedWorkId) {}
-  deleteWork(id: PlannedWorkId) {}
+
+  deleteWork(id: PlannedWorkId) {
+    this._plan.data = this._plan.data.filter((work) => work.id !== id);
+  }
+
   editWork(workData: Partial<PlannedWorkBasicData>) {}
-  updateNormOfTime(id: PlannedWorkId, value: number) {}
-  updatePlanWork(id: PlannedWorkId, field: PlanValueField, value: number) {}
-  _updateFactWork(id: PlannedWorkId, field: FactValueField, value: number) {}
-  _updateFactWorkTime(id: PlannedWorkId, field: FactTimeField, value: number) {}
   copyFactNormTimeToFactTime(mode: "EVERY" | "NOT_FILLED", month: Month) {}
-  updatePprData(id: PlannedWorkId, field: keyof PlannedWorkWithCorrections, value: string | number) {}
-  _updatePlanWorkValueByUser(id: PlannedWorkId, field: PlanValueField, newValue: number) {}
-  updatePprTableCell(id: PlannedWorkId, field: keyof PlannedWorkWithCorrections, value: string, isWorkAproved?: boolean) {}
+  updatePprTableCell(id: PlannedWorkId, field: keyof PlannedWorkWithCorrections, value: string) {}
   updateTransfers(
     id: PlannedWorkId,
     field: PlanValueField,

@@ -49,3 +49,7 @@ export const db = drizzle(connection, {
     pprsInfoTable,
   },
 });
+
+
+type DatabaseType = typeof db;
+export type DatabaseTransactionType = Parameters<Parameters<DatabaseType["transaction"]>[0]>[0];

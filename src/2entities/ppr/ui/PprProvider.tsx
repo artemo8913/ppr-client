@@ -22,7 +22,7 @@ import {
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 import { createPprMeta, IPprMeta } from "../lib/createPprMeta";
-import { PprField } from "../model/PprField";
+import { PprField } from "../model/service/PprField";
 import {
   FACT_TIME_FIELDS,
   FACT_WORK_FIELDS,
@@ -30,7 +30,7 @@ import {
   PLAN_NORM_TIME_FIELDS,
   PLAN_TABEL_TIME_FIELDS,
 } from "../model/ppr.const";
-
+//TODO: убрать null из контекста, чтобы во всех компонентах не делать проверку на null
 interface IPprContext {
   ppr: YearPlan | null;
   addWork: (newWork: Partial<PlannedWorkWithCorrections>, nearWorkId?: PlannedWorkId) => void;

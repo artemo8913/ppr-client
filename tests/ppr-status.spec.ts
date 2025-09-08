@@ -103,10 +103,10 @@ test.describe("Согласование / утверждение планов", 
         // Нормировщик
         await login(page, CREDENTIALS.norm1);
         await page.getByRole("link", { name: MONTH_PLAN_NAME }).click();
-        await page.getByRole('button', { name: 'Согласовать' }).click();
+        await page.getByRole('button', { name: APROVE }).click();
 
         await expect(
-            page.getByRole('button', { name: 'Согласовать' })
+            page.getByRole('button', { name: APROVE })
         ).toHaveCount(0);
 
         await logout(page);

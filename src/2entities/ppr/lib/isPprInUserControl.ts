@@ -12,6 +12,7 @@ export function checkIsPprInUserControl(ppr_created_by?: User, userData?: User) 
       isForSecurityEngineer: false,
       isForSubBoss: false,
       isForBoss: false,
+      isUserDistance: false,
     };
   }
 
@@ -38,6 +39,7 @@ export function checkIsPprInUserControl(ppr_created_by?: User, userData?: User) 
     isForEngineer,
     isForTimeNorm,
     isForSecurityEngineer,
+    isUserDistance,
     isForSubBoss,
     isForBoss,
   };
