@@ -57,7 +57,21 @@ export { SummaryTableFoot } from "./ui/SummaryTableFoot";
 
 export { SummaryTableRow } from "./ui/SummaryTableRow";
 
-export { PprProvider, usePpr } from "./ui/PprProvider";
+export {
+  PprProvider,
+  usePpr,
+  usePprData,
+  useWorksActions,
+  useWorkingMenActions,
+} from "./ui/provider";
+
+export type {
+  IPprDataContext,
+  IWorksActionsContext,
+  IWorkingMenActionsContext,
+} from "./ui/provider";
+
+export { WorksService, WorkingMenService } from "./lib/services";
 
 export { PprTableSettingsProvider, usePprTableSettings } from "./ui/PprTableSettingsProvider";
 

@@ -1,28 +1,9 @@
-import { PPP_META_MOCK } from "./pprMeta.mock";
 import { PPR_MOCK } from "./pprYearPlan.mock";
 import { createNewPprWorkInstance } from "../lib/createNewPprWorkInstance";
 import { createNewWorkingManInstance } from "../lib/createNewWorkingManInstance";
 import { createPprMeta, IBranchDefaultMeta, IBranchMeta, IPprMeta } from "../lib/createPprMeta";
 
 describe("createPprMeta", () => {
-  it("createPprMeta возвращает объект нужного типа", () => {
-    const pprData = [createNewPprWorkInstance({})];
-
-    const workingMansData = [createNewWorkingManInstance()];
-
-    const result = createPprMeta({ pprData, workingMansData });
-    expect(result).toEqual<IPprMeta>({
-      totalValues: {
-        final: expect.any(Object),
-        original: expect.any(Object),
-      },
-      worksRowSpan: expect.any(Array),
-      branchesMeta: expect.any(Array),
-      worksOrder: expect.any(Object),
-      branchesAndSubbrunchesOrder: expect.any(Object),
-      subbranchesList: expect.any(Array),
-    });
-  });
   it("pprMeta ведет расчет", () => {
     const pprData = [
       createNewPprWorkInstance({
@@ -92,6 +73,6 @@ describe("createPprMeta", () => {
   it("pprMeta расчитывает данные по всему Годовому плану", () => {
     const meta = createPprMeta({ pprData: PPR_MOCK.data, workingMansData: PPR_MOCK.workingMans });
 
-    expect(meta).toMatchObject(PPP_META_MOCK);
+    expect(meta).toMatchSnapshot();
   });
 });

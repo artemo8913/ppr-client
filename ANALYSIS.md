@@ -175,3 +175,36 @@ static isFactWork(field: any): field is FactValueField
 **Общая готовность к расширению: 5/10**
 
 Перед добавлением нового функционала рекомендуется выполнить задачи приоритетов 1 и 2 — это снизит риски и упростит дальнейшую разработку.
+
+---
+
+## 8. История изменений
+
+### 2026-01-28: Рефакторинг PprProvider (задача 1.2)
+
+**Выполнено:**
+- Разбит монолитный `PprProvider.tsx` (881 строка) на 3 контекста:
+  - `PprDataContext` — хранение данных (ppr, pprMeta)
+  - `WorksActionsContext` — действия над работами (12 методов)
+  - `WorkingMenActionsContext` — действия над работниками (7 методов)
+- Создано 2 сервиса с чистыми функциями:
+  - `WorksService` — 16 методов
+  - `WorkingMenService` — 7 методов
+- Написано 61 unit-тест для сервисов
+- Сохранена обратная совместимость через `usePpr()` фасад
+
+**Новая структура:**
+```
+src/2entities/ppr/
+├── lib/services/
+│   ├── WorksService.ts
+│   └── WorkingMenService.ts
+└── ui/provider/
+    ├── PprDataContext.tsx
+    ├── WorksActionsContext.tsx
+    ├── WorkingMenActionsContext.tsx
+    ├── PprProvider.tsx
+    └── usePpr.ts
+```
+
+**Результат:** Тестовое покрытие увеличено до 105 тестов (+61). Архитектура улучшена.

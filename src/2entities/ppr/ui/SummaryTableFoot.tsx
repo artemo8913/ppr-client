@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import { TableCellMemo } from "@/1shared/ui/table";
 
-import { usePpr } from "./PprProvider";
+import { usePpr } from "./provider";
 import { usePprTableSettings } from "./PprTableSettingsProvider";
 import { PlannedWorkWithCorrections, PlannedWorkingMans } from "../model/ppr.types";
 import { PprField } from "../model/service/PprField";
