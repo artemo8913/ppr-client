@@ -21,7 +21,13 @@ export const PprTableCopyFactNormTimeToFactTime = () => {
 
   return (
     <Tooltip title="Массово заполнить фактические трудозатраты исходя из нормы времени (для не заполненных значений)">
-      <Button disabled={isDisabled} icon={<CopyOutlined />} type="text" shape="circle" onClick={handleClick} />
+      <Button
+        type="text"
+        shape="circle"
+        disabled={isDisabled}
+        onClick={handleClick}
+        icon={<CopyOutlined />}
+        name="PprTableCopyFactNormTimeToFactTime" />
     </Tooltip>
   );
 };

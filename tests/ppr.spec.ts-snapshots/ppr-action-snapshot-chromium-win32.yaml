@@ -1,0 +1,5206 @@
+- tabpanel "План ТОиР":
+  - heading "ЗАТРАТЫ ТРУДА на запланированные и фактически выполненные работы" [level=2]
+  - table:
+    - rowgroup:
+      - row "Наименования работ Место работ (тип оборудования) Класс участка / вид ТОиР Измеритель Количество измерителей (всего) Год ввода в эксплуатацию Периодичность согласно нормативным документам Дата последнего выполнения Норма времени на измеритель, чел.-ч Обоснование нормы времени Подразделение / исполнитель год январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь":
+        - columnheader "Наименования работ"
+        - columnheader "Место работ (тип оборудования)"
+        - columnheader "Класс участка / вид ТОиР"
+        - columnheader "Измеритель"
+        - columnheader "Количество измерителей (всего)"
+        - columnheader "Год ввода в эксплуатацию"
+        - columnheader "Периодичность согласно нормативным документам"
+        - columnheader "Дата последнего выполнения"
+        - columnheader "Норма времени на измеритель, чел.-ч"
+        - columnheader "Обоснование нормы времени"
+        - columnheader "Подразделение / исполнитель"
+        - columnheader "год"
+        - columnheader "январь"
+        - columnheader "февраль"
+        - columnheader "март"
+        - columnheader "апрель"
+        - columnheader "май"
+        - columnheader "июнь"
+        - columnheader "июль"
+        - columnheader "август"
+        - columnheader "сентябрь"
+        - columnheader "октябрь"
+        - columnheader "ноябрь"
+        - columnheader "декабрь"
+      - row:
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+        - columnheader "план, кол-во"
+        - columnheader "норм. время на плановый объем, чел.-ч"
+        - columnheader "факт, кол-во"
+        - columnheader "трудозатраты по норме времени, чел.-ч"
+        - columnheader "фактические трудозатраты, чел.-ч"
+      - row "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76":
+        - cell "1"
+        - cell "2"
+        - cell "3"
+        - cell "4"
+        - cell "5"
+        - cell "6"
+        - cell "7"
+        - cell "8"
+        - cell "9"
+        - cell "10"
+        - cell "11"
+        - cell "12"
+        - cell "13"
+        - cell "14"
+        - cell "15"
+        - cell "16"
+        - cell "17"
+        - cell "18"
+        - cell "19"
+        - cell "20"
+        - cell "21"
+        - cell "22"
+        - cell "23"
+        - cell "24"
+        - cell "25"
+        - cell "26"
+        - cell "27"
+        - cell "28"
+        - cell "29"
+        - cell "30"
+        - cell "31"
+        - cell "32"
+        - cell "33"
+        - cell "34"
+        - cell "35"
+        - cell "36"
+        - cell "37"
+        - cell "38"
+        - cell "39"
+        - cell "40"
+        - cell "41"
+        - cell "42"
+        - cell "43"
+        - cell "44"
+        - cell "45"
+        - cell "46"
+        - cell "47"
+        - cell "48"
+        - cell "49"
+        - cell "50"
+        - cell "51"
+        - cell "52"
+        - cell "53"
+        - cell "54"
+        - cell "55"
+        - cell "56"
+        - cell "57"
+        - cell "58"
+        - cell "59"
+        - cell "60"
+        - cell "61"
+        - cell "62"
+        - cell "63"
+        - cell "64"
+        - cell "65"
+        - cell "66"
+        - cell "67"
+        - cell "68"
+        - cell "69"
+        - cell "70"
+        - cell "71"
+        - cell "72"
+        - cell "73"
+        - cell "74"
+        - cell "75"
+        - cell "76"
+    - rowgroup:
+      - row "1.Основные (плановые) работы":
+        - cell "1.Основные (плановые) работы"
+      - row "1.1. Затраты труда на обязательные мероприятия":
+        - cell "1.1. Затраты труда на обязательные мероприятия":
+          - text: 1.1.
+          - textbox: Затраты труда на обязательные мероприятия
+      - row "1.1.1 объезд с осмотром контактной сети, выполняемый электромехаником (прим. asd) 1 км развернутой длины железнодорожного пути 0.019 11.04.2018 - распр. №728р Раздел «Общая часть» 10 0.19 10 0.19":
+        - cell "1.1.1 объезд с осмотром контактной сети, выполняемый электромехаником (прим. asd)"
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell "1 км развернутой длины железнодорожного пути"
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell "0.019"
+        - cell "11.04.2018 - распр. №728р Раздел «Общая часть»"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "0.19"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "0.19"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1 км развернутой длины железнодорожного пути 0.019 11.04.2018 - распр. №728р Раздел «Общая часть» 10 0.19 10 0.19":
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell "1 км развернутой длины железнодорожного пути"
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell "0.019"
+        - cell "11.04.2018 - распр. №728р Раздел «Общая часть»"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "0.19"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "0.19"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.1.2 Участие в комиссионных проверках - - чел.-ч - - - - 1 - ЭЧК 10 10 10 10":
+        - cell "1.1.2 Участие в комиссионных проверках"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell "ЭЧК":
+          - textbox: ЭЧК
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.1.3 Прохождение медицинского осмотра - - чел.-ч - - - - 1 - ЭЧК 10 10 10 10":
+        - cell "1.1.3 Прохождение медицинского осмотра"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell "ЭЧК":
+          - textbox: ЭЧК
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 1.1. - 20.38 - 0 0 - 20 - 0 0 - 0.38 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 1.1."
+        - cell "-"
+        - cell "20.38"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "20"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0.38"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "1.2. Основные работы по техническому содержанию":
+        - cell "1.2. Основные работы по техническому содержанию":
+          - text: 1.2.
+          - textbox: Основные работы по техническому содержанию
+      - row "1.2.1 объезд с осмотром контактной сети, выполняемый электромехаником (прим. ПТСКС 1.1 Объезд в кабине электроподвижного состава или на автомотрисе) 3 1 км развернутой длины железнодорожного пути 1959 12 / 1 - 0.019 11.04.2018 - распр. №728р Раздел «Общая часть» ЭЧК 10 0.19 10 0.19":
+        - cell "1.2.1 объезд с осмотром контактной сети, выполняемый электромехаником (прим. ПТСКС 1.1 Объезд в кабине электроподвижного состава или на автомотрисе)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "1 км развернутой длины железнодорожного пути"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "12 / 1":
+          - textbox: 12 / 1
+        - cell "-":
+          - textbox: "-"
+        - cell "0.019"
+        - cell "11.04.2018 - распр. №728р Раздел «Общая часть»"
+        - cell "ЭЧК":
+          - textbox: ЭЧК
+        - cell "10"
+        - cell "0.19"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "0.19"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.2 осмотр вертикальных предохранительных щитов на искусственном сооружение (прим. ПТСКС 1.5 осмотр предохранительных щитов) 3 1 щит 1959 1 / 3 0.071 11.04.2018 - распр. №728р НВ №4 10 0.71 10 0.71":
+        - cell "1.2.2 осмотр вертикальных предохранительных щитов на искусственном сооружение (прим. ПТСКС 1.5 осмотр предохранительных щитов)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "1 щит"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 3":
+          - textbox: 1 / 3
+        - cell:
+          - textbox
+        - cell "0.071"
+        - cell "11.04.2018 - распр. №728р НВ №4"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "0.71"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "0.71"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.3 измерение износа контактного провода микрометром (прим. ПТСКС 4.6б проверка износа контактного провода) 3 10 замеров 1959 1 / 4 0.144 11.04.2018 - распр. №728р НВ №26 10 1.44 10 1.44":
+        - cell "1.2.3 измерение износа контактного провода микрометром (прим. ПТСКС 4.6б проверка износа контактного провода)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "10 замеров"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 4":
+          - textbox: 1 / 4
+        - cell:
+          - textbox
+        - cell "0.144"
+        - cell "11.04.2018 - распр. №728р НВ №26"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "1.44"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "1.44"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.4 проверка состояния ограничителя перенапряжения со снятием напряжения с автомотрисы (прим. ПТСКС 4.18 диагностические испытания и измерения ОПН на КС) 3 ОПН 1959 1 / 6 0.72 11.04.2018 - распр. №728р НВ №104 10 7.2 10 7.2":
+        - cell "1.2.4 проверка состояния ограничителя перенапряжения со снятием напряжения с автомотрисы (прим. ПТСКС 4.18 диагностические испытания и измерения ОПН на КС)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "ОПН"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 6":
+          - textbox: 1 / 6
+        - cell:
+          - textbox
+        - cell "0.72"
+        - cell "11.04.2018 - распр. №728р НВ №104"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "7.2"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "7.2"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.5 Прожекторы и светильники. Проверка освещенности объектов (прим. ПТСКС 4.20 проверка освещенности объектов) 3 1 точка 1959 1 / 1 0.34 05.08.2024 - расп. №1889/р НВ № 18 10 3.4 10 3.4":
+        - cell "1.2.5 Прожекторы и светильники. Проверка освещенности объектов (прим. ПТСКС 4.20 проверка освещенности объектов)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "1 точка"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 1":
+          - textbox: 1 / 1
+        - cell:
+          - textbox
+        - cell "0.34"
+        - cell "05.08.2024 - расп. №1889/р НВ № 18"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "3.4"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "3.4"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.6 текущий ремонт контактной подвески в искусственных сооружениях (прим. ПТСКС 5.1 текущий ремонт контактной сети в ИССО) 3 0,1 км развернутой длины контактной сети 1959 1 / 8 8.362 11.04.2018 - распр. №728р НВ №55 10 83.62 10 83.62":
+        - cell "1.2.6 текущий ремонт контактной подвески в искусственных сооружениях (прим. ПТСКС 5.1 текущий ремонт контактной сети в ИССО)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "0,1 км развернутой длины контактной сети"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 8":
+          - textbox: 1 / 8
+        - cell:
+          - textbox
+        - cell "8.362"
+        - cell "11.04.2018 - распр. №728р НВ №55"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "83.62"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "83.62"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.7 проверка состояния, регулировка и ремонт секционного изолятора (прим. ПТСКС 5.1 текущий ремонт секционных изоляторов) 3 1 секционный изолятор 1959 1 / 6 3.109 11.04.2018 - распр. №728р НВ №68 10 31.09 10 31.09":
+        - cell "1.2.7 проверка состояния, регулировка и ремонт секционного изолятора (прим. ПТСКС 5.1 текущий ремонт секционных изоляторов)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "1 секционный изолятор"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 6":
+          - textbox: 1 / 6
+        - cell:
+          - textbox
+        - cell "3.109"
+        - cell "11.04.2018 - распр. №728р НВ №68"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "31.09"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "31.09"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.8 проверка состояния и регулировка воздушной стрелки (прим. ПТСКС 5.8 текущий ремонт воздушных стрелок боковых путей) 3 1 стрелка 1959 1 / 2 1.205 11.04.2018 - распр. №728р НВ №92 10 12.05 10 12.05":
+        - cell "1.2.8 проверка состояния и регулировка воздушной стрелки (прим. ПТСКС 5.8 текущий ремонт воздушных стрелок боковых путей)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "1 стрелка"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 2":
+          - textbox: 1 / 2
+        - cell:
+          - textbox
+        - cell "1.205"
+        - cell "11.04.2018 - распр. №728р НВ №92"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "12.05"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "12.05"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.2.9 Разъединитель ВЛ с ручным приводом напряжением 6 или 10 кВ. Текущий ремонт (прим. ПТСКС 5.10 текущий ремонт М/Р АБ с ручным приводом) 3 1 разъединитель 1959 1 / 3 2.2 05.08.2024 - расп. №1889/р НВ № 65 10 22 10 22":
+        - cell "1.2.9 Разъединитель ВЛ с ручным приводом напряжением 6 или 10 кВ. Текущий ремонт (прим. ПТСКС 5.10 текущий ремонт М/Р АБ с ручным приводом)"
+        - cell:
+          - textbox
+        - cell "3":
+          - textbox: "3"
+        - cell "1 разъединитель"
+        - cell:
+          - textbox
+        - cell "1959":
+          - textbox: "1959"
+        - cell "1 / 3":
+          - textbox: 1 / 3
+        - cell:
+          - textbox
+        - cell "2.2"
+        - cell "05.08.2024 - расп. №1889/р НВ № 65"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "22"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "22"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 1.2. - 161.7 - 0 0 - 0 - 0 0 - 0.19 - 0 0 - 0.71 - 0 0 - 1.44 - 0 0 - 7.2 - 0 0 - 3.4 - 0 0 - 83.62 - 0 0 - 31.09 - 0 0 - 12.05 - 0 0 - 22 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 1.2."
+        - cell "-"
+        - cell "161.7"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0.19"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0.71"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "1.44"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "7.2"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "3.4"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "83.62"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "31.09"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "12.05"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "22"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "1.3. Работы по планам Трансэнерго и дирекции по энергообеспечению":
+        - cell "1.3. Работы по планам Трансэнерго и дирекции по энергообеспечению":
+          - text: 1.3.
+          - textbox: Работы по планам Трансэнерго и дирекции по энергообеспечению
+      - row "1.3.1 замена одиночного контактного провода (на перегоне) - 1 км провода - - - 49.9 16.10.2004 - ОНВ кап.рем. КС НВ №55 20 998 10 499 10 499":
+        - cell "1.3.1 замена одиночного контактного провода (на перегоне)"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "1 км провода"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "49.9"
+        - cell "16.10.2004 - ОНВ кап.рем. КС НВ №55"
+        - cell:
+          - textbox
+        - cell "20"
+        - cell "998"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "499"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "499"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.3.2 замена несущего троса полукомпенсированной контактной подвески (на перегоне) - 1 км троса - - - 68.5 16.10.2004 - ОНВ кап.рем. КС НВ №56 10 685 10 685":
+        - cell "1.3.2 замена несущего троса полукомпенсированной контактной подвески (на перегоне)"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "1 км троса"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "68.5"
+        - cell "16.10.2004 - ОНВ кап.рем. КС НВ №56"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "685"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "685"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.3.3 замена компенсированной анкеровки контактного провода - 1 анкеровка - - - 7.28 16.10.2004 - ОНВ кап.рем. КС НВ №80 10 72.8 10 72.8":
+        - cell "1.3.3 замена компенсированной анкеровки контактного провода"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "1 анкеровка"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "7.28"
+        - cell "16.10.2004 - ОНВ кап.рем. КС НВ №80"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "72.8"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "72.8"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.3.4 замена подвесного изолятора контактной подвески со снятием напряжения (со съемной вышки) - 1 изолятор - - - 1.1 16.10.2004 - ОНВ кап.рем. КС НВ №142 10 11 10 11":
+        - cell "1.3.4 замена подвесного изолятора контактной подвески со снятием напряжения (со съемной вышки)"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "1 изолятор"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1.1"
+        - cell "16.10.2004 - ОНВ кап.рем. КС НВ №142"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "11"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "11"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.3.5 установка устройства защиты от пережогов проводов на нейтральной вставке со снятием напряжения - 1 устройство - - - 22 16.10.2004 - ОНВ кап.рем. КС НВ №129 10 220 10 220":
+        - cell "1.3.5 установка устройства защиты от пережогов проводов на нейтральной вставке со снятием напряжения"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "1 устройство"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "22"
+        - cell "16.10.2004 - ОНВ кап.рем. КС НВ №129"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "220"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "220"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.3.6 замена фиксирующего зажима - 1 держатель - - - 0.619 11.04.2018 - распр. №728р НВ №126 10 6.19 10 6.19":
+        - cell "1.3.6 замена фиксирующего зажима"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "1 держатель"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "0.619"
+        - cell "11.04.2018 - распр. №728р НВ №126"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "6.19"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "6.19"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.3.7 Трасса ВЛ. Расчистка, вырубка деревьев, угрожающих падением на провода, расчистка от зарослей крон деревьев - 100 м2 - - - 1.1 05.08.2024 - расп. №1889/р НВ № 139 10 11 10 11":
+        - cell "1.3.7 Трасса ВЛ. Расчистка, вырубка деревьев, угрожающих падением на провода, расчистка от зарослей крон деревьев"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "100 м2"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1.1"
+        - cell "05.08.2024 - расп. №1889/р НВ № 139"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "11"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "11"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 1.3. - 2003.99 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 11 - 0 0 - 6.19 - 0 0 - 220 - 0 0 - 11 - 0 0 - 571.8 - 0 0 - 1184 - 0 0":
+        - cell "Итого по пункту 1.3."
+        - cell "-"
+        - cell "2003.99"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "11"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "6.19"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "220"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "11"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "571.8"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "1184"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "1.4. Прочие работы по техническому содержанию":
+        - cell "1.4. Прочие работы по техническому содержанию":
+          - text: 1.4.
+          - textbox: Прочие работы по техническому содержанию
+      - row "1.4.1 Выполнение технических мероприятий по обеспечению безопасности работающих - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "1.4.1 Выполнение технических мероприятий по обеспечению безопасности работающих"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.4.2 Снегоборьба - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "1.4.2 Снегоборьба"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 1.4. - 20 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 10 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 1.4."
+        - cell "-"
+        - cell "20"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "1.5. Выполнение работ для подразделений филиалов ОАО \"РЖД\"":
+        - cell "1.5. Выполнение работ для подразделений филиалов ОАО \"РЖД\"":
+          - text: 1.5.
+          - textbox: Выполнение работ для подразделений филиалов ОАО "РЖД"
+      - row "1.5.1 Обеспечение работ ПЧ - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "1.5.1 Обеспечение работ ПЧ"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "1.5.2 Обеспечение работ ПМС - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "1.5.2 Обеспечение работ ПМС"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 1.5. - 20 - 0 0 - 0 - 0 0 - 0 - 0 0 - 10 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 1.5."
+        - cell "-"
+        - cell "20"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "1.6. Выполнение работ для сторонних организаций":
+        - cell "1.6. Выполнение работ для сторонних организаций":
+          - text: 1.6.
+          - textbox: Выполнение работ для сторонних организаций
+      - row "1.6.1 Обеспечение работ сторонних организаций - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "1.6.1 Обеспечение работ сторонних организаций"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 1.6. - 10 - 0 0 - 0 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 1.6."
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "1.7. Надзор за работой персонала других подразделений":
+        - cell "1.7. Надзор за работой персонала других подразделений":
+          - text: 1.7.
+          - textbox: Надзор за работой персонала других подразделений
+      - row "1.7.1 Надзор за работой персонала других подразделений - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "1.7.1 Надзор за работой персонала других подразделений"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 1.7. - 10 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 1.7."
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "Итого по разделу 1. - 2246.07 - 0 0 - 30 - 0 0 - 10.57 - 0 0 - 10.71 - 0 0 - 11.44 - 0 0 - 17.2 - 0 0 - 13.4 - 0 0 - 94.62 - 0 0 - 37.28 - 0 0 - 232.05 - 0 0 - 33 - 0 0 - 571.8 - 0 0 - 1184 - 0 0":
+        - cell "Итого по разделу 1."
+        - cell "-"
+        - cell "2246.07"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "30"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10.57"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10.71"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "11.44"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "17.2"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "13.4"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "94.62"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "37.28"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "232.05"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "33"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "571.8"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "1184"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "2.Непредвиденные работы":
+        - cell "2.Непредвиденные работы"
+      - row "2.1. Дежурство":
+        - cell "2.1. Дежурство":
+          - text: 2.1.
+          - textbox: Дежурство
+      - row "2.1.1 Дежурство - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "2.1.1 Дежурство"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 2.1. - 10 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 2.1."
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "2.2. Отвлечения":
+        - cell "2.2. Отвлечения":
+          - text: 2.2.
+          - textbox: Отвлечения
+      - row "2.2.1 Больничный лист - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "2.2.1 Больничный лист"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "2.2.2 Командировка - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "2.2.2 Командировка"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 2.2. - 20 - 0 0 - 20 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 2.2."
+        - cell "-"
+        - cell "20"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "20"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "2.3. Устранение несоответствий в содержаний устройств, последствий отказов, технических нарушений":
+        - cell "2.3. Устранение несоответствий в содержаний устройств, последствий отказов, технических нарушений":
+          - text: 2.3.
+          - textbox: Устранение несоответствий в содержаний устройств, последствий отказов, технических нарушений
+      - row "2.3.1 Устранение последствий отказов технических средств - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "2.3.1 Устранение последствий отказов технических средств"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 2.3. - 10 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 2.3."
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "Итого по разделу 2. - 40 - 0 0 - 40 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по разделу 2."
+        - cell "-"
+        - cell "40"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "40"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "3.Дополнительные работы":
+        - cell "3.Дополнительные работы"
+      - row "3.1. Работы по эксплуатационным видам деятельности":
+        - cell "3.1. Работы по эксплуатационным видам деятельности":
+          - text: 3.1.
+          - textbox: Работы по эксплуатационным видам деятельности
+      - row "3.1.1 Ликвидация опасных мест - - чел.-ч - - - 1 - 10 10 10 10":
+        - cell "3.1.1 Ликвидация опасных мест"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 3.1. - 10 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 3.1."
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "3.2. Работы по инвестиционным видам деятельности":
+        - cell "3.2. Работы по инвестиционным видам деятельности":
+          - text: 3.2.
+          - textbox: Работы по инвестиционным видам деятельности
+      - row "3.2.1 Подключение абонентов по договорам технологических присоединений - - чел.-ч - - 1 - 10 10 10 10":
+        - cell "3.2.1 Подключение абонентов по договорам технологических присоединений"
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell "чел.-ч"
+        - cell:
+          - textbox
+        - cell "-":
+          - textbox: "-"
+        - cell "-":
+          - textbox: "-"
+        - cell:
+          - textbox
+        - cell "1"
+        - cell "-"
+        - cell:
+          - textbox
+        - cell "10"
+        - cell "10"
+        - cell
+        - cell
+        - cell
+        - cell "10":
+          - textbox: "10"
+        - cell "10"
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+        - cell
+        - cell:
+          - textbox
+      - row "Итого по пункту 3.2. - 10 - 0 0 - 10 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по пункту 3.2."
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "Итого по разделу 3. - 20 - 0 0 - 20 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0 - 0 - 0 0":
+        - cell "Итого по разделу 3."
+        - cell "-"
+        - cell "20"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "20"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+    - rowgroup:
+      - row "Итого по разделам 1-3, чел.-ч - 2306.07 - 0 0 - 90 - 0 0 - 10.57 - 0 0 - 10.71 - 0 0 - 11.44 - 0 0 - 17.2 - 0 0 - 13.4 - 0 0 - 94.62 - 0 0 - 37.28 - 0 0 - 232.05 - 0 0 - 33 - 0 0 - 571.8 - 0 0 - 1184 - 0 0":
+        - cell "Итого по разделам 1-3, чел.-ч"
+        - cell "-"
+        - cell "2306.07"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "90"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10.57"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "10.71"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "11.44"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "17.2"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "13.4"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "94.62"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "37.28"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "232.05"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "33"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "571.8"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+        - cell "-"
+        - cell "1184"
+        - cell "-"
+        - cell "0"
+        - cell "0"
+      - row "Итого настой часов, чел.-ч - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0 - 0 - - 0":
+        - cell "Итого настой часов, чел.-ч"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "0"
+        - cell "-"
+        - cell "-"
+        - cell "0"
