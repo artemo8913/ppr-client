@@ -1,4 +1,4 @@
-import { TimePeriod } from "@/1shared/lib/date";
+import { TIME_PERIODS, TimePeriod } from "@/1shared/lib/date";
 import {
   PlannedWorkWithCorrections,
   PlanValueField,
@@ -134,5 +134,16 @@ export class PprField {
 
   static getPlanTabelTimeFieldByPlanNormTimeField(field: PlanNormTimeField): PlanTabelTimeField {
     return planNormTimeToPlanTabelTimeFieldsPair[field];
+  }
+
+  static getPlanWork(field: TimePeriod | PlanTimeField | FactValueField): PlanValueField {
+    if (this.isPlanTime(field)) {
+      return planTimeToPlanWorkFieldsPair[field];
+    }
+    if (this.isFactWork(field)) {
+      return factWorkToPlanWorkFieldsPair[field];
+    }
+
+    return `${field}_plan_work`;
   }
 }
